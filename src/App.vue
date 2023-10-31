@@ -1,3 +1,11 @@
+<!--
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2023-10-31 19:41:11
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2023-10-31 21:26:59
+ * @FilePath: \college-application\src\App.vue
+ * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+-->
 <template>
   <nav>
     <router-link to="/">Home</router-link> |
@@ -6,10 +14,10 @@
   <router-view/>
 </template>
 <script setup>
-import { login } from '@/api/try.js'
+import apiFun from './api/try.js'
 import { onMounted } from 'vue'
 onMounted(()=>{
-  login();
+  apiFun.user.login();
 })
 </script>
 <style>
