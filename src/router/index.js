@@ -6,6 +6,11 @@ const routes = [
     name: "main",
     component: () => import("@/views/Main.vue"),
   },
+  {
+    path:'/school-news',
+    name:"school-news",
+    component: () => import("@/views/school/SchoolNews.vue")
+  }
 ];
 
 const router = createRouter({

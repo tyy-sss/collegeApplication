@@ -1,0 +1,13 @@
+/* 显示块 */
+.show-container {
+  background-color: #fff;
+  border-radius: 1rem;
+  padding: 1.5rem;
+}
+/* 显示的标题 */
+.text {
+  font-size: 22px;
+  line-height: 38px;
+  font-weight: 700;
+  padding-bottom: 1rem;
+}
