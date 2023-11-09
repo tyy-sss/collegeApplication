@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-07 19:18:25
+ * @LastEditTime: 2023-11-09 22:20:44
  * @FilePath: \collegeApplication\src\assets\js\data\menu.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -53,16 +53,9 @@ const menuData = reactive([
   //   icon: "location",
   // },
   {
-    id: "700d4075e218daaf4ec77e02",
-    menuType: "1",
-    menuName: "学生个人信息",
-    path: "/studentInfo",
-    icon: "location",
-  },
-  {
     id: "780d4075e218daaf4ec77e31",
     menuType: "1",
-    menuName: "学生管理",
+    menuName: "班级管理",
     path: "/student",
     icon: "location",
   },
@@ -95,10 +88,31 @@ const menuData = reactive([
     icon: "location",
   },
   {
+    id: "758d7075e218daaf4ec77e32",
+    menuType: "1",
+    menuName: "个人综测查看",
+    path: "/student-comprehensive-assessment",
+    icon: "location",
+  },
+  {
     id: "758d7075e218daaf4ec77e31",
     menuType: "1",
     menuName: "综合测评编辑",
     path: "/comprehensive-assessment",
+    icon: "location",
+  },
+  {
+    id: "758d7075e218daaf4ec77e38",
+    menuType: "1",
+    menuName: "查询排名",
+    path: "/ranking-query",
+    icon: "location",
+  },
+  {
+    id: "758d7075e218daaf4ec77e39",
+    menuType: "1",
+    menuName: "登陆页面",
+    path: "/login",
     icon: "location",
   },
 ]);

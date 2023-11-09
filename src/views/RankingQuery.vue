@@ -8,7 +8,7 @@
 -->
 <template>
   <div>
-学生个人信息
+    学生查询排名
   </div>
 </template>
 
