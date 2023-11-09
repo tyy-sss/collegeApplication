@@ -20,9 +20,9 @@ const routes = [
     component: () => import("@/views/school/SchoolNews.vue")
   },
   {
-    path:'/student-info',
-    name:"student-info",
-    component:()=>import("@/views/StudentInfo.vue")
+    path:'/test1',
+    name:"test1",
+    component:()=>import("@/test/test1.vue")
   }
 ];
 

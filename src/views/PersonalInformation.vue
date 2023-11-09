@@ -3,11 +3,11 @@
     <div class="text">个人信息</div>
     <hr />
     <br />
-    <div class="student">
+    <div style="display: block" class="student">
       <div class="left">
         <img
           class="passport"
-          src="@/assets/image/证件照示例图.png"
+          :src="student.avatar"
           alt="未上传证件照或图片加载有误，请刷新"
         />
         <br />
@@ -169,15 +169,80 @@
             </el-row>
           </div>
         </div>
+        <el-button type="primary" class="changeInfo">修改资料</el-button>
+      </div>
+    </div>
+    <div style="display: none" class="teacher">
+        <div class="box">
+          <div class="littleTitle">基本信息</div>
+          <div class="infoBox">
+            <el-row class="infoRow">
+              <el-col :span="7">
+                <div>
+                  <span class="tag">教师姓名 :</span
+                  ><span>{{ teacher.name }}</span>
+                </div></el-col
+              >
+              <el-col :span="7">
+                <div>
+                  <span class="tag">教师编号 :</span
+                  ><span>{{ teacher.id }}</span>
+                </div>
+              </el-col>
+              <el-col :span="7">
+                <div>
+                  <span class="tag">身份证号 :</span
+                  ><span>{{ teacher.card }}</span>
+                </div>
+              </el-col>
+            </el-row>
+            <el-row class="infoRow">
+              <el-col :span="7">
+                <div>
+                  <span class="tag">联系电话 :</span
+                  ><span>{{ teacher.phone }}</span>
+                </div></el-col
+              >
+              <el-col :span="7">
+                <div>
+                  <span class="tag">性别 :</span
+                  ><span>{{ teacher.sex }}</span>
+                </div>
+              </el-col>
+            </el-row>
+          </div>
+        </div>
+        <hr />
         <br>
+        <div class="box">
+          <div class="littleTitle">其他信息</div>
+          <div class="infoBox">
+            <el-row class="infoRow">
+              <el-col :span="7">
+                <div>
+                  <span class="tag">负责班级 :</span
+                  ><span>{{ teacher.manageClass }}</span>
+                </div></el-col
+              >
+            </el-row>
+            <el-row class="infoRow">
+              <el-col :span="7">
+                <div>
+                  <span class="tag">授课班级 :</span
+                  ><span>{{ teacher.teachClass }}</span>
+                </div></el-col
+              >
+            </el-row>
+          </div>
+        </div>
         <br>
         <el-button type="primary" class="changeInfo">修改资料</el-button>
       </div>
     </div>
-  </div>
 </template>
 <script setup>
 let student = {
+  avatar:"https://img.zcool.cn/community/01cf695e71cda9a80120a8953bb057.jpg?x-oss-process=image/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100",
   name: "付小小",
   id: "415567569789",
   card: "365124200103052214",
@@ -195,6 +260,15 @@ let student = {
   phone2: "128 0000 000",
   address: "湖南省张家界市永定区大庸桥街道吉首大学张家界校区",
 };
+let teacher = {
+  name:"杨世博",
+  id:"43251648512",
+  card:"51000000000000000X",
+  phone:"1810 0000 000",
+  sex:"男",
+  manageClass:"2022级预科1班",
+  teachClass:"2022级预科1班、2022级预科4班"
+}
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
@@ -225,7 +299,7 @@ hr {
   float: right;
 }
 .littleTitle {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
   font-weight: 1000;
 }
 .tag {
@@ -236,14 +310,20 @@ hr {
 }
 .infoBox {
   margin-left: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 }
 .infoRow {
   margin-bottom: 15px;
 }
 .changeInfo{
   width: 100px;
+  margin-top: 40px;
   margin-left:90%;
+  margin-bottom: 40px;
+}
+
+.teacher {
+  overflow: auto; /* 清除浮动 */
 }
 </style>
   
