@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-20 22:27:28
+ * @LastEditTime: 2023-11-21 01:02:28
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -16,9 +16,14 @@
         ><el-icon><Download /></el-icon>&nbsp; 导出</el-button
       >
     </div>
-    <el-table :data="assessments" style="width: 100%">
+    <el-table
+      :data="assessments"
+      style="width: 100%"
+      @cell-mouse-enter="handleCellEnter"
+      @cell-mouse-leave="handleCellLeave"
+    >
       <el-table-column prop="id" label="学号" width="120" />
-      <el-table-column prop="name" label="姓名" width="150" />
+      <el-table-column prop="name" fixed label="姓名" width="150" />
       <el-table-column label="德育">
         <el-table-column prop="add1" label="加分明细" width="120" />
         <el-table-column prop="sub1" label="减分明细" width="120" />
@@ -54,8 +59,9 @@
   </div>
 </template>
 <script setup>
+import { ref, computed } from "vue";
 let myclass = "2023级1班";
-const assessments = [
+const assessments = ref([
   {
     id: "20222113001",
     name: "吾尔肯·塞里克",
@@ -240,7 +246,8 @@ const assessments = [
     pre_total: 18,
     point_total: 20,
   },
-];
+]);
+
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 
