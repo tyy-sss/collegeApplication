@@ -1,8 +1,8 @@
 <template>
-  <div class="school">
+  <div class="class">
     <div class="show-container">
       <div class="title">
-        <div class="text">学校管理</div>
+        <div class="text">班级管理</div>
       </div>
       <div class="context">
         <div class="top">
@@ -13,15 +13,17 @@
                   type="primary"
                   :icon="Plus"
                   @click="form.dialogVisible = true"
-                  >添加学校</el-button
+                  >添加班级</el-button
                 ></el-col
               >
               <el-col :span="14" :offset="7"
-                ><el-input v-model="form.searchData" placeholder="请输入">
-                  <template #suffix>
-                    <el-icon @click="onSearch"><Search /></el-icon>
-                  </template> </el-input
-              ></el-col>
+                ><el-date-picker
+                  v-model="form.searchData"
+                  type="year"
+                  placeholder="请选择年份"
+                  @change="onSearch"
+                />
+              </el-col>
             </el-row>
           </div>
           <div class="right">
@@ -30,17 +32,7 @@
             /></el-icon>
           </div>
         </div>
-        <div class="bottom">
-          <div class="item" @click="checkSchoolNews">
-            <div class="first-char">吉</div>
-            <div class="school-name">吉首大学</div>
-            <div class="school-id">学校编号</div>
-            <div>
-              <el-button type="warning" @click="changeSchool">修改</el-button>
-              <el-button type="danger" @click="deleteSchool">删除</el-button>
-            </div>
-          </div>
-        </div>
+        <div class="bottom"></div>
       </div>
     </div>
     <!-- 对话框 -->
@@ -75,10 +67,11 @@
     </el-dialog>
   </div>
 </template>
-<script setup>
+  <script setup>
 import { ElMessage, ElMessageBox } from "element-plus";
 import { reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+import { formatDate } from "@/assets/js/utils/format-date";
 // 接口添加 学校姓名查重，添加学校，修改学校，删除学校，搜索学校
 const validateName = (rule, value, callback) => {
   if (
@@ -164,14 +157,19 @@ const handleClose = () => {
 const checkSchoolNews = () => {
   // 跳转界面
 };
-// 搜索学校
-const onSearch = () => {};
-const onReSearch = () => {};
+// 搜索班级
+const onSearch = () => {
+  let year = formatDate(form.searchData).slice(0, 4);
+  console.log(year);
+};
+const onReSearch = () => {
+  form.searchData = "";
+};
 </script>
-<style src="@/assets/css/show-container.css" scoped>
+  <style src="@/assets/css/show-container.css" scoped>
 </style>
-<style src="@/assets/css/search-top.css" scoped></style>
-<style scoped>
+  <style src="@/assets/css/search-top.css" scoped></style>
+  <style scoped>
 .bottom {
   display: flex;
   /* 自动换行 */
@@ -229,5 +227,5 @@ const onReSearch = () => {};
   box-shadow: 10px 5px 5px RGBA(74, 84, 85, 0.2);
 }
 </style>
-  
     
+      

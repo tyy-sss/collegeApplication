@@ -28,9 +28,9 @@ window.ResizeObserver = class ResizeObserver extends _ResizeObserver {
 <style>
 *,
 html,
-body{
-  padding: 0 ;
-  margin: 0 ;
+body {
+  padding: 0;
+  margin: 0;
   cursor: pointer;
 }
 </style>

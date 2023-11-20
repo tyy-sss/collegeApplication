@@ -95,7 +95,14 @@ const menuData = reactive([
     icon: "location",
   },
   {
-    id: "758d7075e218daaf4ec77e31",
+    id: "600d4075e218daaf4ec77e22",
+    menuType: "1",
+    menuName: "班级管理",
+    path: "/class",
+    icon: "location",
+  },
+  {
+    id: "600d4075e218daaf4ec77e31",
     menuType: "1",
     menuName: "综合测评编辑",
     path: "/comprehensive-assessment",

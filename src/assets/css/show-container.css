@@ -9,11 +9,19 @@
   border-radius: 1rem;
   padding: 1.5rem;
 }
+.title {
+  padding-bottom: 1rem;
+}
 /* 显示的标题 */
-.text {
+.title .text {
   font-size: 22px;
   line-height: 38px;
   font-weight: 700;
-  padding-bottom: 1rem;
+}
+/* 提示语 */
+.prompt {
+  color: RGB(168, 177, 186);
+  font-size: 12px;
+  padding-top: 0.2rem;
 }
 

@@ -1,0 +1,5 @@
+/* 表格样式 */
+::v-deep .el-table .cell {
+    display: flex;
+    justify-content: center;
+  }

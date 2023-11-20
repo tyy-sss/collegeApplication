@@ -1,0 +1,35 @@
+/* 抽屉样式 */
+::v-deep .el-drawer__body {
+  padding: 0 !important;
+}
+.add-role-show {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.item {
+  padding: 1rem;
+}
+::v-deep .el-divider--horizontal {
+  margin: 0;
+}
+.title {
+  font-size: 20px;
+  font-weight: bolder;
+  color: black;
+}
+.content {
+  height: 76%;
+}
+.button-footer {
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+}
+/* 提示语 */
+.prompt {
+  color: RGB(168,177,186);
+  font-size: 12px;
+  padding-top: 0.2rem;
+}

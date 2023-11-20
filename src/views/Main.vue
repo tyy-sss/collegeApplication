@@ -15,6 +15,21 @@ import CommonAside from "@/components/common/common-aside.vue";
 </script>
 <style scoped>
 .common-layout {
-  background-color: RGBA(237,242,246);
+  width: 100%;
+  height: 100%;
+  background-color: RGBA(237, 242, 246);
+}
+.el-aside {
+  position: relative;
+  top: 0px;
+  left: 0px;
+  width: 140px;
+  height: 100vh;
+}
+.el-main {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  overflow-y: scroll;
 }
 </style>
