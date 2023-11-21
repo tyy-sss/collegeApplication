@@ -2,22 +2,31 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-21 01:02:28
+ * @LastEditTime: 2023-11-21 20:06:45
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="show-container">
-    <div class="text">综合测评表公示</div>
+    <div class="title"><div class="text">综合测评表公示</div></div>
+
     <hr />
     <h1>{{ myclass }}班级综合测评表</h1>
+    <br />
     <div style="height: 40px">
+      <span style="float: left">学生姓名: &nbsp;</span>
+      <el-input
+        style="float: left; width: 20%"
+        v-model="search"
+        size="small"
+        placeholder="输入学生姓名关键字"
+      />
       <el-button style="float: right"
         ><el-icon><Download /></el-icon>&nbsp; 导出</el-button
       >
     </div>
     <el-table
-      :data="assessments"
+      :data="filterTableData"
       style="width: 100%"
       @cell-mouse-enter="handleCellEnter"
       @cell-mouse-leave="handleCellLeave"
@@ -52,16 +61,36 @@
       <el-table-column label="当月综合测评得分" fixed="right">
         <el-table-column prop="add_total" label="月加分" width="80" />
         <el-table-column prop="sub_total" label="月减分" width="80" />
-        <el-table-column prop="pre_total" label="上月得分" width="80" />
-        <el-table-column prop="point_total" label="当月总分" width="80" />
+        <el-table-column prop="pre_total" label="上月得分" width="90" />
+        <el-table-column
+          prop="point_total"
+          label="当月总分"
+          sortable
+          width="110"
+        />
       </el-table-column>
     </el-table>
+    <br />
+    <el-pagination
+      :page-size="7"
+      :pager-count="5"
+      layout="prev, pager, next"
+      :total="60"
+      style="float: right"
+    />
+    <br />
   </div>
 </template>
 <script setup>
 import { ref, computed } from "vue";
 let myclass = "2023级1班";
-const assessments = ref([
+const search = ref("");
+const filterTableData = computed(() =>
+  assessments.filter(
+    (data) => !search.value || data.name.includes(search.value)
+  )
+);
+const assessments = [
   {
     id: "20222113001",
     name: "吾尔肯·塞里克",
@@ -106,7 +135,7 @@ const assessments = ref([
     add_total: 24,
     sub_total: 4,
     pre_total: 18,
-    point_total: 20,
+    point_total: 21,
   },
   {
     id: "20222113003",
@@ -129,7 +158,7 @@ const assessments = ref([
     add_total: 24,
     sub_total: 4,
     pre_total: 18,
-    point_total: 20,
+    point_total: 22,
   },
   {
     id: "20222113004",
@@ -152,7 +181,7 @@ const assessments = ref([
     add_total: 24,
     sub_total: 4,
     pre_total: 18,
-    point_total: 20,
+    point_total: 25,
   },
   {
     id: "20222112006",
@@ -175,7 +204,7 @@ const assessments = ref([
     add_total: 24,
     sub_total: 4,
     pre_total: 18,
-    point_total: 20,
+    point_total: 27,
   },
   {
     id: "20222112005",
@@ -198,7 +227,7 @@ const assessments = ref([
     add_total: 24,
     sub_total: 4,
     pre_total: 18,
-    point_total: 20,
+    point_total: 29,
   },
   {
     id: "20222112004",
@@ -221,42 +250,17 @@ const assessments = ref([
     add_total: 24,
     sub_total: 4,
     pre_total: 18,
-    point_total: 20,
+    point_total: 10,
   },
-  {
-    id: "20222112003",
-    name: "沙尔恩高阿·吾日克塔",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-]);
-
+];
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
-
 <style lang="scss" scoped>
 hr {
   border-color: #ebf3ff4d;
 }
 h1 {
-  margin-top: 40px;
+  margin-top: 30px;
   text-align: center;
 }
 </style>

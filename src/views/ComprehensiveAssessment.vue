@@ -2,16 +2,25 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-21 01:35:52
+ * @LastEditTime: 2023-11-21 20:58:04
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="show-container">
-    <div class="text">综合测评表编辑</div>
+    <div class="title">
+      <div class="text">综合测评表编辑</div>
+    </div>
     <hr />
     <h1>{{ myclass }}班级综合测评表[{{ month }}]</h1>
     <div style="height: 40px">
+      <span style="float: left">学生姓名: &nbsp;</span>
+      <el-input
+        style="float: left; width: 20%"
+        v-model="search"
+        size="small"
+        placeholder="输入学生姓名关键字"
+      />
       <el-button style="float: right"
         ><el-icon><Download /></el-icon>&nbsp; 导出</el-button
       >
@@ -267,6 +276,15 @@
       </el-table-column>
     </el-table>
     <br />
+    <el-pagination
+      :page-size="7"
+      :pager-count="5"
+      layout="prev, pager, next"
+      :total="60"
+      style="float: right"
+    />
+    <br />
+    <br />
     <div style="height: 40px; display: flex; justify-content: center">
       <el-button type="primary">提交本月测评结果</el-button>
     </div>
@@ -275,7 +293,7 @@
 <script setup>
 import { ref, computed } from "vue";
 let myclass = "2023级1班";
-let month="三月"
+let month = "三月";
 const assessments = ref([
   {
     id: "20222113001",

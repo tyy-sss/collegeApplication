@@ -2,13 +2,15 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-20 22:34:34
+ * @LastEditTime: 2023-11-21 20:56:20
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="show-container">
-    <div class="text">个人综测查看</div>
+    <div class="title">
+      <div class="text">个人综测查看</div>
+    </div>
     <hr />
     <br />
     <div>
@@ -55,8 +57,8 @@
           <el-table-column label="当月综合测评得分" fixed="right">
             <el-table-column prop="add_total" label="月加分" width="80" />
             <el-table-column prop="sub_total" label="月减分" width="80" />
-            <el-table-column prop="pre_total" label="上月得分" width="80" />
-            <el-table-column prop="point_total" label="当月总分" width="80" />
+            <el-table-column prop="pre_total" label="上月得分" width="90" />
+            <el-table-column prop="point_total" label="当月总分" width="90" />
           </el-table-column>
         </el-table>
         <br />
@@ -72,39 +74,18 @@
       <div>
         <h4>总体综测情况</h4>
         <br />
-        <el-table :data="assessment" style="width: 100%">
+        <el-table :data="assessment" style="width: 77%">
           <el-table-column prop="id" label="学号" width="120" />
           <el-table-column prop="name" label="姓名" width="150" />
-          <el-table-column label="德育">
-            <el-table-column prop="add1" label="加分明细" width="120" />
-            <el-table-column prop="sub1" label="减分明细" width="120" />
-            <el-table-column prop="point1" label="得分" width="60" />
-          </el-table-column>
-          <el-table-column label="智育">
-            <el-table-column prop="add2" label="加分明细" width="120" />
-            <el-table-column prop="sub2" label="减分明细" width="120" />
-            <el-table-column prop="point2" label="得分" width="60" />
-          </el-table-column>
-          <el-table-column label="体育">
-            <el-table-column prop="add3" label="加分明细" width="120" />
-            <el-table-column prop="sub3" label="减分明细" width="120" />
-            <el-table-column prop="point3" label="得分" width="60" />
-          </el-table-column>
-          <el-table-column label="美育">
-            <el-table-column prop="add4" label="加分明细" width="120" />
-            <el-table-column prop="sub4" label="减分明细" width="120" />
-            <el-table-column prop="point4" label="得分" width="60" />
-          </el-table-column>
-          <el-table-column label="劳动">
-            <el-table-column prop="add5" label="加分明细" width="120" />
-            <el-table-column prop="sub5" label="减分明细" width="120" />
-            <el-table-column prop="point5" label="得分" width="60" />
-          </el-table-column>
-          <el-table-column label="当月综合测评得分" fixed="right">
-            <el-table-column prop="add_total" label="月加分" width="80" />
-            <el-table-column prop="sub_total" label="月减分" width="80" />
-            <el-table-column prop="pre_total" label="上月得分" width="80" />
-            <el-table-column prop="point_total" label="当月总分" width="80" />
+          <el-table-column prop="point1" label="德育得分" width="120" />
+          <el-table-column prop="point2" label="智育得分" width="120" />
+          <el-table-column prop="point3" label="体育得分" width="120" />
+          <el-table-column prop="point4" label="美育得分" width="120" />
+          <el-table-column prop="point5" label="劳动得分" width="120" />
+          <el-table-column label="综合测评得分" fixed="right">
+            <el-table-column prop="add_total" label="加分" width="120" />
+            <el-table-column prop="sub_total" label="减分" width="120" />
+            <el-table-column prop="point_total" label="综测总分" width="120" />
           </el-table-column>
         </el-table>
         <br />

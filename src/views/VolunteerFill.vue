@@ -8,7 +8,7 @@
 -->
 <template>
   <div class="show-container">
-    <div class="text">志愿填报（正式填报）</div>
+    <div class="title"><div class="text">志愿填报（正式填报）</div></div>
     <hr />
     <div class="box">
       <div class="tip">

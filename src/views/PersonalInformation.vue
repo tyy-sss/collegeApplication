@@ -1,6 +1,8 @@
 <template>
-  <div class="show-container">
-    <div class="text">个人信息</div>
+  <div class="show-container"> 
+    <div class="title">
+      <div class="text">个人信息</div>
+    </div>
     <hr />
     <br />
     <div style="display: block" class="student">

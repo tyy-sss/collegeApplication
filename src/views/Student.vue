@@ -1,6 +1,8 @@
 <template>
   <div class="show-container">
-    <div class="text">班级管理 - {{ myclass }}</div>
+    <div class="title">
+      <div class="text">班级管理 - {{ myclass }}</div>
+    </div>
     <hr />
     <br />
     <div class="card">
@@ -27,9 +29,12 @@
           >
         </el-col>
         <el-col :span="6">
-          <el-card shadow="Hover"> 📮 回收站 <el-button type="warning" size="small" plain style="float: right"
+          <el-card shadow="Hover">
+            📮 回收站
+            <el-button type="warning" size="small" plain style="float: right"
               >查看</el-button
-            ></el-card>
+            ></el-card
+          >
         </el-col>
       </el-row>
     </div>

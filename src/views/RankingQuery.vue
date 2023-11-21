@@ -2,15 +2,14 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-19 09:46:20
+ * @LastEditTime: 2023-11-21 20:40:55
  * @FilePath: \collegeApplication\src\views\StudentInfo.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
 <template>
   <div class="show-container">
-    <div class="text">查询排名</div>
+    <div class="title"><div class="text">查询排名</div></div>
     <hr />
-    <br><br><br><br><br><br><br>
     <div class="box">
       <!-- 填写志愿 -->
       <div class="left">
@@ -38,18 +37,29 @@
             v-model="object3"
           />
         </el-form-item>
-        <br>
-        <el-button type="primary">查询排名</el-button>
-        <el-button type="danger">历史查询</el-button>
+        <br />
+        <div class="button_box">
+          <el-button type="primary">查询排名</el-button>
+          <el-button type="danger">历史查询</el-button>
+        </div>
       </div>
       <div class="right">
-        <br><br><br><br>
+        <br /><br /><br /><br />
         <h3>您的排名是：</h3>
-        <br>
+        <br />
         <h2>{{ num }}</h2>
       </div>
     </div>
-    <br><br><br><br><br><br><br>
+    <div class="tip_box">
+      <div class="tip2">
+        <div><b>说明</b></div>
+        <br />
+        <div><b>查询排名字段</b></div>
+        <div>
+          您可以限定学校，专业，省份，依据预填报情况查看该限定条件下您的排名。
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
@@ -126,7 +136,7 @@ const options = [
     ],
   },
 ];
-let num="?";
+let num = "?";
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
@@ -136,14 +146,18 @@ hr {
 .box {
   width: 60%;
   height: 410px;
-  margin: 0 auto;
+  margin: 90px auto;
   border-radius: 15px 15px 15px 15px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px, rgba(0, 0, 0, 0.3) 0px 30px 60px -30px, rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
+  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
+    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
 }
-  .left {
+.left {
   width: 50%;
   padding: 100px;
   height: 410px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   background-color: rgba(184, 198, 226, 0.041);
   border-radius: 15px 0 0 15px;
   float: left;
@@ -156,6 +170,22 @@ hr {
   background-color: rgba(255, 192, 203, 0.144);
   float: left;
   text-align: center;
+}
+.button_box {
+  display: flex;
+  justify-content: center;
+}
+.tip_box {
+  display: flex;
+  justify-content: center;
+}
+.tip2 {
+  width: 60%;
+  color: gray;
+  line-height: 25px;
+  margin: 20px 0;
+  padding: 30px 200px;
+  border-top: 1px solid rgba(87, 86, 86, 0.158);
 }
 </style>
   
