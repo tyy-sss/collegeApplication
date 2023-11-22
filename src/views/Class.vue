@@ -32,13 +32,69 @@
             /></el-icon>
           </div>
         </div>
-        <div class="bottom"></div>
+        <div class="middle">
+          <el-table
+            ref="multipleTableRef"
+            :data="tableData"
+            border
+            stripe
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column type="selection" width="35" />
+            <el-table-column label="班级编号" property="uId" />
+            <el-table-column label="班级名称" property="className" />
+            <el-table-column label="班主任" property="classHeader" />
+            <el-table-column
+              label="班主任联系方式"
+              property="classHeaderPhone"
+            />
+            <el-table-column label="班级人数" property="classNumber" />
+            <el-table-column label="操作" min-width="180px">
+              <template #default="scope">
+                <el-button
+                  link
+                  type="primary"
+                  @click="handleChangeClass(scope.row)"
+                  >修改班级信息</el-button
+                >
+                <el-button
+                  link
+                  type="success"
+                  @click="handleDeleteClass(scope.row)"
+                  >删除班级</el-button
+                >
+              </template></el-table-column
+            >
+          </el-table>
+        </div>
+        <div class="bottom">
+          <div class="button">
+            <el-button type="primary" @click="handleBatchDeleteClass"
+              >批量删除班级</el-button
+            >
+          </div>
+          <el-divider />
+          <div class="pager">
+            <div class="page-news">共{{ page.total }}条信息</div>
+            <el-pagination
+              v-model:current-page="page.currentPage"
+              v-model:page-size="page.nowPageSize"
+              :page-sizes="page.pageSize"
+              :pager-count="page.pageCount"
+              layout="prev, pager, next,sizes,jumper"
+              :total="page.total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            />
+          </div>
+        </div>
       </div>
     </div>
     <!-- 对话框 -->
     <el-dialog
       v-model="form.dialogVisible"
-      title="添加学校"
+      title="添加班级"
       width="30%"
       :before-close="handleClose"
     >
@@ -50,18 +106,28 @@
         label-width="120px"
         class="demo-ruleForm"
       >
-        <el-form-item label="学校名称" prop="name">
+        <el-form-item label="班级名称" prop="name">
           <el-input v-model="form.ruleForm.name" />
           <div class="prompt">请输入长度在2到20位之间的中英文字母</div>
         </el-form-item>
-        <el-form-item label="学校编号" prop="number">
-          <el-input v-model="form.ruleForm.number" />
+        <el-form-item label="选择班主任" prop="number">
+          <el-select
+            v-model="form.ruleForm.classHeader"
+            placeholder="选择班主任"
+          >
+            <el-option
+              v-for="item in options"
+              :key="item.teacherId"
+              :label="item.teacherName"
+              :value="item.teacherId"
+            />
+          </el-select>
         </el-form-item>
       </el-form>
       <template #footer>
         <span class="dialog-footer">
           <el-button @click="handleClose">取消</el-button>
-          <el-button type="primary" @click="handleAddSchool"> 确定 </el-button>
+          <el-button type="primary" @click="handleAddClass"> 确定 </el-button>
         </span>
       </template>
     </el-dialog>
@@ -72,14 +138,14 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { formatDate } from "@/assets/js/utils/format-date";
-// 接口添加 学校姓名查重，添加学校，修改学校，删除学校，搜索学校
+// 接口添加 获得班主任列表，按年搜索班级，班级姓名查重，添加班级，删除班级，搜索学校
 const validateName = (rule, value, callback) => {
   if (
     (form.isChange === false && value) ||
-    (form.isChange === true && value != form.oldSchoolName)
+    (form.isChange === true && value != form.oldClassName)
   ) {
-    // 学校查重
-    callback(new Error("学校姓名重复"));
+    // 班级查重
+    // callback(new Error("班级姓名重复"));
   }
   callback();
 };
@@ -87,42 +153,84 @@ const validateName = (rule, value, callback) => {
 const form = reactive({
   dialogVisible: false,
   isChange: false,
-  oldSchoolName: "吉首大学",
+  oldClassName: "吉首大学",
   searchData: "",
   ruleForm: {
     name: "",
-    number: "",
+    classHeader: "",
   },
   rules: {
-    // 添加查重学校姓名
+    // 添加查班级姓名
     name: [
-      { required: true, message: "请输入学校名", trigger: "blur" },
-      {
-        min: 2,
-        max: 20,
-        pattern: /^[\u4e00-\u9fa5a-zA-Z]+$/,
-        message: "请输入中文或英文（2~20位）",
-        trigger: "blur",
-      },
+      { required: true, message: "请输入班级名", trigger: "blur" },
       { validator: validateName, trigger: "blur" },
     ],
   },
 });
+// 表格数据
+const tableData = reactive([
+  {
+    uId: "1",
+    className: "2023级预科1班",
+    classHeader: "张三",
+    classHeaderPhone: "1xxxxxxxxxx",
+    classNumber: "99",
+  },
+]);
+// 班主任信息数据
+const options = reactive([
+  { teacherId: 1, teacherName: "张三" },
+  { teacherId: 2, teacherName: "李四" },
+]);
+// 分页数据
+const page = reactive({
+  pageSize: [10, 15, 20],
+  currentPage: 1,
+  nowPageSize: 10,
+  pageCount: 5,
+  total: 700,
+});
 // 表单验证
 const ruleFormRef = ref(null);
-// 修改学校
-const changeSchool = () => {
+// 手动添加或者修改班级
+const handleAddClass = () => {
+  ruleFormRef.value.validate((valid, fields) => {
+    if (valid) {
+      // 判断还是添加还是修改班级
+      // 清空表单验证消息
+      ruleFormRef.value.resetFields();
+      handleClose();
+    }
+  });
+};
+// 关闭对话框
+const handleClose = () => {
+  // 清空表单验证消息
+  form.dialogVisible = false;
+  ruleFormRef.value.resetFields();
+  form.isChange = false;
+  form.ruleForm.classHeader = "";
+};
+// 搜索班级
+const onSearch = () => {
+  let year = formatDate(form.searchData).slice(0, 4);
+  console.log(year);
+};
+// 重置搜索
+const onReSearch = () => {
+  form.searchData = "";
+};
+// 修改班级信息
+const handleChangeClass = (val) => {
+  form.ruleForm.name = val.className;
+  form.ruleForm.classHeader = val.classHeader;
+  form.oldClassName = val.className;
   form.isChange = true;
-  form.ruleForm = {
-    name: "吉首大学",
-    number: "学校编号",
-  };
-  form.oldSchoolName = "吉首大学";
   form.dialogVisible = true;
 };
-// 删除学校
-const deleteSchool = () => {
-  ElMessageBox.confirm("确定删除这个学校", {
+// 删除班级
+const handleDeleteClass = (val) => {
+  ElMessageBox.confirm("确定删除这个班级", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
@@ -137,40 +245,29 @@ const deleteSchool = () => {
       });
     });
 };
-// 手动添加或者修改学校
-const handleAddSchool = () => {
-  ruleFormRef.value.validate((valid, fields) => {
-    if (valid) {
-      // 判断还是添加还是修改学校
-      // 清空表单验证消息
-      ruleFormRef.value.resetFields();
-    }
-  });
+// 批量处理
+const multipleSelection = ref([]);
+const handleSelectionChange = (val) => {
+  multipleSelection.value = val;
+  console.log(multipleSelection.value);
 };
-// 关闭对话框
-const handleClose = () => {
-  // 清空表单验证消息
-  ruleFormRef.value.resetFields();
-  form.dialogVisible = false;
-};
-// 查看学校的具体消息
-const checkSchoolNews = () => {
-  // 跳转界面
-};
-// 搜索班级
-const onSearch = () => {
-  let year = formatDate(form.searchData).slice(0, 4);
-  console.log(year);
-};
-const onReSearch = () => {
-  form.searchData = "";
+// 批量删除班级
+const handleBatchDeleteClass = () =>{
+
+}
+// 修改每页的个数
+const handleSizeChange = () => {};
+// 页码跳转界面
+const handleCurrentChange = () => {
+  alert(page.currentPage);
 };
 </script>
-  <style src="@/assets/css/show-container.css" scoped>
-</style>
-  <style src="@/assets/css/search-top.css" scoped></style>
-  <style scoped>
-.bottom {
+<style src="@/assets/css/utils/table-center.css" scoped/>
+<style src="@/assets/css/show-container.css" scoped/>
+<style src="@/assets/css/search-top.css" scoped/>
+<style src="@/assets/css/pager.css" scoped/>
+<style scoped>
+.middle {
   display: flex;
   /* 自动换行 */
   flex-flow: wrap;

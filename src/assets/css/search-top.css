@@ -1,5 +1,5 @@
-.context > div {
-  margin-bottom: 2rem;
+.context > div:not(:last-child) {
+  margin-bottom: 1rem;
 }
 .top,
 .top .left {

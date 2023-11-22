@@ -1,0 +1,12 @@
+/* 设置分页展示 */
+.pager {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+}
+.pager .page-news {
+  color: RGB(168, 177, 186);
+  font-size: 13px;
+  padding-top: 0.2rem;
+}

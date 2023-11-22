@@ -16,6 +16,12 @@ const s2ab = (s) => {
   }
 };
 
+/**
+ * excel文件导出
+ * @param {*} json 要导出的信息 
+ * @param {*} fields 要导出的头部信息
+ * @param {*} filename 文件名
+ */
 const excelExport = (json, fields, filename = ".xlsx") => {
     console.log(json);
   //导出xlsx

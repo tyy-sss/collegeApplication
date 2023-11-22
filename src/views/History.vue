@@ -1,5 +1,7 @@
 <template>
-    <div>volunteer-check</div>
+    <div class="history">
+        
+    </div>
 </template>
 <script setup>
 </script>

@@ -106,4 +106,3 @@ const http = {
 
 //对外暴露
 export default http;
-

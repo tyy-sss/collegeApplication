@@ -9,7 +9,7 @@
             drag
             multiple
             :show-file-list="false"
-            accept=".doc,.zip"
+            accept=".doc,.zip,.xlsx,."
             action="#"
             :http-request="uploadAction"
             :before-upload="beforeUpload"
@@ -65,7 +65,6 @@ import {
 } from "@/assets/js/excel/excel-export-data";
 
 // 接口
-import { createChunks } from "@/assets/js/utils/upload";
 // import { uploadSingleResume } from "@/api/resume";
 import { ElMessage } from "element-plus";
 const data = reactive({
@@ -75,9 +74,9 @@ const data = reactive({
     isProgress: false,
   },
 });
-// 上传文件
+// 获得上传文件的数据
 const uploadAction = (option) => {
-  createChunks(option.file);
+
 };
 const beforeUpload = (rawFile) => {
   data.upload.isProgress = true;
