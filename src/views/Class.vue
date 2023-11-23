@@ -6,30 +6,30 @@
       </div>
       <div class="context">
         <div class="top">
-          <div class="left">
-            <el-row>
-              <el-col :span="3">
+          <div class="search">
+            <div class="left">
+              <div class="search-item">
                 <el-button
                   type="primary"
                   :icon="Plus"
                   @click="form.dialogVisible = true"
                   >添加班级</el-button
-                ></el-col
-              >
-              <el-col :span="14" :offset="7"
-                ><el-date-picker
+                >
+              </div>
+              <div class="search-item">
+                <el-date-picker
                   v-model="form.searchData"
                   type="year"
                   placeholder="请选择年份"
                   @change="onSearch"
                 />
-              </el-col>
-            </el-row>
-          </div>
-          <div class="right">
-            <el-icon :size="23" color="#409EFC" @click="onReSearch"
-              ><Refresh
-            /></el-icon>
+              </div>
+            </div>
+            <div class="right">
+              <el-icon :size="23" color="#409EFC" @click="onReSearch"
+                ><Refresh
+              /></el-icon>
+            </div>
           </div>
         </div>
         <div class="middle">
@@ -252,9 +252,7 @@ const handleSelectionChange = (val) => {
   console.log(multipleSelection.value);
 };
 // 批量删除班级
-const handleBatchDeleteClass = () =>{
-
-}
+const handleBatchDeleteClass = () => {};
 // 修改每页的个数
 const handleSizeChange = () => {};
 // 页码跳转界面
@@ -264,7 +262,7 @@ const handleCurrentChange = () => {
 </script>
 <style src="@/assets/css/utils/table-center.css" scoped/>
 <style src="@/assets/css/show-container.css" scoped/>
-<style src="@/assets/css/search-top.css" scoped/>
+<style src="@/assets/css/search-top-left-right.css" scoped/>
 <style src="@/assets/css/pager.css" scoped/>
 <style scoped>
 .middle {

@@ -8,7 +8,7 @@
         <div class="top">
           <div class="search">
             <div class="left">
-              <div class="search-name search-item">
+              <div class="search-item">
                 <div class="text">用户姓名:</div>
                 <div class="input">
                   <el-input
@@ -17,7 +17,7 @@
                   />
                 </div>
               </div>
-              <div class="search-role search-item">
+              <div class="search-item">
                 <div class="text">用户角色:</div>
                 <div class="input">
                   <el-input
@@ -192,6 +192,7 @@ const handleCurrentChange = () => {
 </script>
 <style src="@/assets/css/utils/table-center.css" scoped/>
 <style src="@/assets/css/show-container.css" scoped/>
+<style src="@/assets/css/search-top-left-right.css" scoped/>
 <style src="@/assets/css/pager.css" scoped/>
 <style scoped>
 /* 头部样式设置 */
@@ -199,33 +200,13 @@ const handleCurrentChange = () => {
 .middle {
   margin-bottom: 1rem;
 }
-.top .search,
-.top .search > div,
-.top .search .left .search-item {
-  display: flex;
-}
-.top .search,
-.top .search .left {
-  justify-content: space-between;
-}
-.top .search .left {
-  width: 60%;
-}
 .top .search .right {
-  width: 8%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-width: 5rem;
-}
-.search-item {
-  align-items: center;
-  min-width: 14rem;
-}
-.search-item .text {
-  margin-right: 0.5rem;
-  min-width: 4.5rem;
-}
+    width: 8%;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    min-width: 5rem;
+  }
 </style>
 
   

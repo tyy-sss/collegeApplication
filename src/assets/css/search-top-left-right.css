@@ -1,12 +1,15 @@
-.top {
+.search {
   display: flex;
+  justify-content: space-between;
 }
-.top > div:not(:last-child) {
-  margin-right: 2rem;
+.search .left,
+.search .right {
+  display: flex;
+  margin-right: 1rem;
 }
-
 .search-item {
   display: flex;
+  margin-right: 2rem;
   align-items: center;
 }
 

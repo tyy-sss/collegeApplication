@@ -24,4 +24,6 @@
   font-size: 12px;
   padding-top: 0.2rem;
 }
-
+.context > div:not(:last-child) {
+  margin-bottom: 1rem;
+}

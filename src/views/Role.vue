@@ -7,25 +7,26 @@
       </div>
       <div class="context">
         <div class="top">
-          <div class="left">
-            <el-row>
-              <el-col :span="3">
+          <div class="search">
+            <div class="left">
+              <div class="search-item">
                 <el-button type="primary" :icon="Plus" @click="handleAddRole"
                   >添加角色</el-button
-                ></el-col
-              >
-              <el-col :span="14" :offset="7"
-                ><el-input v-model="search.searchData" placeholder="请输入">
+                >
+              </div>
+              <div class="search-item">
+                <el-input v-model="search.searchData" placeholder="请输入">
                   <template #suffix>
                     <el-icon @click="onSearch"><Search /></el-icon>
-                  </template> </el-input
-              ></el-col>
-            </el-row>
-          </div>
-          <div class="right">
-            <el-icon :size="23" color="#409EFC" @click="onReSearch"
-              ><Refresh
-            /></el-icon>
+                  </template>
+                </el-input>
+              </div>
+            </div>
+            <div class="right">
+              <el-icon :size="23" color="#409EFC" @click="onReSearch"
+                ><Refresh
+              /></el-icon>
+            </div>
           </div>
         </div>
         <div class="middle">
@@ -194,7 +195,7 @@ const handleClose = () => {
 };
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
-<style src="@/assets/css/search-top.css" scoped></style>
+<style src="@/assets/css/search-top-left-right.css" scoped/>
 <style src="@/assets/css/utils/table-center.css" scoped>
 </style>
 <style scoped>

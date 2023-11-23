@@ -6,28 +6,34 @@
       </div>
       <div class="context">
         <div class="top">
-          <div class="left">
-            <el-row>
-              <el-col :span="3">
+          <div class="search">
+            <div class="left">
+              <div class="search-item">
                 <el-button
                   type="primary"
                   :icon="Plus"
                   @click="form.dialogVisible = true"
+                  min-width="150"
                   >添加学校</el-button
-                ></el-col
-              >
-              <el-col :span="14" :offset="7"
-                ><el-input v-model="form.searchData" placeholder="请输入">
+                >
+              </div>
+              <div class="search-item">
+                <el-input
+                  v-model="form.searchData"
+                  placeholder="请输入"
+                  min-width="100"
+                >
                   <template #suffix>
                     <el-icon @click="onSearch"><Search /></el-icon>
-                  </template> </el-input
-              ></el-col>
-            </el-row>
-          </div>
-          <div class="right">
-            <el-icon :size="23" color="#409EFC" @click="onReSearch"
-              ><Refresh
-            /></el-icon>
+                  </template>
+                </el-input>
+              </div>
+            </div>
+            <div class="right">
+              <el-icon :size="23" color="#409EFC" @click="onReSearch"
+                ><Refresh
+              /></el-icon>
+            </div>
           </div>
         </div>
         <div class="bottom">
@@ -194,9 +200,8 @@ const checkSchoolNews = () => {
 const onSearch = () => {};
 const onReSearch = () => {};
 </script>
-<style src="@/assets/css/show-container.css" scoped>
-</style>
-<style src="@/assets/css/search-top.css" scoped></style>
+<style src="@/assets/css/show-container.css" scoped/>
+<style src="@/assets/css/search-top-left-right.css" scoped/>
 <style scoped>
 .bottom {
   display: flex;
@@ -254,11 +259,11 @@ const onReSearch = () => {};
   transform: translateY(-2px);
   box-shadow: 10px 5px 5px RGBA(74, 84, 85, 0.2);
 }
-.switch .choose{
+.switch .choose {
   display: flex;
   align-items: center;
 }
-.switch .choose .rule-text{
+.switch .choose .rule-text {
   margin-left: 0.5rem;
   font-weight: bold;
 }
