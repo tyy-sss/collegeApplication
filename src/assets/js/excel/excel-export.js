@@ -17,13 +17,13 @@ const s2ab = (s) => {
 };
 
 /**
- * excel文件导出
- * @param {*} json 要导出的信息 
+ * excel文件导出 （一级表头）
+ * @param {*} json 要导出的信息
  * @param {*} fields 要导出的头部信息
  * @param {*} filename 文件名
  */
 const excelExport = (json, fields, filename = ".xlsx") => {
-    console.log(json);
+  json = JSON.parse(JSON.stringify(json));
   //导出xlsx
   json.forEach((item) => {
     for (let i in item) {
@@ -55,4 +55,4 @@ const excelExport = (json, fields, filename = ".xlsx") => {
   fs.saveAs(blob, filename + ".xlsx");
 };
 
-export { excelExport};
+export { excelExport,s2ab };

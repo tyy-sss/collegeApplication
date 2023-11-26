@@ -75,27 +75,17 @@ const data = reactive({
   },
 });
 // 获得上传文件的数据
-const uploadAction = (option) => {
-
-};
+const uploadAction = (option) => {};
 const beforeUpload = (rawFile) => {
   data.upload.isProgress = true;
 };
 // 导出学生信息表
 const handleExportStudent = () => {
-  excelExport(
-    JSON.parse(JSON.stringify(studentModelData)),
-    studentHeader,
-    "学生信息模板表"
-  );
+  excelExport(studentModelData, studentHeader, "学生信息模板表");
 };
 // 导出老师信息表
 const handleExportTeach = () => {
-  excelExport(
-    JSON.parse(JSON.stringify(teacherModelData)),
-    teacherHeader,
-    "老师信息模板表"
-  );
+  excelExport(teacherModelData, teacherHeader, "老师信息模板表");
 };
 // 把参数暴露给父组件，让父组件进行修改
 defineExpose({

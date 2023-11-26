@@ -24,7 +24,7 @@
           </div>
         </div>
         <div class="right">
-          <el-button type="primary"
+          <el-button type="primary" @click="handleExcelExport"
             >导出
             <el-icon :size="18"><Download /></el-icon>
           </el-button>
@@ -61,6 +61,7 @@
           :pager-count="9"
           layout="prev, pager, next"
           :total="pager.total"
+          @current-change="handleChangePage"
         />
       </div>
     </div>
@@ -68,7 +69,9 @@
 </template>
 <script setup>
 import { reactive } from "vue";
-
+// 导出数据
+import { historyComprehensiveYearHeader } from "@/assets/js/excel/excel-export-data";
+import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 // 搜索栏数据
 const searchData = reactive({
   class: "cid",
@@ -112,6 +115,31 @@ const pager = reactive({
   size: 10,
   total: 1000,
 });
+// 搜索
+const onSearch = () => {};
+// 手动修改页码数
+const handleChangePage = (val) => {
+  console.log(val);
+};
+// 数据excel导出
+const handleExcelExport = () => {
+  export_json_to_excel(
+    historyComprehensiveYearHeader,
+    assessment,
+    "历史综合测评信息",
+  );
+};
+const formatJson = (filterVal, jsonData) => {
+  return jsonData.map((v) =>
+    filterVal.map((j) => {
+      if (j === "timestamp") {
+        return parseTime(v[j]);
+      } else {
+        return v[j];
+      }
+    })
+  );
+};
 </script>
 <style src="@/assets/css/search-top-left-right.css" scoped/>
 <style scoped>
