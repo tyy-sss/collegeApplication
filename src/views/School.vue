@@ -1,6 +1,8 @@
 <template>
   <div class="school">
     <div class="show-container">
+       <!-- 志愿地区管理 -->
+       <volunteer-address />
       <div class="title">
         <div class="text">学校管理</div>
       </div>
@@ -48,8 +50,14 @@
           </div>
         </div>
       </div>
+      <!-- 学校信息 -->
       <school-table />
+      <!-- 志愿地区管理 -->
+      <volunteer-address />
+      <!-- 志愿规则说明 -->
+      <volunteer-rule-explain />
     </div>
+
     <!-- 对话框 -->
     <el-dialog
       v-model="form.dialogVisible"
@@ -87,6 +95,8 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import schoolTable from "@/components/school/school-table.vue";
+import volunteerRuleExplain from "@/components/school/volunteer-rule-explain.vue";
+import volunteerAddress from "@/components/school/volunteer-address.vue";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
@@ -177,7 +187,7 @@ const checkSchoolNews = () => {
   const href = router.resolve({
     path: "/school-news",
     query: {
-        id:"1"
+      id: "1",
     },
   });
   window.open(href.href, "_blank");
