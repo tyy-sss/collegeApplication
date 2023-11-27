@@ -28,7 +28,7 @@
             <el-form-item label="角色说明" prop="description">
               <el-input
                 v-model="form.ruleForm.description"
-                :autosize="{ minRows: 2, maxRows: 4 }"
+                :autosize="{ minRows: 4, maxRows: 6 }"
                 type="textarea"
               />
             </el-form-item>

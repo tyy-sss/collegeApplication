@@ -4,43 +4,43 @@
       <div class="text">学校信息</div>
     </div>
     <div class="context">
-      <el-table :data="schoolNews">
-        <el-table-column prop="id" label="学校编号" />
-        <el-table-column prop="name" label="学校名称" />
-        <el-table-column prop="professionalLimit" label="专业限制信息" />
-        <el-table-column prop="professionalTriage" label="专业分流信息" />
-        <el-table-column label="志愿填报时间设置">
-          <el-table-column prop="preVolunteerStart" label="预志愿开始" />
-          <el-table-column prop="preVolunteerEnd" label="预志愿结束" />
-          <el-table-column prop="volunteerStart" label="正式志愿开始" />
-          <el-table-column prop="volunteerEnd" label="正式志愿结束" />
-        </el-table-column>
-        <el-table-column prop="ruleChoose" label="志愿规则选择" />
-      </el-table>
-    </div>
-    <div class="title">
-      <div class="text">志愿规则说明</div>
-    </div>
-    <div class="context">
-      <div class="choose">
-        <div class="explain-item">
-          <div class="rule-text">第一志愿优先</div>
-          <rule-explain :volunteer-rule="firstVolunteer" />
-        </div>
-        <div class="explain-item">
-          <div class="rule-text">平行志愿</div>
-          <rule-explain :volunteer-rule="rangeVolunteer" />
+      <div class="top">
+        <el-table :data="schoolNews">
+          <el-table-column prop="id" label="学校编号" />
+          <el-table-column prop="name" label="学校名称" />
+          <el-table-column prop="professionalLimit" label="专业限制信息" />
+          <el-table-column prop="professionalTriage" label="专业分流信息" />
+          <el-table-column label="志愿填报时间设置">
+            <el-table-column prop="preVolunteerStart" label="预志愿开始" />
+            <el-table-column prop="preVolunteerEnd" label="预志愿结束" />
+            <el-table-column prop="volunteerStart" label="正式志愿开始" />
+            <el-table-column prop="volunteerEnd" label="正式志愿结束" />
+          </el-table-column>
+          <el-table-column prop="ruleChoose" label="志愿规则选择" />
+        </el-table>
+      </div>
+      <el-divider />
+      <div class="bottom">
+        <div class="pager">
+          <div class="page-news">共{{ page.total }}条信息</div>
+          <el-pagination
+            v-model:current-page="page.currentPage"
+            v-model:page-size="page.nowPageSize"
+            :page-sizes="page.pageSize"
+            :pager-count="page.pageCount"
+            layout="prev, pager, next,sizes,jumper"
+            :total="page.total"
+            @size-change="handleSizeChange"
+            @current-change="handleCurrentChange"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import { rangeVolunteer, firstVolunteer } from "@/assets/js/data/rule-explain";
-import ruleExplain from "@/components/rule/rule-explain.vue";
-import { linkEmits } from "element-plus";
 import { reactive } from "vue";
-
+// 表格数据
 const schoolNews = reactive([
   {
     id: "1",
@@ -76,33 +76,28 @@ const schoolNews = reactive([
     ruleChoose: "平行志愿",
   },
 ]);
+// 分页数据
+const page = reactive({
+  pageSize: [5, 10, 25],
+  currentPage: 1,
+  nowPageSize: 5,
+  pageCount: 5,
+  total: 20,
+});
+// 修改每页的个数
+const handleSizeChange = (val) => {
+  console.log(val);
+};
+// 页码跳转界面
+const handleCurrentChange = () => {
+  alert(page.currentPage);
+};
 </script>
 <style src="@/assets/css/show-container.css" scoped/>
 <style src="@/assets/css/search-top-left-right.css" scoped/>
+<style src="@/assets/css/pager.css" scoped/>
 <style scoped>
 .school-table > div:not(:last-child) {
   padding-bottom: 1rem;
-}
-.choose {
-  display: flex;
-  align-items: stretch;
-}
-.choose .explain-item {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  width: 50%;
-  border: 2px solid RGB(235, 235, 235);
-  border-radius: 1rem;
-  padding: 1rem;
-  margin: 1.5rem;
-  margin-top: 0;
-}
-.choose .explain-item .rule-text {
-  text-align: center;
-  font-size: 18px;
-  font-weight: bold;
-  margin-bottom: 0.5rem;
 }
 </style>
