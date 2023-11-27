@@ -9,7 +9,7 @@
   border-radius: 1rem;
   padding: 1.5rem;
 }
-.title {
+.show-container > div:not(:last-child) {
   padding-bottom: 1rem;
 }
 /* 显示的标题 */

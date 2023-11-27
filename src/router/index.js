@@ -7,6 +7,7 @@
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
 import { createRouter, createWebHistory } from "vue-router";
+import { stringifyQuery, parseQuery } from "./utils/parameter-encryption";
 
 const routes = [
   {
@@ -15,25 +16,28 @@ const routes = [
     component: () => import("@/views/Main.vue"),
   },
   {
-    path:'/school-news',
-    name:"school-news",
-    component: () => import("@/views/school/SchoolNews.vue")
+    path: "/school-news",
+    name: "school-news",
+    component: () => import("@/views/school/SchoolNews.vue"),
   },
   {
-    path:'/test1',
-    name:"test1",
-    component:()=>import("@/test/test1.vue")
+    path: "/test1",
+    name: "test1",
+    component: () => import("@/test/test1.vue"),
   },
   {
-    path:'/test2',
-    name:"test2",
-    component:()=>import("@/test/test2.vue")
-  }
+    path: "/test2",
+    name: "test2",
+    component: () => import("@/test/test2.vue"),
+  },
 ];
 
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes,
+  // 参数加密和解密配置
+  stringifyQuery,
+  parseQuery,
 });
 
 export default router;

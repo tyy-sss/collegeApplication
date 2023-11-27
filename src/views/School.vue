@@ -48,26 +48,7 @@
           </div>
         </div>
       </div>
-      <div class="title">
-        <div class="text">设置全局志愿规则</div>
-      </div>
-      <div class="content">
-        <div class="switch">
-          <div class="choose">
-            <el-switch v-model="volunteerRule.first" class="ml-2" />
-            <div class="rule-text">第一志愿优先</div>
-          </div>
-
-          <rule-explain :volunteer-rule="firstVolunteer" />
-        </div>
-        <div class="switch">
-          <div class="choose">
-            <el-switch v-model="volunteerRule.range" class="ml-2" />
-            <div class="rule-text">平行志愿</div>
-          </div>
-          <rule-explain :volunteer-rule="rangeVolunteer" />
-        </div>
-      </div>
+      <school-table />
     </div>
     <!-- 对话框 -->
     <el-dialog
@@ -105,8 +86,10 @@
 import { ElMessage, ElMessageBox } from "element-plus";
 import { reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
-import ruleExplain from "@/components/rule/rule-explain.vue";
-import { rangeVolunteer, firstVolunteer } from "@/assets/js/data/rule-explain";
+import schoolTable from "@/components/school/school-table.vue";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
 // 接口添加 学校姓名查重，添加学校，修改学校，删除学校，搜索学校
 const validateName = (rule, value, callback) => {
   if (
@@ -142,10 +125,6 @@ const form = reactive({
       { validator: validateName, trigger: "blur" },
     ],
   },
-});
-const volunteerRule = reactive({
-  first: true,
-  range: false,
 });
 // 表单验证
 const ruleFormRef = ref(null);
@@ -195,6 +174,13 @@ const handleClose = () => {
 // 查看学校的具体消息
 const checkSchoolNews = () => {
   // 跳转界面
+  const href = router.resolve({
+    path: "/school-news",
+    query: {
+        id:"1"
+    },
+  });
+  window.open(href.href, "_blank");
 };
 // 搜索学校
 const onSearch = () => {};
@@ -258,14 +244,6 @@ const onReSearch = () => {};
 .item:hover {
   transform: translateY(-2px);
   box-shadow: 10px 5px 5px RGBA(74, 84, 85, 0.2);
-}
-.switch .choose {
-  display: flex;
-  align-items: center;
-}
-.switch .choose .rule-text {
-  margin-left: 0.5rem;
-  font-weight: bold;
 }
 </style>
   

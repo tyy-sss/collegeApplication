@@ -1,0 +1,73 @@
+// 加密跳转时对路由参数的配置
+import { AesEncryption } from "@/assets/js/utils/parameter-encryption";
+import { isArray, isNull, isUndefined } from "lodash-es";
+
+const aes = new AesEncryption();
+
+/**
+ *
+ * @description 解密:反序列化字符串参数
+ */
+export const stringifyQuery = (obj) => {
+  console.log(obj, "传递的参数");
+  if (!obj) return "";
+  console.log(Object.keys(obj));
+  const result = Object.keys(obj)
+    .map((key) => {
+      const value = obj[key];
+      if (isUndefined(value)) return "";
+      if (isNull(value)) return key;
+      if (isArray(value)) {
+        const resArray = [];
+
+        value.forEach((item) => {
+          if (isUndefined(item)) return;
+
+          if (isNull(item)) {
+            resArray.push(key);
+          } else {
+            resArray.push(key + "=" + item);
+          }
+        });
+        return resArray.join("&");
+      }
+
+      return `${key}=${value}`;
+    })
+    .filter((x) => x.length > 0)
+    .join("&");
+  console.log(result ? `?${aes.encryptByAES(result)}` : "", "处理后的参数");
+  return result ? `?${aes.encryptByAES(result)}` : "";
+};
+
+/**
+ *
+ * @description 解密:反序列化字符串参数
+ */
+export const parseQuery = (query) => {
+  const res = {};
+
+  query = query.trim().replace(/^(\?|#|&)/, "");
+
+  if (!query) return res;
+
+  query = aes.decryptByAES(query);
+
+  query.split("&").forEach((param) => {
+    const parts = param.replace(/\+/g, " ").split("=");
+    const key = parts.shift();
+    const val = parts.length > 0 ? parts.join("=") : null;
+
+    if (!isUndefined(key)) {
+      if (isUndefined(res[key])) {
+        res[key] = val;
+      } else if (isArray(res[key])) {
+        res[key].push(val);
+      } else {
+        res[key] = [res[key], val];
+      }
+    }
+  });
+
+  return res;
+};

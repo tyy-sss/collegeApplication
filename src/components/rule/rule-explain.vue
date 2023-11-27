@@ -18,22 +18,22 @@ const props = defineProps({ volunteerRule: Array });
 const volunteerRule = props.volunteerRule;
 </script>
 <style scoped>
-.rule-explain{
-    margin-top: 0.5rem;
+.rule-explain {
+  margin-top: 0.5rem;
 }
 .rule-item {
-    display: flex;
-    color: RGB(139,139,139);
-    margin-bottom: 0.5rem;
-    font-size: 14px;
-    width: 85%;
+  display: flex;
+  color: #444;
+  margin-bottom: 0.35rem;
+  font-size: 14px;
 }
-.rule-item > div{
-    margin-right:0.6rem;
+.rule-item > div {
+  margin-right: 0.6rem;
 }
-.rule-item .text{
-    text-align: center;
-    min-width: 56px;
-    margin-right: 0.5rem;
+.rule-item .text {
+  text-align: center;
+  min-width: 56px;
+  margin-right: 0.5rem;
+  font-weight: bold;
 }
 </style>
