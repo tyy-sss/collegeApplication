@@ -16,10 +16,19 @@ const routes = [
     component: () => import("@/views/Main.vue"),
   },
   {
-    path: "/school-news",
-    name: "school-news",
-    component: () => import("@/views/school/SchoolNews.vue"),
+    // 管理员查看学校的信息
+    path: "/school-manager",
+    name: "school-manager",
+    component: () => import("@/views/school/Main.vue"),
+    children: [
+      {
+        path: "school-news",
+        name: "school-news",
+        component: () => import("@/views/school/SchoolNews.vue"),
+      },
+    ],
   },
+
   {
     path: "/test1",
     name: "test1",

@@ -40,11 +40,19 @@
               </div>
             </div>
           </div>
-          <div class="add">
+        </div>
+        <div class="add">
+          <div class="add-item">
             <el-button type="primary" :icon="Plus" @click="handleAddUser"
-              >添加用户</el-button
+              >批量添加用户</el-button
             >
             <add-user ref="addUserRef" />
+          </div>
+          <div class="add-item">
+            <el-button type="primary" :icon="Plus" @click="handleAddUserSingle"
+              >单个添加用户</el-button
+            >
+            <add-user-single ref="addUserSingleRef" />
           </div>
         </div>
         <div class="middle">
@@ -122,10 +130,12 @@
 <script setup>
 // 接口 搜索用户 删除用户 重置密码 修改用户角色
 import addUser from "@/components/user/add-user.vue";
+import addUserSingle from "@/components/user/add-user-single.vue";
 import { reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 const addUserRef = ref(null);
+const addUserSingleRef = ref(null);
 
 const searchData = reactive({
   searchName: "",
@@ -159,6 +169,10 @@ const handleSearchUser = () => {};
 // 添加用户
 const handleAddUser = () => {
   addUserRef.value.data.dialogTableVisible = true;
+};
+// 单个添加用户
+const handleAddUserSingle = () => {
+  addUserSingleRef.value.form.dialogVisible = true;
 };
 // 批量处理
 const multipleSelection = ref([]);
@@ -202,12 +216,18 @@ const handleCurrentChange = () => {
   margin-bottom: 1rem;
 }
 .top .search .right {
-    width: 8%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    min-width: 5rem;
-  }
+  width: 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 5rem;
+}
+.add {
+  display: flex;
+}
+.add-item {
+  margin-right: 1rem;
+}
 </style>
 
   

@@ -1,8 +1,6 @@
 <template>
   <div class="school">
     <div class="show-container">
-       <!-- 志愿地区管理 -->
-       <volunteer-address />
       <div class="title">
         <div class="text">学校管理</div>
       </div>
@@ -57,7 +55,6 @@
       <!-- 志愿规则说明 -->
       <volunteer-rule-explain />
     </div>
-
     <!-- 对话框 -->
     <el-dialog
       v-model="form.dialogVisible"
@@ -185,7 +182,7 @@ const handleClose = () => {
 const checkSchoolNews = () => {
   // 跳转界面
   const href = router.resolve({
-    path: "/school-news",
+    path: "/school-manager/school-news",
     query: {
       id: "1",
     },
