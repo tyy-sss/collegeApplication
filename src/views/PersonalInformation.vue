@@ -180,7 +180,9 @@
             </el-row>
           </div>
         </div>
-        <el-button type="primary" class="changeInfo">修改资料</el-button>
+        <el-button type="primary" class="changeInfo" @click="drawer = true"
+          >修改资料</el-button
+        >
       </div>
     </div>
     <div style="display: none" class="teacher">
@@ -245,12 +247,65 @@
         </div>
       </div>
       <br />
-      <el-button type="primary" class="changeInfo">修改资料</el-button>
+      <el-button type="primary" class="changeInfo" @click="drawer = true"
+        >修改资料</el-button
+      >
     </div>
   </div>
+  <el-drawer v-model="drawer" direction="ttb" style="min-height: 50%">
+    <template #header>
+      <h4>修改资料</h4>
+    </template>
+
+    <template #default>
+      <div style="display: flex; flex-direction: column">
+        <h4>基本信息</h4>
+        <br />
+        <el-form-item label="电话号码 ：">
+          <el-input
+            v-model="input"
+            style="width: 30%"
+            :placeholder="student.phone"
+          />
+        </el-form-item>
+        <h4>收件信息</h4>
+        <br />
+        <el-form-item label="收件名称 ：">
+          <el-input
+            v-model="input"
+            style="width: 30%"
+            :placeholder="student.recipient"
+          />
+        </el-form-item>
+        <el-form-item label="收件电话 ：">
+          <el-input
+            v-model="input"
+            style="width: 30%"
+            :placeholder="student.phone2"
+          />
+        </el-form-item>
+        <el-form-item label="详细地址 ：">
+          <el-input
+            v-model="input"
+            style="width: 30%"
+            :placeholder="student.address"
+          />
+        </el-form-item>
+      </div>
+    </template>
+
+    <template #footer>
+      <div style="flex: auto">
+        <el-button @click="cancelClick">取消</el-button>
+        <el-button type="primary" @click="confirmClick">确定</el-button>
+      </div>
+    </template>
+  </el-drawer>
 </template>
 <script setup>
 import { ref, computed } from "vue";
+import { ElMessageBox, ElMessage } from "element-plus";
+const drawer = ref(false);
 let student = ref({
   avatar:
     "https://img.zcool.cn/community/01cf695e71cda9a80120a8953bb057.jpg?x-oss-process=image/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100",
@@ -269,6 +324,7 @@ let student = ref({
   subjects: "化学+地理",
   recipient: "小付",
   phone2: "128 0000 000",
+  address: "湖南省张家界市永定区大庸桥街道吉首大学张家界校区",
   address: "湖南省张家界市永定区大庸桥街道吉首大学张家界校区",
 });
 let teacher = {
@@ -289,11 +345,25 @@ function handleFileSelect(e) {
   console.log(file);
   const formData = new FormData();
   formData.append("file", file);
-  //传文件给后端
+  //传文件给后端（对接口）
   let res =
     "https://pic.huke88.com/task/images/2018-06-05/1BEAA53E-B0EB-3FB7-DCE8-B3D66A5D6771.jpg";
   //返回虚拟路径
   student.value.avatar = res;
+}
+function cancelClick() {
+  drawer.value = false;
+}
+function confirmClick() {
+  ElMessageBox.confirm("确定修改资料吗")
+    .then(() => {
+      drawer.value = false;
+      ElMessage({
+        message: "修改资料成功",
+        type: "success",
+      });
+    })
+    .catch(() => {});
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
@@ -328,27 +398,27 @@ hr {
   float: right;
 }
 .littleTitle {
-  margin-bottom: 30px;
+  margin-bottom: 2rem;
   font-weight: 1000;
 }
 .tag {
   display: inline-block;
-  margin-right: 15px;
-  width: 100px;
+  margin-right: 1rem;
+  width: 5rem;
   text-align: right;
 }
 .infoBox {
-  margin-left: 10px;
-  margin-bottom: 30px;
+  margin-left: 1rem;
+  margin-bottom: 2rem;
 }
 .infoRow {
-  margin-bottom: 15px;
+  margin-bottom: 1rem;
 }
 .changeInfo {
-  width: 100px;
-  margin-top: 40px;
+  width: 6rem;
+  margin-top: 3rem;
   margin-left: 90%;
-  margin-bottom: 40px;
+  margin-bottom: 1rem;
 }
 
 .teacher {

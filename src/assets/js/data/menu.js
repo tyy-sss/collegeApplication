@@ -67,6 +67,13 @@ const menuData = reactive([
     icon: "location",
   },
   {
+    id: "789d4075e218daaf4ec77e35",
+    menuType: "1",
+    menuName: "班级志愿情况",
+    path: "/volunteer",
+    icon: "location",
+  },
+  {
     id: "789d4075e218daaf4ec77e31",
     menuType: "1",
     menuName: "志愿查看",

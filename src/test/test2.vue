@@ -1,37 +1,47 @@
 <template>
-  <el-upload
-      class="avatar-uploader"
-      action="http://localhost:8080/users/uploadImg"
-      :show-file-list="false"
-      :on-success="handleAvatarSuccess"
-      :before-upload="beforeAvatarUpload"
-      :limit=1
-    >
-      <img v-if="imageUrl" :src="imageUrl" class="avatar" />
-      <el-icon v-else class="avatar-uploader-icon"><Plus /></el-icon>
-    </el-upload>
-  </template>
-  <script setup>
-  import {ref, reactive, defineComponent, computed} from "vue";
-  import { ElMessage } from 'element-plus'
-  import { Plus } from '@element-plus/icons-vue'
-  const imageUrl = ref('')//图片回显值
-  const handleAvatarSuccess= (
-   res
-  ) => {
-    console.log(res.data)
-    imageUrl.value = res.data//将图片进行回显
-    console.log(imageUrl.value)
-  }
-  const beforeAvatarUpload = (rawFile) => {
-    if (rawFile.type !== 'image/jpeg'&&rawFile.type!=='image/png') {//只能为图片类型
-      // imageUrl=rawFile
-      ElMessage.error('请选择图片类型的文件！')
-      return false
-    } else if (rawFile.size / 1024 / 1024 > 2) {
-      ElMessage.error('大小不能超过2MB!')//不能大于2MB
-      return false
-    }
-    return true
-  }
-  </script>
+  <el-button type="primary" style="margin-left: 16px" @click="drawer = true">
+    with footer
+  </el-button>
+
+  <el-drawer v-model="drawer" direction="ttb">
+    <template #header>
+      <h4>set title by slot</h4>
+    </template>
+
+    <template #default>
+      <div>
+        <el-radio v-model="radio1" label="Option 1" size="large"
+          >Option 1</el-radio
+        >
+        <el-radio v-model="radio1" label="Option 2" size="large"
+          >Option 2</el-radio
+        >
+      </div>
+    </template>
+
+    <template #footer>
+      <div style="flex: auto">
+        <el-button @click="cancelClick">取消</el-button>
+        <el-button type="primary" @click="confirmClick">确定</el-button>
+      </div>
+    </template>
+  </el-drawer>
+</template>
+
+<script setup>
+import { ref } from "vue";
+import { ElMessageBox } from "element-plus";
+const drawer = ref(false);
+function cancelClick() {
+  drawer.value = false;
+}
+function confirmClick() {
+  ElMessageBox.confirm("确定吗")
+    .then(() => {
+      drawer.value = false;
+    })
+    .catch(() => {
+      // catch error
+    });
+}
+</script>

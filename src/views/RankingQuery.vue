@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-21 20:40:55
+ * @LastEditTime: 2023-11-28 22:01:19
  * @FilePath: \collegeApplication\src\views\StudentInfo.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -40,7 +40,7 @@
         <br />
         <div class="button_box">
           <el-button type="primary">查询排名</el-button>
-          <el-button type="danger">历史查询</el-button>
+          <el-button type="danger" @click="drawer = true">历史查询</el-button>
         </div>
       </div>
       <div class="right">
@@ -61,16 +61,35 @@
       </div>
     </div>
   </div>
+  <!-- 抽屉 -->
+  <el-drawer v-model="drawer" direction="btt" style="min-height: 50%">
+    <template #header>
+      <h4>历史查询</h4>
+    </template>
+
+    <template #default>
+      <div>
+        <el-table
+          :data="queryData"
+          ref="multipleTableRef"
+          @selection-change="handleSelectionChange"
+          style="width: 100%"
+        >
+          <el-table-column type="index" width="50" />
+          <el-table-column label="时间" sortable prop="date" />
+          <el-table-column label="学校" prop="school" />
+          <el-table-column label="专业" prop="professional" />
+          <el-table-column label="省份" prop="province" />
+          <el-table-column label="排名" sortable width="180" prop="num" />
+        </el-table>
+      </div>
+    </template>
+  </el-drawer>
 </template>
 <script setup>
-let student = {
-  name: "付小小",
-  id: "415567569789",
-  card: "365124200103052214",
-  sex: "女",
-  class: "2023级预科1班",
-  school: "湘南学院",
-};
+import { ref, computed } from "vue";
+import { ElMessageBox } from "element-plus";
+const drawer = ref(false);
 let object1 = null;
 let object2 = null;
 let object3 = null;
@@ -137,6 +156,71 @@ const options = [
   },
 ];
 let num = "?";
+const queryData = [
+  {
+    date: "2023.10.4 12:10:23",
+    school: "湘南学院",
+    professional: "汉语言文学（师范）",
+    province: "湖南省",
+    num: "56",
+  },
+  {
+    date: "2023.10.4 12:10:21",
+    school: "湘南学院",
+    professional: "秘书学",
+    province: "湖南省",
+    num: "85",
+  },
+  {
+    date: "2023.10.4 12:09:23",
+    school: "湘南学院",
+    professional: "法学",
+    province: "湖南省",
+    num: "45",
+  },
+  {
+    date: "2023.10.4 12:08:11",
+    school: "湖南文理学院",
+    professional: "国际经济与贸易",
+    province: "湖南省",
+    num: "45",
+  },
+  {
+    date: "2023.10.3 12:10:23",
+    school: "湖南文理学院",
+    professional: "市场营销",
+    province: "湖南省",
+    num: "45",
+  },
+  {
+    date: "2023.10.4 12:10:21",
+    school: "湘南学院",
+    professional: "秘书学",
+    province: "湖南省",
+    num: "85",
+  },
+  {
+    date: "2023.10.4 12:09:23",
+    school: "湘南学院",
+    professional: "法学",
+    province: "湖南省",
+    num: "45",
+  },
+  {
+    date: "2023.10.4 12:08:11",
+    school: "湖南文理学院",
+    professional: "国际经济与贸易",
+    province: "湖南省",
+    num: "45",
+  },
+  {
+    date: "2023.10.3 12:10:23",
+    school: "湖南文理学院",
+    professional: "市场营销",
+    province: "湖南省",
+    num: "45",
+  },
+];
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
