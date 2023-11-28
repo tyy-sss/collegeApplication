@@ -5,6 +5,7 @@
       :with-header="false"
       v-model="form.dialogVisible"
       :before-close="handleClose"
+      size="40%"
       class="demo-drawer"
     >
       <div class="add-role-show">

@@ -9,10 +9,11 @@
             drag
             multiple
             :show-file-list="false"
-            accept=".doc,.zip,.xlsx,."
+            accept=".xlsx"
             action="#"
             :http-request="uploadAction"
             :before-upload="beforeUpload"
+            :on-change="handleAddUser"
           >
             <div>
               <div class="loading" v-if="!data.upload.isProgress">
@@ -63,6 +64,17 @@ import {
   teacherHeader,
   teacherModelData,
 } from "@/assets/js/excel/excel-export-data";
+import {
+  readFile,
+  getExcelData,
+  excelLeadingIn,
+  handleStudentInformation,
+  handleTeacherInformation,
+} from "@/assets/js/excel/excel-leading";
+import {
+  studentCharacter,
+  teacherCharacter,
+} from "@/assets/js/excel/excel-leading-data";
 
 // 接口
 // import { uploadSingleResume } from "@/api/resume";
@@ -78,6 +90,29 @@ const data = reactive({
 const uploadAction = (option) => {};
 const beforeUpload = (rawFile) => {
   data.upload.isProgress = true;
+};
+// 获得上传文件的数据
+const handleAddUser = async (ev) => {
+  //这个是上传的文件
+  const file = ev.raw;
+  if (!file) {
+    // 没有文件
+    ElMessage.error("请上传正确的文件");
+  } else {
+    // console.log(file)
+    //读取file中的数据
+    let data = await readFile(file);
+    const excelData = getExcelData(data);
+    const length = Object.keys(excelData[0]).length;
+    var addData = [];
+    if (length === Object.keys(studentCharacter).length) {
+      addData = excelLeadingIn(excelData, studentCharacter);
+      addData = handleStudentInformation(addData);
+    } else if (length === Object.keys(teacherCharacter).length) {
+      addData = excelLeadingIn(excelData, teacherCharacter);
+      addData = handleTeacherInformation(addData);
+    }
+  }
 };
 // 导出学生信息表
 const handleExportStudent = () => {

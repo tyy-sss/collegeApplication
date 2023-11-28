@@ -36,8 +36,7 @@ export const stringifyQuery = (obj) => {
     })
     .filter((x) => x.length > 0)
     .join("&");
-  console.log(result ? `?${aes.encryptByAES(result)}` : "", "处理后的参数");
-  return result ? `?${aes.encryptByAES(result)}` : "";
+  return result ? `${aes.encryptByAES(result)}` : "";
 };
 
 /**
