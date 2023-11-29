@@ -22,6 +22,7 @@
               <el-icon class="menu-icon"><component :is="item.icon" /></el-icon>
               <span>{{ item.menuName }}</span>
             </el-menu-item>
+            <!-- 消息管理 -->
             <el-menu-item :index="item.path" v-else>
               <el-badge :value="1" class="item">
                 <el-icon class="menu-icon"
@@ -43,9 +44,7 @@
   </div>
 </template>
     <script setup>
-import { onMounted, reactive } from "vue";
-import { giveMenu } from "@/assets/js/data/menu";
-import { getRole } from "@/config/constants";
+import { onBeforeMount, onMounted, reactive } from "vue";
 import store from "@/store";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -54,11 +53,6 @@ const menuDataForVue = reactive(store.state.menu.menuData);
 const handleSelect = (key, keyPath) => {
   router.push({ path: key });
 };
-onMounted(() => {
-  store.commit("setMenu", giveMenu(getRole));
-  console.log(giveMenu(getRole));
-  store.commit("addMenu");
-});
 </script>
 <style scoped>
 .common-aside {

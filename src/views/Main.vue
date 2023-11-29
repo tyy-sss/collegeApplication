@@ -12,6 +12,15 @@
 </template>
   <script setup>
 import CommonAside from "@/components/common/common-aside.vue";
+import { onBeforeMount } from "vue";
+import { giveMenu } from "@/assets/js/data/menu";
+import { getRole } from "@/config/constants";
+import store from "@/store";
+onBeforeMount(() => {
+  store.commit("setMenu", giveMenu(getRole));
+  console.log(giveMenu(getRole));
+  store.commit("addMenu");
+});
 </script>
 <style scoped>
 .common-layout {

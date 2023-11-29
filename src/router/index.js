@@ -6,8 +6,11 @@
  * @FilePath: \collegeApplication\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
+import store from "@/store";
 import { createRouter, createWebHistory } from "vue-router";
 import { stringifyQuery, parseQuery } from "./utils/parameter-encryption";
+import { giveMenu } from "@/assets/js/data/menu";
+import { getRole } from "@/config/constants";
 
 const routes = [
   {
@@ -127,15 +130,24 @@ router.beforeEach((to, form, next) => {
   const token = localStorage.getItem("token");
   console.log(token, "token");
   if (!token) {
-    // 已登录
+    // 未登录
+    // 在登录界面
     if (to.path == "/login") {
       next();
     } else {
       next({ name: "login" });
     }
   } else {
-    // 未登录
-    next();
+    console.log(to.path);
+    // 已登录
+    if (to.path == "/") {
+      // 跳转到菜单表的第一个菜单显示界面
+      const firstPath = giveMenu(getRole)[0].path.slice(1);
+      next({ name: firstPath });
+    } else {
+      // 未登录
+      next();
+    }
   }
 });
 
