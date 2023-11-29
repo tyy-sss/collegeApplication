@@ -16,7 +16,7 @@ import { reactive } from "vue";
  * path：路径
  * icon：展示图标
  */
-const menuData = reactive([
+const managerMenuData = reactive([
   {
     id: "600d4075e218daaf4ec77e50",
     menuType: "1",
@@ -52,62 +52,8 @@ const menuData = reactive([
     path: "/history",
     icon: "location",
   },
-  // {
-  //   id: "788d4075e218daaf4ec77e31",
-  //   menuType: "1",
-  //   menuName: "个人信息",
-  //   path: "/personal-information",
-  //   icon: "location",
-  // },
-  // {
-  //   id: "600d4075e218daaf4ec77e22",
-  //   menuType: "1",
-  //   menuName: "班级管理",
-  //   path: "/student",
-  //   icon: "location",
-  // },
-  // {
-  //   id: "789d4075e218daaf4ec77e31",
-  //   menuType: "1",
-  //   menuName: "志愿查看",
-  //   path: "/volunteer-check",
-  //   icon: "location",
-  // },
-  // {
-  //   id: "789d4075e218daaf4ec77e32",
-  //   menuType: "1",
-  //   menuName: "志愿填报",
-  //   path: "/volunteer-fill",
-  //   icon: "location",
-  // },
-  // {
-  //   id: "758d7075e218daaf4ec77e33",
-  //   menuType: "1",
-  //   menuName: "个人综测查看",
-  //   path: "/student-comprehensive-assessment",
-  //   icon: "location",
-  // },
-  // {
-  //   id: "758d7075e218daaf4ec77e31",
-  //   menuType: "1",
-  //   menuName: "综合测评公示",
-  //   path: "/comprehensive-assessment-check",
-  //   icon: "location",
-  // },
-  // {
-  //   id: "600d4075e218daaf4ec77e31",
-  //   menuType: "1",
-  //   menuName: "综合测评编辑",
-  //   path: "/comprehensive-assessment",
-  //   icon: "location",
-  // },
-  // {
-  //   id: "758d7075e218daaf4ec77e38",
-  //   menuType: "1",
-  //   menuName: "查询排名",
-  //   path: "/ranking-query",
-  //   icon: "location",
-  // },
+]);
+const menuData = reactive([
   {
     id: "788d4075e218daaf4ec77e31",
     menuType: "1",
@@ -120,13 +66,6 @@ const menuData = reactive([
     menuType: "1",
     menuName: "班级管理",
     path: "/student",
-    icon: "location",
-  },
-  {
-    id: "789d4075e218daaf4ec77e35",
-    menuType: "1",
-    menuName: "班级志愿情况",
-    path: "/volunteer",
     icon: "location",
   },
   {
@@ -171,17 +110,15 @@ const menuData = reactive([
     path: "/ranking-query",
     icon: "location",
   },
-  {
-    id: "758d7075e218daaf4ec77e39",
-    menuType: "1",
-    menuName: "登陆页面",
-    path: "/login",
-    icon: "location",
-  },
 ]);
 
-export const giveMenu = () =>{
-  
-}
+const giveMenu = (role) => {
+  if (role === "manager") {
+    return managerMenuData;
+  } else if (role === "student") {
+  } else if (role === "teacher") {
+  }
+  return managerMenuData;
+};
 
-export { menuData };
+export { giveMenu };

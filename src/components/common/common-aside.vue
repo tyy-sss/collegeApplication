@@ -44,7 +44,8 @@
 </template>
     <script setup>
 import { onMounted, reactive } from "vue";
-import { menuData } from "@/assets/js/data/menu";
+import { giveMenu } from "@/assets/js/data/menu";
+import { getRole } from "@/config/constants";
 import store from "@/store";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -54,8 +55,8 @@ const handleSelect = (key, keyPath) => {
   router.push({ path: key });
 };
 onMounted(() => {
-  store.commit("setMenu", menuData);
-  console.log(menuData);
+  store.commit("setMenu", giveMenu(getRole));
+  console.log(giveMenu(getRole));
   store.commit("addMenu");
 });
 </script>

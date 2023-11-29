@@ -44,7 +44,7 @@
 import apiFun from "@/api/user";
 import { reactive, ref } from "vue";
 import { throttle } from "@/assets/js/utils/throttle";
-import { getRefreshToken, removeRefreshToken, setAccessToken, setRefreshToken } from "@/config/constants";
+import { setRole, setAccessToken, setRefreshToken } from "@/config/constants";
 // 用户数据
 const userData = reactive({
   type: 1,
@@ -76,8 +76,10 @@ const login = throttle(() => {
       // 节流
       const data = await apiFun.user.login(userData);
       console.log(data);
+      // 保存token 还有菜单信息
       setAccessToken(data.token.accessToken);
       setRefreshToken(data.token.refreshToken);
+      setRole(data.role);
       // console.log(await apiFun.user.login(userData));
       // 清空表单信息
       // ruleFormRef.value.resetFields();

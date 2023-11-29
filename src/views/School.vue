@@ -48,13 +48,13 @@
           </div>
         </div>
       </div>
-      <!-- 学校信息 -->
-      <school-table />
-      <!-- 志愿地区管理 -->
-      <volunteer-address />
-      <!-- 志愿规则说明 -->
-      <volunteer-rule-explain />
     </div>
+    <!-- 学校信息 -->
+    <school-table />
+    <!-- 志愿地区管理 -->
+    <volunteer-address />
+    <!-- 志愿规则说明 -->
+    <volunteer-rule-explain />
     <!-- 对话框 -->
     <el-dialog
       v-model="form.dialogVisible"
@@ -196,6 +196,9 @@ const onReSearch = () => {};
 <style src="@/assets/css/show-container.css" scoped/>
 <style src="@/assets/css/search-top-left-right.css" scoped/>
 <style scoped>
+.school > div:not(:last-child){
+  margin-bottom: 2rem;
+}
 .bottom {
   display: flex;
   /* 自动换行 */
