@@ -49,6 +49,8 @@ import {
   ACCOUNT_TEST,
   PASSWORD_TEST,
 } from "@/assets/js/utils/regular-expression";
+import { useRouter } from "vue-router";
+const router = useRouter();
 // 用户数据
 const userData = reactive({
   type: 1,
@@ -79,14 +81,16 @@ const login = throttle(() => {
     if (valid) {
       // 节流
       const data = await apiFun.user.login(userData);
-      console.log(data);
       // 保存token 还有菜单信息
       setAccessToken(data.token.accessToken);
       setRefreshToken(data.token.refreshToken);
       setRole(data.role);
-      // console.log(await apiFun.user.login(userData));
       // 清空表单信息
-      // ruleFormRef.value.resetFields();
+      ruleFormRef.value.resetFields();
+      const href = router.resolve({
+        path: "/",
+      });
+      window.open(href.href, "_self");
     }
   });
 }, 1000);

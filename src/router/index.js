@@ -10,7 +10,8 @@ import store from "@/store";
 import { createRouter, createWebHistory } from "vue-router";
 import { stringifyQuery, parseQuery } from "./utils/parameter-encryption";
 import { giveMenu } from "@/assets/js/data/menu";
-import { getRole } from "@/config/constants";
+import { getAccessToken, getRole } from "@/config/constants";
+import { ElMessage } from "element-plus";
 
 const routes = [
   {
@@ -127,14 +128,16 @@ const router = createRouter({
 
 router.beforeEach((to, form, next) => {
   // 判断是否有token
-  const token = localStorage.getItem("token");
-  console.log(token, "token");
+  var token = getAccessToken();
+  token ="111";
+  console.log(token, "短token");
   if (!token) {
     // 未登录
     // 在登录界面
     if (to.path == "/login") {
       next();
     } else {
+      ElMessage.error("请先登录");
       next({ name: "login" });
     }
   } else {

@@ -19,4 +19,10 @@ apiFun.user.login = (data) => {
 apiFun.user.refreshToken = () => {
   return http.post("/user/refresh-token", localStorage.getItem("refreshToken"));
 };
+/**
+ * 退出登录
+ */
+apiFun.user.loginOut = () => {
+  return http.post('/user/loginOut');
+}
 export default apiFun;

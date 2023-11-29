@@ -34,7 +34,7 @@
           </div>
         </el-menu>
       </div>
-      <div class="exit">
+      <div class="exit" @click="handleExit">
         <div>
           <img src="@/assets/image/exit.png" />
         </div>
@@ -44,14 +44,33 @@
   </div>
 </template>
     <script setup>
-import { onBeforeMount, onMounted, reactive } from "vue";
+import { reactive } from "vue";
 import store from "@/store";
 import { useRouter } from "vue-router";
+import apiFun from "@/api/user";
+import {
+  removeAccessToken,
+  removeRefreshToken,
+  removeRole,
+} from "@/config/constants";
 const router = useRouter();
 const menuDataForVue = reactive(store.state.menu.menuData);
 // 跳转界面
 const handleSelect = (key, keyPath) => {
   router.push({ path: key });
+};
+// 退出
+const handleExit = async () => {
+  // 清除用户信息
+  removeAccessToken();
+  removeRefreshToken();
+  removeRole();
+  // const data = await apiFun.user.loginOut();
+  // 跳转界面
+  const href = router.resolve({
+    path:"/login",
+  })
+  window.open(href.href,"_self")
 };
 </script>
 <style scoped>
@@ -104,7 +123,7 @@ const handleSelect = (key, keyPath) => {
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
 }
-::v-deep .el-badge__content.is-fixed{
+::v-deep .el-badge__content.is-fixed {
   transform: translateY(-20%) translateX(100%);
 }
 /* 退出登录 */
