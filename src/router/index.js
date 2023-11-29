@@ -11,9 +11,83 @@ import { stringifyQuery, parseQuery } from "./utils/parameter-encryption";
 
 const routes = [
   {
+    path: "/login",
+    name: "login",
+    component: () => import("@/views/Login.vue"),
+  },
+  {
     path: "/",
     name: "main",
     component: () => import("@/views/Main.vue"),
+    children: [
+      // 管理员
+
+      {
+        path: "role",
+        name: "role",
+        component: () => import("@/views/Role.vue"),
+      },
+      {
+        path: "school",
+        name: "school",
+        component: () => import("@/views/School.vue"),
+      },
+      {
+        path: "user",
+        name: "user",
+        component: () => import("@/views/User.vue"),
+      },
+      {
+        path: "class",
+        name: "class",
+        component: () => import("@/views/Class.vue"),
+      },
+      {
+        path: "history",
+        name: "history",
+        component: () => import("@/views/History.vue"),
+      },
+      {
+        path: "personal-information",
+        name: "personal-information",
+        component: () => import("@/views/PersonalInformation.vue"),
+      },
+      {
+        path: "student",
+        name: "student",
+        component: () => import("@/views/Student.vue"),
+      },
+      {
+        path: "volunteer-check",
+        name: "volunteer-check",
+        component: () => import("@/views/VolunteerCheck.vue"),
+      },
+      {
+        path: "volunteer-fill",
+        name: "volunteer-fill",
+        component: () => import("@/views/VolunteerFill.vue"),
+      },
+      {
+        path: "student-comprehensive-assessment",
+        name: "student-comprehensive-assessment",
+        component: () => import("@/views/StudentComprehensiveAssessment.vue"),
+      },
+      {
+        path: "comprehensive-assessment-check",
+        name: "comprehensive-assessment-check",
+        component: () => import("@/views/ComprehensiveAssessmentCheck.vue"),
+      },
+      {
+        path: "comprehensive-assessment",
+        name: "comprehensive-assessment",
+        component: () => import("@/views/ComprehensiveAssessment.vue"),
+      },
+      {
+        path: "ranking-query",
+        name: "ranking-query",
+        component: () => import("@/views/RankingQuery.vue"),
+      },
+    ],
   },
   {
     // 管理员查看学校的信息
@@ -28,7 +102,6 @@ const routes = [
       },
     ],
   },
-
   {
     path: "/test1",
     name: "test1",
@@ -47,6 +120,23 @@ const router = createRouter({
   // 参数加密和解密配置
   stringifyQuery,
   parseQuery,
+});
+
+router.beforeEach((to, form, next) => {
+  // 判断是否有token
+  const token = localStorage.getItem("token");
+  console.log(token, "token");
+  if (!token) {
+    // 已登录
+    if (to.path == "/login") {
+      next();
+    } else {
+      next({ name: "login" });
+    }
+  } else {
+    // 未登录
+    next();
+  }
 });
 
 export default router;

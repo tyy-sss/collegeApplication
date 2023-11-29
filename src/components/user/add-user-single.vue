@@ -9,7 +9,7 @@
     >
       <div class="add-role-show">
         <div class="top">
-          <div class="title item">添加角色</div>
+          <div class="title item">添加用户</div>
           <el-divider />
         </div>
         <div class="content item">

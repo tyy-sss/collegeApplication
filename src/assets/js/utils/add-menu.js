@@ -19,19 +19,5 @@ const addMenu = (data) => {
   menuData.forEach((item) => {
     menuArray.push(item);
   });
-  // 路由的动态添加
-  if (menuArray[0] !== "") {
-    menuArray.forEach((item) => {
-      var path = item.path.slice(1); // 去除'/';
-      var component = getComponent(path);
-      console.log(component);
-      router.addRoute("main", {
-        path: `${path}`,
-        name: `${path}`,
-        component: () => import(`@/views/${component}.vue`),
-      });
-    });
-    console.log(menuArray, "处理之后的菜单");
-  }
 };
 export { addMenu };

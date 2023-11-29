@@ -55,6 +55,7 @@ const handleSelect = (key, keyPath) => {
 };
 onMounted(() => {
   store.commit("setMenu", menuData);
+  console.log(menuData);
   store.commit("addMenu");
 });
 </script>
