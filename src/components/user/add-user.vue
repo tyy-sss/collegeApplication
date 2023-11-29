@@ -150,7 +150,7 @@ defineExpose({
   padding: 20px;
 }
 .upload {
-  width: 90%;
+  width: 70%;
 }
 .img {
   padding: 10px;
@@ -180,7 +180,7 @@ img {
 }
 /* 加载框 */
 .loading {
-  height: 200px;
+  height: 160px;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -194,9 +194,10 @@ img {
   padding-bottom: 1rem;
 }
 .explain .detail > div {
+  font-size: 14px;
   padding-bottom: 0.5rem;
 }
 .explain .detail:last-child {
-  padding-bottom: 1rem;
+  padding-bottom: 0.5rem;
 }
 </style>

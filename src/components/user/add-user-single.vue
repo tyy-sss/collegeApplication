@@ -26,7 +26,7 @@
             :rules="form.rules"
             label-width="85px"
           >
-            <el-row :gutter="40">
+            <el-row :gutter="15">
               <el-col :span="8">
                 <el-form-item
                   :label="form.isTeacher ? '工号:' : '学号:'"
@@ -42,50 +42,14 @@
               <el-col :span="8">
                 <el-form-item label="性别:" prop="sex">
                   <el-radio-group v-model="form.ruleForm.sex" class="ml-4">
-                    <el-radio label="man" size="large">男</el-radio>
-                    <el-radio label="woman" size="large">女</el-radio>
+                    <el-radio label="man">男</el-radio>
+                    <el-radio label="woman">女</el-radio>
                   </el-radio-group>
                 </el-form-item>
               </el-col>
             </el-row>
 
-            <el-form-item
-              v-if="!form.isTeacher"
-              label="身份证号:"
-              prop="identity"
-            >
-              <el-input v-model="form.ruleForm.identity" />
-            </el-form-item>
-
-            <el-row :gutter="80">
-              <el-col :span="12">
-                <el-form-item label="政治面貌:" prop="politicalStatus">
-                  <el-input
-                    v-model="form.ruleForm.politicalStatus"
-                  /> </el-form-item
-              ></el-col>
-              <el-col :span="12">
-                <el-form-item label="民族:" prop="ethniGroup">
-                  <el-input v-model="form.ruleForm.ethniGroup" /> </el-form-item
-              ></el-col>
-            </el-row>
-
-            <el-row v-if="!form.isTeacher" :gutter="80">
-              <el-col :span="12">
-                <el-form-item label="计划性质:" prop="natureProgram">
-                  <el-input
-                    v-model="form.ruleForm.natureProgram"
-                  /> </el-form-item
-              ></el-col>
-              <el-col :span="12">
-                <el-form-item label="选课科目:" prop="electiveSubject">
-                  <el-input
-                    v-model="form.ruleForm.electiveSubject"
-                  /> </el-form-item
-              ></el-col>
-            </el-row>
-
-            <el-row v-if="!form.isTeacher" :gutter="40">
+            <el-row v-if="!form.isTeacher" :gutter="15">
               <el-col :span="8">
                 <el-form-item label="来源省份:" prop="province">
                   <el-input v-model="form.ruleForm.province" /> </el-form-item
@@ -102,15 +66,87 @@
               </el-col>
             </el-row>
 
-            <el-form-item
-              v-if="!form.isTeacher"
-              label="家庭地址:"
-              prop="homeAddress"
-            >
-              <el-input v-model="form.ruleForm.homeAddress" />
-            </el-form-item>
-
             <el-row :gutter="80">
+              <el-col :span="12">
+                <el-form-item label="政治面貌:" prop="politicalStatus">
+                  <el-select
+                    v-model="form.ruleForm.politicalStatus"
+                    class="m-2"
+                    placeholder="请选择"
+                  >
+                    <el-option
+                      v-for="item in dropDownData.politicalStatusList"
+                      :key="item"
+                      :label="item"
+                      :value="item"
+                    />
+                  </el-select>
+                </el-form-item>
+              </el-col>
+              <el-col :span="12">
+                <el-form-item label="民族:" prop="ethniGroup">
+                  <el-autocomplete
+                    v-model="form.ruleForm.ethniGroup"
+                    :fetch-suggestions="queryEthniGroupString"
+                    clearable
+                    class="inline-input w-50"
+                    placeholder="请输入民族"
+                    @select="handleSelectEthnicGroup"
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+
+            <el-row v-if="!form.isTeacher">
+              <el-col :span="24">
+                <el-form-item label="选课科目:" prop="electiveSubject">
+                  <el-checkbox-group v-model="form.ruleForm.electiveSubject">
+                    <el-checkbox
+                      v-for="subject in dropDownData.subjectList"
+                      :key="subject"
+                      :label="subject"
+                    >
+                      {{ subject }}
+                    </el-checkbox>
+                  </el-checkbox-group>
+                </el-form-item></el-col
+              >
+            </el-row>
+
+            <el-row>
+              <el-col :span="16">
+                <el-form-item
+                  v-if="!form.isTeacher"
+                  label="身份证号:"
+                  prop="identity"
+                >
+                  <el-input v-model="form.ruleForm.identity" /> </el-form-item
+              ></el-col>
+            </el-row>
+
+            <el-row v-if="!form.isTeacher">
+              <el-col :span="16">
+                <el-form-item label="计划性质:" prop="natureProgram">
+                  <el-input
+                    v-model="form.ruleForm.natureProgram"
+                  /> </el-form-item
+              ></el-col>
+            </el-row>
+
+            <el-row>
+              <el-col :span="16">
+                <el-form-item
+                  v-if="!form.isTeacher"
+                  label="家庭地址:"
+                  prop="homeAddress"
+                >
+                  <el-input
+                    v-model="form.ruleForm.homeAddress"
+                  /> </el-form-item
+              ></el-col>
+            </el-row>
+
+            <el-row :gutter="40">
               <el-col :span="12">
                 <el-form-item label="联系电话:" prop="phone">
                   <el-input v-model="form.ruleForm.phone" /> </el-form-item
@@ -127,7 +163,7 @@
         <div class="footer">
           <el-divider />
           <span class="button-footer item">
-            <el-button type="primary" @click="handleAddRole"> 确定 </el-button>
+            <el-button type="primary" @click="handleAddUser"> 确定 </el-button>
             <el-button @click="handleClose">取消</el-button>
           </span>
         </div>
@@ -137,10 +173,29 @@
 </template>
   <script setup>
 // 添加用户
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
+import {
+  ethniGroupList,
+  politicalStatusList,
+  subjectList,
+} from "@/assets/js/data/information-dropdown-data";
+import {
+  IDENTITY_TEST,
+  PHONE_TEST,
+} from "@/assets/js/utils/regular-expression";
+
+// 验证信息
+const validateElectiveSubject = (rule, value, callback) => {
+  console.log(value);
+  if (value.length !== 3) {
+    callback(new Error("科目数应该为3个"));
+  }
+  callback();
+};
+// 表单数据
 const form = reactive({
   // 角色是否是老师
-  isTeacher: true,
+  isTeacher: false,
   dialogVisible: false,
   ruleForm: {
     uId: "",
@@ -159,9 +214,64 @@ const form = reactive({
     parentPhone: "",
   },
   rules: {
-    name: [{ required: true, message: "请输入用户姓名", trigger: "blur" }],
+    uId: [{ required: true, message: "请输入", trigger: "blur" }],
+    name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+    sex: [{ required: true, message: "请输入性别", trigger: "blur" }],
+    province: [{ required: true, message: "请输入", trigger: "blur" }],
+    targetSchool: [{ required: true, message: "请输入", trigger: "blur" }],
+    class: [{ required: true, message: "请输入", trigger: "blur" }],
+    politicalStatus: [{ required: true, message: "请输入", trigger: "blur" }],
+    ethniGroup: [{ required: true, message: "请输入", trigger: "blur" }],
+    electiveSubject: [
+      { required: true, message: "请输入", trigger: "blur" },
+      { validator: validateElectiveSubject, trigger: "blur" },
+    ],
+    identity: [
+      { required: true, message: "请输入", trigger: "blur" },
+      {
+        pattern: IDENTITY_TEST,
+        message: "请输入正确的身份证号",
+        trigger: "blur",
+      },
+    ],
+    phone: [
+      {
+        pattern: PHONE_TEST,
+        message: "请输入正确的手机号码",
+        trigger: "blur",
+      },
+    ],
+    parentPhone: [
+      {
+        pattern: PHONE_TEST,
+        message: "请输入正确的手机号码",
+        trigger: "blur",
+      },
+    ],
   },
 });
+// 下拉框数据
+const dropDownData = reactive({
+  politicalStatusList: politicalStatusList,
+  ethniGroupList: ethniGroupList,
+  subjectList: subjectList,
+});
+// 自动补全输入框
+const queryEthniGroupString = (ethniGroup, cb) => {
+  const results = ethniGroup
+    ? dropDownData.ethniGroupList.filter(createFilter(ethniGroup))
+    : dropDownData.ethniGroupList;
+  cb(results);
+};
+const handleSelectEthnicGroup = (val) => {
+  form.ruleForm.ethniGroup = val.value;
+};
+// 自动补全输入框过滤信息
+const createFilter = (queryString) => {
+  return (restaurant) => {
+    return restaurant.value.indexOf(queryString) === 0;
+  };
+};
 // 调用父组件的方法
 const emit = defineEmits(["handleClose"]);
 // 表单验证
@@ -175,7 +285,7 @@ const handleClose = () => {
   emit("handleClose");
 };
 // 添加角色
-const handleAddRole = () => {
+const handleAddUser = () => {
   ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
       // 判断还是添加还是修改学校
@@ -185,6 +295,9 @@ const handleAddRole = () => {
     }
   });
 };
+onMounted(() => {
+  console.log(dropDownData);
+});
 defineExpose({ form });
 </script>
   <style src="@/assets/css/role/role-drawer.css" scoped>
@@ -198,6 +311,10 @@ defineExpose({ form });
 }
 .choose-role > div {
   margin-right: 0.5rem;
+}
+/* 多选框 */
+.checkbox-group {
+  display: flex;
 }
 </style>
   

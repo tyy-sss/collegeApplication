@@ -1,5 +1,3 @@
-import router from "@/router";
-
 // 动态注册路由
 const addMenu = (data) => {
   // 处理动态路由的数据

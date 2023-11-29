@@ -1,5 +1,7 @@
 // 文件导入
 import XLSX from "xlsx";
+import { subjectList } from "@/assets/js/data/information-dropdown-data";
+import { PHONE_TEST, IDENTITY_TEST } from "@/assets/js/utils/regular-expression";
 
 // 按照二进制读取文件
 export const readFile = (file) => {
@@ -47,16 +49,13 @@ export const excelLeadingIn = (data, character) => {
 // 对学生信息进行处理
 export const handleStudentInformation = (data) => {
   const handleData = [];
-  const subjectList = ["物理", "化学", "生物", "历史", "地理", "政治"];
   data.forEach((item) => {
     // 学生的姓名，学号，班级,目标学校不能为空
     if (!item.name || !item.uId || !item.class || !item.targetSchool) return;
     // 对手机号，身份证号进行正则验证
-    var p = /^[1][0-9]{10}$/;
-    var phone = p.test(item.phone);
-    var parentPhone = p.test(item.parentPhone);
-    var reg = /(^\d{15}$)|(^\d{18}$)|(^\d{17}(\d|X|x)$)/;
-    var identity = reg.test(item.identity);
+    var phone = PHONE_TEST.test(item.phone);
+    var parentPhone = PHONE_TEST.test(item.parentPhone);
+    var identity = IDENTITY_TEST.test(item.identity);
     if (!phone || !parentPhone || !identity) {
       return;
     }

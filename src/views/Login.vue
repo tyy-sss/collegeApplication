@@ -45,6 +45,10 @@ import apiFun from "@/api/user";
 import { reactive, ref } from "vue";
 import { throttle } from "@/assets/js/utils/throttle";
 import { setRole, setAccessToken, setRefreshToken } from "@/config/constants";
+import {
+  ACCOUNT_TEST,
+  PASSWORD_TEST,
+} from "@/assets/js/utils/regular-expression";
 // 用户数据
 const userData = reactive({
   type: 1,
@@ -55,14 +59,14 @@ const userData = reactive({
 const rules = reactive({
   userNumber: [
     {
-      pattern: /^[0-9]{2,16}$/,
+      pattern: ACCOUNT_TEST,
       message: "请输入数字（2~16位）",
       trigger: "blur",
     },
   ],
   password: [
     {
-      pattern: /^[@#$%^&+=a-zA-Z0-9]{6,16}$/,
+      pattern: PASSWORD_TEST,
       message: "请输入数字或者字母（6~16位）",
       trigger: "blur",
     },
