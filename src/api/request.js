@@ -2,7 +2,7 @@ import axios from "axios";
 import qs from "qs"; //转json数据工具包
 import { ElMessage } from "element-plus";
 import { addRequest, refreshToken } from "./two-token";
-import {removeAccessToken } from "@/config/constants";
+import {getAccessToken, removeAccessToken } from "@/config/constants";
 
 //1.利用axios对象的方法create，去创建一个axios实例。
 const requests = axios.create({
@@ -14,7 +14,7 @@ const requests = axios.create({
 });
 //请求拦截器：
 requests.interceptors.request.use((config) => {
-  const token = localStorage.getItem("token");
+  const token = getAccessToken();
   if (token) {
     config.headers.Authorization = "Bearer " + token;
   }
@@ -27,7 +27,7 @@ requests.interceptors.response.use((res) => {
     return Promise.reject(res);
   }
   if (res.data.code != 200) {
-    if (data.code === 4003) {
+    if (data.code === 2044) {
       // 移除失效的短token
       removeAccessToken();
       // 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新

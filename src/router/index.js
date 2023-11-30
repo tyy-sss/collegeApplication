@@ -129,7 +129,6 @@ const router = createRouter({
 router.beforeEach((to, form, next) => {
   // 判断是否有token
   var token = getAccessToken();
-  token ="111";
   console.log(token, "短token");
   if (!token) {
     // 未登录
