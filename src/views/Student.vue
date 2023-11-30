@@ -10,12 +10,12 @@
       <el-row :gutter="12">
         <el-col :span="6">
           <el-card shadow="hover">
-            🧑 本班学生总人数： {{ studentNum }} 人
+            🧑 学生总人数： {{ studentNum }} 人
           </el-card>
         </el-col>
         <el-col :span="6">
           <el-card shadow="hover"
-            >👧 本班评测小组成员人数： {{ cadreNum }} 人
+            >👧 评测小组成员人数： {{ cadreNum }} 人
             <el-button
               type="warning"
               size="small"
@@ -217,15 +217,15 @@ const filterTableData = computed(() =>
 );
 //重置密码
 const handleRepasswd = (index, row) => {
-  console.log(index, row);
+  console.log("重置密码", index, row);
 };
 //批量重置密码
 const handleRepasswds = () => {
-  console.log(multipleSelection.value);
+  console.log("批量重置密码", multipleSelection.value);
 };
 //详细信息(可编辑)
 const handleEdit = (index, row) => {
-  console.log(index, row);
+  console.log("详细信息(可编辑)", index, row);
 };
 //对话框
 const dialogVisible = ref(false);
@@ -233,15 +233,19 @@ const dialogVisible2 = ref(false);
 const dialogVisible3 = ref(false);
 //删除申诉项
 const handleDelete = (index, row) => {
-  console.log(index, row);
+  console.log("删除申诉项", index, row);
 };
 //恢复回收站项
 const handleRecover = (index, row) => {
-  console.log(index, row);
+  console.log("恢复回收站项", index, row);
 };
 //重置测评账号密码
 const handleRecover2 = (index, row) => {
-  console.log(index, row);
+  console.log("重置测评账号密码", index, row);
+};
+//撤销评测小组人员账号
+const handleFired = (index, row) => {
+  console.log("撤销评测小组人员账号", index, row);
 };
 // 申诉列表
 const complaintData = [

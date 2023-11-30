@@ -2,7 +2,10 @@
 * {
   box-sizing: border-box;
 }
-
+/* 根字体 */
+:root{
+  font-size: 15px;
+}
 /* 显示块 */
 .show-container {
   background-color: #fff;

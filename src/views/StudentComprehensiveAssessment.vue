@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-21 20:56:20
+ * @LastEditTime: 2023-11-30 23:08:36
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -63,8 +63,12 @@
         </el-table>
         <br />
       </div>
-      <el-button type="primary">前往电子签名</el-button>
-      <el-button type="danger">申报错误</el-button>
+      <el-button type="primary" @click="dialogVisible = true"
+        >前往电子签名</el-button
+      >
+      <el-button type="danger" @click="dialogVisible2 = true"
+        >申报错误</el-button
+      >
       <br />
       <span style="color: rgb(167, 167, 167)"
         >⊙综合素质测评成绩 = 德育 x 20% + 智育 x 20% + 体育 x 20% + 美育　x 20%
@@ -92,8 +96,49 @@
       </div>
     </div>
   </div>
+  <!-- 电子签名对话框 -->
+  <el-dialog v-model="dialogVisible" title="电子签名" width="50%">
+    <div>
+      <signatures></signatures>
+    </div>
+  </el-dialog>
+  <!-- 申报错误对话框 -->
+  <el-dialog v-model="dialogVisible2" title="申报错误" width="30%">
+    <div>
+      <el-form-item label="申报接收对象：">
+        <el-select
+          v-model="target"
+          class="m-2"
+          placeholder="请选择申报接收对象"
+        >
+          <el-option
+            v-for="item in targets"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </el-form-item>
+      <el-form-item label="错误申报内容：">
+        <el-input
+          v-model="textarea"
+          :autosize="{ minRows: 6, maxRows: 10 }"
+          type="textarea"
+          placeholder="请输入错误申报内容"
+        />
+      </el-form-item>
+    </div>
+    <template #footer>
+      <span class="dialog-footer">
+        <el-button type="primary" @click="commit"> 提交申报 </el-button>
+      </span>
+    </template>
+  </el-dialog>
 </template>
 <script setup>
+import { ref, computed } from "vue";
+import signatures from "@/components/utils/Signatures.vue";
+import {ElMessage } from "element-plus";
 const assessment = [
   {
     id: "2021401449",
@@ -120,80 +165,30 @@ const assessment = [
   },
 ];
 let state = "未到确认时间";
-let student = {
-  name: "付小小",
-  id: "415567569789",
-  card: "365124200103052214",
-  sex: "女",
-  class: "2023级预科1班",
-  school: "湘南学院",
-};
-let object1 = null;
-let object2 = null;
-let object3 = null;
-const options = [
+//对话框
+const dialogVisible = ref(false);
+const dialogVisible2 = ref(false);
+const target = ref("");
+
+const targets = [
   {
-    value: "计算机科学与工程学院",
-    label: "计算机科学与工程学院",
-    children: [
-      {
-        value: "软件工程",
-        label: "软件工程",
-      },
-      {
-        value: "物联网工程",
-        label: "物联网工程",
-      },
-      {
-        value: "人工智能",
-        label: "人工智能",
-        disabled: true,
-      },
-      {
-        value: "大数据网络",
-        label: "大数据网络",
-        disabled: true,
-      },
-    ],
+    value: "1",
+    label: "班主任",
   },
   {
-    value: "美术学院",
-    label: "美术学院",
-    children: [
-      {
-        value: "服装设计",
-        label: "服装设计",
-      },
-      {
-        value: "视觉传达设计",
-        label: "视觉传达设计",
-      },
-      {
-        value: "漫画设计",
-        label: "漫画设计",
-      },
-    ],
-  },
-  {
-    value: "医学院",
-    label: "医学院",
-    children: [
-      {
-        value: "药物科学",
-        label: "药物科学",
-      },
-      {
-        value: "动物医学",
-        label: "动物医学",
-      },
-      {
-        value: "法医",
-        label: "法医",
-      },
-    ],
+    value: "2",
+    label: "评测小组同学",
   },
 ];
-let num = "?";
+const textarea = ref("");
+//提交申报
+function commit() {
+  dialogVisible2.value = false;
+  ElMessage({
+        message: "已申报错误，请耐心等待处理",
+        type: "success",
+      });
+}
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>

@@ -278,12 +278,21 @@
     <br />
     <br />
     <div style="height: 40px; display: flex; justify-content: center">
-      <el-button type="primary">提交本月测评结果</el-button>
+      <el-button type="primary" @click="dialogVisible = true"
+        >提交本月测评结果</el-button
+      >
     </div>
   </div>
+  <!-- 电子签名对话框 -->
+  <el-dialog v-model="dialogVisible" title="电子签名" width="50%">
+    <div>
+      <signatures></signatures>
+    </div>
+  </el-dialog>
 </template>
 <script setup>
 import { ref, computed } from "vue";
+import signatures from "@/components/utils/Signatures.vue";
 let myclass = "2023级1班";
 let month = "三月";
 const assessments = ref([
@@ -556,6 +565,8 @@ const handleCellLeave = (row, column, cell, event) => {
     cell.querySelector(".item__txt").style.display = "block";
   }
 };
+//电子签名对话框
+const dialogVisible = ref(false);
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 
