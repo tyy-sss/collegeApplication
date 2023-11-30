@@ -1,6 +1,7 @@
 <template>
   <div class="volunteer-rule">
-    <div class="title">
+    <div class="show-container">
+      <div class="title">
       <div class="text">志愿规则说明</div>
     </div>
     <div class="context">
@@ -14,6 +15,7 @@
           <rule-explain :volunteer-rule="rangeVolunteer" />
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>

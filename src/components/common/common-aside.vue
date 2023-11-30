@@ -22,6 +22,7 @@
               <el-icon class="menu-icon"><component :is="item.icon" /></el-icon>
               <span>{{ item.menuName }}</span>
             </el-menu-item>
+            <!-- 消息管理 -->
             <el-menu-item :index="item.path" v-else>
               <el-badge :value="1" class="item">
                 <el-icon class="menu-icon"
@@ -33,7 +34,7 @@
           </div>
         </el-menu>
       </div>
-      <div class="exit">
+      <div class="exit" @click="handleExit">
         <div>
           <img src="@/assets/image/exit.png" />
         </div>
@@ -43,20 +44,34 @@
   </div>
 </template>
     <script setup>
-import { onMounted, reactive } from "vue";
-import { menuData } from "@/assets/js/data/menu";
+import { reactive } from "vue";
 import store from "@/store";
 import { useRouter } from "vue-router";
+import apiFun from "@/api/user";
+import {
+  removeAccessToken,
+  removeRefreshToken,
+  removeRole,
+} from "@/config/constants";
 const router = useRouter();
 const menuDataForVue = reactive(store.state.menu.menuData);
 // 跳转界面
 const handleSelect = (key, keyPath) => {
   router.push({ path: key });
 };
-onMounted(() => {
-  store.commit("setMenu", menuData);
-  store.commit("addMenu");
-});
+// 退出
+const handleExit = async () => {
+  // 清除用户信息
+  removeAccessToken();
+  removeRefreshToken();
+  removeRole();
+  // const data = await apiFun.user.loginOut();
+  // 跳转界面
+  const href = router.resolve({
+    path:"/login",
+  })
+  window.open(href.href,"_self")
+};
 </script>
 <style scoped>
 .common-aside {
@@ -108,7 +123,7 @@ onMounted(() => {
   border-top-left-radius: 1rem;
   border-bottom-left-radius: 1rem;
 }
-::v-deep .el-badge__content.is-fixed{
+::v-deep .el-badge__content.is-fixed {
   transform: translateY(-20%) translateX(100%);
 }
 /* 退出登录 */

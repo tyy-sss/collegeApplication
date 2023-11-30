@@ -1,110 +1,116 @@
 <template>
   <div class="volunteer-address">
-    <div class="title">
-      <div class="text">志愿地区管理</div>
-    </div>
-    <div class="context">
-      <div class="top">
-        <div class="search">
-          <div class="left">
-            <div class="search-item">
-              <div class="text">组合姓名:</div>
-              <div class="input">
-                <el-input
-                  v-model="searchData.searchName"
-                  placeholder="请输入"
-                />
+    <div class="show-container">
+      <div class="title">
+        <div class="text">志愿地区管理</div>
+      </div>
+      <div class="context">
+        <div class="top">
+          <div class="search">
+            <div class="left">
+              <div class="search-item">
+                <div class="text">组合姓名:</div>
+                <div class="input">
+                  <el-input
+                    v-model="searchData.searchName"
+                    placeholder="请输入"
+                  />
+                </div>
+              </div>
+              <div class="search-item">
+                <div class="text">省份搜索:</div>
+                <div class="input">
+                  <el-input
+                    v-model="searchData.searchProvince"
+                    placeholder="请输入"
+                  />
+                </div>
               </div>
             </div>
-            <div class="search-item">
-              <div class="text">省份搜索:</div>
-              <div class="input">
-                <el-input
-                  v-model="searchData.searchProvince"
-                  placeholder="请输入"
-                />
+            <div class="right">
+              <div class="search-button">
+                <el-button type="primary" @click="handleSearchAddress"
+                  >查询</el-button
+                >
+              </div>
+              <div class="search-icon">
+                <el-icon :size="23" color="#409EFC" @click="onReSearch"
+                  ><Refresh
+                /></el-icon>
               </div>
             </div>
           </div>
-          <div class="right">
-            <div class="search-button">
-              <el-button type="primary" @click="handleSearchAddress"
-                >查询</el-button
-              >
-            </div>
-            <div class="search-icon">
-              <el-icon :size="23" color="#409EFC" @click="onReSearch"
-                ><Refresh
-              /></el-icon>
-            </div>
+        </div>
+        <div class="add">
+          <el-button type="primary" :icon="Plus" @click="handleAddAddress"
+            >新建</el-button
+          >
+        </div>
+        <div class="middle">
+          <el-table
+            ref="multipleTableRef"
+            :data="tableData"
+            border
+            stripe
+            style="width: 100%"
+            @selection-change="handleSelectionChange"
+          >
+            <el-table-column type="selection" width="35" />
+            <el-table-column prop="id" label="组合编号" min-width="120" />
+            <el-table-column prop="name" label="组合名称" min-width="120" />
+            <el-table-column
+              prop="provinceGroup"
+              label="涵盖省份"
+              min-width="250"
+            />
+            <el-table-column
+              prop="updateTime"
+              label="更新时间"
+              min-width="120"
+            />
+            <el-table-column label="操作" min-width="180px">
+              <template #default="scope">
+                <el-button
+                  link
+                  type="primary"
+                  @click="handleChangeAddress(scope.row)"
+                  >修改</el-button
+                >
+                <el-button
+                  link
+                  type="danger"
+                  @click="handleDeteleAddress(scope.row)"
+                  >删除</el-button
+                >
+              </template></el-table-column
+            >
+          </el-table>
+        </div>
+        <div class="bottom">
+          <div class="button">
+            <el-button type="success" @click="handleBatchDeleteAddress"
+              >批量删除</el-button
+            >
           </div>
-        </div>
-      </div>
-      <div class="add">
-        <el-button type="primary" :icon="Plus" @click="handleAddAddress"
-          >新建</el-button
-        >
-      </div>
-      <div class="middle">
-        <el-table
-          ref="multipleTableRef"
-          :data="tableData"
-          border
-          stripe
-          style="width: 100%"
-          @selection-change="handleSelectionChange"
-        >
-          <el-table-column type="selection" width="35" />
-          <el-table-column prop="id" label="组合编号" min-width="120" />
-          <el-table-column prop="name" label="组合名称" min-width="120" />
-          <el-table-column
-            prop="provinceGroup"
-            label="涵盖省份"
-            min-width="250"
-          />
-          <el-table-column prop="updateTime" label="更新时间" min-width="120" />
-          <el-table-column label="操作" min-width="180px">
-            <template #default="scope">
-              <el-button
-                link
-                type="primary"
-                @click="handleChangeAddress(scope.row)"
-                >修改</el-button
-              >
-              <el-button
-                link
-                type="danger"
-                @click="handleDeteleAddress(scope.row)"
-                >删除</el-button
-              >
-            </template></el-table-column
-          >
-        </el-table>
-      </div>
-      <div class="bottom">
-        <div class="button">
-          <el-button type="success" @click="handleBatchDeleteAddress"
-            >批量删除</el-button
-          >
-        </div>
-        <el-divider />
-        <div class="pager">
-          <div class="page-news">共{{ page.total }}条信息</div>
-          <el-pagination
-            v-model:current-page="page.currentPage"
-            v-model:page-size="page.nowPageSize"
-            :page-sizes="page.pageSize"
-            :pager-count="page.pageCount"
-            layout="prev, pager, next,sizes,jumper"
-            :total="page.total"
-            @size-change="handleSizeChange"
-            @current-change="handleCurrentChange"
+          <el-divider />
+          <div class="pager">
+            <div class="page-news">共{{ page.total }}条信息</div>
+            <el-pagination
+              v-model:current-page="page.currentPage"
+              v-model:page-size="page.nowPageSize"
+              :page-sizes="page.pageSize"
+              :pager-count="page.pageCount"
+              layout="prev, pager, next,sizes,jumper"
+              :total="page.total"
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+            />
+          </div>
+          <add-volunteer-address
+            ref="addVolunteerAddressRef"
+            @handleClose="handleClose"
           />
         </div>
-        <add-volunteer-address
-          ref="addVolunteerAddressRef"
-          @handleClose="handleClose"
-        />
       </div>
     </div>
   </div>

@@ -1,6 +1,7 @@
 <template>
   <div class="school-table">
-    <div class="title">
+    <div class="show-container">
+      <div class="title">
       <div class="text">学校信息</div>
     </div>
     <div class="context">
@@ -35,6 +36,7 @@
           />
         </div>
       </div>
+    </div>
     </div>
   </div>
 </template>

@@ -16,42 +16,44 @@ import { reactive } from "vue";
  * path：路径
  * icon：展示图标
  */
+const managerMenuData = reactive([
+  {
+    id: "600d4075e218daaf4ec77e50",
+    menuType: "1",
+    menuName: "学校管理",
+    path: "/school",
+    icon: "house",
+  },
+  {
+    id: "600d4075e218daaf4ec77e51",
+    menuType: "1",
+    menuName: "角色管理",
+    path: "/role",
+    icon: "location",
+  },
+  {
+    id: "600d4075e218daaf4ec77e21",
+    menuType: "1",
+    menuName: "用户管理",
+    path: "/user",
+    icon: "location",
+  },
+  {
+    id: "600d4075e218daaf4ec77e22",
+    menuType: "1",
+    menuName: "班级管理",
+    path: "/class",
+    icon: "location",
+  },
+  {
+    id: "600d4075e218daaf4ec77e31",
+    menuType: "1",
+    menuName: "历史管理",
+    path: "/history",
+    icon: "location",
+  },
+]);
 const menuData = reactive([
-  // {
-  //   id: "600d4075e218daaf4ec77e50",
-  //   menuType: "1",
-  //   menuName: "学校管理",
-  //   path: "/school",
-  //   icon: "house",
-  // },
-  // {
-  //   id: "600d4075e218daaf4ec77e51",
-  //   menuType: "1",
-  //   menuName: "角色管理",
-  //   path: "/role",
-  //   icon: "location",
-  // },
-  // {
-  //   id: "600d4075e218daaf4ec77e21",
-  //   menuType: "1",
-  //   menuName: "用户管理",
-  //   path: "/user",
-  //   icon: "location",
-  // },
-  // {
-  //   id: "600d4075e218daaf4ec77e22",
-  //   menuType: "1",
-  //   menuName: "班级管理",
-  //   path: "/class",
-  //   icon: "location",
-  // },
-  // {
-  //   id: "600d4075e218daaf4ec77e31",
-  //   menuType: "1",
-  //   menuName: "历史管理",
-  //   path: "/history",
-  //   icon: "location",
-  // },
   {
     id: "788d4075e218daaf4ec77e31",
     menuType: "1",
@@ -64,13 +66,6 @@ const menuData = reactive([
     menuType: "1",
     menuName: "班级管理",
     path: "/student",
-    icon: "location",
-  },
-  {
-    id: "789d4075e218daaf4ec77e35",
-    menuType: "1",
-    menuName: "班级志愿情况",
-    path: "/volunteer",
     icon: "location",
   },
   {
@@ -115,13 +110,15 @@ const menuData = reactive([
     path: "/ranking-query",
     icon: "location",
   },
-  {
-    id: "758d7075e218daaf4ec77e39",
-    menuType: "1",
-    menuName: "登陆页面",
-    path: "/login",
-    icon: "location",
-  },
 ]);
 
-export { menuData };
+const giveMenu = (role) => {
+  if (role === "manager") {
+    return managerMenuData;
+  } else if (role === "student") {
+  } else if (role === "teacher") {
+  }
+  return managerMenuData;
+};
+
+export { giveMenu };

@@ -11,7 +11,6 @@ export default {
     //设置菜单的数据
     setMenu(state, val) {
       state.menuData = val;
-    
     },
     addMenu(state){
       addMenu(state.menuData);

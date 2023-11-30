@@ -1,8 +1,7 @@
 <template>
-  <div class="add-user">
-    <el-dialog v-model="data.dialogTableVisible" title="添加用户">
-      <el-divider />
-      <div class="content top">
+  <div class="profession-information">
+    <div class="context">
+      <div class="top">
         <div class="upload">
           <el-upload
             class="upload-demo"
@@ -34,6 +33,9 @@
           </el-upload>
         </div>
       </div>
+      <div class="middle">
+        <el-button type="primary" @click="handleNextStep">下一步</el-button>
+      </div>
       <div class="bottom">
         <div class="explain">
           <div class="title">文件上传说明</div>
@@ -45,43 +47,27 @@
             <div>（3）限制一个文件，下一个文件会覆盖上一个文件。</div>
           </div>
         </div>
-        <el-button type="primary" @click="handleExportStudent"
-          >下载学生信息模板</el-button
-        >
-        <el-button type="primary" @click="handleExportTeach"
-          >下载老师信息模板</el-button
+        <el-button type="info" @click="handleExportProfession"
+          >下载专业信息模板</el-button
         >
       </div>
-    </el-dialog>
+    </div>
   </div>
 </template>
 <script setup>
 import { reactive } from "vue";
 import { excelExport } from "@/assets/js/excel/excel-export";
-import {
-  studentHeader,
-  studentModelData,
-  teacherHeader,
-  teacherModelData,
-} from "@/assets/js/excel/excel-export-data";
+import { professionInformationLimitHeader } from "@/assets/js/excel/excel-export-data";
 import {
   readFile,
   getExcelData,
   excelLeadingIn,
-  handleStudentInformation,
-  handleTeacherInformation,
 } from "@/assets/js/excel/excel-leading";
-import {
-  studentCharacter,
-  teacherCharacter,
-} from "@/assets/js/excel/excel-leading-data";
+import { professionInformationLimitCharacter } from "@/assets/js/excel/excel-leading-data";
 
 // 接口
-// import { uploadSingleResume } from "@/api/resume";
 import { ElMessage } from "element-plus";
 const data = reactive({
-  dialogTableVisible: false,
-  post: "",
   upload: {
     isProgress: false,
   },
@@ -103,44 +89,45 @@ const handleAddUser = async (ev) => {
     //读取file中的数据
     let data = await readFile(file);
     const excelData = getExcelData(data);
-    const length = Object.keys(excelData[0]).length;
-    var addData = [];
-    if (length === Object.keys(studentCharacter).length) {
-      addData = excelLeadingIn(excelData, studentCharacter);
-      addData = handleStudentInformation(addData);
-    } else if (length === Object.keys(teacherCharacter).length) {
-      addData = excelLeadingIn(excelData, teacherCharacter);
-      addData = handleTeacherInformation(addData);
-    }
+    const addData = excelLeadingIn(
+      excelData,
+      professionInformationLimitCharacter
+    );
+    console.log(addData);
   }
 };
 // 导出学生信息表
-const handleExportStudent = () => {
-  excelExport(studentModelData, studentHeader, "学生信息模板表");
+const handleExportProfession = () => {
+  excelExport([], professionInformationLimitHeader, "专业限制专业信息模板表");
 };
-// 导出老师信息表
-const handleExportTeach = () => {
-  excelExport(teacherModelData, teacherHeader, "老师信息模板表");
-};
-// 把参数暴露给父组件，让父组件进行修改
-defineExpose({
-  data,
-});
+// 调用父组件的方法
+const emit = defineEmits(["changeStepActive"]);
+// 下一步
+const handleNextStep = () =>{
+  emit("changeStepActive",2)
+}
 </script>
 <style scoped>
-::v-deep .el-divider--horizontal {
-  margin: 2px 0;
-}
-.content{
+.profession-information {
   display: flex;
+  align-items: center;
   justify-content: center;
+}
+.context {
+  padding: 2rem;
+  width: 85%;
+  min-width: 700px;
+  background-color: RGBA(237, 242, 246, 0.5);
+  border-radius: 1rem;
+  display: flex;
+  flex-direction: column;
   align-items: center;
 }
-.content {
-  padding: 20px;
+.context > div {
+  margin-bottom: 1rem;
 }
 .upload {
-  width: 70%;
+  min-width: 400px;
 }
 .big {
   color: #32325d;

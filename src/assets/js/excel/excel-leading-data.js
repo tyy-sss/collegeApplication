@@ -1,5 +1,5 @@
 // 文件导出格式
-
+import { reactive } from "vue";
 // 学生信息字段对应表
 export let studentCharacter = {
   uId: {
@@ -87,3 +87,15 @@ export let teacherCharacter = {
     type: "string",
   },
 };
+
+// 专业限制 专业信息导出头行
+export let professionInformationLimitCharacter = reactive({
+  college: {
+    text: "教学学院",
+    type: "string",
+  },
+  professionName: {
+    text: "专业名称",
+    type: "string",
+  },
+});
