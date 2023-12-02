@@ -5,6 +5,7 @@
     </div>
     <hr />
     <h1>{{ myclass }}班级综合测评表[{{ month }}]</h1>
+    <!-- 顶部，查询按钮，导出按钮 -->
     <div style="height: 40px">
       <span style="float: left">学生姓名: &nbsp;</span>
       <el-input
@@ -13,7 +14,7 @@
         size="small"
         placeholder="输入学生姓名关键字"
       />
-      <el-button style="float: right"
+      <el-button style="float: right" @click="handleExcelExport"
         ><el-icon><Download /></el-icon>&nbsp; 导出</el-button
       >
     </div>
@@ -268,6 +269,7 @@
       </el-table-column>
     </el-table>
     <br />
+    <!-- 分页 -->
     <el-pagination
       :page-size="7"
       :pager-count="5"
@@ -277,6 +279,7 @@
     />
     <br />
     <br />
+    <!-- 提交按钮 -->
     <div style="height: 40px; display: flex; justify-content: center">
       <el-button type="primary" @click="dialogVisible = true"
         >提交本月测评结果</el-button
@@ -291,11 +294,13 @@
   </el-dialog>
 </template>
 <script setup>
-import { ref, computed } from "vue";
+import { ref, reactive,computed } from "vue";
 import signatures from "@/components/utils/Signatures.vue";
+import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment";
+import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 let myclass = "2023级1班";
 let month = "三月";
-const assessments = ref([
+const assessments = reactive([
   {
     id: "20222113001",
     name: "吾尔肯·塞里克",
@@ -549,7 +554,7 @@ const editProp = [
   "pre_total",
   "point_total",
 ];
-
+//编辑
 const handleCellEnter = (row, column, cell, event) => {
   const property = column.property;
   if (editProp.includes(property)) {
@@ -557,7 +562,6 @@ const handleCellEnter = (row, column, cell, event) => {
     cell.querySelector(".item__txt").style.display = "none";
   }
 };
-
 const handleCellLeave = (row, column, cell, event) => {
   const property = column.property;
   if (editProp.includes(property)) {
@@ -565,6 +569,17 @@ const handleCellLeave = (row, column, cell, event) => {
     cell.querySelector(".item__txt").style.display = "block";
   }
 };
+
+// 数据excel导出
+const handleExcelExport = () => {
+  console.log(comprehensiveAssessmentHeader)
+  export_json_to_excel(
+    comprehensiveAssessmentHeader,
+    assessments,
+    `${myclass}班级综合测评表`
+  );
+};
+
 //电子签名对话框
 const dialogVisible = ref(false);
 </script>

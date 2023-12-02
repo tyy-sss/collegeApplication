@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-21 20:06:45
+ * @LastEditTime: 2023-12-02 19:08:56
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -21,7 +21,7 @@
         size="small"
         placeholder="输入学生姓名关键字"
       />
-      <el-button style="float: right"
+      <el-button style="float: right" @click="handleExcelExport"
         ><el-icon><Download /></el-icon>&nbsp; 导出</el-button
       >
     </div>
@@ -82,7 +82,9 @@
   </div>
 </template>
 <script setup>
-import { ref, computed } from "vue";
+import { ref, reactive,computed } from "vue";
+import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment";
+import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 let myclass = "2023级1班";
 const search = ref("");
 const filterTableData = computed(() =>
@@ -90,7 +92,7 @@ const filterTableData = computed(() =>
     (data) => !search.value || data.name.includes(search.value)
   )
 );
-const assessments = [
+const assessments = reactive([
   {
     id: "20222113001",
     name: "吾尔肯·塞里克",
@@ -252,7 +254,15 @@ const assessments = [
     pre_total: 18,
     point_total: 10,
   },
-];
+]);
+// 数据excel导出
+const handleExcelExport = () => {
+  export_json_to_excel(
+    comprehensiveAssessmentHeader,
+    assessments,
+    `${myclass}班级综合测评表`
+  );
+};
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style lang="scss" scoped>

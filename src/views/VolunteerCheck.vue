@@ -64,9 +64,9 @@
           <h1>第三志愿：{{ volunteer3 }}</h1>
           <br /></div
       ></el-card>
-      <el-button type="danger">提交志愿</el-button>
+      <el-button type="danger">修改志愿</el-button>
       <br />
-      <div>截止时间{{ danger }}前，您还有{{ times }}次修改机会</div>
+      <div>截止时间{{ danger }}前，您还有<strong style="color:red">{{ times }}</strong>次修改机会</div>
       <br />
       <div class="tip2">
         <div><b>⚠提示</b></div>
@@ -91,7 +91,7 @@ let volunteer1 = "数学与应用数学";
 let volunteer2 = "金融工程";
 let volunteer3 = "软件工程";
 let danger = "2023.11.09";
-let times = "二";
+let times = "2";
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>

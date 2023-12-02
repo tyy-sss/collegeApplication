@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-27 21:02:11
+ * @LastEditTime: 2023-12-02 17:24:40
  * @FilePath: \collegeApplication\src\assets\js\data\menu.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -53,7 +53,7 @@ const managerMenuData = reactive([
     icon: "location",
   },
 ]);
-const menuData = reactive([
+const studentMenuData = reactive([
   {
     id: "788d4075e218daaf4ec77e31",
     menuType: "1",
@@ -80,6 +80,13 @@ const menuData = reactive([
     menuType: "1",
     menuName: "志愿填报",
     path: "/volunteer-fill",
+    icon: "location",
+  },
+  {
+    id: "789d4075e218daaf4ec77e38",
+    menuType: "1",
+    menuName: "志愿填报情况",
+    path: "/volunteer",
     icon: "location",
   },
   {
@@ -111,12 +118,28 @@ const menuData = reactive([
     icon: "location",
   },
 ]);
+const headteacherMenuData = reactive[{
+
+}]
+const teacherMenuData = reactive[{
+
+}]
+const evaluatorMenuData = reactive[{
+
+}]
 
 const giveMenu = (role) => {
+  return studentMenuData;//开发阶段
   if (role === "manager") {
     return managerMenuData;
   } else if (role === "student") {
+    return studentMenuData;
+  } else if (role === "headteacher") {
+    return headteacherMenuData;
   } else if (role === "teacher") {
+    return teacherMenuData;
+  } else if (role === "evaluator") {
+    return evaluatorMenuData;
   }
   return managerMenuData;
 };
