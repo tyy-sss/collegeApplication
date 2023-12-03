@@ -100,8 +100,9 @@ const handleExit = async () => {
   width: 5rem;
 }
 .user-name {
-  font-size: 20px;
-  font-weight: 600;
+  font-size: 22px;
+  font-weight: bolder;
+  font-family: "Times New Roman", Times, serif;
 }
 .description{
   font-family:"Times New Roman", Times, serif;
@@ -143,7 +144,7 @@ const handleExit = async () => {
   margin-left: 0.5rem;
 }
 .exit img {
-  height: 1.5rem;
-  width: 1.5rem;
+  height: 18px;
+  width: 18px;
 }
 </style>
