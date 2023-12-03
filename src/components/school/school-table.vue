@@ -2,7 +2,7 @@
   <div class="school-table">
     <div class="show-container">
       <div class="title">
-      <div class="text">学校信息</div>
+      <div class="text">学校信息录入</div>
     </div>
     <div class="context">
       <div class="top">

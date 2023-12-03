@@ -146,7 +146,7 @@ const handleNextStep = () =>{
   align-items: center;
 }
 .explain {
-  color: #32325d;
+  color: RGB(50,50,93);
 }
 /* 文件上传声明 */
 .explain .title {

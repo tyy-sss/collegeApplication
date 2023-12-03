@@ -79,17 +79,11 @@
   </div>
 </template>
   <script setup>
-// 接口 搜索用户 删除用户 重置密码 修改用户角色
-import addUser from "@/components/user/add-user.vue";
-import addUserSingle from "@/components/user/add-user-single.vue";
 import { reactive, ref } from "vue";
 import { Download, Edit, Check } from "@element-plus/icons-vue";
-const addUserRef = ref(null);
-const addUserSingleRef = ref(null);
 
 const searchData = reactive({
   searchName: "",
-  searchRole: "",
 });
 // 分页数据
 const pager = reactive({

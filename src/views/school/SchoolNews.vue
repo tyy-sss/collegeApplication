@@ -4,7 +4,7 @@
       <div class="text">吉首大学</div>
     </div>
     <div class="context">
-      <el-tabs type="card" class="demo-tabs">
+      <el-tabs type="border-card" class="demo-tabs" v-model="activeName">
         <el-tab-pane label="专业限制" name="first">
           <profession-limit/>
         </el-tab-pane>
@@ -26,6 +26,7 @@ import professionLimit from "@/components/schoo-news/profession-limit.vue";
 import professionShunt from '@/components/schoo-news/profession-shunt.vue'
 const route = useRoute();
 const id = ref(route.query.id);
+var activeName = ref('second')
 </script>
 <style src="@/assets/css/show-container.css" scoped/>
 <style scoped>
