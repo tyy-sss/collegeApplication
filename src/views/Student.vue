@@ -193,8 +193,10 @@
   </el-dialog>
 </template>
 <script setup>
-import { computed, ref } from "vue";
-import { ElMessageBox } from "element-plus";
+import { ref, reactive, computed } from "vue";
+import { ElMessageBox,ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter();
 let studentNum = 50;
 let cadreNum = 6;
 let myclass = "2021级预科4班";

@@ -136,9 +136,12 @@
   </el-dialog>
 </template>
 <script setup>
-import { ref, computed } from "vue";
 import signatures from "@/components/utils/Signatures.vue";
-import {ElMessage } from "element-plus";
+import { ref, reactive, computed } from "vue";
+import { ElMessageBox,ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
 const assessment = [
   {
     id: "2021401449",

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-02 17:14:04
+ * @LastEditTime: 2023-12-03 10:09:17
  * @FilePath: \collegeApplication\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -67,14 +67,21 @@ const routes = [
         component: () => import("@/views/Volunteer.vue"),
       },
       {
-        path: "volunteer-check",
-        name: "volunteer-check",
-        component: () => import("@/views/VolunteerCheck.vue"),
-      },
-      {
-        path: "volunteer-fill",
-        name: "volunteer-fill",
-        component: () => import("@/views/VolunteerFill.vue"),
+        path: "volunteer-basis",
+        name: "volunteer-basis",
+        component: () => import("@/views/VolunteerBasis.vue"),
+        redirect: '/volunteer-check',
+        children: [{
+          path: "/volunteer-check",
+          name: "volunteer-check",
+          component: () => import("@/views/VolunteerCheck.vue"),
+        },
+        {
+          path: "/volunteer-fill",
+          name: "volunteer-fill",
+          component: () => import("@/views/VolunteerFill.vue"),
+        },
+        ],
       },
       {
         path: "student-comprehensive-assessment",

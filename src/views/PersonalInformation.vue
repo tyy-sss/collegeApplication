@@ -303,8 +303,11 @@
   </el-drawer>
 </template>
 <script setup>
-import { ref, computed } from "vue";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ref, reactive, computed } from "vue";
+import { ElMessageBox,ElMessage } from "element-plus";
+import { useRouter } from "vue-router";
+const router = useRouter();
+
 const drawer = ref(false);
 let student = ref({
   avatar:

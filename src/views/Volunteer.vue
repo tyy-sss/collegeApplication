@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-28 21:00:57
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-28 21:22:22
+ * @LastEditTime: 2023-12-03 10:31:39
  * @FilePath: \collegeApplication\src\views\Volunteer.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -37,7 +37,7 @@
       <el-table-column prop="class" label="班级" width="60" />
       <el-table-column prop="id" label="学号" />
       <el-table-column prop="name" label="姓名" />
-      <el-table-column prop="sex" label="性别" width="60"/>
+      <el-table-column prop="sex" label="性别" width="60" />
       <el-table-column prop="category" label="科类" />
       <el-table-column prop="selectSubjects" label="选考科目" />
       <el-table-column prop="grades" label="分流成绩" />
@@ -59,7 +59,7 @@
   </div>
 </template>
 <script setup>
-import { ref,reactive, computed } from "vue";
+import { ref, reactive, computed } from "vue";
 import { volunteerHeader } from "@/assets/js/excel/format/volunteer";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 let myclass = "2023级1班";

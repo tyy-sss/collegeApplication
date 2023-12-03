@@ -31,9 +31,10 @@ const comprehensiveAssessmentHeader = reactive({
       "",
       "当月综合测评得分",
     ],
-  ], // 第一行
+  ], // 第一行的表头数据
   header: ["", "", "加分明细", "减分明细", "得分", "加分明细", "减分明细", "得分", "加分明细", "减分明细", "得分",
-   "加分明细", "减分明细", "得分", "加分明细", "减分明细", "得分", "月加分", "月减法", "上月得分","当月总分"], //最后一行的表头数据
+   "加分明细", "减分明细", "得分", "加分明细", "减分明细", "得分", "月加分", "月减法", "上月得分","当月总分"
+  ], //第二行的表头数据
   filterVal: [
     "name",
     "id",
@@ -66,6 +67,6 @@ const comprehensiveAssessmentHeader = reactive({
     "L1:N1",
     "O1:Q1",
     "R1:U1",
-  ],
+  ],//合并单元格规则
 });
 export { comprehensiveAssessmentHeader };

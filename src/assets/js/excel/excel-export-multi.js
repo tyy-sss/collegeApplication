@@ -99,6 +99,7 @@ const export_json_to_excel = (headerData, data, filename) => {
   }
   wb.SheetNames.push(ws_name);
   wb.Sheets[ws_name] = ws;
+  
   var wbout = XLSX.write(wb, {
     bookType: "xlsx",
     bookSST: false,
