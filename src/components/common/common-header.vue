@@ -70,4 +70,8 @@ const handleExit = async () => {
 .right {
   margin-right: 3rem;
 }
+::v-deep(.el-tooltip__trigger:focus-visible){
+  outline: unset;
+}
+
 </style>
