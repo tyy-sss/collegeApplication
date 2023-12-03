@@ -1,11 +1,3 @@
-/*
- * @Author: STATICHIT 2394412110@qq.com
- * @Date: 2023-11-27 20:45:21
- * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-02 17:24:40
- * @FilePath: \collegeApplication\src\assets\js\data\menu.js
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
- */
 import { reactive } from "vue";
 
 // 模拟菜单数据
@@ -136,7 +128,7 @@ const evaluatorMenuData = reactive[{
 }]
 
 const giveMenu = (role) => {
-  // return studentMenuData;//开发阶段
+  return studentMenuData;//开发阶段
   if (role === "manager") {
     return managerMenuData;
   } else if (role === "student") {
