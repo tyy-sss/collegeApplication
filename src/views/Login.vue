@@ -31,10 +31,6 @@
           </div>
           <div class="overlay-container"></div>
         </div>
-        <div class="index-description">
-          让志愿分配更加高效。
-          <br />
-        </div>
       </div>
     </div>
   </div>
@@ -113,7 +109,7 @@ const login = throttle(() => {
   position: relative;
   background-color: rgba(0, 0, 0, 0.3);
   text-align: center;
-  background: url(../assets/image/wallpaper.png) center;
+  background: url(../assets/image/bk.jpg) center;
   background-size: cover;
   display: flex;
   align-items: center;

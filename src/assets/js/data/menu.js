@@ -136,7 +136,7 @@ const evaluatorMenuData = reactive[{
 }]
 
 const giveMenu = (role) => {
-  return studentMenuData;//开发阶段
+  // return studentMenuData;//开发阶段
   if (role === "manager") {
     return managerMenuData;
   } else if (role === "student") {

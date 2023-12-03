@@ -4,9 +4,10 @@
       <div>
         <div class="user">
           <div class="avatar">
-            <img src="@/assets/image/avatar.png" />
+            <img src="@/assets/image/jsdxLogo.png" />
           </div>
-          <div class="user-name">Julie bell</div>
+          <div class="user-name">吉首大学</div>
+          <div class="description">Jishou University</div>
         </div>
         <el-menu
           :default-active="$route.path"
@@ -68,9 +69,9 @@ const handleExit = async () => {
   // const data = await apiFun.user.loginOut();
   // 跳转界面
   const href = router.resolve({
-    path:"/login",
-  })
-  window.open(href.href,"_self")
+    path: "/login",
+  });
+  window.open(href.href, "_self");
 };
 </script>
 <style scoped>
@@ -99,8 +100,11 @@ const handleExit = async () => {
   width: 5rem;
 }
 .user-name {
-  font-size: 24px;
+  font-size: 20px;
   font-weight: 600;
+}
+.description{
+  font-family:"Times New Roman", Times, serif;
 }
 /* 菜单样式设置 */
 .el-menu {
