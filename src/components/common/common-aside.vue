@@ -1,54 +1,70 @@
 <template>
   <div class="common-aside">
     <div class="menu">
-      <div>
+      <div class="middle">
         <div class="user">
           <div class="avatar">
-            <img src="@/assets/image/jsdxLogo.png" />
+            <img
+              src="@/assets/image/jsdxLogo.png"
+              :style="{ width: imgWidth, height: imgWidth }"
+            />
           </div>
-          <div class="user-name">吉首大学</div>
-          <div class="description">Jishou University</div>
+          <div class="name">
+            <div class="user-name" v-if="!store.state.menu.isCollapse">
+              吉首大学
+            </div>
+            <div class="collapse" @click="handleCollapse">
+              <img src="@/assets/image/collapse.png" />
+            </div>
+          </div>
+          <div class="description" v-if="!store.state.menu.isCollapse">
+            Jishou University
+          </div>
         </div>
         <el-menu
           :default-active="$route.path"
           class="el-menu-vertical-demo"
           text-color="RGB(125,133,146)"
+          :collapse="store.state.menu.isCollapse"
+          :collapse-transition = "false"
           @select="handleSelect"
         >
-          <div v-for="(item, index) in menuDataForVue" :key="index">
-            <el-menu-item
-              :index="item.path"
-              v-if="item.path !== '/information'"
+          <el-menu-item
+            :index="item.path"
+            v-for="item in menuDataForVue"
+            :key="item.path"
+          >
+            <el-icon v-if="item.path !== '/information'" class="menu-icon"
+              ><component :is="item.icon"
+            /></el-icon>
+            <template v-if="item.path !== '/information'" #title>{{
+              item.menuName
+            }}</template>
+            <el-badge
+              v-if="item.path === '/information'"
+              :value="1"
+              class="item"
             >
               <el-icon class="menu-icon"><component :is="item.icon" /></el-icon>
               <span>{{ item.menuName }}</span>
-            </el-menu-item>
-            <!-- 消息管理 -->
-            <el-menu-item :index="item.path" v-else>
-              <el-badge :value="1" class="item">
-                <el-icon class="menu-icon"
-                  ><component :is="item.icon"
-                /></el-icon>
-                <span>{{ item.menuName }}</span>
-              </el-badge>
-            </el-menu-item>
-          </div>
+            </el-badge>
+          </el-menu-item>
+          <!-- 消息管理 -->
         </el-menu>
       </div>
       <div class="exit" @click="handleExit">
         <div>
           <img src="@/assets/image/exit.png" />
         </div>
-        <div>退出登录</div>
+        <div v-if="!store.state.menu.isCollapse">退出登录</div>
       </div>
     </div>
   </div>
 </template>
     <script setup>
-import { reactive } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import store from "@/store";
 import { useRouter } from "vue-router";
-import apiFun from "@/api/user";
 import {
   removeAccessToken,
   removeRefreshToken,
@@ -56,6 +72,21 @@ import {
 } from "@/config/constants";
 const router = useRouter();
 const menuDataForVue = reactive(store.state.menu.menuData);
+const imgWidth = ref(null);
+// 设置图片展示的大小
+const setImgWidth = () => {
+  if (store.state.menu.isCollapse) {
+    // 收缩
+    imgWidth.value = "48px";
+  } else {
+    imgWidth.value = "70px";
+  }
+};
+// 手动收缩
+const handleCollapse = () => {
+  store.commit("setIsCollapse");
+  setImgWidth();
+};
 // 跳转界面
 const handleSelect = (key, keyPath) => {
   router.push({ path: key });
@@ -73,6 +104,9 @@ const handleExit = async () => {
   });
   window.open(href.href, "_self");
 };
+onMounted(() => {
+  setImgWidth();
+});
 </script>
 <style scoped>
 .common-aside {
@@ -96,16 +130,27 @@ const handleExit = async () => {
   padding-bottom: 1rem;
 }
 .avatar > img {
-  height: 5rem;
-  width: 5rem;
+  height: 70px;
+  width: 70px;
 }
 .user-name {
   font-size: 22px;
   font-weight: bolder;
   font-family: "Times New Roman", Times, serif;
 }
-.description{
-  font-family:"Times New Roman", Times, serif;
+
+.collapse {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.collapse img {
+  width: 20px;
+  height: 20px;
+  margin-left: 5px;
+}
+.description {
+  font-family: "Times New Roman", Times, serif;
 }
 /* 菜单样式设置 */
 .el-menu {

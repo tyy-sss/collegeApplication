@@ -1,7 +1,7 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside width="140px">
+      <el-aside :width="asideWidth">
         <common-aside />
       </el-aside>
       <el-main>
@@ -11,16 +11,35 @@
   </div>
 </template>
   <script setup>
+import { onMounted, ref } from "vue";
 import CommonAside from "@/components/common/common-aside.vue";
-import { onBeforeMount } from "vue";
+import { onBeforeMount, watch } from "vue";
 import { giveMenu } from "@/assets/js/data/menu";
 import { getRole } from "@/config/constants";
 import store from "@/store";
 onBeforeMount(() => {
   store.commit("setMenu", giveMenu(getRole));
-  console.log(giveMenu(getRole));
+  // console.log(giveMenu(getRole));
   store.commit("addMenu");
+  setAsideWidth(store.state.menu.isCollapse);
 });
+var asideWidth = ref(null);
+// 修改侧边栏的宽度
+const setAsideWidth = (val) => {
+  if (val) {
+    asideWidth.value = "70px";
+  } else {
+    asideWidth.value = "140px";
+  }
+};
+// 监听菜单收缩状态改变
+watch(
+  () => store.state.menu.isCollapse,
+  (newVal, oldVal) => {
+    console.log(newVal);
+    setAsideWidth(newVal);
+  }
+);
 </script>
 <style scoped>
 .common-layout {
@@ -32,7 +51,7 @@ onBeforeMount(() => {
   position: relative;
   top: 0px;
   left: 0px;
-  width: 140px;
+  /* width: 140px; */
   height: 100vh;
 }
 .el-main {

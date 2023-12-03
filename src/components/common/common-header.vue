@@ -12,7 +12,6 @@
         <div class="img">
           <img src="@/assets/image/avatar.png" />
         </div>
-
         <template #dropdown>
           <el-dropdown-menu>
             <el-dropdown-item @click="handleExit">退出登录</el-dropdown-item>
@@ -70,8 +69,7 @@ const handleExit = async () => {
 .right {
   margin-right: 3rem;
 }
-::v-deep(.el-tooltip__trigger:focus-visible){
+::v-deep(.el-tooltip__trigger:focus-visible) {
   outline: unset;
 }
-
 </style>
