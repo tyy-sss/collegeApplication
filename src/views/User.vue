@@ -46,7 +46,7 @@
             <el-button type="primary" :icon="Plus" @click="handleAddUser"
               >批量添加用户</el-button
             >
-            <add-user ref="addUserRef" />
+            <add-user ref="addUserRef" @get-user-list="getUserList" />
           </div>
           <div class="add-item">
             <el-button type="primary" :icon="Plus" @click="handleAddUserSingle"
@@ -203,6 +203,10 @@ const handleSizeChange = () => {};
 // 页码跳转界面
 const handleCurrentChange = () => {
   alert(page.currentPage);
+};
+// 获得更新之后的用户列表
+const getUserList = () => {
+  console.log("重新获取用户列表");
 };
 </script>
 <style src="@/assets/css/utils/table-center.css" scoped/>

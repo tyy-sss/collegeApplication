@@ -59,8 +59,8 @@ const move = () => {
   toucher.xPum = toucher.dx + toucher.nx;
   toucher.yPum = toucher.dy + toucher.ny;
   //添加限制：只允许在屏幕内拖动
-  const maxWidth = document.body.clientWidth - 54; //屏幕宽度减去悬浮框宽高
-  const maxHeight = document.body.clientHeight - 54;
+  const maxWidth = document.body.clientWidth - 60; //屏幕宽度减去悬浮框宽高
+  const maxHeight = document.body.clientHeight - 60;
   if (toucher.xPum < 0) {
     //屏幕x限制
     toucher.xPum = 0;
@@ -79,7 +79,6 @@ const move = () => {
   document.addEventListener(
     "touchmove",
     function () {
-      // 1.2 如果碰到滑动问题，请注意是否获取到 touchmove
       event.preventDefault(); //jq 阻止冒泡事件
     },
     false

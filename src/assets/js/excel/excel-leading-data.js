@@ -2,11 +2,11 @@
 import { reactive } from "vue";
 // 学生信息字段对应表
 export let studentCharacter = {
-  uId: {
+  userNumber: {
     text: "学号",
     type: "string",
   },
-  name: {
+  username: {
     text: "姓名",
     type: "string",
   },
@@ -14,23 +14,23 @@ export let studentCharacter = {
     text: "性别",
     type: "string",
   },
-  identity: {
+  idCard: {
     text: "身份证号",
     type: "string",
   },
-  politicalStatus: {
+  politicsStatus: {
     text: "政治面貌",
     type: "string",
   },
-  ethnicGroup: {
+  nation: {
     text: "民族",
     type: "string",
   },
-  class: {
+  className: {
     text: "班级",
     type: "string",
   },
-  targetSchool: {
+  school: {
     text: "目标学校",
     type: "string",
   },
@@ -38,15 +38,15 @@ export let studentCharacter = {
     text: "来源省份",
     type: "string",
   },
-  electiveSubject: {
+  subjects: {
     text: "选考科目",
     type: "string",
   },
-  natureProgram: {
+  plan: {
     text: "计划性质",
     type: "string",
   },
-  homeAddress: {
+  address: {
     text: "家庭地址",
     type: "string",
   },
@@ -62,11 +62,11 @@ export let studentCharacter = {
 
 // 老师信息文件导出头行
 export let teacherCharacter = {
-  uId: {
+  userNumber: {
     text: "工号",
     type: "string",
   },
-  name: {
+  username: {
     text: "姓名",
     type: "string",
   },
@@ -74,11 +74,11 @@ export let teacherCharacter = {
     text: "性别",
     type: "string",
   },
-  politicalStatus: {
+  politicsStatus: {
     text: "政治面貌",
     type: "string",
   },
-  ethnicGroup: {
+  nation: {
     text: "民族",
     type: "string",
   },

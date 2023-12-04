@@ -1,7 +1,10 @@
 // 文件导入
 import XLSX from "xlsx";
 import { subjectList } from "@/assets/js/data/information-dropdown-data";
-import { PHONE_TEST, IDENTITY_TEST } from "@/assets/js/utils/regular-expression";
+import {
+  PHONE_TEST,
+  IDENTITY_TEST,
+} from "@/assets/js/utils/regular-expression";
 
 // 按照二进制读取文件
 export const readFile = (file) => {
@@ -51,38 +54,39 @@ export const handleStudentInformation = (data) => {
   const handleData = [];
   data.forEach((item) => {
     // 学生的姓名，学号，班级,目标学校不能为空
-    if (!item.name || !item.uId || !item.class || !item.targetSchool) return;
+    if (!item.username || !item.userNumber || !item.className || !item.school)
+      return;
     // 对手机号，身份证号进行正则验证
     var phone = PHONE_TEST.test(item.phone);
     var parentPhone = PHONE_TEST.test(item.parentPhone);
-    var identity = IDENTITY_TEST.test(item.identity);
-    if (!phone || !parentPhone || !identity) {
+    var idCard = IDENTITY_TEST.test(item.idCard);
+    if (!phone || !parentPhone || !idCard) {
       return;
     }
     // 对选考科目进行处理
     let electiveSubjectList = [];
-    for (let i = 0; i < item.electiveSubject.length; i++) {
+    for (let i = 0; i < item.subjects.length; i++) {
       if (
-        item.electiveSubject[i] === "*" ||
-        item.electiveSubject[i] === "," ||
-        item.electiveSubject[i] === "+" ||
-        item.electiveSubject[i] === "，" ||
-        item.electiveSubject[i] === "." ||
-        item.electiveSubject[i] === "&"
+        item.subjects[i] === "*" ||
+        item.subjects[i] === "," ||
+        item.subjects[i] === "+" ||
+        item.subjects[i] === "，" ||
+        item.subjects[i] === "." ||
+        item.subjects[i] === "&"
       )
         continue;
       let subject = "";
       while (
-        item.electiveSubject[i] !== "*" &&
-        item.electiveSubject[i] !== "," &&
-        item.electiveSubject[i] !== "+" &&
-        item.electiveSubject[i] !== "，" &&
-        item.electiveSubject[i] !== "." &&
-        item.electiveSubject[i] !== "&"
+        item.subjects[i] !== "*" &&
+        item.subjects[i] !== "," &&
+        item.subjects[i] !== "+" &&
+        item.subjects[i] !== "，" &&
+        item.subjects[i] !== "." &&
+        item.subjects[i] !== "&"
       ) {
-        subject = subject.concat(item.electiveSubject[i]);
+        subject = subject.concat(item.subjects[i]);
         i++;
-        if (i >= item.electiveSubject.length) {
+        if (i >= item.subjects.length) {
           break;
         }
       }
@@ -96,7 +100,7 @@ export const handleStudentInformation = (data) => {
     if (electiveSubjectList.size !== 3) {
       return;
     }
-    item.electiveSubject = electiveSubjectList;
+    item.subjects = Array.from(electiveSubjectList);
     handleData.push(item);
   });
   console.log(handleData);
@@ -106,7 +110,7 @@ export const handleStudentInformation = (data) => {
 export const handleTeacherInformation = (data) => {
   const handleData = [];
   data.forEach((item) => {
-    if (!item.uId || !item.name) {
+    if (!item.userNumber || !item.username) {
       return;
     }
     // 对手机号进行正则验证

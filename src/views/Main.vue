@@ -2,7 +2,6 @@
   <div class="common-layout">
     <el-container>
       <!-- 手机端收缩时 -->
-      
       <common-float-aside v-if="phone && store.state.menu.isCollapse" />
       <!-- 电脑端 -->
       <el-aside v-else :width="asideWidth">

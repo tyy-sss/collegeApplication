@@ -2,14 +2,14 @@
 
 import { reactive } from "vue";
 // 政治面貌
-const politicalStatusList = reactive([
+const politicsStatusList = reactive([
   "中共党员",
   "中共预备党员",
   "共青团员",
   "群众",
 ]);
 // 民族
-const ethniGroupList = reactive([
+const nationList = reactive([
   {
     value: "汉族",
   },
@@ -184,4 +184,4 @@ const ethniGroupList = reactive([
 ]);
 // 考试科目
 const subjectList = ["物理", "化学", "生物", "历史", "地理", "政治"];
-export { ethniGroupList, politicalStatusList,subjectList };
+export { nationList, politicsStatusList,subjectList };

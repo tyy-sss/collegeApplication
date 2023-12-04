@@ -30,13 +30,13 @@
               <el-col :span="8">
                 <el-form-item
                   :label="form.isTeacher ? '工号:' : '学号:'"
-                  prop="uId"
+                  prop="userNumber"
                 >
-                  <el-input v-model="form.ruleForm.uId" /> </el-form-item
+                  <el-input v-model="form.ruleForm.userNumber" /> </el-form-item
               ></el-col>
               <el-col :span="8">
-                <el-form-item label="姓名:" prop="name">
-                  <el-input v-model="form.ruleForm.name" />
+                <el-form-item label="姓名:" prop="userName">
+                  <el-input v-model="form.ruleForm.userName" />
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -60,8 +60,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="8">
-                <el-form-item label="班级:" prop="class">
-                  <el-input v-model="form.ruleForm.class" />
+                <el-form-item label="班级:" prop="className">
+                  <el-input v-model="form.ruleForm.className" />
                 </el-form-item>
               </el-col>
             </el-row>
@@ -70,12 +70,12 @@
               <el-col :span="12">
                 <el-form-item label="政治面貌:" prop="politicalStatus">
                   <el-select
-                    v-model="form.ruleForm.politicalStatus"
+                    v-model="form.ruleForm.politicsStatus"
                     class="m-2"
                     placeholder="请选择"
                   >
                     <el-option
-                      v-for="item in dropDownData.politicalStatusList"
+                      v-for="item in dropDownData.politicsStatusList"
                       :key="item"
                       :label="item"
                       :value="item"
@@ -84,9 +84,9 @@
                 </el-form-item>
               </el-col>
               <el-col :span="12">
-                <el-form-item label="民族:" prop="ethniGroup">
+                <el-form-item label="民族:" prop="nation">
                   <el-autocomplete
-                    v-model="form.ruleForm.ethniGroup"
+                    v-model="form.ruleForm.nation"
                     :fetch-suggestions="queryEthniGroupString"
                     clearable
                     class="inline-input w-50"
@@ -118,18 +118,16 @@
                 <el-form-item
                   v-if="!form.isTeacher"
                   label="身份证号:"
-                  prop="identity"
+                  prop="idCard"
                 >
-                  <el-input v-model="form.ruleForm.identity" /> </el-form-item
+                  <el-input v-model="form.ruleForm.idCard" /> </el-form-item
               ></el-col>
             </el-row>
 
             <el-row v-if="!form.isTeacher">
               <el-col :span="16">
-                <el-form-item label="计划性质:" prop="natureProgram">
-                  <el-input
-                    v-model="form.ruleForm.natureProgram"
-                  /> </el-form-item
+                <el-form-item label="计划性质:" prop="plan">
+                  <el-input v-model="form.ruleForm.plan" /> </el-form-item
               ></el-col>
             </el-row>
 
@@ -138,11 +136,9 @@
                 <el-form-item
                   v-if="!form.isTeacher"
                   label="家庭地址:"
-                  prop="homeAddress"
+                  prop="address"
                 >
-                  <el-input
-                    v-model="form.ruleForm.homeAddress"
-                  /> </el-form-item
+                  <el-input v-model="form.ruleForm.address" /> </el-form-item
               ></el-col>
             </el-row>
 
@@ -175,8 +171,8 @@
 // 添加用户
 import { onMounted, reactive, ref } from "vue";
 import {
-  ethniGroupList,
-  politicalStatusList,
+  nationList,
+  politicsStatusList,
   subjectList,
 } from "@/assets/js/data/information-dropdown-data";
 import {
@@ -198,35 +194,35 @@ const form = reactive({
   isTeacher: false,
   dialogVisible: false,
   ruleForm: {
-    uId: "",
-    name: "",
+    userNumber: "",
+    userName: "",
     sex: "",
-    identity: "",
-    politicalStatus: "",
-    ethniGroup: "",
-    class: "",
-    targetSchool: "",
+    idCard: "",
+    politicsStatus: "",
+    nation: "",
+    className: "",
+    school: "",
     province: "",
-    electiveSubject: [],
-    natureProgram: "",
-    homeAddress: "",
+    subjects: [],
+    plan: "",
+    address: "",
     phone: "",
     parentPhone: "",
   },
   rules: {
-    uId: [{ required: true, message: "请输入", trigger: "blur" }],
-    name: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+    userNumber: [{ required: true, message: "请输入", trigger: "blur" }],
+    userName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
     sex: [{ required: true, message: "请输入性别", trigger: "blur" }],
     province: [{ required: true, message: "请输入", trigger: "blur" }],
-    targetSchool: [{ required: true, message: "请输入", trigger: "blur" }],
-    class: [{ required: true, message: "请输入", trigger: "blur" }],
-    politicalStatus: [{ required: true, message: "请输入", trigger: "blur" }],
-    ethniGroup: [{ required: true, message: "请输入", trigger: "blur" }],
-    electiveSubject: [
+    school: [{ required: true, message: "请输入", trigger: "blur" }],
+    className: [{ required: true, message: "请输入", trigger: "blur" }],
+    politicsStatus: [{ required: true, message: "请输入", trigger: "blur" }],
+    nation: [{ required: true, message: "请输入", trigger: "blur" }],
+    subjects: [
       { required: true, message: "请输入", trigger: "blur" },
       { validator: validateElectiveSubject, trigger: "blur" },
     ],
-    identity: [
+    idCard: [
       { required: true, message: "请输入", trigger: "blur" },
       {
         pattern: IDENTITY_TEST,
@@ -252,19 +248,19 @@ const form = reactive({
 });
 // 下拉框数据
 const dropDownData = reactive({
-  politicalStatusList: politicalStatusList,
-  ethniGroupList: ethniGroupList,
+  politicsStatusList: politicsStatusList,
+  nationList: nationList,
   subjectList: subjectList,
 });
 // 自动补全输入框
-const queryEthniGroupString = (ethniGroup, cb) => {
-  const results = ethniGroup
-    ? dropDownData.ethniGroupList.filter(createFilter(ethniGroup))
-    : dropDownData.ethniGroupList;
+const queryEthniGroupString = (nation, cb) => {
+  const results = nation
+    ? dropDownData.nationList.filter(createFilter(nation))
+    : dropDownData.nationList;
   cb(results);
 };
 const handleSelectEthnicGroup = (val) => {
-  form.ruleForm.ethniGroup = val.value;
+  form.ruleForm.nation = val.value;
 };
 // 自动补全输入框过滤信息
 const createFilter = (queryString) => {

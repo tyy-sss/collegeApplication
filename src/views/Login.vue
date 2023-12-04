@@ -73,20 +73,24 @@ const rules = reactive({
 const ruleFormRef = ref(null);
 //
 const login = throttle(() => {
-  ruleFormRef.value.validate(async (valid, fields) => {
+  ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
       // 节流
-      const data = await apiFun.user.login(userData);
-      // 保存token 还有菜单信息
-      setAccessToken(data.token.accessToken);
-      setRefreshToken(data.token.refreshToken);
-      setRole(data.role);
-      // 清空表单信息
-      ruleFormRef.value.resetFields();
-      const href = router.resolve({
-        path: "/",
-      });
-      window.open(href.href, "_self");
+      apiFun.user
+        .login(userData)
+        .then((data) => {
+          // 保存token 还有菜单信息
+          setAccessToken(data.token.accessToken);
+          setRefreshToken(data.token.refreshToken);
+          setRole(data.role);
+          const href = router.resolve({
+            path: "/",
+          });
+          window.open(href.href, "_self");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   });
 }, 1000);
