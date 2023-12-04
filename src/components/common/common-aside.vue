@@ -116,7 +116,7 @@ onMounted(() => {
   background-color: #fff;
 }
 .menu {
-  overflow:hidden;
+  overflow: hidden;
   height: 100vh;
   background-color: #fff;
   border-radius: 2rem;

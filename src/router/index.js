@@ -143,31 +143,31 @@ const router = createRouter({
   parseQuery,
 });
 
-// router.beforeEach((to, form, next) => {
-//   // 判断是否有token
-//   var token = getAccessToken();
-//   console.log(token, "短token");
-//   if (!token) {
-//     // 未登录
-//     // 在登录界面
-//     if (to.path == "/login") {
-//       next();
-//     } else {
-//       ElMessage.error("请先登录");
-//       next({ name: "login" });
-//     }
-//   } else {
-//     console.log(to.path);
-//     // 已登录
-//     if (to.path == "/") {
-//       // 跳转到菜单表的第一个菜单显示界面
-//       const firstPath = giveMenu(getRole)[0].path.slice(1);
-//       next({ name: firstPath });
-//     } else {
-//       // 未登录
-//       next();
-//     }
-//   }
-// });
+router.beforeEach((to, form, next) => {
+  // 判断是否有token
+  var token = getAccessToken();
+  console.log(token, "短token");
+  if (!token) {
+    // 未登录
+    // 在登录界面
+    if (to.path == "/login") {
+      next();
+    } else {
+      ElMessage.error("请先登录");
+      next({ name: "login" });
+    }
+  } else {
+    console.log(to.path);
+    // 已登录
+    if (to.path == "/") {
+      // 跳转到菜单表的第一个菜单显示界面
+      const firstPath = giveMenu(getRole)[0].path.slice(1);
+      next({ name: firstPath });
+    } else {
+      // 未登录
+      next();
+    }
+  }
+});
 
 export default router;
