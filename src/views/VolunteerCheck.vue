@@ -99,7 +99,8 @@ let volunteer3 = ref("软件工程");
 let danger = ref("2023.11.09");
 let times = ref("2");
 function changeVolunteer() {
-  router.push({ path: "/volunteer-fill" });
+  // router.push({ path: "/volunteer-fill" });
+  router.push({ name: "volunteer-fill" });
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>

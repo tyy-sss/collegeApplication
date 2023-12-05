@@ -21,29 +21,29 @@ requests.interceptors.request.use((config) => {
   return config;
 });
 //接收请求拦截器
-requests.interceptors.response.use((res) => {
-  if (typeof res.data !== "object") {
-    ElMessage.error("服务端异常！");
-    return Promise.reject(res);
-  }
-  if (res.data.code != 200) {
-    // console.log(res.data);
-    if (res.data.msg) ElMessage.error(res.data.msg);
-    if (res.data.code === 2044) {
-      // 移除失效的短token
-      removeAccessToken();
-      // 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新
-      addRequest(() => resolve(server(config)));
-      // 携带长token去请求新的token
-      refreshToken();
-    }
-    if (res.data.resultCode == 419) {
-      router.push({ path: "/login" });
-    }
-    return Promise.reject(res.data);
-  }
-  return res.data; //返回的是数据
-});
+// requests.interceptors.response.use((res) => {
+//   if (typeof res.data !== "object") {
+//     ElMessage.error("服务端异常！");
+//     return Promise.reject(res);
+//   }
+//   if (res.data.code != 200) {
+//     // console.log(res.data);
+//     if (res.data.msg) ElMessage.error(res.data.msg);
+//     if (res.data.code === 2044) {
+//       // 移除失效的短token
+//       removeAccessToken();
+//       // 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新
+//       addRequest(() => resolve(server(config)));
+//       // 携带长token去请求新的token
+//       refreshToken();
+//     }
+//     if (res.data.resultCode == 419) {
+//       router.push({ path: "/login" });
+//     }
+//     return Promise.reject(res.data);
+//   }
+//   return res.data; //返回的是数据
+// });
 
 const header = {
   "Content-Type": "application/json;charset=UTF-8",

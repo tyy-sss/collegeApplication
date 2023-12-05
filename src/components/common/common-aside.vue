@@ -89,6 +89,7 @@ const handleCollapse = () => {
 };
 // 跳转界面
 const handleSelect = (key, keyPath) => {
+  console.log("key:",key,"keyPath:",keyPath)
   router.push({ path: key });
 };
 // 退出

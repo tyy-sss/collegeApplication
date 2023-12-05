@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-03 10:40:53
+ * @LastEditTime: 2023-12-05 22:37:41
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
 -->
@@ -191,7 +191,8 @@ const options = reactive([
 // 提交志愿
 function submitVolunteer() {
   //提交志愿到服务端
-  router.push({ path: "/volunteer-check" });
+  // router.push({ path: "/volunteer-check" });
+  router.push({name:'volunteer-check'})
   ElMessage({
     message: "修改志愿成功",
     type: "success",

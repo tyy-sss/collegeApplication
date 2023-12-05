@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-30 22:12:35
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-30 22:48:23
+ * @LastEditTime: 2023-12-05 21:52:29
  * @FilePath: \collegeApplication\src\test\test3.vue
  * @Description:电子签名demo
 -->
@@ -39,7 +39,8 @@
 <script setup>
 import { ElMessage } from "element-plus";
 import vueEsign from "vue-esign";
-import { ref } from "vue";
+import { ref, defineEmits } from "vue";
+const emits = defineEmits(["finish"]);
 const lineWidth = ref(0);
 const lineColor = ref("#000000");
 const resultImg = ref("");
@@ -59,6 +60,7 @@ const save = () => {
       //   this.$emit("finsih", res);
       console.log(res);
       resultImg.value = res;
+      emits("finish", res);
     })
     .catch((err) => {
       console.log(err); // 画布没有签字时会执行这里err= 'Not Signned'

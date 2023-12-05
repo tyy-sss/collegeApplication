@@ -68,20 +68,6 @@ const studentMenuData = reactive([
     icon: "location",
   },
   {
-    id: "789d4075e218daaf4ec77e31",
-    menuType: "1",
-    menuName: "志愿查看",
-    path: "/volunteer-check",
-    icon: "location",
-  },
-  {
-    id: "789d4075e218daaf4ec77e32",
-    menuType: "1",
-    menuName: "志愿填报",
-    path: "/volunteer-fill",
-    icon: "location",
-  },
-  {
     id: "789d4075e218daaf4ec77e38",
     menuType: "1",
     menuName: "志愿填报情况",
@@ -128,7 +114,7 @@ const evaluatorMenuData = reactive[{
 }]
 
 const giveMenu = (role) => {
-  // return studentMenuData;//开发阶段
+  return studentMenuData;//开发阶段
   if (role === "manager") {
     return managerMenuData;
   } else if (role === "student") {

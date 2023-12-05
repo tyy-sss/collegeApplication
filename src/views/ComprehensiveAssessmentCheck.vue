@@ -70,15 +70,16 @@
         />
       </el-table-column>
     </el-table>
-    <br />
-    <el-pagination
-      :page-size="7"
-      :pager-count="5"
-      layout="prev, pager, next"
-      :total="60"
-      style="float: right"
-    />
-    <br />
+    <!-- 分页 -->
+    <div class="pagination">
+      <el-pagination
+        :page-size="7"
+        :pager-count="5"
+        layout="prev, pager, next"
+        :total="60"
+        style="margin-left: auto;"
+      />
+    </div>
   </div>
 </template>
 <script setup>
@@ -272,6 +273,9 @@ hr {
 h1 {
   margin-top: 30px;
   text-align: center;
+}
+.pagination{
+  display: flex;
 }
 </style>
   

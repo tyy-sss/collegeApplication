@@ -268,17 +268,16 @@
         </el-table-column>
       </el-table-column>
     </el-table>
-    <br />
     <!-- 分页 -->
-    <el-pagination
-      :page-size="7"
-      :pager-count="5"
-      layout="prev, pager, next"
-      :total="60"
-      style="float: right"
-    />
-    <br />
-    <br />
+    <div class="pagination">
+      <el-pagination
+        :page-size="7"
+        :pager-count="5"
+        layout="prev, pager, next"
+        :total="60"
+        style="margin-left: auto;"
+      />
+    </div>
     <!-- 提交按钮 -->
     <div class="submitBtn">
       <el-button type="primary" @click="dialogVisible = true"
@@ -289,7 +288,7 @@
   <!-- 电子签名对话框 -->
   <el-dialog v-model="dialogVisible" title="电子签名" width="50%">
     <div>
-      <signatures></signatures>
+      <signatures @finish="finish"></signatures>
     </div>
   </el-dialog>
 </template>
@@ -579,6 +578,11 @@ const handleExcelExport = () => {
     `${myclass}班级综合测评表`
   );
 };
+//签名后提交数据和电子签名
+function finish(sign) {
+  console.log("AAA");
+  console.log(sign);
+}
 
 //电子签名对话框
 const dialogVisible = ref(false);
@@ -604,10 +608,12 @@ h1 {
     padding: 0 9px;
   }
 }
+.pagination{
+  display: flex;
+}
 .submitBtn {
   text-align: center;
   height: 40px;
-  margin-left: 10%;
 }
 </style>
   
