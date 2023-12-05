@@ -2,7 +2,7 @@ import axios from "axios";
 import qs from "qs"; //转json数据工具包
 import { ElMessage } from "element-plus";
 import { addRequest, refreshToken } from "./two-token";
-import { getAccessToken, removeAccessToken } from "@/config/constants";
+import { getAccessToken, removeAccessToken } from "@/constants/token";
 
 //1.利用axios对象的方法create，去创建一个axios实例。
 const requests = axios.create({

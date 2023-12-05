@@ -19,7 +19,7 @@ import CommonAside from "@/components/common/common-aside.vue";
 import commonFloatAside from "@/components/common/common-float-aside.vue";
 import { onBeforeMount, watch } from "vue";
 import { giveMenu } from "@/assets/js/data/menu";
-import { getRole } from "@/config/constants";
+import { getRole } from "@/constants/token";
 import store from "@/store";
 // 判断打开时是手机端还是pc端
 const phone = ref(null);

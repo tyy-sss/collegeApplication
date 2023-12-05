@@ -10,7 +10,7 @@ import store from "@/store";
 import { createRouter, createWebHistory } from "vue-router";
 import { stringifyQuery, parseQuery } from "./utils/parameter-encryption";
 import { giveMenu } from "@/assets/js/data/menu";
-import { getAccessToken, getRole } from "@/config/constants";
+import { getAccessToken, getRole } from "@/constants/token";
 import { ElMessage } from "element-plus";
 
 const routes = [

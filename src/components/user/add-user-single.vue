@@ -170,7 +170,7 @@
   <script setup>
 // 添加用户
 // 接口
-import managerFun from "@/api/manager-user";
+import managerUserFun from "@/api/manager-user";
 import { onMounted, reactive, ref } from "vue";
 import {
   nationList,
@@ -180,7 +180,7 @@ import {
 import {
   IDENTITY_TEST,
   PHONE_TEST,
-} from "@/assets/js/utils/regular-expression";
+} from "@/constants/regular-expression";
 import { ElMessage } from "element-plus";
 
 // 验证信息
@@ -299,7 +299,7 @@ const handleAddUser = () => {
         addData.push(teacher);
         // 添加老师
         // 把老师数据传给后端
-        managerFun.user
+        managerUserFun.user
           .addTeacherByExcel(addData)
           .then((res) => {
             uploadSuccess(res);
@@ -311,7 +311,7 @@ const handleAddUser = () => {
         // 添加学生
         addData.push(form.ruleForm);
         // 把学生数据传给后端
-        managerFun.user
+        managerUserFun.user
           .addStudentsByExcel(addData)
           .then((res) => {
             uploadSuccess(res);

@@ -4,7 +4,7 @@ import { subjectList } from "@/assets/js/data/information-dropdown-data";
 import {
   PHONE_TEST,
   IDENTITY_TEST,
-} from "@/assets/js/utils/regular-expression";
+} from "@/constants/regular-expression";
 
 // 按照二进制读取文件
 export const readFile = (file) => {

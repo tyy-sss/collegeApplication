@@ -1,7 +1,7 @@
 // 用户管理
 import http from "./request";
 
-let managerFun = {
+let managerUserFun = {
   user: {},
   test: {},
 };
@@ -14,7 +14,7 @@ let managerFun = {
  * @param {*} size 分页数据大小
  * @returns
  */
-managerFun.user.searchUser = (username, role, current, size) => {
+managerUserFun.user.searchUser = (username, role, current, size) => {
   return http.get("/user", { username, role, current, size });
 };
 /**
@@ -22,7 +22,7 @@ managerFun.user.searchUser = (username, role, current, size) => {
  * @param {} data
  * @returns
  */
-managerFun.user.addStudentsByExcel = (data) => {
+managerUserFun.user.addStudentsByExcel = (data) => {
   return http.post("/user/students", data);
 };
 /**
@@ -30,22 +30,29 @@ managerFun.user.addStudentsByExcel = (data) => {
  * @param {} data
  * @returns
  */
-managerFun.user.addTeacherByExcel = (data) => {
+managerUserFun.user.addTeacherByExcel = (data) => {
   return http.post("/user/teachers", data);
+};
+/**
+ * 获得老师的信息
+ * @returns
+ */
+managerUserFun.user.getTeacherList = () => {
+  return http.post("/user/teachers");
 };
 /**
  * 重置密码
  * @param {*} data 用户账号数组
  * @returns
  */
-managerFun.user.reset = (data) => {
+managerUserFun.user.reset = (data) => {
   return http.put("/user/reset", data);
 };
 /**
  * 删除用户
  * @param {*} data 用户账号数组
  */
-managerFun.user.deleteUser = (data) => {
+managerUserFun.user.deleteUser = (data) => {
   return http.delete("/user", data);
 };
-export default managerFun;
+export default managerUserFun;

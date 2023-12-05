@@ -77,7 +77,7 @@ import {
 } from "@/assets/js/excel/excel-leading-data";
 
 // 接口
-import managerFun from "@/api/manager-user";
+import managerUserFun from "@/api/manager-user";
 import { ElMessage } from "element-plus";
 const data = reactive({
   dialogTableVisible: false,
@@ -109,7 +109,7 @@ const handleAddUser = async (ev) => {
       addData = excelLeadingIn(excelData, studentCharacter);
       addData = handleStudentInformation(addData);
       // 把学生数据传给后端
-      managerFun.user
+      managerUserFun.user
         .addStudentsByExcel(addData)
         .then((res) => {
           uploadSuccess(res);
@@ -122,7 +122,7 @@ const handleAddUser = async (ev) => {
       addData = excelLeadingIn(excelData, teacherCharacter);
       addData = handleTeacherInformation(addData);
       // 把老师数据传给后端
-      managerFun.user
+      managerUserFun.user
         .addTeacherByExcel(addData)
         .then((res) => {
           uploadSuccess(res);

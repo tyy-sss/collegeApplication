@@ -69,7 +69,7 @@ import {
   removeAccessToken,
   removeRefreshToken,
   removeRole,
-} from "@/config/constants";
+} from "@/constants/token";
 const router = useRouter();
 const menuDataForVue = reactive(store.state.menu.menuData);
 const imgWidth = ref(null);

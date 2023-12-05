@@ -28,7 +28,7 @@ import {
   removeAccessToken,
   removeRefreshToken,
   removeRole,
-} from "@/config/constants";
+} from "@/constants/token";
 // 退出
 const handleExit = async () => {
   // 清除用户信息

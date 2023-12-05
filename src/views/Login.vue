@@ -40,11 +40,11 @@
 import apiFun from "@/api/user";
 import { reactive, ref } from "vue";
 import { throttle } from "@/assets/js/utils/throttle";
-import { setRole, setAccessToken, setRefreshToken } from "@/config/constants";
+import { setRole, setAccessToken, setRefreshToken } from "@/constants/token";
 import {
   ACCOUNT_TEST,
   PASSWORD_TEST,
-} from "@/assets/js/utils/regular-expression";
+} from "@/constants/regular-expression";
 import { useRouter } from "vue-router";
 const router = useRouter();
 // 用户数据

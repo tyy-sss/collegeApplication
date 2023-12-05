@@ -146,7 +146,7 @@
 </template>
 <script setup>
 // 接口 搜索用户 删除用户 重置密码 修改用户角色
-import managerFun from "@/api/manager-user";
+import managerUserFun from "@/api/manager-user";
 import addUser from "@/components/user/add-user.vue";
 import addUserSingle from "@/components/user/add-user-single.vue";
 import { onMounted, reactive, ref } from "vue";
@@ -202,7 +202,7 @@ const handleDeleteUser = (val) => {
   var userNumberList = [];
   userNumberList.push(val.userNumber);
   // 重置密码
-  managerFun.user.deleteUser(userNumberList).then((res) => {
+  managerUserFun.user.deleteUser(userNumberList).then((res) => {
     ElMessage.success(res);
     getUserList();
   });
@@ -212,7 +212,7 @@ const handleResetUser = (val) => {
   var userNumberList = [];
   userNumberList.push(val.userNumber);
   // 重置密码
-  managerFun.user.reset(userNumberList).then((res) => {
+  managerUserFun.user.reset(userNumberList).then((res) => {
     ElMessage.success(res);
   });
 };
@@ -229,7 +229,7 @@ const handleBatchResetUser = () => {
       userNumberList.push(item.userNumber);
     });
     // 重置密码
-    managerFun.user.reset(userNumberList).then((res) => {
+    managerUserFun.user.reset(userNumberList).then((res) => {
       ElMessage.success(res);
     });
   }
@@ -245,7 +245,7 @@ const handleBatchDeleteUser = () => {
       userNumberList.push(item.userNumber);
     });
     // 重置密码
-    managerFun.user.deleteUser(userNumberList).then((res) => {
+    managerUserFun.user.deleteUser(userNumberList).then((res) => {
       ElMessage.success(res);
       getUserList();
     });
@@ -253,7 +253,7 @@ const handleBatchDeleteUser = () => {
 };
 // 获得更新之后的用户列表
 const getUserList = () => {
-  managerFun.user
+  managerUserFun.user
     .searchUser(
       data.searchData.searchName,
       data.searchData.searchRole,

@@ -1,8 +1,8 @@
 // 双token配置
 import http from "./request";
 let flag = false; // 设置开关，保证一次只能请求一次短token，防止客户多此操作，多次请求
-export { REFRESH_TOKEN,PASS } from "@/config/constants";
-import { getRefreshToken, removeRefreshToken, setAccessToken, setRefreshToken } from "@/config/constants";
+export { REFRESH_TOKEN,PASS } from "@/constants/token";
+import { getRefreshToken, removeRefreshToken, setAccessToken, setRefreshToken } from "@/constants/token";
 
 /*把过期请求添加在数组中*/
 export const addRequest = (request) => {
