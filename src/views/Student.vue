@@ -194,7 +194,7 @@
 </template>
 <script setup>
 import { ref, reactive, computed } from "vue";
-import { ElMessageBox,ElMessage } from "element-plus";
+import { ElMessageBox, ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 const router = useRouter();
 let studentNum = 50;

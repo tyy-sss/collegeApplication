@@ -280,7 +280,7 @@
     <br />
     <br />
     <!-- 提交按钮 -->
-    <div style="height: 40px; display: flex; justify-content: center">
+    <div class="submitBtn">
       <el-button type="primary" @click="dialogVisible = true"
         >提交本月测评结果</el-button
       >
@@ -294,7 +294,7 @@
   </el-dialog>
 </template>
 <script setup>
-import { ref, reactive,computed } from "vue";
+import { ref, reactive, computed } from "vue";
 import signatures from "@/components/utils/Signatures.vue";
 import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
@@ -572,7 +572,7 @@ const handleCellLeave = (row, column, cell, event) => {
 
 // 数据excel导出
 const handleExcelExport = () => {
-  console.log(comprehensiveAssessmentHeader)
+  console.log(comprehensiveAssessmentHeader);
   export_json_to_excel(
     comprehensiveAssessmentHeader,
     assessments,
@@ -597,23 +597,17 @@ h1 {
   .item__input {
     display: none;
     width: 100%;
-    /* 调整elementUI中样式 如果不需要调整请忽略 */
-    .el-input__inner {
-      height: 24px !important;
-    }
-    /* 调整elementUI中样式 如果不需要调整请忽略 */
-    .el-input__suffix {
-      i {
-        font-size: 12px !important;
-        line-height: 26px !important;
-      }
-    }
   }
   .item__txt {
     box-sizing: border-box;
     line-height: 24px;
     padding: 0 9px;
   }
+}
+.submitBtn {
+  text-align: center;
+  height: 40px;
+  margin-left: 10%;
 }
 </style>
   

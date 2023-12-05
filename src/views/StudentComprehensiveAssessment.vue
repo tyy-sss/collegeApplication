@@ -138,7 +138,7 @@
 <script setup>
 import signatures from "@/components/utils/Signatures.vue";
 import { ref, reactive, computed } from "vue";
-import { ElMessageBox,ElMessage } from "element-plus";
+import { ElMessageBox, ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
@@ -188,9 +188,9 @@ const textarea = ref("");
 function commit() {
   dialogVisible2.value = false;
   ElMessage({
-        message: "已申报错误，请耐心等待处理",
-        type: "success",
-      });
+    message: "已申报错误，请耐心等待处理",
+    type: "success",
+  });
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
