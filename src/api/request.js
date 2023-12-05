@@ -10,7 +10,7 @@ const requests = axios.create({
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径当中会出现api
   baseURL: "http://192.168.50.35:8081/",
   //代表请求超时的时间
-  timeout: 5000,
+  timeout: 10000,
 });
 //请求拦截器：
 requests.interceptors.request.use((config) => {
@@ -88,7 +88,7 @@ const http = {
     return new Promise((resolve, reject) => {
       requests({
         url,
-        data: qs.parse(params),
+        data: params,
         headers: header,
         method: "PUT",
       })
@@ -105,7 +105,7 @@ const http = {
     return new Promise((resolve, reject) => {
       requests({
         url,
-        data: qs.parse(params),
+        data: params,
         headers: header,
         method: "DELETE",
       })

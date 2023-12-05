@@ -77,8 +77,7 @@ import {
 } from "@/assets/js/excel/excel-leading-data";
 
 // 接口
-import apiFun from "@/api/student";
-import teacherFun from "@/api/teacher";
+import managerFun from "@/api/manager-user";
 import { ElMessage } from "element-plus";
 const data = reactive({
   dialogTableVisible: false,
@@ -100,7 +99,6 @@ const handleAddUser = async (ev) => {
     // 没有文件
     ElMessage.error("请上传正确的文件");
   } else {
-    // console.log(file)
     //读取file中的数据
     let data = await readFile(file);
     const excelData = getExcelData(data);
@@ -111,10 +109,10 @@ const handleAddUser = async (ev) => {
       addData = excelLeadingIn(excelData, studentCharacter);
       addData = handleStudentInformation(addData);
       // 把学生数据传给后端
-      apiFun.user
+      managerFun.user
         .addStudentsByExcel(addData)
         .then((res) => {
-          uploadSuccess();
+          uploadSuccess(res);
         })
         .catch((err) => {
           console.log(err);
@@ -124,10 +122,10 @@ const handleAddUser = async (ev) => {
       addData = excelLeadingIn(excelData, teacherCharacter);
       addData = handleTeacherInformation(addData);
       // 把老师数据传给后端
-      teacherFun.user
+      managerFun.user
         .addTeacherByExcel(addData)
         .then((res) => {
-          uploadSuccess();
+          uploadSuccess(res);
         })
         .catch((err) => {
           console.log(err);
@@ -138,9 +136,10 @@ const handleAddUser = async (ev) => {
 // 调用父组件的方法
 const emit = defineEmits(["getUserList"]);
 // 上传成功之后
-const uploadSuccess = () => {
+const uploadSuccess = (res) => {
+  ElMessage.success(res);
+  data.dialogTableVisible = false;
   data.upload.isProgress = false;
-  ElMessage.success("上传数据成功");
   emit("getUserList")
 };
 // 导出学生信息表

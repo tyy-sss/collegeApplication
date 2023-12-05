@@ -70,17 +70,18 @@ const routes = [
         path: "volunteer-basis",
         name: "volunteer-basis",
         component: () => import("@/views/VolunteerBasis.vue"),
-        redirect: '/volunteer-check',
-        children: [{
-          path: "/volunteer-check",
-          name: "volunteer-check",
-          component: () => import("@/views/VolunteerCheck.vue"),
-        },
-        {
-          path: "/volunteer-fill",
-          name: "volunteer-fill",
-          component: () => import("@/views/VolunteerFill.vue"),
-        },
+        redirect: "/volunteer-check",
+        children: [
+          {
+            path: "/volunteer-check",
+            name: "volunteer-check",
+            component: () => import("@/views/VolunteerCheck.vue"),
+          },
+          {
+            path: "/volunteer-fill",
+            name: "volunteer-fill",
+            component: () => import("@/views/VolunteerFill.vue"),
+          },
         ],
       },
       {
@@ -146,7 +147,6 @@ const router = createRouter({
 router.beforeEach((to, form, next) => {
   // 判断是否有token
   var token = getAccessToken();
-  console.log(token, "短token");
   if (!token) {
     // 未登录
     // 在登录界面
@@ -157,7 +157,6 @@ router.beforeEach((to, form, next) => {
       next({ name: "login" });
     }
   } else {
-    console.log(to.path);
     // 已登录
     if (to.path == "/") {
       // 跳转到菜单表的第一个菜单显示界面

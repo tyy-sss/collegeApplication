@@ -11,7 +11,7 @@ const aes = new AesEncryption();
 export const stringifyQuery = (obj) => {
   console.log(obj, "传递的参数");
   if (!obj) return "";
-  console.log(Object.keys(obj));
+  // console.log(Object.keys(obj));
   const result = Object.keys(obj)
     .map((key) => {
       const value = obj[key];
