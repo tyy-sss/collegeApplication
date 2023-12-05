@@ -170,7 +170,7 @@
   <script setup>
 // 添加用户
 // 接口
-import managerUserFun from "@/api/manager-user";
+import managerFun from "@/api/manager";
 import { onMounted, reactive, ref } from "vue";
 import {
   nationList,
@@ -299,7 +299,7 @@ const handleAddUser = () => {
         addData.push(teacher);
         // 添加老师
         // 把老师数据传给后端
-        managerUserFun.user
+        managerFun.user
           .addTeacherByExcel(addData)
           .then((res) => {
             uploadSuccess(res);
@@ -311,7 +311,7 @@ const handleAddUser = () => {
         // 添加学生
         addData.push(form.ruleForm);
         // 把学生数据传给后端
-        managerUserFun.user
+        managerFun.user
           .addStudentsByExcel(addData)
           .then((res) => {
             uploadSuccess(res);
