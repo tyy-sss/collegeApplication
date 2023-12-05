@@ -1,7 +1,10 @@
 <template>
   <div class="common-layout">
     <el-container>
-      <el-aside :width="asideWidth">
+      <!-- 手机端收缩时 -->
+      <common-float-aside v-if="phone && store.state.menu.isCollapse" />
+      <!-- 电脑端 -->
+      <el-aside v-else :width="asideWidth">
         <common-aside />
       </el-aside>
       <el-main>
@@ -13,16 +16,19 @@
   <script setup>
 import { onMounted, ref } from "vue";
 import CommonAside from "@/components/common/common-aside.vue";
+import commonFloatAside from "@/components/common/common-float-aside.vue";
 import { onBeforeMount, watch } from "vue";
 import { giveMenu } from "@/assets/js/data/menu";
-import { getRole } from "@/config/constants";
+import { getRole } from "@/constants/token";
 import store from "@/store";
-onBeforeMount(() => {
-  store.commit("setMenu", giveMenu(getRole));
-  // console.log(giveMenu(getRole));
-  store.commit("addMenu");
-  setAsideWidth(store.state.menu.isCollapse);
-});
+// 判断打开时是手机端还是pc端
+const phone = ref(null);
+const isMobile = () => {
+  let flag = navigator.userAgent.match(
+    /(phone|pad|pod|iPhone|iPod|ios|iPad|Android|Mobile|BlackBerry|IEMobile|MQQBrowser|JUC|Fennec|wOSBrowser|BrowserNG|WebOS|Symbian|Windows Phone)/i
+  );
+  return flag;
+};
 var asideWidth = ref(null);
 // 修改侧边栏的宽度
 const setAsideWidth = (val) => {
@@ -32,6 +38,16 @@ const setAsideWidth = (val) => {
     asideWidth.value = "140px";
   }
 };
+onBeforeMount(() => {
+  store.commit("setMenu", giveMenu(getRole));
+  // console.log(giveMenu(getRole));
+  store.commit("addMenu");
+  setAsideWidth(store.state.menu.isCollapse);
+  // 判断是否是手机
+  if (isMobile()) {
+    phone.value = true;
+  }
+});
 // 监听菜单收缩状态改变
 watch(
   () => store.state.menu.isCollapse,

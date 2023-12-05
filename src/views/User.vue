@@ -12,7 +12,7 @@
                 <div class="text">用户姓名:</div>
                 <div class="input">
                   <el-input
-                    v-model="searchData.searchName"
+                    v-model="data.searchData.searchName"
                     placeholder="请输入"
                   />
                 </div>
@@ -21,7 +21,7 @@
                 <div class="text">用户角色:</div>
                 <div class="input">
                   <el-input
-                    v-model="searchData.searchRole"
+                    v-model="data.searchData.searchRole"
                     placeholder="请输入"
                   />
                 </div>
@@ -29,9 +29,7 @@
             </div>
             <div class="right">
               <div class="search-button">
-                <el-button type="primary" @click="handleSearchUser"
-                  >查询</el-button
-                >
+                <el-button type="primary" @click="searchUser">查询</el-button>
               </div>
               <div class="search-icon">
                 <el-icon :size="23" color="#409EFC" @click="onReSearch"
@@ -46,35 +44,54 @@
             <el-button type="primary" :icon="Plus" @click="handleAddUser"
               >批量添加用户</el-button
             >
-            <add-user ref="addUserRef" />
+            <add-user ref="addUserRef" @get-user-list="getUserList" />
           </div>
           <div class="add-item">
             <el-button type="primary" :icon="Plus" @click="handleAddUserSingle"
               >单个添加用户</el-button
             >
-            <add-user-single ref="addUserSingleRef" />
+            <add-user-single
+              ref="addUserSingleRef"
+              @get-user-list="getUserList"
+            />
           </div>
         </div>
         <div class="middle">
           <el-table
             ref="multipleTableRef"
-            :data="tableData"
+            :data="data.tableData"
             border
             stripe
             style="width: 100%"
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" width="35" />
-            <el-table-column prop="id" label="用户账号" min-width="120" />
-            <el-table-column prop="name" label="用户姓名" min-width="120" />
-            <el-table-column prop="uId" label="身份证号" min-width="150" />
-            <el-table-column prop="role" label="用户角色" min-width="120" />
-            <el-table-column prop="class" label="所在班级" />
             <el-table-column
-              prop="update_time"
-              label="最近更新"
-              min-width="100"
+              prop="userNumber"
+              label="用户账号"
+              min-width="120"
             />
+            <el-table-column prop="username" label="用户姓名" min-width="120" />
+            <el-table-column prop="idCard" label="身份证号" min-width="150">
+              <template #default="scope">{{
+                scope.row.idCard ? scope.row.idCard : "-"
+              }}</template>
+            </el-table-column>
+            <el-table-column prop="role" label="用户角色" min-width="120">
+              <template #default="scope">{{
+                scope.row.role ? scope.row.role : "-"
+              }}</template>
+            </el-table-column>
+            <el-table-column prop="className" label="所在班级">
+              <template #default="scope">{{
+                scope.row.className ? scope.row.className : "-"
+              }}</template> </el-table-column
+            >>
+            <el-table-column prop="updateTime" label="最近更新" min-width="100">
+              <template #default="scope">{{
+                scope.row.updateTime ? scope.row.updateTime : "-"
+              }}</template></el-table-column
+            >
             <el-table-column label="操作" min-width="180px">
               <template #default="scope">
                 <el-button
@@ -110,16 +127,16 @@
           </div>
           <el-divider />
           <div class="pager">
-            <div class="page-news">共{{ page.total }}条信息</div>
+            <div class="page-news">共{{ data.page.total }}条信息</div>
             <el-pagination
-              v-model:current-page="page.currentPage"
-              v-model:page-size="page.nowPageSize"
-              :page-sizes="page.pageSize"
-              :pager-count="page.pageCount"
+              v-model:current-page="data.page.currentPage"
+              v-model:page-size="data.page.nowPageSize"
+              :page-sizes="data.page.pageSize"
+              :pager-count="data.page.pageCount"
               layout="prev, pager, next,sizes,jumper"
-              :total="page.total"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
+              :total="data.page.total"
+              @size-change="getUserList"
+              @current-change="getUserList"
             />
           </div>
         </div>
@@ -129,43 +146,42 @@
 </template>
 <script setup>
 // 接口 搜索用户 删除用户 重置密码 修改用户角色
+import managerUserFun from "@/api/manager-user";
 import addUser from "@/components/user/add-user.vue";
 import addUserSingle from "@/components/user/add-user-single.vue";
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage } from "element-plus";
 const addUserRef = ref(null);
 const addUserSingleRef = ref(null);
-
-const searchData = reactive({
-  searchName: "",
-  searchRole: "",
-});
-// 分页数据
-const page = reactive({
-  pageSize: [10, 15, 20],
-  currentPage: 1,
-  nowPageSize: 10,
-  pageCount: 5,
-  total: 700,
-});
-const tableData = [
-  {
-    id: "2016-05-03",
-    name: "Tom",
-    uId: 20249480324,
-    role: "老师",
-    class: "1",
-    update_time: "1930214:139L:11",
+const data = reactive({
+  // 搜索数据
+  searchData: {
+    searchName: "",
+    searchRole: "",
   },
-];
+  // 分页数据
+  page: {
+    pageSize: [10, 15, 20],
+    currentPage: 1,
+    nowPageSize: 10,
+    pageCount: 5,
+    total: 0,
+  },
+  // 表格数据
+  tableData: [],
+});
 // 重置搜索
 const onReSearch = () => {
-  searchData.searchName = "";
-  searchData.searchRole = "";
+  data.searchData.searchName = "";
+  data.searchData.searchRole = "";
+  searchUser();
 };
-// 查询用户
-const handleSearchUser = () => {};
+// 搜索用户
+const searchUser = () => {
+  data.page.currentPage = 1;
+  getUserList();
+};
 // 添加用户
 const handleAddUser = () => {
   addUserRef.value.data.dialogTableVisible = true;
@@ -181,29 +197,81 @@ const handleSelectionChange = (val) => {
   console.log(multipleSelection.value);
 };
 // 删除单个用户
-const handleDeleteUser = (val) => {};
+const handleDeleteUser = (val) => {
+  console.log(val);
+  var userNumberList = [];
+  userNumberList.push(val.userNumber);
+  // 重置密码
+  managerUserFun.user.deleteUser(userNumberList).then((res) => {
+    ElMessage.success(res);
+    getUserList();
+  });
+};
 // 重置密码
-const handleResetUser = (val) => {};
+const handleResetUser = (val) => {
+  var userNumberList = [];
+  userNumberList.push(val.userNumber);
+  // 重置密码
+  managerUserFun.user.reset(userNumberList).then((res) => {
+    ElMessage.success(res);
+  });
+};
 // 修改角色
 const handleChangeUserRole = (val) => {};
 // 批量重置密码
 const handleBatchResetUser = () => {
   if (multipleSelection.value.length === 0) {
     ElMessage.error("请至少选择一个用户");
+  } else {
+    console.log(multipleSelection.value);
+    var userNumberList = [];
+    multipleSelection.value.forEach((item) => {
+      userNumberList.push(item.userNumber);
+    });
+    // 重置密码
+    managerUserFun.user.reset(userNumberList).then((res) => {
+      ElMessage.success(res);
+    });
   }
 };
 // 批量删除用户
 const handleBatchDeleteUser = () => {
   if (multipleSelection.value.length === 0) {
     ElMessage.error("请至少选择一个用户");
+  } else {
+    console.log(multipleSelection.value);
+    var userNumberList = [];
+    multipleSelection.value.forEach((item) => {
+      userNumberList.push(item.userNumber);
+    });
+    // 重置密码
+    managerUserFun.user.deleteUser(userNumberList).then((res) => {
+      ElMessage.success(res);
+      getUserList();
+    });
   }
 };
-// 修改每页的个数
-const handleSizeChange = () => {};
-// 页码跳转界面
-const handleCurrentChange = () => {
-  alert(page.currentPage);
+// 获得更新之后的用户列表
+const getUserList = () => {
+  managerUserFun.user
+    .searchUser(
+      data.searchData.searchName,
+      data.searchData.searchRole,
+      data.page.currentPage,
+      data.page.nowPageSize
+    )
+    .then((res) => {
+      data.page.total = res.total;
+      data.page.currentPage = res.current;
+      data.tableData = res.records;
+    })
+    .catch((err) => {
+      console.log(err);
+    });
 };
+onMounted(() => {
+  getUserList();
+});
 </script>
 <style src="@/assets/css/utils/table-center.css" scoped/>
 <style src="@/assets/css/show-container.css" scoped/>

@@ -17,12 +17,12 @@ apiFun.user.login = (data) => {
  * 刷新token
  */
 apiFun.user.refreshToken = () => {
-  return http.post("/user/refresh-token", localStorage.getItem("refreshToken"));
+  return http.post("/user/refresh", localStorage.getItem("refreshToken"));
 };
 /**
  * 退出登录
  */
 apiFun.user.loginOut = () => {
-  return http.post('/user/loginOut');
+  return http.get('/user/loginOut');
 }
 export default apiFun;

@@ -33,4 +33,8 @@ body {
   margin: 0;
   cursor: pointer;
 }
+* {
+  /* 滑动时报错 */
+  touch-action: pan-y;
+}
 </style>

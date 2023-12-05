@@ -108,7 +108,7 @@
       >
         <el-form-item label="班级名称" prop="name">
           <el-input v-model="form.ruleForm.name" />
-          <div class="prompt">请输入长度在2到20位之间的中英文字母</div>
+          <div class="prompt">请输入长度在2到20位之间的中文数字</div>
         </el-form-item>
         <el-form-item label="选择班主任" prop="number">
           <el-select
@@ -135,7 +135,7 @@
 </template>
   <script setup>
 import { ElMessage, ElMessageBox } from "element-plus";
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { formatDate } from "@/assets/js/utils/format-date";
 // 接口添加 获得班主任列表，按年搜索班级，班级姓名查重，添加班级，删除班级，搜索学校

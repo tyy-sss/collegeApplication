@@ -77,7 +77,7 @@ import {
 } from "@/assets/js/excel/excel-leading-data";
 
 // 接口
-// import { uploadSingleResume } from "@/api/resume";
+import managerUserFun from "@/api/manager-user";
 import { ElMessage } from "element-plus";
 const data = reactive({
   dialogTableVisible: false,
@@ -99,20 +99,48 @@ const handleAddUser = async (ev) => {
     // 没有文件
     ElMessage.error("请上传正确的文件");
   } else {
-    // console.log(file)
     //读取file中的数据
     let data = await readFile(file);
     const excelData = getExcelData(data);
     const length = Object.keys(excelData[0]).length;
     var addData = [];
     if (length === Object.keys(studentCharacter).length) {
+      // 批量添加学生
       addData = excelLeadingIn(excelData, studentCharacter);
       addData = handleStudentInformation(addData);
+      // 把学生数据传给后端
+      managerUserFun.user
+        .addStudentsByExcel(addData)
+        .then((res) => {
+          uploadSuccess(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     } else if (length === Object.keys(teacherCharacter).length) {
+      // 批量添加老师
       addData = excelLeadingIn(excelData, teacherCharacter);
       addData = handleTeacherInformation(addData);
+      // 把老师数据传给后端
+      managerUserFun.user
+        .addTeacherByExcel(addData)
+        .then((res) => {
+          uploadSuccess(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   }
+};
+// 调用父组件的方法
+const emit = defineEmits(["getUserList"]);
+// 上传成功之后
+const uploadSuccess = (res) => {
+  ElMessage.success(res);
+  data.dialogTableVisible = false;
+  data.upload.isProgress = false;
+  emit("getUserList")
 };
 // 导出学生信息表
 const handleExportStudent = () => {
@@ -131,7 +159,7 @@ defineExpose({
 ::v-deep .el-divider--horizontal {
   margin: 2px 0;
 }
-.content{
+.content {
   display: flex;
   justify-content: center;
   align-items: center;

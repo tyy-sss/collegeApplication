@@ -40,11 +40,11 @@
 import apiFun from "@/api/user";
 import { reactive, ref } from "vue";
 import { throttle } from "@/assets/js/utils/throttle";
-import { setRole, setAccessToken, setRefreshToken } from "@/config/constants";
+import { setRole, setAccessToken, setRefreshToken } from "@/constants/token";
 import {
   ACCOUNT_TEST,
   PASSWORD_TEST,
-} from "@/assets/js/utils/regular-expression";
+} from "@/constants/regular-expression";
 import { useRouter } from "vue-router";
 const router = useRouter();
 // 用户数据
@@ -73,20 +73,24 @@ const rules = reactive({
 const ruleFormRef = ref(null);
 //
 const login = throttle(() => {
-  ruleFormRef.value.validate(async (valid, fields) => {
+  ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
       // 节流
-      const data = await apiFun.user.login(userData);
-      // 保存token 还有菜单信息
-      setAccessToken(data.token.accessToken);
-      setRefreshToken(data.token.refreshToken);
-      setRole(data.role);
-      // 清空表单信息
-      ruleFormRef.value.resetFields();
-      const href = router.resolve({
-        path: "/",
-      });
-      window.open(href.href, "_self");
+      apiFun.user
+        .login(userData)
+        .then((data) => {
+          // 保存token 还有菜单信息
+          setAccessToken(data.token.accessToken);
+          setRefreshToken(data.token.refreshToken);
+          setRole(data.role);
+          const href = router.resolve({
+            path: "/",
+          });
+          window.open(href.href, "_self");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     }
   });
 }, 1000);

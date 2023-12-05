@@ -69,7 +69,7 @@ import {
   removeAccessToken,
   removeRefreshToken,
   removeRole,
-} from "@/config/constants";
+} from "@/constants/token";
 const router = useRouter();
 const menuDataForVue = reactive(store.state.menu.menuData);
 const imgWidth = ref(null);
@@ -116,7 +116,7 @@ onMounted(() => {
   background-color: #fff;
 }
 .menu {
-  overflow:hidden;
+  overflow: hidden;
   height: 100vh;
   background-color: #fff;
   border-radius: 2rem;

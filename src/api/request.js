@@ -2,7 +2,7 @@ import axios from "axios";
 import qs from "qs"; //转json数据工具包
 import { ElMessage } from "element-plus";
 import { addRequest, refreshToken } from "./two-token";
-import {getAccessToken, removeAccessToken } from "@/config/constants";
+import { getAccessToken, removeAccessToken } from "@/constants/token";
 
 //1.利用axios对象的方法create，去创建一个axios实例。
 const requests = axios.create({
@@ -10,13 +10,13 @@ const requests = axios.create({
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径当中会出现api
   baseURL: "http://192.168.50.35:8081/",
   //代表请求超时的时间
-  timeout: 5000,
+  timeout: 10000,
 });
 //请求拦截器：
 requests.interceptors.request.use((config) => {
   const token = getAccessToken();
   if (token) {
-    config.headers.Authorization = "Bearer " + token;
+    config.headers.Authorization = token;
   }
   return config;
 });
@@ -27,19 +27,16 @@ requests.interceptors.response.use((res) => {
     return Promise.reject(res);
   }
   if (res.data.code != 200) {
-    if (data.code === 2044) {
+    // console.log(res.data);
+    if (res.data.msg) ElMessage.error(res.data.msg);
+    if (res.data.code === 2044) {
       // 移除失效的短token
       removeAccessToken();
       // 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新
       addRequest(() => resolve(server(config)));
       // 携带长token去请求新的token
       refreshToken();
-    } else {
-      // 有效返回相应的数据
-      resolve();
     }
-    console.log(res.data);
-    if (res.data.msg) ElMessage.error(res.data.msg);
     if (res.data.resultCode == 419) {
       router.push({ path: "/login" });
     }
@@ -50,7 +47,6 @@ requests.interceptors.response.use((res) => {
 
 const header = {
   "Content-Type": "application/json;charset=UTF-8",
-  accessToken: "",
 };
 
 const http = {
@@ -75,7 +71,7 @@ const http = {
     return new Promise((resolve, reject) => {
       requests({
         url,
-        data: qs.parse(params),
+        data: params,
         headers: header,
         method: "POST",
       })
@@ -92,7 +88,7 @@ const http = {
     return new Promise((resolve, reject) => {
       requests({
         url,
-        data: qs.parse(params),
+        data: params,
         headers: header,
         method: "PUT",
       })
@@ -109,7 +105,7 @@ const http = {
     return new Promise((resolve, reject) => {
       requests({
         url,
-        data: qs.parse(params),
+        data: params,
         headers: header,
         method: "DELETE",
       })
