@@ -112,6 +112,8 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
+import studentFun from "@/api/student";
+import teacherFun from "@/api/teacher";
 import { useRouter } from "vue-router";
 const router = useRouter();
 let student = {
@@ -192,7 +194,7 @@ const options = reactive([
 function submitVolunteer() {
   //提交志愿到服务端
   // router.push({ path: "/volunteer-check" });
-  router.push({name:'volunteer-check'})
+  router.push({ name: "volunteer-check" });
   ElMessage({
     message: "修改志愿成功",
     type: "success",

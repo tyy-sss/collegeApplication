@@ -139,7 +139,9 @@
 import signatures from "@/components/utils/Signatures.vue";
 import { ref, reactive, computed } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
+import studentFun from "@/api/student"
 import { useRouter } from "vue-router";
+
 const router = useRouter();
 
 const assessment = [

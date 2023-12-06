@@ -305,7 +305,10 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
+import studentFun from "@/api/student"
+import teacherFun from "@/api/teacher"
 import { useRouter } from "vue-router";
+
 const router = useRouter();
 
 const drawer = ref(false);

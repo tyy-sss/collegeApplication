@@ -1,13 +1,13 @@
 // 班级管理
 import http from "./request";
 
-let headteacherFun = {
+let teacherFun = {
   user: {},
 };
 /**
  * 获取班级学生信息
  */
- headteacherFun.user.getStudents = () => {
+teacherFun.user.getStudents = () => {
   return http.get("/class");
 };
-export default headteacherFun;
+export default teacherFun;

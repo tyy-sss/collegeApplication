@@ -63,6 +63,8 @@
 import { ref, reactive, computed } from "vue";
 import { volunteerHeader } from "@/assets/js/excel/format/volunteer";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
+import teacherFun from "@/api/teacher"
+
 let myclass = "2023级1班";
 const search = ref("");
 const filterTableData = computed(() =>
