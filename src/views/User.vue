@@ -146,7 +146,7 @@
 </template>
 <script setup>
 // 接口 搜索用户 删除用户 重置密码 修改用户角色
-import managerUserFun from "@/api/manager-user";
+import managerFun from "@/api/manager";
 import addUser from "@/components/user/add-user.vue";
 import addUserSingle from "@/components/user/add-user-single.vue";
 import { onMounted, reactive, ref } from "vue";
@@ -202,7 +202,7 @@ const handleDeleteUser = (val) => {
   var userNumberList = [];
   userNumberList.push(val.userNumber);
   // 重置密码
-  managerUserFun.user.deleteUser(userNumberList).then((res) => {
+  managerFun.user.deleteUser(userNumberList).then((res) => {
     ElMessage.success(res);
     getUserList();
   });
@@ -212,7 +212,7 @@ const handleResetUser = (val) => {
   var userNumberList = [];
   userNumberList.push(val.userNumber);
   // 重置密码
-  managerUserFun.user.reset(userNumberList).then((res) => {
+  managerFun.user.reset(userNumberList).then((res) => {
     ElMessage.success(res);
   });
 };
@@ -223,13 +223,12 @@ const handleBatchResetUser = () => {
   if (multipleSelection.value.length === 0) {
     ElMessage.error("请至少选择一个用户");
   } else {
-    console.log(multipleSelection.value);
     var userNumberList = [];
     multipleSelection.value.forEach((item) => {
       userNumberList.push(item.userNumber);
     });
     // 重置密码
-    managerUserFun.user.reset(userNumberList).then((res) => {
+    managerFun.user.reset(userNumberList).then((res) => {
       ElMessage.success(res);
     });
   }
@@ -239,13 +238,12 @@ const handleBatchDeleteUser = () => {
   if (multipleSelection.value.length === 0) {
     ElMessage.error("请至少选择一个用户");
   } else {
-    console.log(multipleSelection.value);
     var userNumberList = [];
     multipleSelection.value.forEach((item) => {
       userNumberList.push(item.userNumber);
     });
     // 重置密码
-    managerUserFun.user.deleteUser(userNumberList).then((res) => {
+    managerFun.user.deleteUser(userNumberList).then((res) => {
       ElMessage.success(res);
       getUserList();
     });
@@ -253,7 +251,7 @@ const handleBatchDeleteUser = () => {
 };
 // 获得更新之后的用户列表
 const getUserList = () => {
-  managerUserFun.user
+  managerFun.user
     .searchUser(
       data.searchData.searchName,
       data.searchData.searchRole,

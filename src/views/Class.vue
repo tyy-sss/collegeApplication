@@ -9,16 +9,13 @@
           <div class="search">
             <div class="left">
               <div class="search-item">
-                <el-button
-                  type="primary"
-                  :icon="Plus"
-                  @click="form.dialogVisible = true"
-                  >添加班级</el-button
-                >
+                <el-button type="primary" :icon="Plus" @click="addClass">{{
+                  data.isChange ? "修改班级" : "添加班级"
+                }}</el-button>
               </div>
               <div class="search-item">
                 <el-date-picker
-                  v-model="form.searchData"
+                  v-model="data.searchData"
                   type="year"
                   placeholder="请选择年份"
                   @change="onSearch"
@@ -35,21 +32,18 @@
         <div class="middle">
           <el-table
             ref="multipleTableRef"
-            :data="tableData"
+            :data="data.tableData"
             border
             stripe
             style="width: 100%"
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" width="35" />
-            <el-table-column label="班级编号" property="uId" />
+            <el-table-column label="班级编号" property="classId" />
             <el-table-column label="班级名称" property="className" />
-            <el-table-column label="班主任" property="classHeader" />
-            <el-table-column
-              label="班主任联系方式"
-              property="classHeaderPhone"
-            />
-            <el-table-column label="班级人数" property="classNumber" />
+            <el-table-column label="班主任" property="username" />
+            <el-table-column label="班主任联系方式" property="phone" />
+            <el-table-column label="班级人数" property="size" />
             <el-table-column label="操作" min-width="180px">
               <template #default="scope">
                 <el-button
@@ -76,14 +70,14 @@
           </div>
           <el-divider />
           <div class="pager">
-            <div class="page-news">共{{ page.total }}条信息</div>
+            <div class="page-news">共{{ data.page.total }}条信息</div>
             <el-pagination
-              v-model:current-page="page.currentPage"
-              v-model:page-size="page.nowPageSize"
-              :page-sizes="page.pageSize"
-              :pager-count="page.pageCount"
+              v-model:current-page="data.page.currentPage"
+              v-model:page-size="data.page.nowPageSize"
+              :page-sizes="data.page.pageSize"
+              :pager-count="data.page.pageCount"
               layout="prev, pager, next,sizes,jumper"
-              :total="page.total"
+              :total="data.page.total"
               @size-change="handleSizeChange"
               @current-change="handleCurrentChange"
             />
@@ -93,7 +87,7 @@
     </div>
     <!-- 对话框 -->
     <el-dialog
-      v-model="form.dialogVisible"
+      v-model="data.dialogVisible"
       title="添加班级"
       width="30%"
       :before-close="handleClose"
@@ -101,25 +95,22 @@
       <el-form
         ref="ruleFormRef"
         label-position="top"
-        :model="form.ruleForm"
-        :rules="form.rules"
+        :model="data.form"
+        :rules="data.rules"
         label-width="120px"
         class="demo-ruleForm"
       >
-        <el-form-item label="班级名称" prop="name">
-          <el-input v-model="form.ruleForm.name" />
+        <el-form-item label="班级名称" prop="className">
+          <el-input v-model="data.form.className" />
           <div class="prompt">请输入长度在2到20位之间的中文数字</div>
         </el-form-item>
         <el-form-item label="选择班主任" prop="number">
-          <el-select
-            v-model="form.ruleForm.classHeader"
-            placeholder="选择班主任"
-          >
+          <el-select v-model="data.form.userNumber" placeholder="选择班主任">
             <el-option
-              v-for="item in options"
-              :key="item.teacherId"
-              :label="item.teacherName"
-              :value="item.teacherId"
+              v-for="item in data.options"
+              :key="item.userNumber"
+              :label="item.username"
+              :value="item.userNumber"
             />
           </el-select>
         </el-form-item>
@@ -139,94 +130,118 @@ import { onMounted, reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { formatDate } from "@/assets/js/utils/format-date";
 // 接口添加 获得班主任列表，按年搜索班级，班级姓名查重，添加班级，删除班级，搜索学校
-const validateName = (rule, value, callback) => {
+import managerFun from "@/api/manager";
+const validateName = async (rule, value, callback) => {
   if (
-    (form.isChange === false && value) ||
-    (form.isChange === true && value != form.oldClassName)
+    (data.isChange === false && value) ||
+    (data.isChange === true && value != data.oldClassName)
   ) {
-    // 班级查重
-    // callback(new Error("班级姓名重复"));
+    await managerFun.class
+      .existsClass(value)
+      .then((res) => {
+        callback();
+      })
+      .catch((err) => {
+        callback(new Error(err.msg));
+      });
   }
   callback();
 };
 //   数据
-const form = reactive({
+const data = reactive({
   dialogVisible: false,
   isChange: false,
   oldClassName: "吉首大学",
   searchData: "",
-  ruleForm: {
-    name: "",
-    classHeader: "",
+  form: {
+    className: "",
+    userNumber: "",
   },
   rules: {
     // 添加查班级姓名
-    name: [
+    className: [
       { required: true, message: "请输入班级名", trigger: "blur" },
       { validator: validateName, trigger: "blur" },
     ],
   },
-});
-// 表格数据
-const tableData = reactive([
-  {
-    uId: "1",
-    className: "2023级预科1班",
-    classHeader: "张三",
-    classHeaderPhone: "1xxxxxxxxxx",
-    classNumber: "99",
+  // 班主任信息数据
+  options: [],
+  // 分页数据
+  page: {
+    pageSize: [10, 15, 20],
+    currentPage: 1,
+    nowPageSize: 10,
+    pageCount: 5,
+    total: 700,
   },
-]);
-// 班主任信息数据
-const options = reactive([
-  { teacherId: 1, teacherName: "张三" },
-  { teacherId: 2, teacherName: "李四" },
-]);
-// 分页数据
-const page = reactive({
-  pageSize: [10, 15, 20],
-  currentPage: 1,
-  nowPageSize: 10,
-  pageCount: 5,
-  total: 700,
+  // 表格数据
+  tableData: [],
 });
 // 表单验证
 const ruleFormRef = ref(null);
+// 打开对话框
+const addClass = () => {
+  data.dialogVisible = true;
+  // 获得老师列表
+  managerFun.user.getTeacherList().then((res) => {
+    data.options = res;
+  });
+};
 // 手动添加或者修改班级
 const handleAddClass = () => {
   ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
-      // 判断还是添加还是修改班级
-      // 清空表单验证消息
-      ruleFormRef.value.resetFields();
-      handleClose();
+      if (data.isChange) {
+        managerFun.class
+          .changeClass(data.form.userNumber, data.form.className)
+          .then((res) => {
+            ElMessage.success(res);
+            getClassList();
+            handleClose();
+          });
+      } else {
+        // 判断还是添加还是修改班级
+        managerFun.class
+          .addClass(data.form.userNumber, data.form.className)
+          .then((res) => {
+            ElMessage.success(res);
+            getClassList();
+            handleClose();
+          });
+      }
     }
   });
 };
 // 关闭对话框
 const handleClose = () => {
   // 清空表单验证消息
-  form.dialogVisible = false;
+  data.dialogVisible = false;
   ruleFormRef.value.resetFields();
-  form.isChange = false;
-  form.ruleForm.classHeader = "";
+  data.isChange = false;
+  data.form.userNumber = "";
 };
 // 搜索班级
 const onSearch = () => {
-  let year = formatDate(form.searchData).slice(0, 4);
-  console.log(year);
+  data.searchData = formatDate(data.searchData).slice(0, 4);
+  getClassList();
 };
 // 重置搜索
 const onReSearch = () => {
-  form.searchData = "";
+  data.searchData = "";
+  getClassList();
 };
 // 修改班级信息
 const handleChangeClass = (val) => {
-  form.ruleForm.name = val.className;
-  form.ruleForm.classHeader = val.classHeader;
-  form.oldClassName = val.className;
-  form.isChange = true;
-  form.dialogVisible = true;
+  // 获得老师列表
+  managerFun.user.getTeacherList().then((res) => {
+    data.options = res;
+  });
+  console.log(val);
+  data.form.className = val.className;
+  data.form.userNumber = val.userNumber;
+  data.oldClassName = val.className;
+  data.isChange = true;
+  data.dialogVisible = true;
 };
 // 删除班级
 const handleDeleteClass = (val) => {
@@ -236,7 +251,15 @@ const handleDeleteClass = (val) => {
     type: "warning",
   })
     .then(() => {
+
       // 删除学校
+      const classList = [];
+      classList.push(val.classId);
+      // 删除班级
+      managerFun.class.deleteClass(classList).then((res) => {
+        ElMessage.success(res);
+        getClassList();
+      });
     })
     .catch(() => {
       ElMessage({
@@ -249,16 +272,61 @@ const handleDeleteClass = (val) => {
 const multipleSelection = ref([]);
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
-  console.log(multipleSelection.value);
 };
 // 批量删除班级
-const handleBatchDeleteClass = () => {};
+const handleBatchDeleteClass = () => {
+  if (multipleSelection.value.length === 0) {
+    ElMessage.error("请至少选择一个班级");
+  } else {
+    ElMessageBox.confirm("确定删除", {
+      confirmButtonText: "确定",
+      cancelButtonText: "取消",
+      type: "warning",
+    })
+      .then(() => {
+        const classList = [];
+        multipleSelection.value.forEach((item) => {
+          classList.push(item.classId);
+        });
+        // 删除班级
+        managerFun.class.deleteClass(classList).then((res) => {
+          ElMessage.success(res);
+          getClassList();
+        });
+      })
+      .catch(() => {
+        ElMessage({
+          type: "info",
+          message: "已取消删除",
+        });
+      });
+  }
+};
 // 修改每页的个数
 const handleSizeChange = () => {};
 // 页码跳转界面
 const handleCurrentChange = () => {
-  alert(page.currentPage);
+  alert(data.page.currentPage);
 };
+// 获得班级信息
+const getClassList = () => {
+  managerFun.class
+    .searchClass(
+      Number(data.searchData),
+      data.page.currentPage,
+      data.page.nowPageSize
+    )
+    .then((res) => {
+      console.log(res);
+      data.tableData = res.records;
+      data.page.total = res.total;
+      data.page.currentPage = res.current;
+    })
+    .catch((err) => {});
+};
+onMounted(() => {
+  getClassList();
+});
 </script>
 <style src="@/assets/css/utils/table-center.css" scoped/>
 <style src="@/assets/css/show-container.css" scoped/>
