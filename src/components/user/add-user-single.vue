@@ -55,8 +55,8 @@
                   <el-input v-model="form.ruleForm.province" /> </el-form-item
               ></el-col>
               <el-col :span="8">
-                <el-form-item label="目标学校:" prop="targetSchool">
-                  <el-input v-model="form.ruleForm.targetSchool" />
+                <el-form-item label="目标学校:" prop="school">
+                  <el-input v-model="form.ruleForm.school" />
                 </el-form-item>
               </el-col>
               <el-col :span="8">
@@ -180,6 +180,7 @@ import {
 import {
   IDENTITY_TEST,
   PHONE_TEST,
+  NAME_TEST,
 } from "@/constants/regular-expression";
 import { ElMessage } from "element-plus";
 
@@ -214,7 +215,10 @@ const form = reactive({
   },
   rules: {
     userNumber: [{ required: true, message: "请输入", trigger: "blur" }],
-    username: [{ required: true, message: "请输入姓名", trigger: "blur" }],
+    username: [
+      { required: true, message: "请输入姓名", trigger: "blur" },
+      { pattern: NAME_TEST, message: "请输入正确的姓名", trigger: "blur" },
+    ],
     sex: [{ required: true, message: "请输入性别", trigger: "blur" }],
     province: [{ required: true, message: "请输入", trigger: "blur" }],
     school: [{ required: true, message: "请输入", trigger: "blur" }],
@@ -275,13 +279,6 @@ const createFilter = (queryString) => {
 const emit = defineEmits(["getUserList"]);
 // 表单验证
 const ruleFormRef = ref(null);
-// 关闭对话框
-const handleClose = () => {
-  // 清空表单验证消息
-  ruleFormRef.value.resetFields();
-  form.ruleForm.politicsStatus = "";
-  form.dialogVisible = false;
-};
 // 添加用户
 const handleAddUser = () => {
   ruleFormRef.value.validate((valid, fields) => {
@@ -297,37 +294,48 @@ const handleAddUser = () => {
           phone: form.ruleForm.phone,
         });
         addData.push(teacher);
-        // 添加老师
-        // 把老师数据传给后端
-        managerFun.user
-          .addTeacherByExcel(addData)
-          .then((res) => {
-            uploadSuccess(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        addTeacherList(addData);
       } else {
         // 添加学生
         addData.push(form.ruleForm);
-        // 把学生数据传给后端
-        managerFun.user
-          .addStudentsByExcel(addData)
-          .then((res) => {
-            uploadSuccess(res);
-          })
-          .catch((err) => {
-            console.log(err);
-          });
+        adduerList(addData);
       }
     }
   });
 };
 // 上传成功之后
-const uploadSuccess = (res) => {
-  ElMessage.success(res);
-  emit("getUserList");
-  handleClose();
+const handleClose = () => {
+  // 清空表单验证消息
+  new Promise((resolve, reject) => {
+    resolve((form.dialogVisible = false));
+  }).then(() => {
+    ruleFormRef.value.resetFields();
+    form.ruleForm.politicsStatus = "";
+    emit("getUserList");
+  });
+};
+// 添加用户接口
+const adduerList = (val) => {
+  // 把学生数据传给后端
+  managerFun.user
+    .addStudentsByExcel(val)
+    .then((res) => {
+      ElMessage.success(res);
+    })
+    .finally(() => {
+      handleClose();
+    });
+};
+// 添加老师接口
+const addTeacherList = (val) => {
+  managerFun.user
+    .addTeacherByExcel(val)
+    .then((res) => {
+      ElMessage.success(res);
+    })
+    .finally(() => {
+      handleClose();
+    });
 };
 onMounted(() => {
   console.log(dropDownData);

@@ -151,7 +151,7 @@ import addUser from "@/components/user/add-user.vue";
 import addUserSingle from "@/components/user/add-user-single.vue";
 import { onMounted, reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
-import { ElMessage } from "element-plus";
+import { ElMessage, ElMessageBox } from "element-plus";
 const addUserRef = ref(null);
 const addUserSingleRef = ref(null);
 const data = reactive({
@@ -194,27 +194,18 @@ const handleAddUserSingle = () => {
 const multipleSelection = ref([]);
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
-  console.log(multipleSelection.value);
 };
 // 删除单个用户
 const handleDeleteUser = (val) => {
-  console.log(val);
   var userNumberList = [];
   userNumberList.push(val.userNumber);
-  // 重置密码
-  managerFun.user.deleteUser(userNumberList).then((res) => {
-    ElMessage.success(res);
-    getUserList();
-  });
+  deleteUserList(userNumberList);
 };
 // 重置密码
 const handleResetUser = (val) => {
   var userNumberList = [];
   userNumberList.push(val.userNumber);
-  // 重置密码
-  managerFun.user.reset(userNumberList).then((res) => {
-    ElMessage.success(res);
-  });
+  resetUserList(userNumberList);
 };
 // 修改角色
 const handleChangeUserRole = (val) => {};
@@ -227,10 +218,7 @@ const handleBatchResetUser = () => {
     multipleSelection.value.forEach((item) => {
       userNumberList.push(item.userNumber);
     });
-    // 重置密码
-    managerFun.user.reset(userNumberList).then((res) => {
-      ElMessage.success(res);
-    });
+    resetUserList(userNumberList());
   }
 };
 // 批量删除用户
@@ -242,12 +230,46 @@ const handleBatchDeleteUser = () => {
     multipleSelection.value.forEach((item) => {
       userNumberList.push(item.userNumber);
     });
-    // 重置密码
-    managerFun.user.deleteUser(userNumberList).then((res) => {
+    deleteUserList(userNumberList);
+  }
+};
+// 删除用户接口
+const deleteUserList = (val) => {
+  ElMessageBox.confirm("确定删除所选用户", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      managerFun.user
+        .deleteUser(val)
+        .then((res) => {
+          ElMessage.success(res);
+        })
+        .catch(() => {})
+        .finally(() => {
+          getUserList();
+        });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "已取消删除",
+      });
+    });
+};
+// 重置密码接口
+const resetUserList = (val) => {
+  // 重置密码
+  managerFun.user
+    .reset(val)
+    .then((res) => {
       ElMessage.success(res);
+    })
+    .catch(() => {})
+    .finally(() => {
       getUserList();
     });
-  }
 };
 // 获得更新之后的用户列表
 const getUserList = () => {
@@ -259,7 +281,7 @@ const getUserList = () => {
       data.page.nowPageSize
     )
     .then((res) => {
-      data.page.total = res.total;
+      data.page.total = parseInt(res.total);
       data.page.currentPage = res.current;
       data.tableData = res.records;
     })
