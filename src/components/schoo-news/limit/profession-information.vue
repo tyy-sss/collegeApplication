@@ -1,7 +1,8 @@
 <template>
   <div class="profession-information">
-    <div class="context">
-      <div class="top">
+    <el-dialog v-model="data.dialogTableVisible" title="添加科目">
+      <el-divider />
+      <div class="content top">
         <div class="upload">
           <el-upload
             class="upload-demo"
@@ -33,9 +34,6 @@
           </el-upload>
         </div>
       </div>
-      <div class="middle">
-        <el-button type="primary" @click="handleNextStep">下一步</el-button>
-      </div>
       <div class="bottom">
         <div class="explain">
           <div class="title">文件上传说明</div>
@@ -51,7 +49,7 @@
           >下载专业信息模板</el-button
         >
       </div>
-    </div>
+    </el-dialog>
   </div>
 </template>
 <script setup>
@@ -68,6 +66,7 @@ import { professionInformationLimitCharacter } from "@/assets/js/excel/excel-lea
 // 接口
 import { ElMessage } from "element-plus";
 const data = reactive({
+  dialogTableVisible: false,
   upload: {
     isProgress: false,
   },
@@ -96,38 +95,33 @@ const handleAddUser = async (ev) => {
     console.log(addData);
   }
 };
-// 导出学生信息表
+// 导出专业限制专业信息模板表
 const handleExportProfession = () => {
   excelExport([], professionInformationLimitHeader, "专业限制专业信息模板表");
 };
-// 调用父组件的方法
-const emit = defineEmits(["changeStepActive"]);
-// 下一步
-const handleNextStep = () =>{
-  emit("changeStepActive",2)
-}
+defineExpose({
+  data,
+});
 </script>
 <style scoped>
-.profession-information {
+::v-deep .el-divider--horizontal {
+  margin: 2px 0;
+}
+/* .profession-information {
   display: flex;
   align-items: center;
   justify-content: center;
-}
-.context {
-  padding: 2rem;
-  width: 85%;
-  min-width: 700px;
-  background-color: RGBA(237, 242, 246, 0.5);
-  border-radius: 1rem;
+} */
+.content {
   display: flex;
-  flex-direction: column;
+  justify-content: center;
   align-items: center;
 }
-.context > div {
-  margin-bottom: 1rem;
+.content {
+  padding: 20px;
 }
 .upload {
-  min-width: 400px;
+  width: 70%;
 }
 .big {
   color: #32325d;
@@ -146,7 +140,7 @@ const handleNextStep = () =>{
   align-items: center;
 }
 .explain {
-  color: RGB(50,50,93);
+  color: #32325d;
 }
 /* 文件上传声明 */
 .explain .title {

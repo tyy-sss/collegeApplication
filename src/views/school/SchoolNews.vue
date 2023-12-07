@@ -26,7 +26,7 @@ import professionLimit from "@/components/schoo-news/profession-limit.vue";
 import professionShunt from '@/components/schoo-news/profession-shunt.vue'
 const route = useRoute();
 const id = ref(route.query.id);
-var activeName = ref('second')
+var activeName = ref('first')
 </script>
 <style src="@/assets/css/show-container.css" scoped/>
 <style scoped>

@@ -4,6 +4,7 @@ import http from "./request";
 let managerFun = {
   user: {},
   class: {},
+  school: {},
 };
 
 /**
@@ -64,7 +65,7 @@ managerFun.class.searchClass = (year, current, size) => {
  * @returns
  */
 managerFun.class.existsClass = (className) => {
-  return http.get("/class/exists", {className});
+  return http.get("/class/exists", { className });
 };
 /**
  * 创建班级
@@ -75,18 +76,57 @@ managerFun.class.addClass = (userNumber, className) => {
   return http.post("/class", { userNumber, className });
 };
 /**
-* 修改班级信息
-* @param {*} userNumver
-* @param {*} className
-*/
-managerFun.class.changeClass = (userNumber,className) =>{
-  return http.put("/class",{ userNumber,className })
-}
+ * 修改班级信息
+ * @param {*} userNumver
+ * @param {*} className
+ */
+managerFun.class.changeClass = (classId, userNumber, className) => {
+  return http.put("/class", { classId, userNumber, className });
+};
 /**
  * 删除班级
  * @param {*} data 班级编号数组
  */
-managerFun.class.deleteClass = (data) =>{
-  return http.delete("/class",data)
-}
+managerFun.class.deleteClass = (data) => {
+  return http.delete("/class", data);
+};
+/**
+ * 学校名查重
+ * @param {*} name
+ * @returns
+ */
+managerFun.school.existsSchool = (schoolName) => {
+  return http.get("/school/exists", { schoolName });
+};
+/**
+ * 搜索学校
+ * @param {*} schoolName
+ * @returns
+ */
+managerFun.school.searchSchool = (schoolName) => {
+  return http.get("/school", { schoolName });
+};
+/**
+ * 添加学校
+ * @param {*} data
+ * @returns
+ */
+managerFun.school.addSchool = (data) => {
+  return http.post("/school", data);
+};
+/**
+ * 修改学校信息
+ * @param {*} data
+ * @returns
+ */
+managerFun.school.changeSchool = (data) => {
+  return http.put("/school", data);
+};
+/**
+ * 删除学校
+ * @param {*} number 学校编号
+ */
+managerFun.school.deleteSchool = (number) => {
+  return http.delete("/school", number);
+};
 export default managerFun;

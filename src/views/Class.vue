@@ -9,9 +9,9 @@
           <div class="search">
             <div class="left">
               <div class="search-item">
-                <el-button type="primary" :icon="Plus" @click="addClass">{{
-                  data.isChange ? "修改班级" : "添加班级"
-                }}</el-button>
+                <el-button type="primary" :icon="Plus" @click="addClass">
+                  添加班级
+                </el-button>
               </div>
               <div class="search-item">
                 <el-date-picker
@@ -78,8 +78,8 @@
               :pager-count="data.page.pageCount"
               layout="prev, pager, next,sizes,jumper"
               :total="data.page.total"
-              @size-change="handleSizeChange"
-              @current-change="handleCurrentChange"
+              @size-change="getClassList"
+              @current-change="getClassList"
             />
           </div>
         </div>
@@ -88,7 +88,7 @@
     <!-- 对话框 -->
     <el-dialog
       v-model="data.dialogVisible"
-      title="添加班级"
+      :title="data.isChange ? '修改班级' : '添加班级'"
       width="30%"
       :before-close="handleClose"
     >
@@ -102,7 +102,7 @@
       >
         <el-form-item label="班级名称" prop="className">
           <el-input v-model="data.form.className" />
-          <div class="prompt">请输入长度在2到20位之间的中文数字</div>
+          <div class="prompt">请输入长度在5到20位之间的中文数字</div>
         </el-form-item>
         <el-form-item label="选择班主任" prop="number">
           <el-select v-model="data.form.userNumber" placeholder="选择班主任">
@@ -131,6 +131,7 @@ import { Plus } from "@element-plus/icons-vue";
 import { formatDate } from "@/assets/js/utils/format-date";
 // 接口添加 获得班主任列表，按年搜索班级，班级姓名查重，添加班级，删除班级，搜索学校
 import managerFun from "@/api/manager";
+import { CLASS_NAME_TEST } from "@/constants/regular-expression";
 const validateName = async (rule, value, callback) => {
   if (
     (data.isChange === false && value) ||
@@ -154,6 +155,7 @@ const data = reactive({
   oldClassName: "吉首大学",
   searchData: "",
   form: {
+    classId: "",
     className: "",
     userNumber: "",
   },
@@ -161,6 +163,11 @@ const data = reactive({
     // 添加查班级姓名
     className: [
       { required: true, message: "请输入班级名", trigger: "blur" },
+      {
+        pattern: CLASS_NAME_TEST,
+        message: "请输入正确的班级名",
+        trigger: "blur",
+      },
       { validator: validateName, trigger: "blur" },
     ],
   },
@@ -172,7 +179,7 @@ const data = reactive({
     currentPage: 1,
     nowPageSize: 10,
     pageCount: 5,
-    total: 700,
+    total: 0,
   },
   // 表格数据
   tableData: [],
@@ -191,34 +198,24 @@ const addClass = () => {
 const handleAddClass = () => {
   ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
+      console.log(data.form.userNumber);
       if (data.isChange) {
-        managerFun.class
-          .changeClass(data.form.userNumber, data.form.className)
-          .then((res) => {
-            ElMessage.success(res);
-            getClassList();
-            handleClose();
-          });
+        changeClassData();
       } else {
-        // 判断还是添加还是修改班级
-        managerFun.class
-          .addClass(data.form.userNumber, data.form.className)
-          .then((res) => {
-            ElMessage.success(res);
-            getClassList();
-            handleClose();
-          });
+        addClassData();
       }
     }
   });
 };
 // 关闭对话框
 const handleClose = () => {
-  // 清空表单验证消息
-  data.dialogVisible = false;
-  ruleFormRef.value.resetFields();
-  data.isChange = false;
-  data.form.userNumber = "";
+  new Promise((resolve, reject) => {
+    resolve((data.dialogVisible = false));
+  }).then(() => {
+    ruleFormRef.value.resetFields();
+    data.isChange = false;
+    data.form = {};
+  });
 };
 // 搜索班级
 const onSearch = () => {
@@ -232,12 +229,13 @@ const onReSearch = () => {
 };
 // 修改班级信息
 const handleChangeClass = (val) => {
-  // 获得老师列表
-  managerFun.user.getTeacherList().then((res) => {
-    data.options = res;
+  new Promise((resolve, reject) => {
+    resolve(getTeacherList());
+  }).then(() => {
+    data.options.push({ userNumber: val.userNumber, username: val.username });
   });
-  console.log(val);
-  data.form.className = val.className;
+
+  data.form = Object.assign({}, val);
   data.form.userNumber = val.userNumber;
   data.oldClassName = val.className;
   data.isChange = true;
@@ -245,28 +243,10 @@ const handleChangeClass = (val) => {
 };
 // 删除班级
 const handleDeleteClass = (val) => {
-  ElMessageBox.confirm("确定删除这个班级", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  })
-    .then(() => {
-
-      // 删除学校
-      const classList = [];
-      classList.push(val.classId);
-      // 删除班级
-      managerFun.class.deleteClass(classList).then((res) => {
-        ElMessage.success(res);
-        getClassList();
-      });
-    })
-    .catch(() => {
-      ElMessage({
-        type: "info",
-        message: "已取消删除",
-      });
-    });
+  const classList = [];
+  classList.push(val.classId);
+  // 删除班级
+  deleteClassList(classList);
 };
 // 批量处理
 const multipleSelection = ref([]);
@@ -278,37 +258,73 @@ const handleBatchDeleteClass = () => {
   if (multipleSelection.value.length === 0) {
     ElMessage.error("请至少选择一个班级");
   } else {
-    ElMessageBox.confirm("确定删除", {
-      confirmButtonText: "确定",
-      cancelButtonText: "取消",
-      type: "warning",
-    })
-      .then(() => {
-        const classList = [];
-        multipleSelection.value.forEach((item) => {
-          classList.push(item.classId);
-        });
-        // 删除班级
-        managerFun.class.deleteClass(classList).then((res) => {
-          ElMessage.success(res);
-          getClassList();
-        });
-      })
-      .catch(() => {
-        ElMessage({
-          type: "info",
-          message: "已取消删除",
-        });
-      });
+    const classList = [];
+    multipleSelection.value.forEach((item) => {
+      classList.push(item.classId);
+    });
+    // 删除班级
+    deleteClassList(classList);
   }
 };
-// 修改每页的个数
-const handleSizeChange = () => {};
-// 页码跳转界面
-const handleCurrentChange = () => {
-  alert(data.page.currentPage);
+// 添加班级信息接口
+const addClassData = () => {
+  managerFun.class
+    .addClass(data.form.userNumber, data.form.className)
+    .then((res) => {
+      ElMessage.success(res);
+    })
+    .catch(() => {})
+    .finally(() => {
+      getClassList();
+      handleClose();
+    });
 };
-// 获得班级信息
+// 修改班级信息接口
+const changeClassData = () => {
+  managerFun.class
+    .changeClass(data.form.classId, data.form.userNumber, data.form.className)
+    .then((res) => {
+      ElMessage.success(res);
+    })
+    .catch(() => {})
+    .finally(() => {
+      getClassList();
+      handleClose();
+    });
+};
+// 删除班级信息接口
+const deleteClassList = (val) => {
+  ElMessageBox.confirm("确定删除所选班级", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      managerFun.class
+        .deleteClass(val)
+        .then((res) => {
+          ElMessage.success(res);
+        })
+        .catch(() => {})
+        .finally(() => {
+          getClassList();
+        });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "已取消删除",
+      });
+    });
+};
+// 获得老师信息接口
+const getTeacherList = () => {
+  // 获得老师列表
+  managerFun.user.getTeacherList().then((res) => {
+    data.options = res;
+  });
+};
+// 获得班级信息接口
 const getClassList = () => {
   managerFun.class
     .searchClass(
@@ -317,10 +333,9 @@ const getClassList = () => {
       data.page.nowPageSize
     )
     .then((res) => {
-      console.log(res);
-      data.tableData = res.records;
-      data.page.total = res.total;
+      data.page.total = parseInt(res.total);
       data.page.currentPage = res.current;
+      data.tableData = res.records;
     })
     .catch((err) => {});
 };
@@ -338,56 +353,6 @@ onMounted(() => {
   /* 自动换行 */
   flex-flow: wrap;
   align-items: center;
-}
-/* 学校展示样式 */
-.item {
-  border: 2px solid RGB(235, 235, 235);
-  border-radius: 1rem;
-  padding: 1rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-right: 2rem;
-  margin-bottom: 2rem;
-  height: 100%;
-}
-.item:not(:last-child) {
-  padding: 1.5rem;
-}
-/* 设置item下的div除了最后一个孩子 */
-.item > div:not(:last-child) {
-  margin-bottom: 1rem;
-}
-/* 学校具体展示样式 */
-.first-char {
-  height: 3rem;
-  width: 3rem;
-  border: 3px solid RGB(104, 164, 252);
-  border-radius: 100% 100% 30% 100%;
-  box-shadow: 10px 5px 5px RGBA(134, 180, 255, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: cursive;
-  font-size: 30px;
-  font-weight: bolder;
-}
-.school-name {
-  font-weight: bolder;
-  font-size: 18px;
-}
-.school-id {
-  color: RGB(168, 176, 185);
-  font-size: 14px;
-}
-/* 添加学校 */
-.item .add img {
-  width: 2rem;
-  height: 2rem;
-}
-.item:hover {
-  transform: translateY(-2px);
-  box-shadow: 10px 5px 5px RGBA(74, 84, 85, 0.2);
 }
 </style>
     

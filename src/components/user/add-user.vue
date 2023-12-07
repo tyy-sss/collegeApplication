@@ -56,7 +56,7 @@
   </div>
 </template>
 <script setup>
-import { reactive } from "vue";
+import { onMounted, reactive } from "vue";
 import { excelExport } from "@/assets/js/excel/excel-export";
 import {
   studentHeader,
@@ -108,40 +108,30 @@ const handleAddUser = async (ev) => {
       // 批量添加学生
       addData = excelLeadingIn(excelData, studentCharacter);
       addData = handleStudentInformation(addData);
-      // 把学生数据传给后端
-      managerFun.user
-        .addStudentsByExcel(addData)
-        .then((res) => {
-          uploadSuccess(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      adduerList(addData);
     } else if (length === Object.keys(teacherCharacter).length) {
       // 批量添加老师
       addData = excelLeadingIn(excelData, teacherCharacter);
       addData = handleTeacherInformation(addData);
-      // 把老师数据传给后端
-      managerFun.user
-        .addTeacherByExcel(addData)
-        .then((res) => {
-          uploadSuccess(res);
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+      addTeacherList(addData);
+    }else{
+      ElMessage.error("上传失败，表格格式错误");
+      handleColse();
     }
   }
 };
 // 调用父组件的方法
 const emit = defineEmits(["getUserList"]);
-// 上传成功之后
-const uploadSuccess = (res) => {
-  ElMessage.success(res);
-  data.dialogTableVisible = false;
-  data.upload.isProgress = false;
+// 上传之后
+const handleClose = () => {
+  new Promise((resolve, reject) => {
+    resolve((data.dialogVisible = false));
+  }).then(() => {
+    data.upload.isProgress = false;
   emit("getUserList");
+  });
 };
+
 // 导出学生信息表
 const handleExportStudent = () => {
   excelExport(studentModelData, studentHeader, "学生信息模板表");
@@ -149,6 +139,31 @@ const handleExportStudent = () => {
 // 导出老师信息表
 const handleExportTeach = () => {
   excelExport(teacherModelData, teacherHeader, "老师信息模板表");
+};
+// 添加用户接口
+const adduerList = (val) => {
+  // 把学生数据传给后端
+  managerFun.user
+    .addStudentsByExcel(val)
+    .then((res) => {
+      ElMessage.success(res);
+    })
+    .catch(() => {})
+    .finally(() => {
+      handleClose();
+    });
+};
+// 添加老师接口
+const addTeacherList = (val) => {
+  managerFun.user
+    .addTeacherByExcel(val)
+    .then((res) => {
+      ElMessage.success(res);
+    })
+    .catch(() => {})
+    .finally(() => {
+      handleClose();
+    });
 };
 // 把参数暴露给父组件，让父组件进行修改
 defineExpose({
