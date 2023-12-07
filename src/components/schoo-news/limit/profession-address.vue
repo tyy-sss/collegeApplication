@@ -29,15 +29,6 @@
             />
           </el-table>
         </div>
-        <div class="pager">
-          <el-pagination
-            :page-size="data.pager.size"
-            :pager-count="9"
-            layout="prev, pager, next"
-            :total="data.pager.total"
-            @current-change="handleChangePage"
-          />
-        </div>
         <div class="text">当前选择组合：{{ combination.toString() }}</div>
       </div>
     </el-drawer>
@@ -59,11 +50,7 @@ const data = reactive({
       name: "3+31改革省份",
       provinceGroup: ["北京", "天津", "上海", "浙江", "山东", "海南"],
     },
-  ], // 分页数据
-  pager: {
-    size: 10,
-    total: 10,
-  },
+  ], 
 });
 // 组合数据
 var combination = ref("");

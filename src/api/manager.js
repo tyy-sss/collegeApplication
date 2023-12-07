@@ -5,6 +5,7 @@ let managerFun = {
   user: {},
   class: {},
   school: {},
+  area: {},
 };
 
 /**
@@ -129,4 +130,35 @@ managerFun.school.changeSchool = (data) => {
 managerFun.school.deleteSchool = (number) => {
   return http.delete("/school", number);
 };
+/**
+ * 搜索组合
+ * @param {组合名} name 
+ * @returns 
+ */
+managerFun.area.selectArea = (name) => {
+  return http.get("/area/selectArea?name="+name);
+};
+/**
+ * 添加地址组合
+ * @param {地区对象} data
+ */
+managerFun.area.addArea = (data) => {
+  return http.post("/area/addArea", data);
+};
+/**
+ * 修改地址组合
+ * @param {地区对象} data 
+ * @returns 
+ */
+managerFun.area.modifyArea = (data) =>{
+  return http.put('/area/modifyArea',data)
+}
+/**
+ * 删除地址
+ * @param {地址组合id} data 
+ * @returns 
+ */
+managerFun.area.deleteArea = (data) =>{
+  return http.delete("area?areaIds="+data)
+}
 export default managerFun;
