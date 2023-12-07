@@ -27,7 +27,10 @@ requests.interceptors.request.use((config) => {
 //     return Promise.reject(res);
 //   }
 //   if (res.data.code != 200) {
-//     // console.log(res.data);
+//     ElMessage({
+//       message: `${res.data}`,
+//       type: "error",
+//     });
 //     if (res.data.msg) ElMessage.error(res.data.msg);
 //     if (res.data.code === 2044) {
 //       // 移除失效的短token
