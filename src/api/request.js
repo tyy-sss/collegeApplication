@@ -5,11 +5,13 @@ import { addRequest, refreshToken } from "./two-token";
 import { getAccessToken, removeAccessToken } from "@/constants/token";
 
 //1.利用axios对象的方法create，去创建一个axios实例。
+const YSB = "http://192.168.50.35:8081/";
+const ZWY = "http://192.168.50.159:8081/";
 const requests = axios.create({
   //配置对象
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径当中会出现api
-  // baseURL: "http://192.168.50.159:8081/",
-  baseURL: "http://192.168.50.35:8081/",//开发阶段
+  baseURL: "http://192.168.50.159:8081/",
+  
   //代表请求超时的时间
   timeout: 10000,
 });
@@ -39,9 +41,8 @@ requests.interceptors.response.use((res) => {
       addRequest(() => resolve(server(config)));
       // 携带长token去请求新的token
       refreshToken();
-    } else if (res.data.code == 2018) {
-
-    } else {
+    }else if(res.data.code == 2018){
+    }else{
       if (res.data.msg) ElMessage.error(res.data.msg);
     }
     // if (res.data.resultCode == 419) {

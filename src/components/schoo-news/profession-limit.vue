@@ -3,12 +3,22 @@
     <div class="context">
       <div class="add">
         <div class="add-item">
-          <el-button color="#626aef" :icon="Plus" @click="handleAddProfessionInformation">添加科目</el-button>
-          <profession-information ref="professionInformationRef"/>
+          <el-button
+            color="#626aef"
+            :icon="Plus"
+            @click="handleAddProfessionInformation"
+            >添加科目</el-button
+          >
+          <profession-information ref="professionInformationRef" />
         </div>
         <div class="add-item">
-          <el-button type="success" :icon="Share" @click="handleCheckProfessionAddress">选择志愿地区组合</el-button>
-          <profession-address ref="professionAddressRef"/>
+          <el-button
+            type="success"
+            :icon="Share"
+            @click="handleCheckProfessionAddress"
+            >选择志愿地区组合</el-button
+          >
+          <profession-address ref="professionAddressRef" />
         </div>
       </div>
       <div class="top">
@@ -50,13 +60,15 @@
             :key="index"
             :prop="item.value"
             :label="item.label"
+            min-width="250"
           >
-            <!-- <template #default="scope"> -->
-            <!-- <el-select v-model="scope.row.proJbruserValue"  @focus="getDatalist(scope.row)" placeholder="请选择" filterable allow-create>
-				<el-option v-for="item in projectJbrUserlist " :key="item.id" :label="item.username" :value="item.id">
-				</el-option>
-			</el-select> -->
-            <!-- </template> -->
+            <template #default="scope">
+              <el-cascader
+                v-model="scope.row[item.value]"
+                :options="data.options"
+                :show-all-levels="false"
+              />
+            </template>
           </el-table-column>
           <el-table-column prop="peopleNum" label="限制人数" />
           <el-table-column prop="editStatus" label="编辑状态">
@@ -95,9 +107,11 @@
 </template>
   <script setup>
 import { reactive, ref } from "vue";
-import professionInformation from '@/components/schoo-news/limit/profession-information.vue'
+import professionInformation from "@/components/schoo-news/limit/profession-information.vue";
 import professionAddress from "@/components/schoo-news/limit/profession-address.vue";
-import { Download, Plus, Share,Check,Edit } from "@element-plus/icons-vue";
+import { Download, Plus, Share, Check, Edit } from "@element-plus/icons-vue";
+// 下拉框数据
+import { options,two } from '@/assets/js/data/address-cascader'
 const data = reactive({
   // 搜索数据
   searchData: {
@@ -120,29 +134,33 @@ const data = reactive({
     },
   ],
   // 表格数据
-  tableData: [{
-    college:"文学院",
-    professionName:"新闻学",
-    "1":"",
-    "2":"",
-    peopleNum:100
-  }],
+  tableData: [
+    {
+      college: "文学院",
+      professionName: "新闻学",
+      1: "不限",
+      2: ["", "one", "","物理"],
+      peopleNum: 100,
+    },
+  ],
+  options:options
 });
-const professionInformationRef = ref(null)
-const professionAddressRef = ref(null)
+const professionInformationRef = ref(null);
+const professionAddressRef = ref(null);
 // 添加科目
-const handleAddProfessionInformation = () =>{
+const handleAddProfessionInformation = () => {
   professionInformationRef.value.data.dialogTableVisible = true;
-}
+};
 // 选择志愿组合
-const handleCheckProfessionAddress = () =>{
+const handleCheckProfessionAddress = () => {
   professionAddressRef.value.data.dialogVisible = true;
-}
+};
 // 查询专业
 const handleSearchProfession = () => {};
 // 手动修改页码数
 const handleChangePage = (val) => {
   console.log(val);
+  two();
 };
 </script>
   <style src="@/assets/css/utils/table-center.css" scoped/>

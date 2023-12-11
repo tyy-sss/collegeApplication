@@ -34,7 +34,7 @@
                 <div class="text">{{ item.text }}:</div>
                 <div class="choose-item">
                   <el-checkbox-group
-                    v-model="form.ruleForm.provinceGroup"
+                    v-model="form.ruleForm.includingProvinces"
                     size="large"
                   >
                     <el-checkbox
@@ -66,16 +66,19 @@
   <script setup>
 // 添加地址组合,组合姓名查重
 import { reactive, ref, watch } from "vue";
+// 接口
+import managerFun from "@/api/manager";
 // 省份数据
 import { cities } from "@/assets/js/utils/province-name.js";
+import { ElMessage } from "element-plus";
 const props = defineProps({ addressVal: Object });
 const validateName = (rule, value, callback) => {
   if (
     (form.isChange === false && value) ||
     (form.isChange === true && value != form.oldAddressName)
   ) {
-    // 学校查重
-    callback(new Error("组合名称重复"));
+    // 组合命查重
+    // callback(new Error("组合名称重复"));
   }
   callback();
 };
@@ -84,16 +87,16 @@ const form = reactive({
   isChange: false,
   oldAddressName: "",
   ruleForm: {
-    id: "",
+    areaId: "",
     name: "",
-    provinceGroup: [],
+    includingProvinces: [],
   },
   rules: {
     name: [
       { required: true, message: "请输入角色名称", trigger: "blur" },
       { validator: validateName, trigger: "blur" },
     ],
-    provinceGroup: [
+    includingProvinces: [
       { required: true, message: "至少选择一个省份", trigger: "blur" },
     ],
   },
@@ -108,22 +111,48 @@ const handleClose = () => {
   ruleFormRef.value.resetFields();
   form.dialogVisible = false;
   form.isChange = false;
-  form.oldAddressName = "";
   form.ruleForm = {};
   // 清楚父组件的信息
   emit("handleClose");
 };
-// 添加地址
+// 添加组合
 const handleAddAddress = () => {
   ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
       // 判断还是添加还是修改学校
-      // 清空表单验证消息
-      // 重新刷新角色列表
-      console.log(form.ruleForm.provinceGroup);
-      ruleFormRef.value.resetFields();
+      if (form.isChange) {
+        changeAreaData();
+      } else {
+        addAreaData();
+      }
     }
   });
+};
+// 添加地址组合
+const addAreaData = () => {
+  managerFun.area
+    .addArea(form.ruleForm)
+    .then((res) => {
+      ElMessage.success("操作成功");
+    })
+    .catch(() => {})
+    .finally(() => {
+      handleClose();
+    });
+};
+// 修改地址组合
+const changeAreaData = () => {
+  managerFun.area
+    .modifyArea(form.ruleForm)
+    .then((res) => {
+      ElMessage.success("操作成功");
+    })
+    .catch((err) => {
+      ElMessage.error(err);
+    })
+    .finally(() => {
+      handleClose();
+    });
 };
 defineExpose({
   form,
