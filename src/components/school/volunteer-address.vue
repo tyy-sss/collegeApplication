@@ -51,19 +51,24 @@
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" width="35" />
-            <el-table-column prop="areaId" label="组合编号" min-width="120" />
-            <el-table-column prop="name" label="组合名称" min-width="120" />
+            <el-table-column prop="areaId" label="组合编号" />
+            <el-table-column prop="name" label="组合名称" />
+            <el-table-column prop="subject" label="所含科目" />
             <el-table-column
               prop="includingProvinces"
               label="涵盖省份"
               min-width="250"
             />
-            <el-table-column prop="updateTime" label="修改时间">
+            <el-table-column
+              prop="updateTime"
+              label="修改时间"
+              min-width="100px"
+            >
               <template #default="scope">{{
                 formatDate(scope.row.updateTime)
               }}</template></el-table-column
             >>
-            <el-table-column label="操作" min-width="180px">
+            <el-table-column label="操作">
               <template #default="scope">
                 <el-button
                   link
@@ -105,14 +110,7 @@ const data = reactive({
   searchData: {
     searchName: "",
   },
-  tableData: [
-    {
-      areaId: 1,
-      name: "3+3改革省份",
-      includingProvinces: ["北京", "天津", "上海", "浙江", "山东", "海南"],
-      updateTime: "3214325432",
-    },
-  ],
+  tableData: [],
 });
 // 重置搜索
 const onReSearch = () => {
