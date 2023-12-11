@@ -5,9 +5,15 @@ let teacherFun = {
   user: {},
 };
 /**
- * 获取班级学生信息
+ * 老师获取个人信息
  */
-teacherFun.user.getStudents = () => {
-  return http.get("/class");
+teacherFun.user.getInformation = () => {
+  return http.get("/teacher/information");
+};
+/**
+ * 老师修改电话号码
+ */
+teacherFun.user.getInformation = () => {
+  return http.put("/teacher/phone");
 };
 export default teacherFun;

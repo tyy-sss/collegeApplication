@@ -314,6 +314,7 @@ import teacherFun from "@/api/teacher";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
+
 //渲染完之前
 onBeforeMount(() => {
   BeforePer();
@@ -333,7 +334,7 @@ const save = function () {
   if (identity.value === "student") {
     moreDitail.value = true;
     //获取学生信息接口
-    // studentFun.user.getUser().then((res)=>{
+    // studentFun.user.getInformation().then((res)=>{
     //   student = res.data;
     // })
     student = studentData;
@@ -342,7 +343,7 @@ const save = function () {
   } else if (identity.value === "teacher") {
     moreDitail.value = false;
     //获取老师信息接口
-    // teacherFun.user.getUser().then((res)=>{
+    // teacherFun.user.getInformation().then((res)=>{
     //   teacher = res.data;
     // })
     teacher = teacherData;

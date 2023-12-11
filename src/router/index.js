@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-07 21:05:12
+ * @LastEditTime: 2023-12-07 22:42:37
  * @FilePath: \collegeApplication\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -144,29 +144,29 @@ const router = createRouter({
   parseQuery,
 });
 
-router.beforeEach((to, form, next) => {
-  // 判断是否有token
-  var token = getAccessToken();
-  if (!token) {
-    // 未登录
-    // 在登录界面
-    if (to.path == "/login") {
-      next();
-    } else {
-      ElMessage.error("请先登录");
-      next({ name: "login" });
-    }
-  } else {
-    // 已登录
-    if (to.path == "/") {
-      // 跳转到菜单表的第一个菜单显示界面
-      const firstPath = giveMenu(getRole)[0].path.slice(1);
-      next({ name: firstPath });
-    } else {
-      // 未登录
-      next();
-    }
-  }
-});
+// router.beforeEach((to, form, next) => {
+//   // 判断是否有token
+//   var token = getAccessToken();
+//   if (!token) {
+//     // 未登录
+//     // 在登录界面
+//     if (to.path == "/login") {
+//       next();
+//     } else {
+//       ElMessage.error("请先登录");
+//       next({ name: "login" });
+//     }
+//   } else {
+//     // 已登录
+//     if (to.path == "/") {
+//       // 跳转到菜单表的第一个菜单显示界面
+//       const firstPath = giveMenu(getRole)[0].path.slice(1);
+//       next({ name: firstPath });
+//     } else {
+//       // 未登录
+//       next();
+//     }
+//   }
+// });
 
 export default router;
