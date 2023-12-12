@@ -1,3 +1,11 @@
+<!--
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2023-11-19 11:54:17
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2023-12-12 22:30:27
+ * @FilePath: \collegeApplication\src\components\ExportExcel.vue
+ * @Description: 导出demo
+-->
 <template>
   <el-button
     type="primary"

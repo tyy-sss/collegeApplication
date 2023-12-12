@@ -9,7 +9,7 @@
 <template>
   <div class="show-container">
     <div class="title">
-      <div class="text">志愿填报（{{ type }}）</div>
+      <div class="text" @click="changeTest">志愿填报（{{ type }}）</div>
     </div>
     <hr />
     <router-view></router-view>
@@ -18,11 +18,11 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 let type = ref("正式填报");
+const changeTest = () => {
+  type.value = type.value === "正式填报" ? "预填报" : "正式填报";
+};
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
-hr {
-  border-color: #ebf3ff4d;
-}
 </style>
   

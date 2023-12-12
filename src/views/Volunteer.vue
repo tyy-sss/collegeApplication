@@ -2,9 +2,9 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-28 21:00:57
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-03 10:31:39
+ * @LastEditTime: 2023-12-12 22:09:41
  * @FilePath: \collegeApplication\src\views\Volunteer.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 志愿填报情况页面
 -->
 <template>
   <div class="show-container">
@@ -27,34 +27,86 @@
     </div>
     <el-table
       :data="filterTableData"
-      style="min-width: 100px"
+      style="width: 100%; width: auto"
       @cell-mouse-enter="handleCellEnter"
       @cell-mouse-leave="handleCellLeave"
     >
-      <el-table-column prop="target" label="目标学校" />
-      <el-table-column prop="num" label="序号" width="80" />
-      <el-table-column prop="province" label="省份" />
-      <el-table-column prop="class" label="班级" width="60" />
-      <el-table-column prop="id" label="学号" />
-      <el-table-column prop="name" label="姓名" />
-      <el-table-column prop="sex" label="性别" width="60" />
-      <el-table-column prop="category" label="科类" />
-      <el-table-column prop="selectSubjects" label="选考科目" />
-      <el-table-column prop="grades" label="分流成绩" />
+      <el-table-column
+        prop="target"
+        label="目标学校"
+        :min-width="getColumnWidth('target')"
+      />
+      <el-table-column
+        prop="num"
+        label="序号"
+        :min-width="getColumnWidth('num')"
+      />
+      <el-table-column
+        prop="province"
+        label="省份"
+        :min-width="getColumnWidth('province')"
+      />
+      <el-table-column
+        prop="class"
+        label="班级"
+        :min-width="getColumnWidth('class')"
+      />
+      <el-table-column
+        prop="id"
+        label="学号"
+        :min-width="getColumnWidth('id')"
+      />
+      <el-table-column
+        prop="name"
+        label="姓名"
+        :min-width="getColumnWidth('name')"
+      />
+      <el-table-column
+        prop="sex"
+        label="性别"
+        :min-width="getColumnWidth('sex')"
+      />
+      <el-table-column
+        prop="category"
+        label="科类"
+        :min-width="getColumnWidth('category')"
+      />
+      <el-table-column
+        prop="selectSubjects"
+        label="选考科目"
+        :min-width="getColumnWidth('selectSubjects')"
+      />
+      <el-table-column
+        prop="grades"
+        label="分流成绩"
+        :min-width="getColumnWidth('grades')"
+      />
       <el-table-column label="志愿情况" fixed="right">
-        <el-table-column prop="voluntary1" label="一志愿" />
-        <el-table-column prop="voluntary2" label="二志愿" />
-        <el-table-column prop="voluntary3" label="三志愿愿" />
+        <el-table-column
+          prop="voluntary1"
+          label="一志愿"
+          :min-width="getColumnWidth('voluntary1')"
+        />
+        <el-table-column
+          prop="voluntary2"
+          label="二志愿"
+          :min-width="getColumnWidth('voluntary2')"
+        />
+        <el-table-column
+          prop="voluntary3"
+          label="三志愿愿"
+          :min-width="getColumnWidth('voluntary3')"
+        />
       </el-table-column>
     </el-table>
-      <!-- 分页 -->
-      <div class="pagination">
+    <!-- 分页 -->
+    <div class="pagination">
       <el-pagination
         :page-size="7"
         :pager-count="5"
         layout="prev, pager, next"
         :total="60"
-        style="margin-left: auto;"
+        style="margin-left: auto"
       />
     </div>
   </div>
@@ -63,8 +115,8 @@
 import { ref, reactive, computed } from "vue";
 import { volunteerHeader } from "@/assets/js/excel/format/volunteer";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
-import teacherFun from "@/api/teacher"
-
+import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
+import teacherFun from "@/api/teacher";
 let myclass = "2023级1班";
 const search = ref("");
 const filterTableData = computed(() =>
@@ -292,17 +344,15 @@ const handleExcelExport = () => {
     `${myclass}班级志愿填报情况表`
   );
 };
+const { getColumnWidth } = adaptiveColumnWidthFun(assessments);
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style lang="scss" scoped>
-hr {
-  border-color: #ebf3ff4d;
-}
 h1 {
   margin-top: 30px;
   text-align: center;
 }
-.pagination{
+.pagination {
   display: flex;
 }
 </style>

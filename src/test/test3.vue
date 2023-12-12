@@ -4,7 +4,7 @@
  * @LastEditors: STATICHIT 2394412110@qq.com
  * @LastEditTime: 2023-11-30 22:40:32
  * @FilePath: \collegeApplication\src\test\test3.vue
- * @Description:电子签名demo
+ * @Description:测试vue文件3：电子签名demo
 -->
 <template>
   <div>

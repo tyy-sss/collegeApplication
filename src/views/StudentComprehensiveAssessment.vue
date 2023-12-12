@@ -2,9 +2,9 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-11-30 23:08:36
+ * @LastEditTime: 2023-12-12 22:10:12
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 学生个人综测查看页面
 -->
 <template>
   <div class="show-container">
@@ -139,7 +139,7 @@
 import signatures from "@/components/utils/Signatures.vue";
 import { ref, reactive, computed } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
-import studentFun from "@/api/student"
+import studentFun from "@/api/student";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -197,34 +197,5 @@ function commit() {
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
-hr {
-  border-color: #ebf3ff4d;
-}
-.box {
-  width: 60%;
-  height: 410px;
-  margin: 0 auto;
-  border-radius: 15px 15px 15px 15px;
-  box-shadow: rgba(50, 50, 93, 0.25) 0px 50px 100px -20px,
-    rgba(0, 0, 0, 0.3) 0px 30px 60px -30px,
-    rgba(10, 37, 64, 0.35) 0px -2px 6px 0px inset;
-}
-.left {
-  width: 50%;
-  padding: 100px;
-  height: 410px;
-  background-color: rgba(184, 198, 226, 0.041);
-  border-radius: 15px 0 0 15px;
-  float: left;
-}
-.right {
-  width: 50%;
-  padding: 100px;
-  height: 410px;
-  border-radius: 0 15px 15px 0;
-  background-color: rgba(255, 192, 203, 0.144);
-  float: left;
-  text-align: center;
-}
 </style>
   

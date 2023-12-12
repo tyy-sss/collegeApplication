@@ -2,31 +2,42 @@
 * {
   box-sizing: border-box;
 }
+
 /* 根字体 */
-:root{
+:root {
   font-size: 15px;
 }
+
 /* 显示块 */
 .show-container {
   background-color: #fff;
   border-radius: 1rem;
   padding: 1.5rem;
 }
-.show-container > div:not(:last-child) {
+
+.show-container>div:not(:last-child) {
   padding-bottom: 1rem;
 }
+
 /* 显示的标题 */
 .title .text {
   font-size: 22px;
   line-height: 38px;
   font-weight: 700;
 }
+
 /* 提示语 */
 .prompt {
   color: RGB(168, 177, 186);
   font-size: 12px;
   padding-top: 0.2rem;
 }
-.context > div:not(:last-child) {
+
+.context>div:not(:last-child) {
   margin-bottom: 1rem;
+}
+
+/* 分割线颜色设置 */
+hr {
+  border-color: #ebf3ff4d;
 }

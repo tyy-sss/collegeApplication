@@ -1,3 +1,11 @@
+<!--
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2023-11-27 20:45:21
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2023-12-12 22:27:21
+ * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
+ * @Description: 测评小组综合测评表编辑页面
+-->
 <template>
   <div class="show-container">
     <div class="title">
@@ -590,9 +598,6 @@ const dialogVisible = ref(false);
 <style src="@/assets/css/show-container.css" scoped></style>
 
 <style lang="scss" scoped>
-hr {
-  border-color: #ebf3ff4d;
-}
 h1 {
   margin-top: 40px;
   text-align: center;

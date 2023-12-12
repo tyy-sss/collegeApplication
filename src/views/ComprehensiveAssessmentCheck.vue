@@ -4,7 +4,7 @@
  * @LastEditors: STATICHIT 2394412110@qq.com
  * @LastEditTime: 2023-12-02 19:08:56
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description:综合测评表公示页面
 -->
 <template>
   <div class="show-container">
@@ -77,13 +77,13 @@
         :pager-count="5"
         layout="prev, pager, next"
         :total="60"
-        style="margin-left: auto;"
+        style="margin-left: auto"
       />
     </div>
   </div>
 </template>
 <script setup>
-import { ref, reactive,computed } from "vue";
+import { ref, reactive, computed } from "vue";
 import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 let myclass = "2023级1班";
@@ -267,14 +267,11 @@ const handleExcelExport = () => {
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style lang="scss" scoped>
-hr {
-  border-color: #ebf3ff4d;
-}
 h1 {
   margin-top: 30px;
   text-align: center;
 }
-.pagination{
+.pagination {
   display: flex;
 }
 </style>

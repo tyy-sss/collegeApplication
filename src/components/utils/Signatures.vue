@@ -2,9 +2,9 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-30 22:12:35
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-05 21:52:29
- * @FilePath: \collegeApplication\src\test\test3.vue
- * @Description:电子签名demo
+ * @LastEditTime: 2023-12-12 22:24:59
+ * @FilePath: \collegeApplication\src\components\utils\Signatures.vue
+ * @Description:电子签名组件
 -->
 <template>
   <div>
@@ -15,8 +15,6 @@
       <vueEsign
         ref="esign"
         class="mySign"
-        :width="800"
-        :height="300"
         :isCrop="isCrop"
         :lineWidth="lineWidth"
         :lineColor="lineColor"
@@ -81,10 +79,9 @@ const save = () => {
   background: none;
 }
 .hello {
-  border-radius: 8px;
-  padding: 20px;
-  height: 400px;
-  width: 800px;
+  border-radius: 0.7rem;
+  padding: 1.5rem;
+  width: 90%;
   box-shadow: 0px 0px 5px #f4f4f4;
   margin: auto;
   border: 1px solid #cccccc;
@@ -96,7 +93,7 @@ const save = () => {
 }
 .btn {
   text-align: right;
-  margin-right: 15px;
+  margin-right: 1rem;
 }
 .btnA {
   text-align: center;
@@ -104,7 +101,7 @@ const save = () => {
 }
 .btnA button {
   height: 35px;
-  width: 300px;
+  width: 30%;
   color: white;
   font-size: 16px;
   border-radius: 15px;

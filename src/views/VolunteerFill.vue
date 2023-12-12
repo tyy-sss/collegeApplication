@@ -2,9 +2,9 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-05 22:37:41
+ * @LastEditTime: 2023-12-12 22:12:01
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 志愿填报页面
 -->
 <template>
   <div class="box">
@@ -203,9 +203,6 @@ function submitVolunteer() {
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
-hr {
-  border-color: #ebf3ff4d;
-}
 .box {
   width: 100%;
   display: flex;

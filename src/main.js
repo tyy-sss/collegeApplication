@@ -12,7 +12,6 @@ import * as ElIconModules from "@element-plus/icons-vue";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 
 import "default-passive-events";
-
 const app = createApp(App);
 app
   .use(store)

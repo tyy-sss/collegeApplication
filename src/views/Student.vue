@@ -1,3 +1,11 @@
+<!--
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2023-11-06 22:04:48
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2023-12-12 22:28:09
+ * @FilePath: \collegeApplication\src\views\Student.vue
+ * @Description: 班级管理页面
+-->
 <template>
   <div class="show-container">
     <div class="title">
@@ -5,9 +13,9 @@
     </div>
     <hr />
     <br />
-    <div class="card">
-      <!-- 处理盒子 -->
-      <el-row :gutter="12">
+    <!-- <div class="card"> -->
+    <!-- 处理盒子 -->
+    <!-- <el-row :gutter="12">
         <el-col :span="6">
           <el-card shadow="hover">
             🧑 学生总人数： {{ studentNum }} 人
@@ -53,7 +61,57 @@
           >
         </el-col>
       </el-row>
+    </div> -->
+
+    <!-- 测试 -->
+    <div class="card">
+      <!-- 处理盒子 -->
+      <div>
+        <el-card shadow="hover" class="item">
+          🧑 学生总人数： {{ studentNum }} 人
+        </el-card>
+      </div>
+      <div>
+        <el-card shadow="hover" class="item"
+          >👧 评测成员人数： {{ cadreNum }} 人
+          <el-button
+            type="warning"
+            size="small"
+            plain
+            style="float: right"
+            @click="dialogVisible3 = true"
+            >管理</el-button
+          >
+        </el-card>
+      </div>
+      <div>
+        <el-card shadow="hover" class="item">
+          💬 待处理申述
+          <el-button
+            type="warning"
+            size="small"
+            plain
+            style="float: right"
+            @click="dialogVisible = true"
+            >处理</el-button
+          ></el-card
+        >
+      </div>
+      <div>
+        <el-card shadow="hover" class="item">
+          📮 回收站
+          <el-button
+            type="warning"
+            size="small"
+            plain
+            style="float: right"
+            @click="dialogVisible2 = true"
+            >查看</el-button
+          ></el-card
+        >
+      </div>
     </div>
+
     <div class="box">
       <!-- 班级学生管理列表 -->
       <el-table
@@ -454,11 +512,19 @@ const evaluationData = [
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
-hr {
-  border-color: #ebf3ff4d;
-}
 .box {
   margin: 20px 0 20px 0;
+}
+.card {
+  /* grid布局 */
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+  grid-gap: 20px 20px;
+  grid-auto-rows: 50px;
+  grid-auto-flow: row dense;
+}
+.item {
+  text-align: left;
 }
 </style>
   

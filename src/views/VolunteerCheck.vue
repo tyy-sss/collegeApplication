@@ -1,3 +1,11 @@
+<!--
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2023-11-06 22:04:48
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2023-12-12 22:28:46
+ * @FilePath: \collegeApplication\src\views\VolunteerCheck.vue
+ * @Description: 查看志愿页面
+-->
 <template>
   <div class="box">
     <!-- <div class="tip">
@@ -83,8 +91,8 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
-import studentFun from "@/api/student"
-import teacherFun from "@/api/teacher"
+import studentFun from "@/api/student";
+import teacherFun from "@/api/teacher";
 import { useRouter } from "vue-router";
 const router = useRouter();
 let student = reactive({
@@ -107,22 +115,12 @@ function changeVolunteer() {
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
-hr {
-  border-color: #ebf3ff4d;
-}
 .box {
   width: 100%;
   display: flex;
   justify-content: center;
   flex-direction: column;
   align-items: center;
-}
-.tip {
-  padding: 20px;
-  margin: 40px 0 40px 0;
-  background-color: rgba(172, 171, 171, 0.082);
-  box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
-    rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
 }
 .tip2 {
   color: gray;
@@ -145,7 +143,8 @@ hr {
   margin-bottom: 15px;
 }
 .box2 {
-  width: 500px;
+  width: 100%;
+  padding: 2rem 6rem;
   display: flex;
   flex-direction: column;
   justify-content: center;

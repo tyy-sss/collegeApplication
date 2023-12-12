@@ -1,3 +1,11 @@
+<!--
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2023-11-06 22:04:48
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2023-12-12 22:27:46
+ * @FilePath: \collegeApplication\src\views\PersonalInformation.vue
+ * @Description:个人信息页面（学生/老师）
+-->
 <template>
   <div class="show-container">
     <div class="title">
@@ -314,7 +322,6 @@ import teacherFun from "@/api/teacher";
 import { useRouter } from "vue-router";
 const router = useRouter();
 
-
 //渲染完之前
 onBeforeMount(() => {
   BeforePer();
@@ -461,9 +468,6 @@ function confirmClick() {
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
-hr {
-  border-color: #ebf3ff4d;
-}
 .student {
   overflow: auto; /* 清除浮动 */
 }

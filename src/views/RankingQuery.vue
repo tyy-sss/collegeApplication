@@ -4,7 +4,7 @@
  * @LastEditors: STATICHIT 2394412110@qq.com
  * @LastEditTime: 2023-12-07 22:13:47
  * @FilePath: \collegeApplication\src\views\StudentInfo.vue
- * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
+ * @Description: 学生查询排名页面
 -->
 <template>
   <div class="show-container">
@@ -460,9 +460,6 @@ const queryData = [
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style  lang="scss" scoped>
-hr {
-  border-color: #ebf3ff4d;
-}
 .box {
   margin-top: 20px;
 }
