@@ -25,6 +25,17 @@
             <el-form-item label="组合名称" prop="name">
               <el-input v-model="form.ruleForm.name" />
             </el-form-item>
+            <el-form-item label="所含科目" prop="subject">
+              <el-checkbox-group v-model="form.ruleForm.subject" size="large">
+                <el-checkbox
+                  v-for="city in subjectList"
+                  :key="city"
+                  :label="city"
+                >
+                  {{ city }}
+                </el-checkbox>
+              </el-checkbox-group>
+            </el-form-item>
             <el-form-item label="涵盖省份" prop="province">
               <div
                 class="choose-group"
@@ -70,6 +81,7 @@ import { reactive, ref, watch } from "vue";
 import managerFun from "@/api/manager";
 // 省份数据
 import { cities } from "@/assets/js/utils/province-name.js";
+import { subjectList } from "@/assets/js/data/information-dropdown-data";
 import { ElMessage } from "element-plus";
 const props = defineProps({ addressVal: Object });
 const validateName = (rule, value, callback) => {
@@ -90,6 +102,7 @@ const form = reactive({
     areaId: "",
     name: "",
     includingProvinces: [],
+    subject: [],
   },
   rules: {
     name: [
@@ -99,6 +112,7 @@ const form = reactive({
     includingProvinces: [
       { required: true, message: "至少选择一个省份", trigger: "blur" },
     ],
+    subject: [{ required: true, message: "请选择所含科目", trigger: "blur" }],
   },
 });
 // 调用父组件的方法

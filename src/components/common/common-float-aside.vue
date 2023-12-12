@@ -75,14 +75,6 @@ const move = () => {
   }
   moveDiv.style.left = toucher.xPum + "px";
   moveDiv.style.top = toucher.yPum + "px";
-  //阻止页面的滑动默认事件
-  document.addEventListener(
-    "touchmove",
-    function () {
-      event.preventDefault(); //jq 阻止冒泡事件
-    },
-    false
-  );
 };
 //鼠标释放时候的函数
 const end = () => {
