@@ -103,7 +103,7 @@ const handleAddUser = async (ev) => {
     let data = await readFile(file);
     const excelData = getExcelData(data);
     const length = Object.keys(excelData[0]).length;
-    var addData = [];
+    let addData = [];
     if (length === Object.keys(studentCharacter).length) {
       // 批量添加学生
       addData = excelLeadingIn(excelData, studentCharacter);

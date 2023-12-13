@@ -7,15 +7,15 @@
       <div class="context">
         <el-tag
           v-for="tag in data.tags"
-          :key="tag.name"
+          :key="tag.subjectName"
           :type="tag.type"
           class="mx-1"
           size="large"
           effect="light"
           closable
-          @close="handleClose(tag.name)"
+          @close="handleClose(tag.subjectId)"
         >
-          {{ tag.name }}
+          {{ tag.subjectName }}
         </el-tag>
         <el-input
           v-if="data.inputVisible"
@@ -41,9 +41,12 @@
 <script setup>
 import { nextTick, onMounted, reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
+// 接口
+import managerFun from "@/api/manager";
+import { ElMessage } from "element-plus";
 
 const data = reactive({
-  tags: ["物理", "化学", "生物", "政治", "历史", "地理"],
+  tags: [],
   inputVisible: false,
   subjectName: "",
 });
@@ -58,27 +61,52 @@ const showInput = () => {
 // 添加科目
 const handleInputConfirm = () => {
   if (data.subjectName) {
-    data.tags.push(data.subjectName);
+    addSubject(data.subjectName);
   }
   data.inputVisible = false;
   data.subjectName = "";
 };
 // 删除科目
-const handleClose = (val) => {};
+const handleClose = (val) => {
+  deleteSubject(val);
+};
 // 给科目设置type
 const postType = () => {
-  var tags = [];
+  let tags = [];
   const typeList = ["", "success", "info", "danger", "warning"];
   for (let i = 0; i < data.tags.length; i++) {
     tags.push({
-      name: data.tags[i],
+      subjectName: data.tags[i].subjectName,
+      subjectId: data.tags[i].subjectId,
       type: typeList[i % 5],
     });
   }
   data.tags = tags;
 };
+// 添加科目
+const addSubject = () => {
+  managerFun.subject.addSubject(data.subjectName).then((res) => {
+    ElMessage.success("添加成功")
+    getSubject();
+  }).catch((err)=>{
+  });
+};
+// 删除科目
+const deleteSubject = (id) => {
+  managerFun.subject.deleteSubject(id).then(() => {
+    ElMessage.success("删除成功")
+    getSubject();
+  });
+};
+// 获得所有科目
+const getSubject = () => {
+  managerFun.subject.checkSubject().then((res) => {
+    data.tags = res;
+    postType();
+  });
+};
 onMounted(() => {
-  postType();
+  getSubject();
 });
 </script>
 <style src="@/assets/css/show-container.css" scoped/>

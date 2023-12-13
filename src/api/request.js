@@ -40,8 +40,8 @@ requests.interceptors.response.use((res) => {
       addRequest(() => resolve(server(config)));
       // 携带长token去请求新的token
       refreshToken();
-    }else if(res.data.code == 2018){
-    }else{
+    } else if (res.data.code == 2018) {
+    } else {
       if (res.data.msg) ElMessage.error(res.data.msg);
     }
     // if (res.data.resultCode == 419) {
@@ -51,7 +51,6 @@ requests.interceptors.response.use((res) => {
   }
   return res.data; //返回的是数据
 });
-
 
 const header = {
   "Content-Type": "application/json;charset=UTF-8",

@@ -29,7 +29,7 @@ const isMobile = () => {
   );
   return flag;
 };
-var asideWidth = ref(null);
+let asideWidth = ref(null);
 // 修改侧边栏的宽度
 const setAsideWidth = (val) => {
   if (val) {

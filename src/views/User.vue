@@ -197,13 +197,13 @@ const handleSelectionChange = (val) => {
 };
 // 删除单个用户
 const handleDeleteUser = (val) => {
-  var userNumberList = [];
+  let userNumberList = [];
   userNumberList.push(val.userNumber);
   deleteUserList(userNumberList);
 };
 // 重置密码
 const handleResetUser = (val) => {
-  var userNumberList = [];
+  let userNumberList = [];
   userNumberList.push(val.userNumber);
   resetUserList(userNumberList);
 };
@@ -214,7 +214,7 @@ const handleBatchResetUser = () => {
   if (multipleSelection.value.length === 0) {
     ElMessage.error("请至少选择一个用户");
   } else {
-    var userNumberList = [];
+    let userNumberList = [];
     multipleSelection.value.forEach((item) => {
       userNumberList.push(item.userNumber);
     });
@@ -226,7 +226,7 @@ const handleBatchDeleteUser = () => {
   if (multipleSelection.value.length === 0) {
     ElMessage.error("请至少选择一个用户");
   } else {
-    var userNumberList = [];
+    let userNumberList = [];
     multipleSelection.value.forEach((item) => {
       userNumberList.push(item.userNumber);
     });

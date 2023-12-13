@@ -53,7 +53,7 @@ const data = reactive({
   ], 
 });
 // 组合数据
-var combination = ref("");
+let combination = ref("");
 // 批量处理
 const multipleSelection = ref([]);
 const handleSelectionChange = (val) => {

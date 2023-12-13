@@ -1,504 +1,172 @@
-import { reactive } from "vue";
 // 科目数组
-import { subjectList } from "@/assets/js/data/information-dropdown-data";
-
-export const two = () => {
-  const list = [];
-  console.log(subjectList);
-  for (let i = 0; i < subjectList.size() - 1; i++) {
-    for (let j = i + 1; j < subjectList.size(); j++) {
-      list.push({
-        value: subjectList[i] + "，" + subjectList[j] + "任选一门",
-        value: subjectList[i] + "，" + subjectList[j] + "任选一门",
+// import { subjectList } from "@/assets/js/data/information-dropdown-data";
+let subjectList = [];
+let labelList = [];
+let vis = [];
+let musts = []; //存储强制选的集合
+let valueList = [];
+// 强制科目集合
+const mustFunction = (sum, j, vt) => {
+  if (sum == 0) {
+    musts.push([].concat(vt));
+    return;
+  }
+  for (let i = j; i < subjectList.length; i++) {
+    if (vis[i]) continue;
+    vis[i] = 1;
+    vt.push(i);
+    mustFunction(sum - 1, i + 1, vt);
+    vt.pop(); //回溯
+    vis[i] = 0;
+  }
+};
+// 必选科目集合
+const requiredFunction = (sum, j, vt, mustSum, xuanSum) => {
+  //递归筛出必选的种类
+  if (sum == 0) {
+    if (mustSum != 0) {
+      mustFunction(mustSum, 0, []);
+      musts.forEach((item) => {
+        getList(vt, item, xuanSum);
       });
+    } else {
+      getList(vt, [], xuanSum);
+    }
+    musts = [];
+    return;
+  }
+  for (let i = j; i < subjectList.length; i++) {
+    if (vis[i]) continue;
+    vis[i] = 1;
+    vt.push(i);
+    requiredFunction(sum - 1, i + 1, vt, mustSum, xuanSum);
+    vt.pop();
+    vis[i] = 0;
+  }
+};
+// 通过数组得到要显示的label
+const getLabelForList = (requiredList, mustList, xuanSum) => {
+  let ss = "";
+  if (requiredList.length) {
+    ss += "必选";
+    for (let i = 0; i < requiredList.length; i++) {
+      ss += requiredList[i];
+      if (i != requiredList.length - 1) {
+        ss += "，";
+      }
+    }
+    ss += "。";
+  }
+  if (xuanSum != 0) {
+    for (let i = 0; i < mustList.length; i++) {
+      ss += mustList[i];
+      if (i != mustList.length - 1) {
+        ss += "，";
+      }
+    }
+    ss += "中任选" + xuanSum + "门。";
+  }
+  return ss;
+};
+// 通过数字得到要显示的label
+const getLabelForNum = (requiredSum, mustSum, xuanSum) => {
+  let ss = "";
+  if (requiredSum != 0) {
+    ss += "必选" + requiredSum + "门";
+  }
+  if (xuanSum != 0) {
+    if (requiredSum != 0) {
+      ss += ",";
+    }
+    ss += "强制从" + mustSum + "门中选" + xuanSum + "门";
+  }
+  return ss;
+};
+// 得到list
+const getList = (requiredList, mustList, xuanSum) => {
+  let subjectRequiredList = [];
+  [].concat(requiredList).forEach((item) => {
+    subjectRequiredList.push(subjectList[item]);
+  });
+  let subjectMustList = [];
+  mustList.forEach((item) => {
+    subjectMustList.push(subjectList[item]);
+  });
+  valueList.push({
+    value: {
+      SubjectScope: subjectList,
+      // 必选科目数组
+      RequiredSubject: subjectRequiredList,
+      // 任选科目
+      OptionalSubjectScope: {
+        // 任选科目数量
+        SubjectNum: xuanSum,
+        // 任选科目数组
+        OptionalSubject: [...subjectMustList],
+      },
+    },
+    label: getLabelForList(subjectRequiredList, subjectMustList, xuanSum),
+  });
+};
+// 得到Label
+const getLabel = (n) => {
+  //n表示一共几门
+  for (let requiredSum = n; requiredSum >= 0; requiredSum--) {
+    let xuanSum = n - requiredSum;
+    for (
+      let mustSum = xuanSum + 1;
+      mustSum <= subjectList.length - requiredSum - 1;
+      mustSum++
+    ) {
+      if (requiredSum === n) {
+        requiredFunction(requiredSum, 0, [], 0, xuanSum);
+      } else {
+        requiredFunction(requiredSum, 0, [], mustSum, xuanSum);
+      }
+      let labelString = getLabelForNum(requiredSum, mustSum, xuanSum);
+      labelList.push({
+        value: labelString,
+        label: labelString,
+        children: [].concat(valueList),
+      });
+      musts = [];
+      valueList = [];
+      if (requiredSum === n) {
+        break;
+      }
     }
   }
-  console.log(list,"科目数组");
-  return list;
 };
-
-export const options = reactive([
-  {
-    value: "不限",
-    label: "不限选课要求",
-  },
-  {
-    value: "",
-    label: "限制选课要求",
-    children: [
-      {
-        value: "one",
-        label: "一门",
-        children: [
-          {
-            value: "",
-            label: "强制选一门",
-            children: [
-              {
-                value: "物理",
-                label: "物理",
-              },
-              {
-                value: "化学",
-                label: "化学",
-              },
-              {
-                value: "生物",
-                label: "生物",
-              },
-              {
-                value: "历史",
-                label: "历史",
-              },
-              {
-                value: "政治",
-                label: "政治",
-              },
-              {
-                value: "地理",
-                label: "地理",
-              },
-            ],
-          },
-          {
-            value: "*",
-            label: "强制从两门中选一门",
-            children: [
-              {
-                value: "物理，化学任选一门",
-                label: "物理，化学任选一门",
-              },
-              {
-                value: "物理，生物任选一门",
-                label: "物理，生物任选一门",
-              },
-              {
-                value: "物理，历史任选一门",
-                label: "物理，历史任选一门",
-              },
-              {
-                value: "物理，政治任选一门",
-                label: "物理，政治任选一门",
-              },
-              {
-                value: "物理，地理任选一门",
-                label: "物理，地理任选一门",
-              },
-              {
-                value: "化学，生物任选一门",
-                label: "化学，生物任选一门",
-              },
-              {
-                value: "化学，历史任选一门",
-                label: "化学，历史任选一门",
-              },
-              {
-                value: "化学，政治任选一门",
-                label: "化学，政治任选一门",
-              },
-              {
-                value: "化学，地理任选一门",
-                label: "化学，地理任选一门",
-              },
-              {
-                value: "生物，历史任选一门",
-                label: "生物，历史任选一门",
-              },
-              {
-                value: "生物，政治任选一门",
-                label: "生物，政治任选一门",
-              },
-              {
-                value: "生物，地理任选一门",
-                label: "生物，地理任选一门",
-              },
-              {
-                value: "历史，政治任选一门",
-                label: "历史，政治任选一门",
-              },
-              {
-                value: "历史，地理任选一门",
-                label: "历史，地理任选一门",
-              },
-              {
-                value: "政治，地理任选一门",
-                label: "政治，地理任选一门",
-              },
-            ],
-          },
-          {
-            value: "*",
-            label: "强制从三门中选一门",
-            children: [
-              {
-                value: "物理，化学，生物任选一门",
-                label: "物理，化学，生物任选一门",
-              },
-              {
-                value: "物理，化学，历史任选一门",
-                label: "物理，化学，历史任选一门",
-              },
-              {
-                value: "物理，化学，政治任选一门",
-                label: "物理，化学，政治任选一门",
-              },
-              {
-                value: "物理，化学，地理任选一门",
-                label: "物理，化学，地理任选一门",
-              },
-              {
-                value: "物理，生物，历史任选一门",
-                label: "物理，生物，历史任选一门",
-              },
-              {
-                value: "物理，生物，政治任选一门",
-                label: "物理，生物，政治任选一门",
-              },
-              {
-                value: "物理，生物，地理任选一门",
-                label: "物理，生物，地理任选一门",
-              },
-              {
-                value: "物理，历史，政治任选一门",
-                label: "物理，历史，政治任选一门",
-              },
-              {
-                value: "物理，历史，地理任选一门",
-                label: "物理，历史，地理任选一门",
-              },
-              {
-                value: "物理，政治，地理任选一门",
-                label: "物理，政治，地理任选一门",
-              },
-              {
-                value: "化学，生物，历史任选一门",
-                label: "化学，生物，历史任选一门",
-              },
-              {
-                value: "化学，生物，政治任选一门",
-                label: "化学，生物，政治任选一门",
-              },
-              {
-                value: "化学，生物，地理任选一门",
-                label: "化学，生物，地理任选一门",
-              },
-              {
-                value: "化学，历史，政治任选一门",
-                label: "化学，历史，政治任选一门",
-              },
-              {
-                value: "化学，历史，地理任选一门",
-                label: "化学，历史，地理任选一门",
-              },
-              {
-                value: "化学，政治，地理任选一门",
-                label: "化学，政治，地理任选一门",
-              },
-              {
-                value: "生物，历史，政治任选一门",
-                label: "生物，历史，政治任选一门",
-              },
-              {
-                value: "生物，历史，地理任选一门",
-                label: "生物，历史，地理任选一门",
-              },
-              {
-                value: "历史，政治，地理任选一门",
-                label: "历史，政治，地理任选一门",
-              },
-            ],
-          },
-          {
-            value: "*",
-            label: "强制从四门中选一门",
-            children: [
-              {
-                value: "物理，化学，生物，历史任选一门",
-                label: "物理，化学，生物，历史任选一门",
-              },
-              {
-                value: "物理，化学，生物，政治任选一门",
-                label: "物理，化学，生物，政治任选一门",
-              },
-              {
-                value: "物理，化学，生物，地理任选一门",
-                label: "物理，化学，生物，地理任选一门",
-              },
-              {
-                value: "物理，化学，历史，政治任选一门",
-                label: "物理，化学，历史，政治任选一门",
-              },
-              {
-                value: "物理，化学，历史，地理任选一门",
-                label: "物理，化学，历史，地理任选一门",
-              },
-              {
-                value: "物理，化学，政治，地理任选一门",
-                label: "物理，化学，政治，地理任选一门",
-              },
-              {
-                value: "物理，生物，历史，政治任选一门",
-                label: "物理，生物，历史，政治任选一门",
-              },
-              {
-                value: "物理，生物，历史，地理任选一门",
-                label: "物理，生物，历史，地理任选一门",
-              },
-              {
-                value: "物理，生物，政治，地理任选一门",
-                label: "物理，生物，政治，地理任选一门",
-              },
-              {
-                value: "化学，生物，历史，政治任选一门",
-                label: "化学，生物，历史，政治任选一门",
-              },
-              {
-                value: "化学，生物，历史，地理任选一门",
-                label: "化学，生物，历史，地理任选一门",
-              },
-              {
-                value: "化学，生物，政治，地理任选一门",
-                label: "化学，生物，政治，地理任选一门",
-              },
-              {
-                value: "生物，历史，政治，地理任选一门",
-                label: "生物，历史，政治，地理任选一门",
-              },
-            ],
-          },
-          {
-            value: "*",
-            label: "强制从五门中选一门",
-            children: [
-              {
-                value: "物理，化学，生物，历史，政治任选一门",
-                label: "物理，化学，生物，历史，政治任选一门",
-              },
-              {
-                value: "物理，化学，生物，历史，地理任选一门",
-                label: "物理，化学，生物，历史，地理任选一门",
-              },
-              {
-                value: "物理，化学，生物，政治，地理任选一门",
-                label: "物理，化学，生物，政治，地理任选一门",
-              },
-              {
-                value: "物理，化学，历史，政治，地理任选一门",
-                label: "物理，化学，历史，政治，地理任选一门",
-              },
-              {
-                value: "物理，生物，历史，政治，地理任选一门",
-                label: "物理，生物，历史，政治，地理任选一门",
-              },
-              {
-                value: "化学，生物，历史，政治，地理任选一门",
-                label: "化学，生物，历史，政治，地理任选一门",
-              },
-            ],
-          },
-        ],
+// 得到总的联级选择框
+export const optionsChoose = () => {
+  subjectList = ["物理", "化学", "生物", "历史", "地理", "政治"];
+  let firstChildren = [];
+  let allList = [
+    {
+      value: {
+        SubjectScope: subjectList,
+        RequiredSubject: [],
+        OptionalSubjectScope: {
+          SubjectNum: 3,
+          OptionalSubject: [...subjectList],
+        },
       },
-      {
-        value: "two",
-        label: "两门",
-        children: [
-          {
-            value: "*",
-            label: "强制选两门",
-            children: [
-              {
-                value: "物理，化学",
-                label: "物理，化学",
-              },
-              {
-                value: "物理，生物",
-                label: "物理，生物",
-              },
-              {
-                value: "物理，历史",
-                label: "物理，历史",
-              },
-              {
-                value: "物理，政治",
-                label: "物理，政治",
-              },
-              {
-                value: "物理，地理",
-                label: "物理，地理",
-              },
-              {
-                value: "化学，生物",
-                label: "化学，生物",
-              },
-              {
-                value: "化学，历史",
-                label: "化学，历史",
-              },
-              {
-                value: "化学，政治",
-                label: "化学，政治",
-              },
-              {
-                value: "化学，地理",
-                label: "化学，地理",
-              },
-              {
-                value: "生物，历史",
-                label: "生物，历史",
-              },
-              {
-                value: "生物，政治",
-                label: "生物，政治",
-              },
-              {
-                value: "生物，地理",
-                label: "生物，地理",
-              },
-              {
-                value: "历史，政治",
-                label: "历史，政治",
-              },
-              {
-                value: "历史，地理",
-                label: "历史，地理",
-              },
-              {
-                value: "政治，地理",
-                label: "政治，地理",
-              },
-            ],
-          },
-          {
-            value: "*",
-            label: "必选一门，强制从两门中选一门",
-            children: [
-              {
-                value: "必选物理，化学和生物任选一门",
-                label: "必选物理，化学和生物任选一门",
-              },
-              {
-                value: "必选物理，化学和历史任选一门",
-                label: "必选物理，化学和历史任选一门",
-              },
-              {
-                value: "必选物理，化学和政治任选一门",
-                label: "必选物理，化学和政治任选一门",
-              },
-              {
-                value: "必选物理，化学和地理任选一门",
-                label: "必选物理，化学和地理任选一门",
-              },
-              {
-                value: "必须物理，生物和历史任选一门",
-                label: "必选物理，生物和历史任选一门",
-              },
-              {
-                value: "必选物理，生物和政治任选一门",
-                label: "必选物理，生物和政治任选一门",
-              },
-              {
-                value: "必选物理，生物和地理任选一门",
-                label: "必选物理，生物和地理任选一门",
-              },
-              {
-                value: "必选物理，历史和政治任选一门",
-                label: "必选物理，历史和政治任选一门",
-              },
-              {
-                value: "必选物理，历史和地理任选一门",
-                label: "必选物理，历史和地理任选一门",
-              },
-              {
-                value: "必选物理，政治和地理任选一门",
-                label: "必选物理，政治和地理任选一门",
-              },
-              {
-                value: "必选物理，化学和生物任选一门",
-                label: "必选物理，化学和生物任选一门",
-              },
-              {
-                value: "必选物理，化学和历史任选一门",
-                label: "必选物理，化学和历史任选一门",
-              },
-              {
-                value: "必选物理，化学和政治任选一门",
-                label: "必选物理，化学和政治任选一门",
-              },
-              {
-                value: "必选物理，化学和地理任选一门",
-                label: "必选物理，化学和地理任选一门",
-              },
-              {
-                value: "必须物理，生物和历史任选一门",
-                label: "必选物理，生物和历史任选一门",
-              },
-              {
-                value: "必选物理，生物和政治任选一门",
-                label: "必选物理，生物和政治任选一门",
-              },
-              {
-                value: "必选物理，生物和地理任选一门",
-                label: "必选物理，生物和地理任选一门",
-              },
-              {
-                value: "必选物理，历史和政治任选一门",
-                label: "必选物理，历史和政治任选一门",
-              },
-              {
-                value: "必选物理，历史和地理任选一门",
-                label: "必选物理，历史和地理任选一门",
-              },
-              {
-                value: "必选物理，政治和地理任选一门",
-                label: "必选物理，政治和地理任选一门",
-              },
-            ],
-          },
-          {
-            value: "*",
-            label: "必选一门，强制从三门中选一门",
-            children: [],
-          },
-          {
-            value: "*",
-            label: "必选一门，强制从四门中选一门",
-            children: [],
-          },
-          {
-            value: "*",
-            label: "强制从三门中选两门",
-            children: [],
-          },
-          {
-            value: "*",
-            label: "强制从四门中选两门",
-            children: [],
-          },
-          {
-            value: "*",
-            label: "强制从五门中选两门",
-            children: [],
-          },
-        ],
-      },
-      {
-        value: "three",
-        label: "三门",
-        children: [
-          {
-            value: "*",
-            label: "必选一门，强制从多门中选两门",
-          },
-          {
-            value: "*",
-            label: "必选两门，强制从多门中选一门",
-          },
-          {
-            value: "*",
-            label: "强制选三门",
-          },
-        ],
-      },
-    ],
-  },
-]);
+      label: "不限科目",
+    },
+    {
+      value: "",
+      label: "限制科目",
+      children: firstChildren,
+    },
+  ];
+  for (let i = 1; i <= 3; i++) {
+    getLabel(i);
+    firstChildren.push({
+      value: i + "门",
+      label: i + "门",
+      children: [].concat(labelList),
+    });
+    labelList = [];
+  }
+  return allList;
+};

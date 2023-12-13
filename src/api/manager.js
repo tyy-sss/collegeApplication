@@ -6,6 +6,7 @@ let managerFun = {
   class: {},
   school: {},
   area: {},
+  subject: {},
 };
 
 /**
@@ -60,6 +61,8 @@ managerFun.user.getTeacherList = () => {
 managerFun.class.searchClass = (year, current, size) => {
   return http.get("/class", { year, current, size });
 };
+
+/** 班级 */
 /**
  * 班级名查重
  * @param {*} className
@@ -91,6 +94,8 @@ managerFun.class.changeClass = (classId, userNumber, className) => {
 managerFun.class.deleteClass = (data) => {
   return http.delete("/class", data);
 };
+
+/** 学校 */
 /**
  * 学校名查重
  * @param {*} name
@@ -130,13 +135,15 @@ managerFun.school.changeSchool = (data) => {
 managerFun.school.deleteSchool = (number) => {
   return http.delete("/school", number);
 };
+
+/** 地区 */
 /**
  * 搜索组合
- * @param {组合名} name 
- * @returns 
+ * @param {组合名} name
+ * @returns
  */
 managerFun.area.selectArea = (name) => {
-  return http.get("/area/selectArea?name="+name);
+  return http.get("/area/selectArea?name=" + name);
 };
 /**
  * 添加地址组合
@@ -147,18 +154,46 @@ managerFun.area.addArea = (data) => {
 };
 /**
  * 修改地址组合
- * @param {地区对象} data 
- * @returns 
+ * @param {地区对象} data
+ * @returns
  */
-managerFun.area.modifyArea = (data) =>{
-  return http.put('/area/modifyArea',data)
-}
+managerFun.area.modifyArea = (data) => {
+  return http.put("/area/modifyArea", data);
+};
 /**
  * 删除地址
- * @param {地址组合id} data 
- * @returns 
+ * @param {地址组合id} data
+ * @returns
  */
-managerFun.area.deleteArea = (data) =>{
-  return http.delete("area?areaIds="+data)
-}
+managerFun.area.deleteArea = (data) => {
+  return http.delete("/area/deleteArea?areaIds=" + data);
+};
+
+/* 科目 */
+/**
+ * 查看所有的科目
+ * @returns
+ */
+managerFun.subject.checkSubject = () => {
+  return http.get("/subject/selectSubject");
+};
+/**
+ * 添加科目
+ * @param {添加的科目名} data
+ * @returns
+ */
+managerFun.subject.addSubject = (data) => {
+  return http.post("/subject/addSubject", {
+    subjectId: 0,
+    subjectName: data,
+  });
+};
+/**
+ * 删除科目
+ * @param {科目id} subjectId
+ * @returns
+ */
+managerFun.subject.deleteSubject = (subjectId) => {
+  return http.delete("/subject/delete?subjectIds=" + subjectId);
+};
 export default managerFun;

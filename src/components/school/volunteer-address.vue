@@ -53,16 +53,17 @@
             <el-table-column type="selection" width="35" />
             <el-table-column prop="areaId" label="组合编号" />
             <el-table-column prop="name" label="组合名称" />
-            <el-table-column prop="subject" label="所含科目" />
+            <el-table-column prop="subjectNumber" label="高考科目数量"/>
+            <el-table-column prop="subjectScope" label="所含科目" min-width="160"/>
             <el-table-column
               prop="includingProvinces"
               label="涵盖省份"
-              min-width="250"
+              min-width="180"
             />
             <el-table-column
               prop="updateTime"
               label="修改时间"
-              min-width="100px"
+              min-width="110"
             >
               <template #default="scope">{{
                 formatDate(scope.row.updateTime)
@@ -191,6 +192,7 @@ const getAddressList = () => {
       data.tableData = res;
       data.tableData.forEach((item) => {
         item.includingProvinces = JSON.parse(item.includingProvinces);
+        item.subjectScope = JSON.parse(item.subjectScope)
       });
     }
   });

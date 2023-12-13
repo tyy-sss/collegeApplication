@@ -1,7 +1,7 @@
 //将数字或者中国标准时间变成yyy-MM-dd HH-MM-SS格式的日期
 const formatDate = (value) => {
-  var date = new Date(value);
-  var y = date.getFullYear(),
+  let date = new Date(value);
+  let y = date.getFullYear(),
     m = date.getMonth() + 1,
     d = date.getDate(),
     h = date.getHours(),
@@ -22,7 +22,7 @@ const formatDate = (value) => {
   if (s < 10) {
     s = "0" + s;
   }
-  var t = y + "-" + m + "-" + d + " " + h + ":" + i + ":" + s;
+  let t = y + "-" + m + "-" + d + " " + h + ":" + i + ":" + s;
   return t;
 };
 export { formatDate };

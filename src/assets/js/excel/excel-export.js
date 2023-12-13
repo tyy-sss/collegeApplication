@@ -3,15 +3,15 @@ import XLSX from "xlsx";
 import fs from "file-saver";
 
 const s2ab = (s) => {
-  var buf;
+  let buf;
   if (typeof ArrayBuffer !== "undefined") {
     buf = new ArrayBuffer(s.length);
-    var view = new Uint8Array(buf);
-    for (var i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
+    let view = new Uint8Array(buf);
+    for (let i = 0; i != s.length; ++i) view[i] = s.charCodeAt(i) & 0xff;
     return buf;
   } else {
     buf = new Array(s.length);
-    for (var i = 0; i != s.length; ++i) buf[i] = s.charCodeAt(i) & 0xff;
+    for (let i = 0; i != s.length; ++i) buf[i] = s.charCodeAt(i) & 0xff;
     return buf;
   }
 };
