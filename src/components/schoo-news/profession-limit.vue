@@ -106,12 +106,12 @@
   </div>
 </template>
   <script setup>
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
 import professionInformation from "@/components/schoo-news/limit/profession-information.vue";
 import professionAddress from "@/components/schoo-news/limit/profession-address.vue";
 import { Download, Plus, Share, Check, Edit } from "@element-plus/icons-vue";
 // 下拉框数据
-import { options,two } from '@/assets/js/data/address-cascader'
+import { optionsChoose } from "@/assets/js/data/address-cascader";
 const data = reactive({
   // 搜索数据
   searchData: {
@@ -138,12 +138,17 @@ const data = reactive({
     {
       college: "文学院",
       professionName: "新闻学",
-      1: "不限",
-      2: ["", "one", "","物理"],
+      1: [""],
+      2: [""],
       peopleNum: 100,
     },
   ],
-  options:options
+  options: [
+    {
+      value: "guide",
+      label: "Guide",
+    },
+  ],
 });
 const professionInformationRef = ref(null);
 const professionAddressRef = ref(null);
@@ -160,8 +165,10 @@ const handleSearchProfession = () => {};
 // 手动修改页码数
 const handleChangePage = (val) => {
   console.log(val);
-  two();
 };
+onMounted(() => {
+  data.options =  optionsChoose();
+});
 </script>
   <style src="@/assets/css/utils/table-center.css" scoped/>
   <style src="@/assets/css/show-container.css" scoped/>
