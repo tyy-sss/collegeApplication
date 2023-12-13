@@ -2,64 +2,14 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-07 22:13:47
- * @FilePath: \collegeApplication\src\views\StudentInfo.vue
+ * @LastEditTime: 2023-12-13 22:49:32
+ * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
 <template>
   <div class="show-container">
     <div class="title"><div class="text">查询排名</div></div>
     <hr />
-    <!-- 旧的 -->
-    <!--  <div class="box">
-      <div class="left">
-        <el-form-item label="学校 ：">
-          <el-cascader
-            :options="options"
-            placeholder="请输入学校名称"
-            :show-all-levels="false"
-            v-model="object1"
-          />
-        </el-form-item>
-        <el-form-item label="专业 ：">
-          <el-cascader
-            :options="options"
-            placeholder="请输入专业名称"
-            :show-all-levels="false"
-            v-model="object2"
-          />
-        </el-form-item>
-        <el-form-item label="省份 ：">
-          <el-cascader
-            :options="options"
-            placeholder="请输入省份名称"
-            :show-all-levels="false"
-            v-model="object3"
-          />
-        </el-form-item>
-        <br />
-        <div class="button_box">
-          <el-button type="primary">查询排名</el-button>
-          <el-button type="danger" @click="drawer = true">历史查询</el-button>
-        </div>
-      </div>
-      <div class="right">
-        <br /><br /><br /><br />
-        <h3>您的排名是：</h3>
-        <br />
-        <h2>{{ num }}</h2>
-      </div>
-    </div>
-    <div class="tip_box">
-      <div class="tip2">
-        <div><b>说明</b></div>
-        <br />
-        <div><b>查询排名字段</b></div>
-        <div>
-          您可以限定学校，专业，省份，依据预填报情况查看该限定条件下您的排名。
-        </div>
-      </div>
-  </div> -->
     <div class="box">
       <!-- 条件 -->
       <h4>查询条件</h4>
@@ -153,7 +103,6 @@
             <el-button class="search" @click="search">查询</el-button>
           </template>
         </el-input>
-
         <el-button class="history" @click="drawer = true">历史查询</el-button>
       </div>
       <!-- 结果 -->
@@ -204,7 +153,7 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
-import studentFun from "@/api/student"
+import studentFun from "@/api/student";
 import { useRouter } from "vue-router";
 
 const router = useRouter();
@@ -316,71 +265,7 @@ let selectType = (item) => {
   console.log(curType.value);
 };
 const types = reactive([{ name: "普通预科" }, { name: "新疆专项" }]);
-// let object1 = null;
-// let object2 = null;
-// let object3 = null;
-// const options = [
-//   {
-//     value: "计算机科学与工程学院",
-//     label: "计算机科学与工程学院",
-//     children: [
-//       {
-//         value: "软件工程",
-//         label: "软件工程",
-//       },
-//       {
-//         value: "物联网工程",
-//         label: "物联网工程",
-//       },
-//       {
-//         value: "人工智能",
-//         label: "人工智能",
-//         disabled: true,
-//       },
-//       {
-//         value: "大数据网络",
-//         label: "大数据网络",
-//         disabled: true,
-//       },
-//     ],
-//   },
-//   {
-//     value: "美术学院",
-//     label: "美术学院",
-//     children: [
-//       {
-//         value: "服装设计",
-//         label: "服装设计",
-//       },
-//       {
-//         value: "视觉传达设计",
-//         label: "视觉传达设计",
-//       },
-//       {
-//         value: "漫画设计",
-//         label: "漫画设计",
-//       },
-//     ],
-//   },
-//   {
-//     value: "医学院",
-//     label: "医学院",
-//     children: [
-//       {
-//         value: "药物科学",
-//         label: "药物科学",
-//       },
-//       {
-//         value: "动物医学",
-//         label: "动物医学",
-//       },
-//       {
-//         value: "法医",
-//         label: "法医",
-//       },
-//     ],
-//   },
-// ];
+
 let num = "?";
 // 历史查询记录
 const queryData = [
@@ -461,12 +346,12 @@ const queryData = [
 <style src="@/assets/css/show-container.css" scoped></style>
 <style  lang="scss" scoped>
 .box {
-  margin-top: 20px;
+  margin-top: 1.5rem;
 }
 .condition {
   height: 40%;
-  padding: 20px;
-  border: 1px solid rgb(241, 238, 238);
+  padding: 1.5rem;
+  border: 0.1rem solid rgb(241, 238, 238);
   margin-bottom: 30px;
 }
 .item {
@@ -475,7 +360,7 @@ const queryData = [
     position: absolute;
     left: 0;
     color: #000;
-    line-height: 20px;
+    line-height: 1.5rem;
     .tip {
       vertical-align: bottom;
     }
@@ -484,14 +369,14 @@ const queryData = [
     }
   }
   .condition_list {
-    padding-left: 107px;
-    margin-top: 10px;
+    padding-left: 6.5rem;
+    margin-top: 0.7rem;
     .tag_item {
-      padding: 0 20px 12px 0;
+      padding: 0 1.2rem 1rem 0;
       white-space: nowrap;
       display: inline-block;
       color: #000;
-      line-height: 24px;
+      line-height: 1.6rem;
       cursor: pointer;
     }
     .tag_item:hover {
@@ -504,25 +389,25 @@ const queryData = [
 }
 
 .searchBox {
-  margin-bottom: 30px;
-  padding: 10px 0;
+  margin-bottom: 2rem;
+  padding: 0.5rem 0;
   display: inline-block;
   .input-with-select {
-    height: 40px;
-    width: 400px;
+    height: 3.5rem;
+    width: 25rem;
   }
   .search {
-    height: 40px;
-    width: 100px;
+    height: 3.5rem;
+    width: 6rem;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
     background-color: #77adfe;
     color: #fff;
   }
   .history {
-    margin-left: 15px;
-    width: 103px;
-    height: 40px;
+    margin-left: 1rem;
+    width: 6rem;
+    height: 3.5rem;
     border-radius: 5px;
     border-color: #77adfe;
     color: #77adfe;
@@ -531,70 +416,39 @@ const queryData = [
 }
 .stack-line {
   background: #f2f7ff;
-  padding: 20px;
-  line-height: 18px;
+  padding: 1.2rem;
+  line-height: 1.2rem;
   span {
     font-size: 17px;
     color: rgb(98, 97, 97);
     margin-right: 10px;
   }
   .gk-score {
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
   }
   .gk-rank {
-    margin: 15px 0;
+    margin: 1rem 0;
   }
   .item {
     display: flex;
     justify-content: flex-start;
     align-items: center;
-    margin-bottom: 15px;
+    margin-bottom: 1rem;
   }
 }
-/* 旧的 */
-/* .box {
-  width: 60%;
-  height: 410px;
-  margin: 90px auto;
-  border-radius: 15px 15px 15px 15px;
-  box-shadow: rgba(0, 0, 0, 0.1) 0px 4px 6px -1px,
-    rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;
+@media (max-width: 600px) {
+  /* 当屏幕宽度小于等于800px时 */
+  .searchBox {
+  .input-with-select {
+    width: 22rem;
+  }
 }
-.left {
-  width: 50%;
-  padding: 100px;
-  height: 410px;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  background-color: rgba(184, 198, 226, 0.041);
-  border-radius: 15px 0 0 15px;
-  float: left;
 }
-.right {
-  width: 50%;
-  padding: 100px;
-  height: 410px;
-  border-radius: 0 15px 15px 0;
-  background-color: rgba(255, 192, 203, 0.144);
-  float: left;
-  text-align: center;
+@media (min-width: 600px) and (max-width: 1000px) {
+  
 }
-.button_box {
-  display: flex;
-  justify-content: center;
+@media (min-width: 1000px) {
+  
 }
-.tip_box {
-  display: flex;
-  justify-content: center;
-}
-.tip2 {
-  width: 60%;
-  color: gray;
-  line-height: 25px;
-  margin: 20px 0;
-  padding: 30px 200px;
-  border-top: 1px solid rgba(87, 86, 86, 0.158);
-} */
 </style>
   
