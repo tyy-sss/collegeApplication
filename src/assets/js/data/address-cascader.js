@@ -1,10 +1,10 @@
 // 科目数组
 // import { subjectList } from "@/assets/js/data/information-dropdown-data";
-var subjectList = [];
-var labelList = [];
-var vis = [];
-var musts = []; //存储强制选的集合
-var valueList = [];
+let subjectList = [];
+let labelList = [];
+let vis = [];
+let musts = []; //存储强制选的集合
+let valueList = [];
 // 强制科目集合
 const mustFunction = (sum, j, vt) => {
   if (sum == 0) {
@@ -46,7 +46,7 @@ const requiredFunction = (sum, j, vt, mustSum, xuanSum) => {
 };
 // 通过数组得到要显示的label
 const getLabelForList = (requiredList, mustList, xuanSum) => {
-  var ss = "";
+  let ss = "";
   if (requiredList.length) {
     ss += "必选";
     for (let i = 0; i < requiredList.length; i++) {
@@ -70,7 +70,7 @@ const getLabelForList = (requiredList, mustList, xuanSum) => {
 };
 // 通过数字得到要显示的label
 const getLabelForNum = (requiredSum, mustSum, xuanSum) => {
-  var ss = "";
+  let ss = "";
   if (requiredSum != 0) {
     ss += "必选" + requiredSum + "门";
   }
@@ -84,20 +84,24 @@ const getLabelForNum = (requiredSum, mustSum, xuanSum) => {
 };
 // 得到list
 const getList = (requiredList, mustList, xuanSum) => {
-  var subjectRequiredList = [];
+  let subjectRequiredList = [];
   [].concat(requiredList).forEach((item) => {
     subjectRequiredList.push(subjectList[item]);
   });
-  var subjectMustList = [];
+  let subjectMustList = [];
   mustList.forEach((item) => {
     subjectMustList.push(subjectList[item]);
   });
   valueList.push({
     value: {
       SubjectScope: subjectList,
+      // 必选科目数组
       RequiredSubject: subjectRequiredList,
+      // 任选科目
       OptionalSubjectScope: {
+        // 任选科目数量
         SubjectNum: xuanSum,
+        // 任选科目数组
         OptionalSubject: [...subjectMustList],
       },
     },
@@ -119,7 +123,7 @@ const getLabel = (n) => {
       } else {
         requiredFunction(requiredSum, 0, [], mustSum, xuanSum);
       }
-      var labelString = getLabelForNum(requiredSum, mustSum, xuanSum);
+      let labelString = getLabelForNum(requiredSum, mustSum, xuanSum);
       labelList.push({
         value: labelString,
         label: labelString,
@@ -136,8 +140,8 @@ const getLabel = (n) => {
 // 得到总的联级选择框
 export const optionsChoose = () => {
   subjectList = ["物理", "化学", "生物", "历史", "地理", "政治"];
-  var firstChildren = [];
-  var allList = [
+  let firstChildren = [];
+  let allList = [
     {
       value: {
         SubjectScope: subjectList,
@@ -155,7 +159,7 @@ export const optionsChoose = () => {
       children: firstChildren,
     },
   ];
-  for (var i = 1; i <= 3; i++) {
+  for (let i = 1; i <= 3; i++) {
     getLabel(i);
     firstChildren.push({
       value: i + "门",

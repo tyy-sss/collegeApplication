@@ -57,9 +57,9 @@ export const handleStudentInformation = (data) => {
     if (!item.username || !item.userNumber || !item.className || !item.school)
       return;
     // 对手机号，身份证号进行正则验证
-    var phone = PHONE_TEST.test(item.phone);
-    var parentPhone = PHONE_TEST.test(item.parentPhone);
-    var idCard = IDENTITY_TEST.test(item.idCard);
+    let phone = PHONE_TEST.test(item.phone);
+    let parentPhone = PHONE_TEST.test(item.parentPhone);
+    let idCard = IDENTITY_TEST.test(item.idCard);
     if (!phone || !parentPhone || !idCard) {
       return;
     }
@@ -114,8 +114,8 @@ export const handleTeacherInformation = (data) => {
       return;
     }
     // 对手机号进行正则验证
-    var p = /^[1][0-9]{10}$/;
-    var phone = p.test(item.phone);
+    let p = /^[1][0-9]{10}$/;
+    let phone = p.test(item.phone);
     if (!phone) {
       return;
     }

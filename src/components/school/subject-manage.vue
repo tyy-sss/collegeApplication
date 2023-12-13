@@ -72,7 +72,7 @@ const handleClose = (val) => {
 };
 // 给科目设置type
 const postType = () => {
-  var tags = [];
+  let tags = [];
   const typeList = ["", "success", "info", "danger", "warning"];
   for (let i = 0; i < data.tags.length; i++) {
     tags.push({

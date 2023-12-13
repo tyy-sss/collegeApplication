@@ -4,7 +4,7 @@ import { s2ab } from "./excel-export";
 
 const datenum = (v, date1904) => {
   if (date1904) v += 1462;
-  var epoch = Date.parse(v);
+  let epoch = Date.parse(v);
   return (epoch - new Date(Date.UTC(1899, 11, 30))) / (24 * 60 * 60 * 1000);
 };
 /**
@@ -13,8 +13,8 @@ const datenum = (v, date1904) => {
  * @returns
  */
 const sheet_from_array_of_arrays = (data) => {
-  var ws = {};
-  var range = {
+  let ws = {};
+  let range = {
     s: {
       c: 0,
       r: 0,
@@ -24,17 +24,17 @@ const sheet_from_array_of_arrays = (data) => {
       r: 0,
     },
   };
-  for (var R = 0; R != data.length; ++R) {
-    for (var C = 0; C != data[R].length; ++C) {
+  for (let R = 0; R != data.length; ++R) {
+    for (let C = 0; C != data[R].length; ++C) {
       if (range.s.r > R) range.s.r = R;
       if (range.s.c > C) range.s.c = C;
       if (range.e.r < R) range.e.r = R;
       if (range.e.c < C) range.e.c = C;
-      var cell = {
+      let cell = {
         v: data[R][C],
       };
       if (cell.v == null) continue;
-      var cell_ref = XLSX.utils.encode_cell({
+      let cell_ref = XLSX.utils.encode_cell({
         c: C,
         r: R,
       });
@@ -88,9 +88,9 @@ const export_json_to_excel = (headerData, data, filename) => {
   for (let i = multiHeader.length - 1; i > -1; i--) {
     data.unshift(multiHeader[i]);
   }
-  var ws_name = ".xlsx";
-  var wb = XLSX.utils.book_new();
-  var ws = sheet_from_array_of_arrays(data);
+  let ws_name = ".xlsx";
+  let wb = XLSX.utils.book_new();
+  let ws = sheet_from_array_of_arrays(data);
   if (merges.length > 0) {
     if (!ws["!merges"]) ws["!merges"] = [];
     merges.forEach((item) => {
@@ -100,7 +100,7 @@ const export_json_to_excel = (headerData, data, filename) => {
   wb.SheetNames.push(ws_name);
   wb.Sheets[ws_name] = ws;
   
-  var wbout = XLSX.write(wb, {
+  let wbout = XLSX.write(wb, {
     bookType: "xlsx",
     bookSST: false,
     type: "binary",

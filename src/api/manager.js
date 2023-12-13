@@ -166,7 +166,7 @@ managerFun.area.modifyArea = (data) => {
  * @returns
  */
 managerFun.area.deleteArea = (data) => {
-  return http.delete("area?areaIds=" + data);
+  return http.delete("/area/deleteArea?areaIds=" + data);
 };
 
 /* 科目 */

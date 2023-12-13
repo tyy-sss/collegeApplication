@@ -5,7 +5,7 @@
       :with-header="false"
       v-model="form.dialogVisible"
       :before-close="handleClose"
-      size="40%"
+      size="45%"
       class="demo-drawer"
     >
       <div class="add-role-show">
@@ -25,18 +25,28 @@
             <el-form-item label="组合名称" prop="name">
               <el-input v-model="form.ruleForm.name" />
             </el-form-item>
-            <el-form-item label="所含科目" prop="subject">
-              <el-checkbox-group v-model="form.ruleForm.subject" size="large">
+            <el-form-item label="高考科目数量" prop="subjectNumber">
+              <el-input-number
+                v-model="form.ruleForm.subjectNumber"
+                :min="1"
+                :max="form.subjectList.length"
+              />
+            </el-form-item>
+            <el-form-item label="所含科目" prop="subjectScope">
+              <el-checkbox-group
+                v-model="form.ruleForm.subjectScope"
+                size="large"
+              >
                 <el-checkbox
-                  v-for="city in subjectList"
-                  :key="city"
-                  :label="city"
+                  v-for="subject in form.subjectList"
+                  :key="subject.subjectName"
+                  :label="subject.subjectName"
                 >
-                  {{ city }}
+                  {{ subject.subjectName }}
                 </el-checkbox>
               </el-checkbox-group>
             </el-form-item>
-            <el-form-item label="涵盖省份" prop="province">
+            <el-form-item label="涵盖省份" prop="includingProvinces">
               <div
                 class="choose-group"
                 v-for="(item, index) in cities"
@@ -76,43 +86,33 @@
 </template>
   <script setup>
 // 添加地址组合,组合姓名查重
-import { reactive, ref, watch } from "vue";
+import { onMounted, reactive, ref, watch } from "vue";
 // 接口
 import managerFun from "@/api/manager";
 // 省份数据
 import { cities } from "@/assets/js/utils/province-name.js";
-import { subjectList } from "@/assets/js/data/information-dropdown-data";
 import { ElMessage } from "element-plus";
 const props = defineProps({ addressVal: Object });
-const validateName = (rule, value, callback) => {
-  if (
-    (form.isChange === false && value) ||
-    (form.isChange === true && value != form.oldAddressName)
-  ) {
-    // 组合命查重
-    // callback(new Error("组合名称重复"));
-  }
-  callback();
-};
 const form = reactive({
   dialogVisible: false,
   isChange: false,
   oldAddressName: "",
+  subjectList: [],
   ruleForm: {
     areaId: "",
     name: "",
     includingProvinces: [],
-    subject: [],
+    subjectScope: [],
+    subjectNumber: 3,
   },
   rules: {
-    name: [
-      { required: true, message: "请输入角色名称", trigger: "blur" },
-      { validator: validateName, trigger: "blur" },
-    ],
+    name: [{ required: true, message: "请输入组合名称", trigger: "blur" }],
     includingProvinces: [
       { required: true, message: "至少选择一个省份", trigger: "blur" },
     ],
-    subject: [{ required: true, message: "请选择所含科目", trigger: "blur" }],
+    subjectScope: [
+      { required: true, message: "请选择所含科目", trigger: "blur" },
+    ],
   },
 });
 // 调用父组件的方法
@@ -168,6 +168,18 @@ const changeAreaData = () => {
       handleClose();
     });
 };
+// 获得所有科目
+const getAllSubject = () => {
+  managerFun.subject.checkSubject().then((res) => {
+    form.subjectList = res;
+  });
+};
+onMounted(() => {
+  getAllSubject();
+  if (form.isChange == false) {
+    form.ruleForm.subjectNumber = 3;
+  }
+});
 defineExpose({
   form,
 });
@@ -182,8 +194,8 @@ defineExpose({
   justify-content: flex-start;
   width: 100%;
   border: 1px solid RGB(220, 223, 230);
-  padding-top: 0.2rem;
-  padding-bottom: 0.2rem;
+  padding-top: 0.1rem;
+  padding-bottom: 0.1rem;
 }
 .choose-group:not(:first-child) {
   border-top: 0px;
