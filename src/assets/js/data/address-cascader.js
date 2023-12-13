@@ -1,5 +1,6 @@
 // 科目数组
-import { subjectList } from "@/assets/js/data/information-dropdown-data";
+// import { subjectList } from "@/assets/js/data/information-dropdown-data";
+var subjectList = [];
 var labelList = [];
 var vis = [];
 var musts = []; //存储强制选的集合
@@ -134,6 +135,7 @@ const getLabel = (n) => {
 };
 // 得到总的联级选择框
 export const optionsChoose = () => {
+  subjectList = ["物理", "化学", "生物", "历史", "地理", "政治"];
   var firstChildren = [];
   var allList = [
     {

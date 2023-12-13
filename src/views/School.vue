@@ -67,7 +67,7 @@ const topChoose = reactive([
   },
 ]);
 
-const showItem = ref(3);
+const showItem = ref(5);
 
 const hanleCheckItem = (val) => {
   showItem.value = val + 1;

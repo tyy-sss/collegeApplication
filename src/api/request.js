@@ -10,7 +10,7 @@ const ZWY = "http://192.168.50.159:8081/";
 const requests = axios.create({
   //配置对象
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径当中会出现api
-  baseURL: YSB,
+  baseURL: ZWY,
   //代表请求超时的时间
   timeout: 10000,
 });
@@ -40,8 +40,8 @@ requests.interceptors.response.use((res) => {
       addRequest(() => resolve(server(config)));
       // 携带长token去请求新的token
       refreshToken();
-    }else if(res.data.code == 2018){
-    }else{
+    } else if (res.data.code == 2018) {
+    } else {
       if (res.data.msg) ElMessage.error(res.data.msg);
     }
     // if (res.data.resultCode == 419) {
@@ -51,7 +51,6 @@ requests.interceptors.response.use((res) => {
   }
   return res.data; //返回的是数据
 });
-
 
 const header = {
   "Content-Type": "application/json;charset=UTF-8",
