@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-12 22:27:46
+ * @LastEditTime: 2023-12-13 22:32:46
  * @FilePath: \collegeApplication\src\views\PersonalInformation.vue
  * @Description:个人信息页面（学生/老师）
 -->
@@ -21,12 +21,15 @@
           class="fileInput"
           v-on:change="handleFileSelect($event)"
         />
-        <img
-          v-if="avatar"
-          :src="avatar"
-          class="passport"
-          alt="未上传证件照或图片加载有误，请刷新"
-        />
+        <div class="imgBox">
+          <img
+            v-if="avatar"
+            :src="avatar"
+            class="passport"
+            alt="未上传证件照或图片加载有误，请刷新"
+          />
+        </div>
+
         <br />
         <el-button class="uploadPassport" @click="fackBtn"
           >上传证件照</el-button
@@ -35,159 +38,94 @@
       <div class="right">
         <div class="box">
           <div class="littleTitle">基本信息</div>
-          <div class="infoBox">
-            <el-row class="infoRow">
-              <el-col :span="7">
-                <div>
-                  <span class="tag">学生姓名 :</span
-                  ><span>{{ student.name || "-" }}</span>
-                </div></el-col
-              >
-              <el-col :span="7">
-                <div>
-                  <span class="tag">学生学号 :</span
-                  ><span>{{ student.id || "-" }}</span>
-                </div>
-              </el-col>
-              <el-col :span="7">
-                <div>
-                  <span class="tag">身份证号 :</span
-                  ><span>{{ student.card || "-" }}</span>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row class="infoRow">
-              <el-col :span="7">
-                <div>
-                  <span class="tag">联系电话 :</span
-                  ><span>{{ student.phone || "-" }}</span>
-                </div></el-col
-              >
-              <el-col :span="7">
-                <div>
-                  <span class="tag">学生性别 :</span
-                  ><span>{{ student.sex || "-" }}</span>
-                </div>
-              </el-col>
-              <el-col :span="7">
-                <div>
-                  <span class="tag">学生班级 :</span
-                  ><span>{{ student.class || "-" }}</span>
-                </div>
-              </el-col>
-            </el-row>
+          <div class="grid-item">
+            <div>
+              <span class="tag">学生姓名 :</span
+              ><span>{{ student.name || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">学生学号 :</span
+              ><span>{{ student.id || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">身份证号 :</span
+              ><span>{{ student.card || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">联系电话 :</span
+              ><span>{{ student.phone || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">学生性别 :</span
+              ><span>{{ student.sex || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">学生班级 :</span
+              ><span>{{ student.class || "-" }}</span>
+            </div>
+          </div>
+          <div style="margin-top: 1rem">
+            <span class="tag">家庭地址 :</span
+            ><span>{{ student.home_address || "-" }}</span>
           </div>
         </div>
         <hr />
         <br />
         <div class="box">
           <div class="littleTitle">其他信息</div>
-          <div class="infoBox">
-            <el-row class="infoRow">
-              <el-col :span="7">
-                <div>
-                  <span class="tag">政治面貌 :</span
-                  ><span>{{ student.name || "-" }}</span>
-                </div></el-col
-              >
-              <el-col :span="7">
-                <div>
-                  <span class="tag">目标学校 :</span
-                  ><span>{{ student.school || "-" }}</span>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row class="infoRow">
-              <el-col :span="7">
-                <div>
-                  <span class="tag">民族 :</span
-                  ><span>{{ student.ethnicity || "-" }}</span>
-                </div></el-col
-              >
-              <el-col :span="7">
-                <div>
-                  <span class="tag">来源省份 :</span
-                  ><span>{{ student.province || "-" }}</span>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row class="infoRow">
-              <el-col :span="7">
-                <div>
-                  <span class="tag">科类 :</span
-                  ><span>{{ student.category || "-" }}</span>
-                </div></el-col
-              >
-              <el-col :span="7">
-                <div>
-                  <span class="tag">性质计划 :</span
-                  ><span>{{ student.nature || "-" }}</span>
-                </div>
-              </el-col>
-            </el-row>
-            <el-row class="infoRow">
-              <el-col :span="7">
-                <div>
-                  <span class="tag">选考科目 :</span
-                  ><span>{{ student.subjects || "-" }}</span>
-                </div></el-col
-              >
-            </el-row>
+          <div class="grid-item">
+            <div>
+              <span class="tag">政治面貌 :</span
+              ><span>{{ student.name || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">目标学校 :</span
+              ><span>{{ student.school || "-" }}</span>
+            </div>
+
+            <div>
+              <span class="tag">民族 :</span
+              ><span>{{ student.ethnicity || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">来源省份 :</span
+              ><span>{{ student.province || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">科类 :</span
+              ><span>{{ student.category || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">性质计划 :</span
+              ><span>{{ student.nature || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">选考科目 :</span
+              ><span>{{ student.subjects || "-" }}</span>
+            </div>
           </div>
         </div>
         <hr />
         <br />
         <div class="box">
           <div class="littleTitle">收件信息</div>
-          <div class="infoBox">
-            <el-row class="infoRow">
-              <el-col :span="24">
-                <div>
-                  <span class="tag">家庭地址 :</span
-                  ><span>{{ student.home_address || "-" }}</span>
-                </div></el-col
-              >
-            </el-row>
-            <br />
-            <el-row class="infoRow">
-              <el-col :span="2">
-                <div>
-                  <span class="tag">收件地址 :</span>
-                </div></el-col
-              >
-              <el-col :span="10">
-                <div style="background-color: rgba(224, 230, 230, 0.438)">
-                  <br />
-                  <el-row class="infoRow">
-                    <el-col :span="24">
-                      <div>
-                        <span class="tag">收件人 :</span
-                        ><span>{{ student.recipient || "-" }}</span>
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <el-row class="infoRow">
-                    <el-col :span="24">
-                      <div>
-                        <span class="tag">收件电话 :</span
-                        ><span>{{ student.phone2 || "-" }}</span>
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <el-row class="infoRow">
-                    <el-col :span="24">
-                      <div>
-                        <span class="tag">详细地址 :</span
-                        ><span>{{ student.recipient_address || "-" }}</span>
-                      </div>
-                    </el-col>
-                  </el-row>
-                  <br />
-                </div>
-              </el-col>
-            </el-row>
+          <div class="flex_box pickup_box">
+            <div class="infoRow">
+              <span class="tag">收件人 :</span>
+              <span>{{ student.recipient || "-" }}</span>
+            </div>
+            <div class="infoRow">
+              <span class="tag">收件电话 :</span>
+              <span>{{ student.phone2 || "-" }}</span>
+            </div>
+            <div class="infoRow">
+              <span class="tag">详细地址 :</span>
+              <span>{{ student.recipient_address || "-" }}</span>
+            </div>
           </div>
         </div>
+      </div>
+      <div class="btnBox">
         <el-button type="primary" class="changeInfo" @click="drawer = true"
           >修改资料</el-button
         >
@@ -196,72 +134,52 @@
     <div v-if="identity === 'teacher'" class="teacher">
       <div class="box">
         <div class="littleTitle">基本信息</div>
-        <div class="infoBox">
-          <el-row class="infoRow">
-            <el-col :span="7">
-              <div>
-                <span class="tag">教师姓名 :</span
-                ><span>{{ teacher.name || "-" }}</span>
-              </div></el-col
-            >
-            <el-col :span="7">
-              <div>
-                <span class="tag">教师编号 :</span
-                ><span>{{ teacher.id || "-" }}</span>
-              </div>
-            </el-col>
-            <el-col :span="7">
-              <div>
-                <span class="tag">身份证号 :</span
-                ><span>{{ teacher.card || "-" }}</span>
-              </div>
-            </el-col>
-          </el-row>
-          <el-row class="infoRow">
-            <el-col :span="7">
-              <div>
-                <span class="tag">联系电话 :</span
-                ><span>{{ teacher.phone || "-" }}</span>
-              </div></el-col
-            >
-            <el-col :span="7">
-              <div>
-                <span class="tag">性别 :</span
-                ><span>{{ teacher.sex || "-" }}</span>
-              </div>
-            </el-col>
-          </el-row>
+        <div class="grid-item">
+          <div>
+            <span class="tag">教师姓名 :</span
+            ><span>{{ teacher.name || "-" }}</span>
+          </div>
+          <div>
+            <span class="tag">教师编号 :</span
+            ><span>{{ teacher.id || "-" }}</span>
+          </div>
+          <div>
+            <span class="tag">身份证号 :</span
+            ><span>{{ teacher.card || "-" }}</span>
+          </div>
+          <div>
+            <span class="tag">联系电话 :</span
+            ><span>{{ teacher.phone || "-" }}</span>
+          </div>
+          <div>
+            <span class="tag">性别 :</span><span>{{ teacher.sex || "-" }}</span>
+          </div>
         </div>
       </div>
       <hr />
-      <br />
       <div class="box">
         <div class="littleTitle">其他信息</div>
-        <div class="infoBox">
-          <el-row class="infoRow">
-            <el-col :span="7">
-              <div>
-                <span class="tag">负责班级 :</span
-                ><span>{{ teacher.manageClass || "-" }}</span>
-              </div></el-col
-            >
-          </el-row>
-          <el-row class="infoRow">
-            <el-col :span="7">
-              <div>
-                <span class="tag">授课班级 :</span
-                ><span>{{ teacher.teachClass || "-" }}</span>
-              </div></el-col
-            >
-          </el-row>
+        <div class="flex_box">
+          <div class="infoRow">
+            <span class="tag">负责班级 :</span
+            ><span>{{ teacher.manageClass || "-" }}</span>
+          </div>
+          <div class="infoRow">
+            <span class="tag">授课班级 :</span
+            ><span>{{ teacher.teachClass || "-" }}</span>
+          </div>
         </div>
       </div>
-      <br />
-      <el-button type="primary" class="changeInfo" @click="drawer = true"
-        >修改资料</el-button
-      >
+
+      <div class="btnBox">
+        <el-button type="primary" class="changeInfo" @click="drawer = true"
+          >修改资料</el-button
+        >
+      </div>
     </div>
   </div>
+
+  <!-- 修改资料抽屉 -->
   <el-drawer v-model="drawer" direction="ttb" style="min-height: 50%">
     <template #header>
       <h4>修改资料</h4>
@@ -466,33 +384,27 @@ function confirmClick() {
     .catch(() => {});
 }
 </script>
+
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
-.student {
-  overflow: auto; /* 清除浮动 */
-}
-.left {
-  width: 10%;
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  float: left;
+.imgBox {
+  width: 100%;
+  height: 13rem;
 }
 .passport {
-  width: 10rem;
-  height: 15rem;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
 }
 .fileInput {
   display: none;
 }
 .uploadPassport {
-  width: 8rem;
+  font-size: 0.8rem;
+  width: 5rem;
 }
-.right {
-  width: 88%;
-  display: flex;
-  flex-direction: column;
-  float: right;
+.box {
+  padding: 0 0 1rem 0;
 }
 .littleTitle {
   margin-bottom: 2rem;
@@ -504,22 +416,77 @@ function confirmClick() {
   width: 5rem;
   text-align: right;
 }
-.infoBox {
-  margin-left: 1rem;
-  margin-bottom: 2rem;
-}
 .infoRow {
   margin-bottom: 1rem;
 }
+.pickup_box {
+  width: 50%;
+  padding: 0.8rem;
+  background-color: rgba(224, 230, 230, 0.438);
+}
+.flex_box {
+  display: flex;
+  flex-direction: column;
+}
 .changeInfo {
   width: 6rem;
-  margin-top: 3rem;
-  margin-left: 90%;
+  margin-top: 2rem;
   margin-bottom: 1rem;
 }
 
 .teacher {
   overflow: auto; /* 清除浮动 */
+}
+.grid-item {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
+  gap: 1rem 1.2rem;
+  grid-auto-flow: row dense;
+}
+.btnBox {
+  width: 100%;
+  text-align: right;
+}
+.student {
+  display: flex;
+  flex-wrap: wrap;
+}
+.left {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+}
+
+@media (max-width: 1000px) {
+  /* 当屏幕宽度小于等于800px时 */
+  .left,
+  .right {
+    width: 100%; /* 将宽度设置为100%以确保在小屏幕上上下摆放 */
+  }
+  .pickup_box {
+    width: 100%;
+  }
+}
+@media (min-width: 1000px) and (max-width: 1250px) {
+  .left {
+    margin-right: 1rem;
+    width: 25%; /* 左侧宽度固定为15% */
+  }
+  .right {
+    width: 73%; /* 右侧宽度固定为85% */
+  }
+  .pickup_box {
+    width: 100%;
+  }
+}
+@media (min-width: 1250px) {
+  .left {
+    margin-right: 1rem;
+    width: 10%; /* 左侧宽度固定为10% */
+  }
+  .right {
+    width: 88%; /* 右侧宽度固定为90% */
+  }
 }
 </style>
   

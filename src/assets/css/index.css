@@ -1,0 +1,53 @@
+/*
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2023-12-13 19:20:23
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2023-12-13 22:17:09
+ * @FilePath: \collegeApplication\src\assets\css\index.css
+ * @Description: 配置根长度以保证各个页面使用rem可以以此为依据做到自适应
+ */
+
+/* 默认字体大小为16px，适用于大多数屏幕 */
+html {
+  font-size: 16px;
+}
+
+/* 在小屏幕下，降低字体大小以适应较小的屏幕 */
+@media only screen and (max-width: 600px) {
+  html {
+    font-size: 12px;
+  }
+}
+
+/* 在中屏幕下，增加字体大小以适应大多数的屏幕 */
+@media only screen and (min-width: 800px)and(max-width: 1000px) {
+  html {
+    font-size: 13px;
+  }
+}
+
+/* 在大屏幕下，增加字体大小以适应较大的屏幕 */
+@media only screen and (min-width: 1000px)and(max-width: 1500px) {
+  html {
+    font-size: 14px;
+  }
+}
+
+/* 在大屏幕下，增加字体大小以适应很大的屏幕 */
+@media only screen and (min-width: 1500px)and(max-width: 1900px) {
+  html {
+    font-size: 16px;
+  }
+}
+/* 在大大大屏幕下，增加字体大小以适应较大的屏幕 */
+@media only screen and (min-width: 1900px)and (max-width: 2200px) {
+  html {
+    font-size: 20px;
+  }
+}
+/* 在大大大屏幕下，增加字体大小以适应较大的屏幕 */
+@media only screen and (min-width: 2200px) {
+  html {
+    font-size: 22px;
+  }
+}
