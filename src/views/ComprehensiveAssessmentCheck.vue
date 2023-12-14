@@ -85,6 +85,7 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment";
+import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 let myclass = "2023级1班";
 const search = ref("");
@@ -256,6 +257,7 @@ const assessments = reactive([
     point_total: 10,
   },
 ]);
+const { getColumnWidth } = adaptiveColumnWidthFun(assessments);
 // 数据excel导出
 const handleExcelExport = () => {
   export_json_to_excel(

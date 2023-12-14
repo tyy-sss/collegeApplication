@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-12 22:10:12
+ * @LastEditTime: 2023-12-14 22:20:32
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -76,20 +76,20 @@
       >
       <br /><br />
       <div>
-        <h4>总体综测情况</h4>
+        <h4>本学期总体综测情况</h4>
         <br />
-        <el-table :data="assessment" style="width: 77%">
-          <el-table-column prop="id" label="学号" width="120" />
-          <el-table-column prop="name" label="姓名" width="150" />
-          <el-table-column prop="point1" label="德育得分" width="120" />
-          <el-table-column prop="point2" label="智育得分" width="120" />
-          <el-table-column prop="point3" label="体育得分" width="120" />
-          <el-table-column prop="point4" label="美育得分" width="120" />
-          <el-table-column prop="point5" label="劳动得分" width="120" />
+        <el-table :data="assessment">
+          <el-table-column prop="id" label="学号" />
+          <el-table-column prop="name" label="姓名" />
+          <el-table-column prop="point1" label="德育得分" />
+          <el-table-column prop="point2" label="智育得分" />
+          <el-table-column prop="point3" label="体育得分" />
+          <el-table-column prop="point4" label="美育得分" />
+          <el-table-column prop="point5" label="劳动得分" />
           <el-table-column label="综合测评得分" fixed="right">
-            <el-table-column prop="add_total" label="加分" width="120" />
-            <el-table-column prop="sub_total" label="减分" width="120" />
-            <el-table-column prop="point_total" label="综测总分" width="120" />
+            <el-table-column prop="add_total" label="加分" />
+            <el-table-column prop="sub_total" label="减分" />
+            <el-table-column prop="point_total" label="综测总分" />
           </el-table-column>
         </el-table>
         <br />
@@ -140,9 +140,7 @@ import signatures from "@/components/utils/Signatures.vue";
 import { ref, reactive, computed } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
-import { useRouter } from "vue-router";
-
-const router = useRouter();
+import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 
 const assessment = [
   {
@@ -169,6 +167,8 @@ const assessment = [
     point_total: 20,
   },
 ];
+
+const { getColumnWidth } = adaptiveColumnWidthFun(assessment);
 let state = "未到确认时间";
 //对话框
 const dialogVisible = ref(false);
@@ -197,5 +197,13 @@ function commit() {
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
+el-table el-table-column th {
+  font-size: 1.2rem; /* 1.2rem相当于根元素的字体大小 */
+  color: red !important;
+}
+
+el-table el-table-column td {
+  font-size: 1rem; /* 1rem相当于根元素的字体大小 */
+}
 </style>
   
