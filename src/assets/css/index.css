@@ -4,7 +4,7 @@
  * @LastEditors: STATICHIT 2394412110@qq.com
  * @LastEditTime: 2023-12-13 22:17:09
  * @FilePath: \collegeApplication\src\assets\css\index.css
- * @Description: 配置根长度以保证各个页面使用rem可以以此为依据做到自适应
+ * @Description: 配置根长度以保证各个页面使用rem可以以此为依据做到自适应,以及flex布局和grid布局多页面复用样式
  */
 
 /* 默认字体大小为16px，适用于大多数屏幕 */
@@ -50,4 +50,11 @@ html {
   html {
     font-size: 22px;
   }
+}
+/* 多个div竖直排列内容居中flex布局 */
+.column-center-flex {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
 }

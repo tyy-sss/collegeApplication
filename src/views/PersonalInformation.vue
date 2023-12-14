@@ -1,4 +1,4 @@
-<!--
+<!--router
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
@@ -13,7 +13,9 @@
     </div>
     <hr />
     <br />
+    <!-- 学生信息 -->
     <div v-if="identity === 'student'" class="student">
+      <!-- 证件照区 -->
       <div class="left" v-loading.lock="loading">
         <input
           type="file"
@@ -35,6 +37,7 @@
           >上传证件照</el-button
         >
       </div>
+      <!-- 信息区 -->
       <div class="right">
         <div class="box">
           <div class="littleTitle">基本信息</div>
@@ -125,52 +128,59 @@
           </div>
         </div>
       </div>
+      <!-- 按钮区 -->
       <div class="btnBox">
         <el-button type="primary" class="changeInfo" @click="drawer = true"
           >修改资料</el-button
         >
       </div>
     </div>
+    <!-- 老师信息 -->
     <div v-if="identity === 'teacher'" class="teacher">
-      <div class="box">
-        <div class="littleTitle">基本信息</div>
-        <div class="grid-item">
-          <div>
-            <span class="tag">教师姓名 :</span
-            ><span>{{ teacher.name || "-" }}</span>
+      <!-- 信息区 -->
+      <div>
+        <div class="box">
+          <div class="littleTitle">基本信息</div>
+          <div class="grid-item">
+            <div>
+              <span class="tag">教师姓名 :</span
+              ><span>{{ teacher.name || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">教师编号 :</span
+              ><span>{{ teacher.id || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">身份证号 :</span
+              ><span>{{ teacher.card || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">联系电话 :</span
+              ><span>{{ teacher.phone || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">性别 :</span
+              ><span>{{ teacher.sex || "-" }}</span>
+            </div>
           </div>
-          <div>
-            <span class="tag">教师编号 :</span
-            ><span>{{ teacher.id || "-" }}</span>
-          </div>
-          <div>
-            <span class="tag">身份证号 :</span
-            ><span>{{ teacher.card || "-" }}</span>
-          </div>
-          <div>
-            <span class="tag">联系电话 :</span
-            ><span>{{ teacher.phone || "-" }}</span>
-          </div>
-          <div>
-            <span class="tag">性别 :</span><span>{{ teacher.sex || "-" }}</span>
+        </div>
+        <hr />
+        <br />
+        <div class="box">
+          <div class="littleTitle">其他信息</div>
+          <div class="flex_box">
+            <div class="infoRow">
+              <span class="tag">主任班级 :</span
+              ><span>{{ teacher.manageClass || "-" }}</span>
+            </div>
+            <div class="infoRow">
+              <span class="tag">授课班级 :</span
+              ><span>{{ teacher.teachClass || "-" }}</span>
+            </div>
           </div>
         </div>
       </div>
-      <hr />
-      <div class="box">
-        <div class="littleTitle">其他信息</div>
-        <div class="flex_box">
-          <div class="infoRow">
-            <span class="tag">负责班级 :</span
-            ><span>{{ teacher.manageClass || "-" }}</span>
-          </div>
-          <div class="infoRow">
-            <span class="tag">授课班级 :</span
-            ><span>{{ teacher.teachClass || "-" }}</span>
-          </div>
-        </div>
-      </div>
-
+      <!-- 按钮区 -->
       <div class="btnBox">
         <el-button type="primary" class="changeInfo" @click="drawer = true"
           >修改资料</el-button
@@ -181,10 +191,11 @@
 
   <!-- 修改资料抽屉 -->
   <el-drawer v-model="drawer" direction="ttb" style="min-height: 50%">
+    <!-- 标题 -->
     <template #header>
       <h4>修改资料</h4>
     </template>
-
+    <!-- 内容区 -->
     <template #default>
       <div style="display: flex; flex-direction: column">
         <h4>基本信息</h4>
@@ -222,7 +233,7 @@
         </div>
       </div>
     </template>
-
+    <!-- 尾部按钮区 -->
     <template #footer>
       <div style="flex: auto">
         <el-button @click="cancelClick">取消</el-button>
@@ -236,9 +247,6 @@ import { ref, reactive, onMounted, computed, onBeforeMount } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { getRole } from "@/constants/token";
 import studentFun from "@/api/student";
-import teacherFun from "@/api/teacher";
-import { useRouter } from "vue-router";
-const router = useRouter();
 
 //渲染完之前
 onBeforeMount(() => {
@@ -255,6 +263,7 @@ function Per() {}
 const loading = ref(false);
 let identity = ref(getRole); //获取当前用户身份
 identity.value = "student";
+
 const save = function () {
   if (identity.value === "student") {
     moreDitail.value = true;
@@ -386,30 +395,37 @@ function confirmClick() {
 </script>
 
 <style src="@/assets/css/show-container.css" scoped></style>
-<style scoped>
-.imgBox {
-  width: 100%;
-  height: 13rem;
+<style lang="scss" scoped>
+.left {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  .fileInput {
+    display: none;
+  }
+  .imgBox {
+    width: 100%;
+    height: 13rem;
+    .passport {
+      width: 100%;
+      height: 100%;
+      object-fit: contain;
+    }
+  }
+  .uploadPassport {
+    font-size: 0.8rem;
+    width: 5rem;
+  }
 }
-.passport {
-  width: 100%;
-  height: 100%;
-  object-fit: contain;
-}
-.fileInput {
-  display: none;
-}
-.uploadPassport {
-  font-size: 0.8rem;
-  width: 5rem;
-}
+
 .box {
   padding: 0 0 1rem 0;
+  .littleTitle {
+    margin-bottom: 2rem;
+    font-weight: 1000;
+  }
 }
-.littleTitle {
-  margin-bottom: 2rem;
-  font-weight: 1000;
-}
+
 .tag {
   display: inline-block;
   margin-right: 1rem;
@@ -428,11 +444,6 @@ function confirmClick() {
   display: flex;
   flex-direction: column;
 }
-.changeInfo {
-  width: 6rem;
-  margin-top: 2rem;
-  margin-bottom: 1rem;
-}
 
 .teacher {
   overflow: auto; /* 清除浮动 */
@@ -446,15 +457,15 @@ function confirmClick() {
 .btnBox {
   width: 100%;
   text-align: right;
+  .changeInfo {
+    width: 6rem;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
 }
 .student {
   display: flex;
   flex-wrap: wrap;
-}
-.left {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
 }
 
 @media (max-width: 1000px) {

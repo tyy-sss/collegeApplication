@@ -2,16 +2,15 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-12 22:12:01
+ * @LastEditTime: 2023-12-14 21:25:26
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
 <template>
-  <div class="box">
+  <div class="box column-center-flex">
     <div class="tip">
-      <b>⚠提示：</b><br />
       <div style="margin-left: 20px">
-        <span
+        <span style="color: rgb(163, 6, 6)"
           >▪
           首要提醒：该表格填写关系到您今后的录取学校选择,请一定要认真对待。</span
         ><br />
@@ -26,53 +25,39 @@
       </div>
     </div>
     <!-- 基本信息 -->
-    <div class="info">
-      <el-row class="infoRow">
-        <el-col :span="8">
-          <div>
-            <span class="tag">学生姓名 :</span><span>{{ student.name }}</span>
-          </div></el-col
-        >
-        <el-col :span="8">
-          <div>
-            <span class="tag">学生学号 :</span><span>{{ student.id }}</span>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div>
-            <span class="tag">身份证号 :</span><span>{{ student.card }}</span>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row class="infoRow">
-        <el-col :span="8">
-          <div>
-            <span class="tag">学生性别 :</span><span>{{ student.sex }}</span>
-          </div></el-col
-        >
-        <el-col :span="8">
-          <div>
-            <span class="tag">录取学校 :</span
-            ><span
-              ><b>{{ student.school }}</b></span
-            >
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div>
-            <span class="tag">学生班级 :</span><span>{{ student.class }}</span>
-          </div>
-        </el-col>
-      </el-row>
+    <div class="info-box">
+      <div class="grid-item">
+        <div>
+          <span class="tag">学生姓名 :</span><span>{{ student.name }}</span>
+        </div>
+        <div>
+          <span class="tag">学生学号 :</span><span>{{ student.id }}</span>
+        </div>
+        <div>
+          <span class="tag">身份证号 :</span><span>{{ student.card }}</span>
+        </div>
+        <div>
+          <span class="tag">学生性别 :</span><span>{{ student.sex }}</span>
+        </div>
+        <div>
+          <span class="tag">录取学校 :</span
+          ><span
+            ><b>{{ student.school }}</b></span
+          >
+        </div>
+        <div>
+          <span class="tag">学生班级 :</span><span>{{ student.class }}</span>
+        </div>
+      </div>
     </div>
     <!-- 填写志愿 -->
-    <div class="box2">
+    <div class="volunteers-box">
       <el-form-item label="第一志愿 ：">
         <el-cascader
           :options="options"
           placeholder="请输入专业名称"
           :show-all-levels="false"
-          v-model="object1"
+          v-model="volunteers.object1"
         />
       </el-form-item>
       <el-form-item label="第二志愿 ：">
@@ -80,7 +65,7 @@
           :options="options"
           placeholder="请输入专业名称"
           :show-all-levels="false"
-          v-model="object2"
+          v-model="volunteers.object2"
         />
       </el-form-item>
       <el-form-item label="第三志愿 ：">
@@ -88,13 +73,13 @@
           :options="options"
           placeholder="请输入专业名称"
           :show-all-levels="false"
-          v-model="object3"
+          v-model="volunteers.object3"
         />
       </el-form-item>
     </div>
     <el-button type="primary" @click="submitVolunteer">提交志愿</el-button>
 
-    <div class="tip2">
+    <div class="tip top-border">
       <div><b>说明</b></div>
       <br />
       <div><b>志愿分流规则</b></div>
@@ -113,7 +98,6 @@
 import { ref, reactive, computed } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
-import teacherFun from "@/api/teacher";
 import { useRouter } from "vue-router";
 const router = useRouter();
 let student = {
@@ -125,9 +109,11 @@ let student = {
   school: "湘南学院",
 };
 // 志愿
-let object1 = ref(null);
-let object2 = ref(null);
-let object3 = ref(null);
+let volunteers = reactive({
+  object1: null,
+  object2: null,
+  object3: null,
+});
 const options = reactive([
   {
     value: "计算机科学与工程学院",
@@ -192,53 +178,65 @@ const options = reactive([
 ]);
 // 提交志愿
 function submitVolunteer() {
-  //提交志愿到服务端
-  // router.push({ path: "/volunteer-check" });
-  router.push({ name: "volunteer-check" });
-  ElMessage({
-    message: "修改志愿成功",
-    type: "success",
-  });
+  ElMessageBox.confirm(
+    `您的第一,第二,第三志愿分别为${volunteers.object1},${volunteers.object2},${volunteers.object3},请确认准确无误后提交。`,
+    "Warning",
+    {
+      confirmButtonText: "确认提交",
+      cancelButtonText: "返回修改",
+      type: "warning",
+    }
+  )
+    .then(() => {
+      //提交志愿接口(成功需要把志愿剩余次数减一)
+      // studentFun.user.updataVolunteer().then((res) => {
+      //   if (res.code === 200) {
+      //提交志愿到服务端
+      router.push({ name: "volunteer-check" });
+      ElMessage({
+        type: "success",
+        message: "提交志愿成功",
+      });
+      //   }
+      // });
+    })
+    .catch(() => {});
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
-<style scoped>
+<style lang="scss" scoped>
+$small-margin: 1rem;
+$big-margin: 3rem;
 .box {
   width: 100%;
-  display: flex;
-  justify-content: center;
-  flex-direction: column;
-  align-items: center;
 }
 .tip {
-  line-height: 25px;
-  padding: 20px;
-  margin: 40px 0 40px 0;
-  background-color: rgba(172, 171, 171, 0.082);
-  box-shadow: rgba(50, 50, 105, 0.15) 0px 2px 5px 0px,
-    rgba(0, 0, 0, 0.05) 0px 1px 1px 0px;
-}
-.tip2 {
   color: gray;
-  line-height: 25px;
-  margin: 20px 0;
-  padding: 20px;
-  border-top: 1px solid rgba(87, 86, 86, 0.158);
+  line-height: 1.5rem;
+  margin: $small-margin 0 $small-margin 0;
+  padding: 3rem;
 }
-.info {
-  width: 70%;
+.top-border {
+  border-top: 0.1rem solid rgba(87, 86, 86, 0.158);
+}
+.info-box {
+  width: 80%;
+  margin: $small-margin 0 $small-margin 0;
 }
 .tag {
+  width: 7rem;
   display: inline-block;
-  margin-right: 15px;
-  width: 100px;
+  margin-right: $small-margin;
   text-align: right;
 }
-.infoRow {
-  margin-bottom: 15px;
+.volunteers-box {
+  margin: $big-margin 0;
 }
-.box2 {
-  margin: 40px 0 40px 0;
+.grid-item {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 1rem 1.2rem;
+  grid-auto-flow: row dense;
 }
 </style>
   
