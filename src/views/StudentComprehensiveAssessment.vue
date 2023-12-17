@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-14 22:20:32
+ * @LastEditTime: 2023-12-17 19:27:55
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -55,10 +55,10 @@
             <el-table-column prop="point5" label="得分" width="60" />
           </el-table-column>
           <el-table-column label="当月综合测评得分" fixed="right">
-            <el-table-column prop="add_total" label="月加分" width="80" />
-            <el-table-column prop="sub_total" label="月减分" width="80" />
-            <el-table-column prop="pre_total" label="上月得分" width="90" />
-            <el-table-column prop="point_total" label="当月总分" width="90" />
+            <el-table-column prop="add_total" label="月加分" width="70" />
+            <el-table-column prop="sub_total" label="月减分" width="70" />
+            <el-table-column prop="pre_total" label="上月得分" width="85" />
+            <el-table-column prop="point_total" label="当月总分" width="85" />
           </el-table-column>
         </el-table>
         <br />
@@ -204,6 +204,9 @@ el-table el-table-column th {
 
 el-table el-table-column td {
   font-size: 1rem; /* 1rem相当于根元素的字体大小 */
+}
+.cell{
+  font-size: 4rem !important;
 }
 </style>
   

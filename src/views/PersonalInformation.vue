@@ -44,19 +44,23 @@
           <div class="grid-item">
             <div>
               <span class="tag">学生姓名 :</span
-              ><span>{{ student.name || "-" }}</span>
+              ><span>{{ student.username || "-" }}</span>
             </div>
             <div>
               <span class="tag">学生学号 :</span
-              ><span>{{ student.id || "-" }}</span>
+              ><span>{{ student.userNumber || "-" }}</span>
             </div>
             <div>
               <span class="tag">身份证号 :</span
-              ><span>{{ student.card || "-" }}</span>
+              ><span>{{ student.idCard || "-" }}</span>
             </div>
             <div>
               <span class="tag">联系电话 :</span
               ><span>{{ student.phone || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">父母电话 :</span
+              ><span>{{ student.parentPhone || "-" }}</span>
             </div>
             <div>
               <span class="tag">学生性别 :</span
@@ -64,12 +68,12 @@
             </div>
             <div>
               <span class="tag">学生班级 :</span
-              ><span>{{ student.class || "-" }}</span>
+              ><span>{{ student.className || "-" }}</span>
             </div>
           </div>
           <div style="margin-top: 1rem">
             <span class="tag">家庭地址 :</span
-            ><span>{{ student.home_address || "-" }}</span>
+            ><span>{{ student.address || "-" }}</span>
           </div>
         </div>
         <hr />
@@ -79,7 +83,7 @@
           <div class="grid-item">
             <div>
               <span class="tag">政治面貌 :</span
-              ><span>{{ student.name || "-" }}</span>
+              ><span>{{ student.politicsStatus || "-" }}</span>
             </div>
             <div>
               <span class="tag">目标学校 :</span
@@ -88,19 +92,20 @@
 
             <div>
               <span class="tag">民族 :</span
-              ><span>{{ student.ethnicity || "-" }}</span>
+              ><span>{{ student.nation || "-" }}</span>
             </div>
             <div>
               <span class="tag">来源省份 :</span
               ><span>{{ student.province || "-" }}</span>
             </div>
             <div>
-              <span class="tag">科类 :</span
-              ><span>{{ student.category || "-" }}</span>
+              <span class="tag">科类 :</span>
+              <!-- <span>{{ student.category || "-" }}</span> -->
+              <span>{{ "-" }}</span>
             </div>
             <div>
               <span class="tag">性质计划 :</span
-              ><span>{{ student.nature || "-" }}</span>
+              ><span>{{ student.plan || "-" }}</span>
             </div>
             <div>
               <span class="tag">选考科目 :</span
@@ -115,15 +120,15 @@
           <div class="flex_box pickup_box">
             <div class="infoRow">
               <span class="tag">收件人 :</span>
-              <span>{{ student.recipient || "-" }}</span>
+              <span>{{ student.consignee.username || "-" }}</span>
             </div>
             <div class="infoRow">
               <span class="tag">收件电话 :</span>
-              <span>{{ student.phone2 || "-" }}</span>
+              <span>{{ student.consignee.phone || "-" }}</span>
             </div>
             <div class="infoRow">
               <span class="tag">详细地址 :</span>
-              <span>{{ student.recipient_address || "-" }}</span>
+              <span>{{ student.consignee.address || "-" }}</span>
             </div>
           </div>
         </div>
@@ -214,21 +219,21 @@
             <el-input
               v-model="updataData.recipient"
               style="width: 30%"
-              :placeholder="student.recipient || '-'"
+              :placeholder="student.consignee.username || '-'"
             />
           </el-form-item>
           <el-form-item label="收件电话 ：">
             <el-input
               v-model="updataData.phone2"
               style="width: 30%"
-              :placeholder="student.phone2 || '-'"
+              :placeholder="student.consignee.phone || '-'"
             />
           </el-form-item>
           <el-form-item label="详细地址 ：">
             <el-input
-              v-model="updataData.recipient_address"
+              v-model="updataData.address"
               style="width: 30%"
-              :placeholder="student.recipient_address || '-'"
+              :placeholder="student.consignee.address || '-'"
           /></el-form-item>
         </div>
       </div>
@@ -247,7 +252,9 @@ import { ref, reactive, onMounted, computed, onBeforeMount } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { getRole } from "@/constants/token";
 import studentFun from "@/api/student";
+const data = reactive({
 
+});
 //渲染完之前
 onBeforeMount(() => {
   BeforePer();
@@ -256,22 +263,23 @@ onBeforeMount(() => {
 onMounted(() => {
   Per();
 });
-function BeforePer() {
+function BeforePer() {}
+function Per() {
   save();
 }
-function Per() {}
 const loading = ref(false);
 let identity = ref(getRole); //获取当前用户身份
 identity.value = "student";
 
+//渲染初始数据
 const save = function () {
   if (identity.value === "student") {
     moreDitail.value = true;
     //获取学生信息接口
-    // studentFun.user.getInformation().then((res)=>{
-    //   student = res.data;
-    // })
-    student = studentData;
+    studentFun.user.getInformation().then((res) => {
+      student.value = res;
+      console.log("XXX", student);
+    });
     avatar.value =
       "https://img.zcool.cn/community/01cf695e71cda9a80120a8953bb057.jpg?x-oss-process=image/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100";
   } else if (identity.value === "teacher") {
@@ -299,33 +307,56 @@ function changeidentity() {
 const drawer = ref(false);
 const moreDitail = ref();
 let avatar = ref("");
-let student = reactive({});
-let studentData = {
-  avatar:
-    "https://th.bing.com/th/id/OIP.-yzce0XE8eHoGLr9Dqaw5wHaJ4?w=480&h=640&rs=1&pid=ImgDetMain",
-  name: "付小小",
-  id: "415567569789",
-  card: "365124200103052214",
-  phone: "1385 2222 222",
-  sex: "女",
-  class: "2023级预科1班",
-  politics: "共青团员",
-  school: "湘南学院",
-  ethnicity: "土家族",
-  province: "湖南省",
-  category: "普通类（首选物理）",
-  nature: "国家计划",
-  subjects: "化学+地理",
-  recipient: "小付",
-  phone2: "128 0000 000",
-  home_address: "湖南省张家界市永定区大庸桥街道吉首大学张家界校区",
-  recipient_address: "湖南省长沙市芙蓉区泉升大酒店",
-};
+let student = ref({
+  username: "",
+  userNumber: "",
+  idCard: "",
+  phone: "",
+  parentPhone: "",
+  sex: "",
+  className: "",
+  politicsStatus: "",
+  school: "",
+  nation: "",
+  province: "",
+  plan: "",
+  subjects: "",
+  consignee: {
+    username: "",
+    phone: "",
+    address: "",
+  },
+  address: "",
+});
+// let studentData = {
+//   avatar:
+//     "https://th.bing.com/th/id/OIP.-yzce0XE8eHoGLr9Dqaw5wHaJ4?w=480&h=640&rs=1&pid=ImgDetMain",
+//   username: "付小小",
+//   userNumber: "415567569789",
+//   idCard: "365124200103052214",
+//   phone: "1385 2222 222",
+//   parentPhone:"1481 2222 222",
+//   sex: "女",
+//   className: "2023级预科1班",
+//   politicsStatus: "共青团员",
+//   school: "湘南学院",
+//   nation: "土家族",
+//   province: "湖南省",
+//   category: "普通类（首选物理）",
+//   plan: "国家计划",
+//   subjects: "化学+地理",
+//   consignee:{
+//     username:"小付",
+//     phone:"128 0000 000",
+//     address:"湖南省长沙市芙蓉区泉升大酒店",
+//   },
+//   address: "湖南省张家界市永定区大庸桥街道吉首大学张家界校区",
+// };
 let updataData = reactive({
   phone: "",
-  recipient: "",
+  username: "",
   phone2: "",
-  recipient_address: "",
+  address: "",
 });
 let teacher = reactive({});
 let teacherData = {
@@ -364,6 +395,7 @@ function handleFileSelect(e) {
 function cancelClick() {
   drawer.value = false;
 }
+// 修改资料
 function confirmClick() {
   ElMessageBox.confirm("确定进行资料修改吗")
     .then(() => {
