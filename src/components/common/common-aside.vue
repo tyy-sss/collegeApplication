@@ -153,6 +153,7 @@ onMounted(() => {
 }
 .description {
   font-family: "Times New Roman", Times, serif;
+  font-size: 17px;
 }
 /* 菜单样式设置 */
 .el-menu {
