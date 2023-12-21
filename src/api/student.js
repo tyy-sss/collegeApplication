@@ -10,6 +10,7 @@ import http from "./request";
 
 let studentFun = {
   user: {},
+  sign: {},
 };
 /**
  * 学生获取个人信息
@@ -19,30 +20,23 @@ studentFun.user.getInformation = () => {
 };
 
 /**
- * 学生修改个人信息（收件信息）
+ * 学生修改个人信息（电话以及收件信息）
  */
 studentFun.user.updateInformation = (params) => {
-  return http.put("/student/information",params);
+  return http.put("/student/information", params);
 };
 
 /**
- * 获取班级成员列表
+ * 学生修改密码
  */
- studentFun.user.updateInformation = (params) => {
-  return http.get(`/adviser/students?classId=${params.classId}&userNumber=${params.userNumber}&username=${params.username}&role=${params.role}&current=${params.current}&size=${params.size}`);
+studentFun.user.updatePassword = (password) => {
+  return http.put("/student/password", password);
 };
 
 /**
- * 班主任获取学生个人信息
+ * 上传电子签名
  */
- studentFun.user.getStudentInformation = (params) => {
-  return http.get(`/adviser/student?number=${params.number}`);
-};
-
-/**
- * 班主任修改学生个人信息
- */
- studentFun.user.updateStudentInformation = (params) => {
-  return http.get(`/adviser/student`,params);
+studentFun.sign.submitSignature = (base64Url) => {
+  return http.post("/appraisal/signature", base64Url);
 };
 export default studentFun;

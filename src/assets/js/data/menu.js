@@ -118,6 +118,13 @@ const teacherMenuData = reactive([{
 }])
 const evaluatorMenuData = reactive([
   {
+    id: "788d4075e218daaf4ec77e31",
+    menuType: "1",
+    menuName: "个人信息",
+    path: "/personal-information",
+    icon: "location",
+  },
+  {
     id: "758d7075e218daaf4ec77e31",
     menuType: "1",
     menuName: "综合测评公示",
@@ -133,7 +140,7 @@ const evaluatorMenuData = reactive([
 ])
 
 const giveMenu = (role) => {
-  return studentMenuData;//开发阶段
+  return evaluatorMenuData;//开发阶段
   if (role === "manager") {
     return managerMenuData;
   } else if (role === "student") {

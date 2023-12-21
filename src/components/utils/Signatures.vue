@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-30 22:12:35
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-12 22:24:59
+ * @LastEditTime: 2023-12-21 22:41:19
  * @FilePath: \collegeApplication\src\components\utils\Signatures.vue
  * @Description:电子签名组件
 -->
@@ -55,8 +55,6 @@ const save = () => {
   esign.value
     .generate()
     .then((res) => {
-      //   this.$emit("finsih", res);
-      console.log(res);
       resultImg.value = res;
       emits("finish", res);
     })

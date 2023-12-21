@@ -14,7 +14,11 @@
     <hr />
     <br />
     <!-- 学生信息 -->
-    <div v-if="identity === 'student'" class="student">
+    <div
+      v-if="identity === 'STUDENT'"
+      class="student"
+      v-loading.lock="loading2"
+    >
       <!-- 证件照区 -->
       <div class="left" v-loading.lock="loading">
         <input
@@ -89,7 +93,6 @@
               <span class="tag">目标学校 :</span
               ><span>{{ student.school || "-" }}</span>
             </div>
-
             <div>
               <span class="tag">民族 :</span
               ><span>{{ student.nation || "-" }}</span>
@@ -141,7 +144,7 @@
       </div>
     </div>
     <!-- 老师信息 -->
-    <div v-if="identity === 'teacher'" class="teacher">
+    <div v-if="identity === 'TEACHER'" class="teacher">
       <!-- 信息区 -->
       <div>
         <div class="box">
@@ -149,15 +152,11 @@
           <div class="grid-item">
             <div>
               <span class="tag">教师姓名 :</span
-              ><span>{{ teacher.name || "-" }}</span>
+              ><span>{{ teacher.username || "-" }}</span>
             </div>
             <div>
               <span class="tag">教师编号 :</span
-              ><span>{{ teacher.id || "-" }}</span>
-            </div>
-            <div>
-              <span class="tag">身份证号 :</span
-              ><span>{{ teacher.card || "-" }}</span>
+              ><span>{{ teacher.userNumber || "-" }}</span>
             </div>
             <div>
               <span class="tag">联系电话 :</span
@@ -166,6 +165,14 @@
             <div>
               <span class="tag">性别 :</span
               ><span>{{ teacher.sex || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">民族 :</span
+              ><span>{{ student.nation || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">政治面貌 :</span
+              ><span>{{ teacher.politicsStatus || "-" }}</span>
             </div>
           </div>
         </div>
@@ -176,12 +183,12 @@
           <div class="flex_box">
             <div class="infoRow">
               <span class="tag">主任班级 :</span
-              ><span>{{ teacher.manageClass || "-" }}</span>
+              ><span>{{ teacher.manageClass || "非班主任" }}</span>
             </div>
-            <div class="infoRow">
+            <!-- <div class="infoRow">
               <span class="tag">授课班级 :</span
               ><span>{{ teacher.teachClass || "-" }}</span>
-            </div>
+            </div> -->
           </div>
         </div>
       </div>
@@ -252,54 +259,52 @@ import { ref, reactive, onMounted, computed, onBeforeMount } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { getRole } from "@/constants/token";
 import studentFun from "@/api/student";
-const data = reactive({
+import teacherFun from "@/api/teacher";
+const data = reactive({});
 
-});
-//渲染完之前
-onBeforeMount(() => {
-  BeforePer();
-});
-//渲染完之后
 onMounted(() => {
+  loading2.value=true;
   Per();
 });
-function BeforePer() {}
+
 function Per() {
-  save();
+  init();
 }
 const loading = ref(false);
-let identity = ref(getRole); //获取当前用户身份
-identity.value = "student";
+const loading2 = ref(false);
+let identity = ref(getRole()); //获取当前用户身份
+console.log("获取当前用户身份", identity.value);
+identity.value = "STUDENT";
 
 //渲染初始数据
-const save = function () {
-  if (identity.value === "student") {
+const init = function () {
+  if (identity.value === "STUDENT") {
     moreDitail.value = true;
     //获取学生信息接口
     studentFun.user.getInformation().then((res) => {
       student.value = res;
-      console.log("XXX", student);
-    });
-    avatar.value =
+      avatar.value =
       "https://img.zcool.cn/community/01cf695e71cda9a80120a8953bb057.jpg?x-oss-process=image/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100";
-  } else if (identity.value === "teacher") {
+      loading2.value=false;
+    });
+    } else if (identity.value === "TEACHER") {
     moreDitail.value = false;
     //获取老师信息接口
-    // teacherFun.user.getInformation().then((res)=>{
-    //   teacher = res.data;
-    // })
-    teacher = teacherData;
+    teacherFun.user.getInformation().then((res) => {
+      teacher.value = res;
+      loading2.value=false;
+    });
   }
 };
 
 //方便测试
 function changeidentity() {
-  if (identity.value === "teacher") {
-    identity.value = "student";
-    save();
+  if (identity.value === "TEACHER") {
+    identity.value = "STUDENT";
+    init();
   } else {
-    identity.value = "teacher";
-    save();
+    identity.value = "TEACHER";
+    init();
   }
 }
 
@@ -328,46 +333,13 @@ let student = ref({
   },
   address: "",
 });
-// let studentData = {
-//   avatar:
-//     "https://th.bing.com/th/id/OIP.-yzce0XE8eHoGLr9Dqaw5wHaJ4?w=480&h=640&rs=1&pid=ImgDetMain",
-//   username: "付小小",
-//   userNumber: "415567569789",
-//   idCard: "365124200103052214",
-//   phone: "1385 2222 222",
-//   parentPhone:"1481 2222 222",
-//   sex: "女",
-//   className: "2023级预科1班",
-//   politicsStatus: "共青团员",
-//   school: "湘南学院",
-//   nation: "土家族",
-//   province: "湖南省",
-//   category: "普通类（首选物理）",
-//   plan: "国家计划",
-//   subjects: "化学+地理",
-//   consignee:{
-//     username:"小付",
-//     phone:"128 0000 000",
-//     address:"湖南省长沙市芙蓉区泉升大酒店",
-//   },
-//   address: "湖南省张家界市永定区大庸桥街道吉首大学张家界校区",
-// };
 let updataData = reactive({
   phone: "",
   username: "",
   phone2: "",
   address: "",
 });
-let teacher = reactive({});
-let teacherData = {
-  name: "杨世博",
-  id: "43251648512",
-  card: "51000000000000000X",
-  phone: "1810 0000 000",
-  sex: "男",
-  manageClass: "2022级预科1班",
-  teachClass: "2022级预科1班、2022级预科4班",
-};
+let teacher = ref({});
 //上传证件照假按钮
 function fackBtn() {
   document.getElementById("fileInput").click();
@@ -401,7 +373,7 @@ function confirmClick() {
     .then(() => {
       drawer.value = false;
       //修改资料接口
-      if (identity.value === "student") {
+      if (identity.value === "STUDENT") {
         // studentFun.user.updataInfo().then((res) => {
         //   if (res.code === 200) {
         ElMessage({
@@ -411,7 +383,7 @@ function confirmClick() {
 
         //   }
         // });
-      } else if (identity.value === "teacher") {
+      } else if (identity.value === "TEACHER") {
         // teacherFun.user.updataInfo().then((res) => {
         // if (res.code === 200) {
         ElMessage({
@@ -424,6 +396,42 @@ function confirmClick() {
     })
     .catch(() => {});
 }
+
+//模拟数据
+// let studentData = {
+//   avatar:
+//     "https://th.bing.com/th/id/OIP.-yzce0XE8eHoGLr9Dqaw5wHaJ4?w=480&h=640&rs=1&pid=ImgDetMain",
+//   username: "付小小",
+//   userNumber: "415567569789",
+//   idCard: "365124200103052214",
+//   phone: "1385 2222 222",
+//   parentPhone:"1481 2222 222",
+//   sex: "女",
+//   className: "2023级预科1班",
+//   politicsStatus: "共青团员",
+//   school: "湘南学院",
+//   nation: "土家族",
+//   province: "湖南省",
+//   category: "普通类（首选物理）",
+//   plan: "国家计划",
+//   subjects: "化学+地理",
+//   consignee:{
+//     username:"小付",
+//     phone:"128 0000 000",
+//     address:"湖南省长沙市芙蓉区泉升大酒店",
+//   },
+//   address: "湖南省张家界市永定区大庸桥街道吉首大学张家界校区",
+// };
+// let teacherData = ref({
+//   username: "杨世博",
+//   userNumber: "43251648512",
+//   sex: "男",
+//   nation: "汉族",
+//   politicsStatus: "党员",
+//   phone: "1810 0000 000",
+//   manageClass: "2022级预科1班",
+//   teachClass: "2022级预科1班、2022级预科4班",
+// });
 </script>
 
 <style src="@/assets/css/show-container.css" scoped></style>

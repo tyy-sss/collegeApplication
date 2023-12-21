@@ -1,3 +1,11 @@
+/*
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2023-12-11 21:47:46
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2023-12-21 22:39:31
+ * @FilePath: \collegeApplication\src\main.js
+ * @Description: 介绍文件的作用
+ */
 import { createApp } from "vue";
 import App from "./App.vue";
 import router from "./router";
@@ -11,7 +19,7 @@ import "element-plus/dist/index.css";
 import * as ElIconModules from "@element-plus/icons-vue";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 
-import "default-passive-events";
+// import "default-passive-events";
 import './assets/css/index.css'; // 引入全局样式文
 const app = createApp(App);
 app
