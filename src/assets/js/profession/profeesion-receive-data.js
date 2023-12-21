@@ -12,7 +12,6 @@ const changeStringsType = (item) => {
 
 // 展示所有的分页数据 把后端传过来的数据 处理
 export const handleTableData = (res, tableHeader) => {
-  console.log(res);
   // 表格数据处理 处理strings数组最后一个元素的strings属性
   res.records.forEach((element) => {
     changeStringsType(element);

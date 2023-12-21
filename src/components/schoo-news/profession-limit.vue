@@ -11,7 +11,7 @@
           >
           <profession-information
             ref="professionInformationRef"
-            @get-profession-list="getProfessionList"
+            @get-profession-list="resetProfessionList"
           />
         </div>
         <!-- <div class="add-item">
@@ -55,12 +55,17 @@
                 >查询</el-button
               >
             </div>
+            <div class="search-button">
+              <el-button type="primary" @click="resetProfessionList"
+                >重置</el-button
+              >
+            </div>
           </div>
         </div>
       </div>
       <div class="add">
         <div class="add-item">
-          <el-button type="primary" :icon="Download">导出单页信息</el-button>
+          <el-button type="primary" :icon="Download" @click="handleExportProfession">导出单页信息</el-button>
         </div>
         <div class="add-item">
           <el-button type="primary" :icon="Download">导出所有信息</el-button>
@@ -96,9 +101,9 @@
               <el-input-number
                 v-model="scope.row.enrollmentNumber"
                 class="mx-4"
-                :min="1"
+                :min="0"
                 controls-position="right"
-                @change="handleChangeEnrollmentNumber"
+                @change="handleChangeEnrollmentNumber(scope.row)"
               />
             </template>
           </el-table-column>
@@ -142,16 +147,20 @@ import managerFun from "@/api/manager";
 // 获得路由显示的学校id
 const route = new useRoute();
 const schoolId = ref(route.query.id).value;
-
 // 下拉框数据
 import { optionsChoose } from "@/assets/js/profession/address-cascader";
 // 数据处理
-import { handleCascaderData } from "@/assets/js/profession/profession-send-data";
+import {
+  handleCascaderData,
+  handleCascaderDataForEnrollmentNumber,
+} from "@/assets/js/profession/profession-send-data";
+import { handleProfessionExportData } from '@/assets/js/excel/profession/profession-export'
 import {
   handleTableData,
   handleTableDataForSingle,
 } from "@/assets/js/profession/profeesion-receive-data";
-import { ElMessage } from "element-plus";
+import { debounce } from "@/assets/js/utils/throttle";
+import { ElMessage, ElMessageBox } from "element-plus";
 const data = reactive({
   // 搜索数据
   searchData: {
@@ -186,21 +195,48 @@ const handleSearchProfession = () => {
     getShcoolMajor();
   }
 };
-// 修改专业的录取人数
-const handleChangeEnrollmentNumber = (val) => {
-  console.log(val);
-};
-// const professionAddressRef = ref(null);
-// 选择志愿组合
-// const handleCheckProfessionAddress = () => {
-//   professionAddressRef.value.data.dialogVisible = true;
-// };
+// 导出信息
+const handleExportProfession = () =>{
+  handleProfessionExportData(data.tableHeader);
+}
 // 删除专业
-const handleDeleteProfession = (val) => {};
+const handleDeleteProfession = (val) => {
+  ElMessageBox.confirm("确定删除所选地址组合", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      managerFun.major
+        .deleteMajor(val.majorId)
+        .then((res) => {
+          ElMessage.success("操作成功");
+        })
+        .catch(() => {})
+        .finally(() => {
+          getShcoolMajor();
+        });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "已取消删除",
+      });
+    });
+};
+// 修改专业的录取人数
+const handleChangeEnrollmentNumber = debounce((val) => {
+  changeMajor(handleCascaderDataForEnrollmentNumber(val));
+}, 500);
 const cascaderRef = ref(null);
 // 修改限制专业地区的值
-const handleChangeChooseValue = async (chooseVal, rowVal) => {
-  handleCascaderData(chooseVal, rowVal)
+const handleChangeChooseValue = (chooseVal, rowVal) => {
+  changeMajor(handleCascaderData(chooseVal, rowVal));
+};
+// 修改单个专业限制信息
+const changeMajor = (val) => {
+  managerFun.major
+    .modifyMajor(val)
     .then((res) => {
       // 处理回显数据
       data.tableData = handleTableDataForSingle(res, data.tableData);
@@ -246,13 +282,13 @@ const getShcoolMajor = () => {
     .catch(() => {});
 };
 // 上传成功之后获得专业信息
-const getProfessionList = () => {
+const resetProfessionList = () => {
   data.page.currentPage = 1;
   data.page.nowPageSize = 10;
   data.searchData.searchType = "";
   data.searchData.searchName = "";
   getShcoolMajor();
-};
+};  
 watch(
   () => data.searchData.searchType,
   (newVal, oldVal) => {
@@ -271,6 +307,11 @@ onMounted(() => {
     getShcoolMajor();
   });
 });
+// const professionAddressRef = ref(null);
+// 选择志愿组合
+// const handleCheckProfessionAddress = () => {
+//   professionAddressRef.value.data.dialogVisible = true;
+// };
 </script>
 <style src="@/assets/css/utils/table-center.css" scoped/>
 <style src="@/assets/css/show-container.css" scoped/>

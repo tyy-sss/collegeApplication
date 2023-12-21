@@ -229,4 +229,12 @@ managerFun.major.addMajor = (data) => {
 managerFun.major.modifyMajor = (data) => {
   return http.put("/major/modifyMajor", data);
 };
+/**
+ * 删除专业
+ * @param {专业id} majorIds 
+ * @returns 
+ */
+managerFun.major.deleteMajor = (majorIds) =>{
+  return http.delete("/major/deleteMajor?MajorId="+ majorIds)
+}
 export default managerFun;

@@ -1,4 +1,3 @@
-import managerFun from "@/api/manager";
 // 对联级选择器进行处理成上传到后端的值
 const getCascaderData = (changeData) => {
   let [...data] = changeData;
@@ -24,7 +23,6 @@ const getCascaderData = (changeData) => {
 export const handleCascaderData = (changeData, allData) => {
   // 获得最后上传的联级选择器的值 改成深拷贝
   let cascaderData = getCascaderData(changeData);
-  let rowData = { ...allData };
   let subjectRules = [];
   allData.subjectRule.forEach((element) => {
     if (element.strings.length != 0 && element.areaId != 0) {
@@ -48,12 +46,36 @@ export const handleCascaderData = (changeData, allData) => {
       }
     }
   }
-  return managerFun.major.modifyMajor({
-    college: rowData.college,
-    enrollmenrNumber: rowData.enrollmenrNumber,
-    majorId: rowData.majorId,
-    name: rowData.name,
-    schoolId: rowData.schoolId,
+  return {
+    college: allData.college,
+    enrollmentNumber: allData.enrollmentNumber,
+    majorId: allData.majorId,
+    name: allData.name,
+    schoolId: allData.schoolId,
     subjectRule: subjectRules,
+  };
+};
+
+// 修改专业的人数
+export const handleCascaderDataForEnrollmentNumber = (allData) => {
+  let subjectRules = [];
+  allData.subjectRule.forEach((element) => {
+    if (element.strings.length != 0 && element.areaId != 0) {
+      subjectRules.push(JSON.parse(JSON.stringify(element)));
+    }
   });
+  for (let i = 0; i < subjectRules.length; i++) {
+    let n = subjectRules[i].strings.length - 1;
+    if (subjectRules[i].strings[n] != "") {
+      subjectRules[i].strings[n] = JSON.stringify(subjectRules[i].strings[n]);
+    }
+  }
+  return {
+    college: allData.college,
+    enrollmentNumber: allData.enrollmentNumber,
+    majorId: allData.majorId,
+    name: allData.name,
+    schoolId: allData.schoolId,
+    subjectRule: subjectRules,
+  };
 };
