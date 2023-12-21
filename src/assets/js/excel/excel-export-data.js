@@ -63,7 +63,7 @@ const teacherModelData = reactive([
 // 专业限制 专业信息导出头行
 const professionInformationLimitHeader = reactive({
   college: "教学学院",
-  professionName: "专业名称",
+  name: "专业名称",
 });
 
 export {

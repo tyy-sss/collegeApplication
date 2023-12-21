@@ -7,6 +7,7 @@ let managerFun = {
   school: {},
   area: {},
   subject: {},
+  major: {},
 };
 
 /**
@@ -195,5 +196,50 @@ managerFun.subject.addSubject = (data) => {
  */
 managerFun.subject.deleteSubject = (subjectId) => {
   return http.delete("/subject/delete?subjectIds=" + subjectId);
+};
+
+/** 专业 */
+/**
+ * 通过学校id获得这个学校的专业信息
+ * @param {学校id} schoolId
+ * @returns
+ */
+managerFun.major.selectSchoolMajor = (schoolId, current, size) => {
+  return http.get("/major/selectSchoolMajor?", {
+    schoolId,
+    current,
+    size,
+  });
+};
+/**
+ * 添加专业(excel批量添加)
+ * @param {专业数组} data
+ * @returns
+ */
+managerFun.major.addMajor = (data) => {
+  return http.post("/major/addMajor", data);
+};
+/**
+ * 修改专业
+ * @param {修改后的数据} data
+ * @returns
+ */
+managerFun.major.modifyMajor = (data) => {
+  return http.put("/major/modifyMajor", data);
+};
+/**
+ * 通过学院查询专业
+ * @param {学校id} schoolId
+ */
+managerFun.major.selectCollegeMajor = (college) => {
+  return http.get("/major/selectCollegeMajor?college=" + college);
+};
+/**
+ * 通过专业名查询专业
+ * @param {专业名} name 
+ * @returns 
+ */
+managerFun.major.selectMajor = (name) => {
+  return http.get("/major/selectMajor?name=" + name);
 };
 export default managerFun;
