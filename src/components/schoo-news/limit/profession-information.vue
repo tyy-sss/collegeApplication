@@ -102,6 +102,8 @@ const handleAddUser = async (ev) => {
 const handleExportProfession = () => {
   excelExport([], professionInformationLimitHeader, "专业限制专业信息模板表");
 };
+// 调用父组件的方法
+const emit = defineEmits(["getProfessionList"]);
 // 上传专业文件
 const uploadFile = (val) => {
   for (let i = 0; i < val.length; i++) {
@@ -136,6 +138,7 @@ const uploadFile = (val) => {
     .finally(() => {
       data.upload.isProgress = false;
       data.dialogTableVisible = false;
+      emit("getProfessionList");
     });
 };
 defineExpose({

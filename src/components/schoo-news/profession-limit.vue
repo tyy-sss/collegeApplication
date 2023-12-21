@@ -9,7 +9,10 @@
             @click="handleAddProfessionInformation"
             >添加科目</el-button
           >
-          <profession-information ref="professionInformationRef" />
+          <profession-information
+            ref="professionInformationRef"
+            @get-profession-list="getProfessionList"
+          />
         </div>
         <!-- <div class="add-item">
           <el-button
@@ -143,7 +146,11 @@ const schoolId = ref(route.query.id).value;
 // 下拉框数据
 import { optionsChoose } from "@/assets/js/profession/address-cascader";
 // 数据处理
-import { handleCascaderData } from "@/assets/js/profession/profession-data";
+import { handleCascaderData } from "@/assets/js/profession/profession-send-data";
+import {
+  handleTableData,
+  handleTableDataForSingle,
+} from "@/assets/js/profession/profeesion-receive-data";
 import { ElMessage } from "element-plus";
 const data = reactive({
   // 搜索数据
@@ -151,7 +158,7 @@ const data = reactive({
     searchType: "",
     searchName: "",
     isSearch: false,
-    typeOptions: ["搜索学院", "搜索专业"],
+    typeOptions: ["学院", "专业名称"],
   },
   // 分页数据
   page: {
@@ -176,78 +183,7 @@ const handleSearchProfession = () => {
   if (!data.searchData.isSearch || data.searchData.searchName == "") {
     ElMessage.error("请输入正确数据");
   } else {
-    switch (data.searchData.searchType) {
-      case "搜索学院":
-        managerFun.major
-          .selectCollegeMajor(data.searchData.searchName)
-          .then((res) => {
-            // 分页数据处理
-            data.page.currentPage = res.current;
-            data.page.total = res.total;
-            data.page.nowPageSize = res.size;
-            // 表格数据处理
-            res.records.forEach((element) => {
-              for (let i = 0; i < element.subjectRule.length; i++) {
-                let n = element.subjectRule[i].strings.length - 1;
-                if (element.subjectRule[i].strings[n] != "") {
-                  element.subjectRule[i].strings[n] = JSON.parse(
-                    element.subjectRule[i].strings[n]
-                  );
-                }
-              }
-            });
-            data.tableData = res.records.concat();
-            // 对数据进行处理
-            data.tableData.forEach((element) => {
-              for (let i = 0; i < data.tableHeader.length; i++) {
-                let isExist = element.subjectRule.filter((item) => {
-                  item.areaId == Number(data.tableHeader[i].areaId);
-                });
-                if (isExist.length == 0) {
-                  element.subjectRule.push({
-                    areaId: Number(data.tableHeader[i].areaId),
-                    strings: [],
-                  });
-                }
-              }
-            });
-          });
-        break;
-      case "搜索专业":
-        managerFun.major.selectMajor(data.searchData.searchName).then((res) => {
-          // 分页数据处理
-          data.page.currentPage = res.current;
-          data.page.total = res.total;
-          data.page.nowPageSize = res.size;
-          // 表格数据处理
-          res.records.forEach((element) => {
-            for (let i = 0; i < element.subjectRule.length; i++) {
-              let n = element.subjectRule[i].strings.length - 1;
-              if (element.subjectRule[i].strings[n] != "") {
-                element.subjectRule[i].strings[n] = JSON.parse(
-                  element.subjectRule[i].strings[n]
-                );
-              }
-            }
-          });
-          data.tableData = res.records.concat();
-          // 对数据进行处理
-          data.tableData.forEach((element) => {
-            for (let i = 0; i < data.tableHeader.length; i++) {
-              let isExist = element.subjectRule.filter((item) => {
-                item.areaId == Number(data.tableHeader[i].areaId);
-              });
-              if (isExist.length == 0) {
-                element.subjectRule.push({
-                  areaId: Number(data.tableHeader[i].areaId),
-                  strings: [],
-                });
-              }
-            }
-          });
-        });
-        break;
-    }
+    getShcoolMajor();
   }
 };
 // 修改专业的录取人数
@@ -267,33 +203,7 @@ const handleChangeChooseValue = async (chooseVal, rowVal) => {
   handleCascaderData(chooseVal, rowVal)
     .then((res) => {
       // 处理回显数据
-      for (let i = 0, len = res.subjectRule.length; i < len; i++) {
-        let n = res.subjectRule[i].strings.length - 1;
-        if (res.subjectRule[i].strings[n] != "") {
-          res.subjectRule[i].strings[n] = JSON.parse(
-            res.subjectRule[i].strings[n]
-          );
-        }
-      }
-      for (let i = 0, len = data.tableData.length; i < len; i++) {
-        if (data.tableData[i].majorId == res.majorId) {
-          for (let k = 0, len1 = res.subjectRule.length; k < len1; k++) {
-            for (
-              let j = 0, len2 = data.tableData[i].subjectRule.length;
-              j < len2;
-              j++
-            ) {
-              if (
-                res.subjectRule[k].areaId ==
-                data.tableData[i].subjectRule[j].areaId
-              ) {
-                data.tableData[i].subjectRule[j] = res.subjectRule[k];
-              }
-            }
-          }
-        }
-      }
-      console.log(data.tableData,"修改后的值");
+      data.tableData = handleTableDataForSingle(res, data.tableData);
     })
     .catch(() => {})
     .finally(() => {});
@@ -318,40 +228,30 @@ const getAreaList = () => {
 // 通过学校id获取专业信息
 const getShcoolMajor = () => {
   managerFun.major
-    .selectSchoolMajor(schoolId, data.page.currentPage, data.page.nowPageSize)
+    .selectSchoolMajor(
+      schoolId,
+      data.searchData.searchType,
+      data.searchData.searchName,
+      data.page.currentPage,
+      data.page.nowPageSize
+    )
     .then((res) => {
       // 分页数据处理
       data.page.currentPage = res.current;
       data.page.total = res.total;
       data.page.nowPageSize = res.size;
-      // 表格数据处理
-      res.records.forEach((element) => {
-        for (let i = 0; i < element.subjectRule.length; i++) {
-          let n = element.subjectRule[i].strings.length - 1;
-          if (element.subjectRule[i].strings[n] != "") {
-            element.subjectRule[i].strings[n] = JSON.parse(
-              element.subjectRule[i].strings[n]
-            );
-          }
-        }
-      });
-      data.tableData = res.records.concat();
-      // 对数据进行处理
-      data.tableData.forEach((element) => {
-        for (let i = 0; i < data.tableHeader.length; i++) {
-          let isExist = element.subjectRule.filter((item) => {
-            return item.areaId == Number(data.tableHeader[i].areaId);
-          });
-          if (isExist.length == 0) {
-            element.subjectRule.push({
-              areaId: Number(data.tableHeader[i].areaId),
-              strings: [],
-            });
-          }
-        }
-      });
+      // 表格数据处理 处理strings数组最后一个元素的strings属性
+      data.tableData = handleTableData(res, data.tableHeader);
     })
     .catch(() => {});
+};
+// 上传成功之后获得专业信息
+const getProfessionList = () => {
+  data.page.currentPage = 1;
+  data.page.nowPageSize = 10;
+  data.searchData.searchType = "";
+  data.searchData.searchName = "";
+  getShcoolMajor();
 };
 watch(
   () => data.searchData.searchType,

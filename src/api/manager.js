@@ -204,9 +204,11 @@ managerFun.subject.deleteSubject = (subjectId) => {
  * @param {学校id} schoolId
  * @returns
  */
-managerFun.major.selectSchoolMajor = (schoolId, current, size) => {
+managerFun.major.selectSchoolMajor = (schoolId, type, word, current, size) => {
   return http.get("/major/selectSchoolMajor?", {
     schoolId,
+    type,
+    word,
     current,
     size,
   });
@@ -226,20 +228,5 @@ managerFun.major.addMajor = (data) => {
  */
 managerFun.major.modifyMajor = (data) => {
   return http.put("/major/modifyMajor", data);
-};
-/**
- * 通过学院查询专业
- * @param {学校id} schoolId
- */
-managerFun.major.selectCollegeMajor = (college) => {
-  return http.get("/major/selectCollegeMajor?college=" + college);
-};
-/**
- * 通过专业名查询专业
- * @param {专业名} name 
- * @returns 
- */
-managerFun.major.selectMajor = (name) => {
-  return http.get("/major/selectMajor?name=" + name);
 };
 export default managerFun;
