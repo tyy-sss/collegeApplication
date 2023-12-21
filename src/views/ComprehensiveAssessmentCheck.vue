@@ -84,7 +84,7 @@
 </template>
 <script setup>
 import { ref, reactive, computed } from "vue";
-import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment";
+import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment-style";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 let myclass = "2023级1班";

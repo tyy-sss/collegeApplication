@@ -357,7 +357,7 @@
 <script setup>
 import { ref, reactive, computed } from "vue";
 import signatures from "@/components/utils/Signatures.vue";
-import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment";
+import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment-style";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import studentFun from "@/api/student";
 let myclass = "2023级1班";

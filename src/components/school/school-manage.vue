@@ -39,7 +39,7 @@
         <div class="bottom">
           <div v-for="(item, index) in form.schoolData" :key="index">
             <div class="item">
-              <div class="school-item" @click="checkSchoolNews">
+              <div class="school-item" @click="checkSchoolNews(item)">
                 <div class="first-char">{{ item.name.slice(0, 1) }}</div>
                 <div class="school-name">{{ item.name }}</div>
                 <div class="school-id">学校编号：{{ item.number }}</div>
@@ -208,12 +208,12 @@ const handleClose = () => {
   });
 };
 // 查看学校的具体消息
-const checkSchoolNews = () => {
+const checkSchoolNews = (val) => {
   // 跳转界面
   const href = router.resolve({
     path: "/school-manager/school-news",
     query: {
-      id: "1",
+      id: val.schoolId,
     },
   });
   window.open(href.href, "_blank");

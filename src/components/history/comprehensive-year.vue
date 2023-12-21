@@ -70,7 +70,7 @@
 <script setup>
 import { reactive } from "vue";
 // 导出数据
-import { historyComprehensiveYearHeader } from "@/assets/js/excel/history/comprehensive-data";
+import { historyComprehensiveYearHeader } from "@/assets/js/excel/history/comprehensive-style";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 // 搜索栏数据
 const searchData = reactive({

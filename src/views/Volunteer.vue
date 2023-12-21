@@ -113,7 +113,7 @@
 </template>
 <script setup>
 import { ref, reactive, computed } from "vue";
-import { volunteerHeader } from "@/assets/js/excel/format/volunteer";
+import { volunteerHeader } from "@/assets/js/excel/format/volunteer-style";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 import teacherFun from "@/api/teacher";

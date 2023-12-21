@@ -94,7 +94,7 @@ export let professionInformationLimitCharacter = reactive({
     text: "教学学院",
     type: "string",
   },
-  professionName: {
+  name: {
     text: "专业名称",
     type: "string",
   },

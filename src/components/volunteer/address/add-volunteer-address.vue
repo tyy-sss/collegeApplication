@@ -126,6 +126,7 @@ const handleClose = () => {
   form.dialogVisible = false;
   form.isChange = false;
   form.ruleForm = {};
+  form.ruleForm.subjectNumber = 3;
   // 清楚父组件的信息
   emit("handleClose");
 };

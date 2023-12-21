@@ -53,7 +53,8 @@
   </div>
 </template>
 <script setup>
-import { reactive } from "vue";
+import { reactive, ref } from "vue";
+import { useRoute } from "vue-router";
 import { excelExport } from "@/assets/js/excel/excel-export";
 import { professionInformationLimitHeader } from "@/assets/js/excel/excel-export-data";
 import {
@@ -62,8 +63,11 @@ import {
   excelLeadingIn,
 } from "@/assets/js/excel/excel-leading";
 import { professionInformationLimitCharacter } from "@/assets/js/excel/excel-leading-data";
-
+// 学校id
+const route = new useRoute();
+const schoolId = ref(route.query.id);
 // 接口
+import managerFun from "@/api/manager";
 import { ElMessage } from "element-plus";
 const data = reactive({
   dialogTableVisible: false,
@@ -84,7 +88,6 @@ const handleAddUser = async (ev) => {
     // 没有文件
     ElMessage.error("请上传正确的文件");
   } else {
-    // console.log(file)
     //读取file中的数据
     let data = await readFile(file);
     const excelData = getExcelData(data);
@@ -92,12 +95,51 @@ const handleAddUser = async (ev) => {
       excelData,
       professionInformationLimitCharacter
     );
-    console.log(addData);
+    uploadFile(addData);
   }
 };
 // 导出专业限制专业信息模板表
 const handleExportProfession = () => {
   excelExport([], professionInformationLimitHeader, "专业限制专业信息模板表");
+};
+// 调用父组件的方法
+const emit = defineEmits(["getProfessionList"]);
+// 上传专业文件
+const uploadFile = (val) => {
+  for (let i = 0; i < val.length; i++) {
+    val[i] = {
+      majorId: 0,
+      schoolId: Number(schoolId.value),
+      name: val[i].name,
+      college: val[i].college,
+      subjectRule: [
+        {
+          areaId: 0,
+          requiredSubjects: [""],
+          optionalSubjects: {
+            subjectNumber: 0,
+            optionalSubjectScope: [""],
+          },
+          subjectGroups: [0],
+          strings: [""],
+        },
+      ],
+      enrollmentNumber: 0,
+    };
+  }
+  managerFun.major
+    .addMajor(val)
+    .then((res) => {
+      ElMessage.success("上传成功");
+    })
+    .catch(() => {
+      ElMessage.error("上传失败 ");
+    })
+    .finally(() => {
+      data.upload.isProgress = false;
+      data.dialogTableVisible = false;
+      emit("getProfessionList");
+    });
 };
 defineExpose({
   data,
@@ -107,11 +149,6 @@ defineExpose({
 ::v-deep .el-divider--horizontal {
   margin: 2px 0;
 }
-/* .profession-information {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-} */
 .content {
   display: flex;
   justify-content: center;

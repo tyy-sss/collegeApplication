@@ -1,4 +1,4 @@
-// 节流
+// 节流 立即执行版
 export const throttle = (fn, time) => {
   let timer = null;
   time = time || 1000;
@@ -14,7 +14,7 @@ export const throttle = (fn, time) => {
   };
 };
 
-// 防抖
+// 防抖 非立即执行版
 export const debounce = (fn, time) => {
   time = time || 200;
   // 定时器

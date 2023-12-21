@@ -5,6 +5,7 @@ let labelList = [];
 let vis = [];
 let musts = []; //存储强制选的集合
 let valueList = [];
+let areaId;
 // 强制科目集合
 const mustFunction = (sum, j, vt) => {
   if (sum == 0) {
@@ -92,20 +93,27 @@ const getList = (requiredList, mustList, xuanSum) => {
   mustList.forEach((item) => {
     subjectMustList.push(subjectList[item]);
   });
+  let labelString = getLabelForList(
+    subjectRequiredList,
+    subjectMustList,
+    xuanSum
+  );
   valueList.push({
     value: {
-      SubjectScope: subjectList,
+      areaId: areaId,
+      subjectGroups: subjectList,
       // 必选科目数组
-      RequiredSubject: subjectRequiredList,
+      requiredSubjects: subjectRequiredList,
       // 任选科目
-      OptionalSubjectScope: {
+      optionalSubjects: {
         // 任选科目数量
-        SubjectNum: xuanSum,
+        subjectNumber: xuanSum,
         // 任选科目数组
-        OptionalSubject: [...subjectMustList],
+        optionalSubjectScope: [...subjectMustList],
       },
+      strings: labelString,
     },
-    label: getLabelForList(subjectRequiredList, subjectMustList, xuanSum),
+    label: labelString,
   });
 };
 // 得到Label
@@ -138,18 +146,21 @@ const getLabel = (n) => {
   }
 };
 // 得到总的联级选择框
-export const optionsChoose = () => {
-  subjectList = ["物理", "化学", "生物", "历史", "地理", "政治"];
+export const optionsChoose = (subjectScope, areaIdVal, subjectNumber) => {
+  subjectList =  ["物理", "化学", "生物", "历史", "地理", "政治"];
+  areaId = areaIdVal;
   let firstChildren = [];
   let allList = [
     {
       value: {
-        SubjectScope: subjectList,
-        RequiredSubject: [],
-        OptionalSubjectScope: {
-          SubjectNum: 3,
-          OptionalSubject: [...subjectList],
+        areaId: areaId,
+        subjectGroups: [0],
+        requiredSubjects: [],
+        optionalSubjects: {
+          subjectNumber: 3,
+          optionalSubjectScope: [...subjectList],
         },
+        strings: ["不限科目"],
       },
       label: "不限科目",
     },
@@ -159,7 +170,7 @@ export const optionsChoose = () => {
       children: firstChildren,
     },
   ];
-  for (let i = 1; i <= 3; i++) {
+  for (let i = 1; i <= subjectNumber; i++) {
     getLabel(i);
     firstChildren.push({
       value: i + "门",

@@ -114,9 +114,9 @@ const handleAddUser = async (ev) => {
       addData = excelLeadingIn(excelData, teacherCharacter);
       addData = handleTeacherInformation(addData);
       addTeacherList(addData);
-    }else{
+    } else {
       ElMessage.error("上传失败，表格格式错误");
-      handleColse();
+      handleClose();
     }
   }
 };
@@ -128,7 +128,7 @@ const handleClose = () => {
     resolve((data.dialogVisible = false));
   }).then(() => {
     data.upload.isProgress = false;
-  emit("getUserList");
+    emit("getUserList");
   });
 };
 

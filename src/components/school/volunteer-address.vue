@@ -158,7 +158,6 @@ const handleBatchDeleteAddress = () => {
 };
 // 删除地址组合接口
 const deleteAreaList = (val) => {
-  console.log(val);
   ElMessageBox.confirm("确定删除所选地址组合", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
