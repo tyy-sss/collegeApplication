@@ -141,6 +141,7 @@ const form = reactive({
       },
       { validator: validateName, trigger: "blur" },
     ],
+    number: [{ required: true, message: "请输入学校编号", trigger: "blur" }],
   },
   // 学校数据
   schoolData: [],
@@ -214,6 +215,7 @@ const checkSchoolNews = (val) => {
     path: "/school-manager/school-news",
     query: {
       id: val.schoolId,
+      schoolId: val.number,
     },
   });
   window.open(href.href, "_blank");
