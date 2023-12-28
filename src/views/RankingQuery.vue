@@ -439,16 +439,14 @@ const queryData = [
 @media (max-width: 600px) {
   /* 当屏幕宽度小于等于800px时 */
   .searchBox {
-  .input-with-select {
-    width: 22rem;
+    .input-with-select {
+      width: 22rem;
+    }
   }
 }
-}
 @media (min-width: 600px) and (max-width: 1000px) {
-  
 }
 @media (min-width: 1000px) {
-  
 }
 </style>
   

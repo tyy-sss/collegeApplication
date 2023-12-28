@@ -75,7 +75,7 @@ const ruleFormRef = ref(null);
 const login = throttle(() => {
   ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
-      // 节流
+      // 节流 
       apiFun.user
         .login(userData)
         .then((data) => {
@@ -86,6 +86,7 @@ const login = throttle(() => {
           const href = router.resolve({
             path: "/",
           });
+          console.log("data",data)
           window.open(href.href, "_self");
         })
         .catch((err) => {

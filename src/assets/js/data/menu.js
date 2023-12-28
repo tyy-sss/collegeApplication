@@ -140,16 +140,16 @@ const evaluatorMenuData = reactive([
 ])
 
 const giveMenu = (role) => {
-  return studentMenuData;//开发阶段
-  if (role === "manager") {
+  return studentMenuData;
+  if (role == "manager") {
     return managerMenuData;
-  } else if (role === "student") {
+  } else if (role == 1) {
     return studentMenuData;
-  } else if (role === "headteacher") {
+  } else if (role == 0) {
     return headteacherMenuData;
-  } else if (role === "teacher") {
+  } else if (role == "teacher") {
     return teacherMenuData;
-  } else if (role === "evaluator") {
+  } else if (role == "evaluator") {
     return evaluatorMenuData;
   }
   return managerMenuData;

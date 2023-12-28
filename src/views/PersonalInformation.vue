@@ -14,13 +14,9 @@
     <hr />
     <br />
     <!-- 学生信息 -->
-    <div
-      v-if="identity === 'STUDENT'"
-      class="student"
-      v-loading.lock="loading2"
-    >
+    <div v-if="identity == 1" class="student" v-loading.lock="data.loading2">
       <!-- 证件照区 -->
-      <div class="left" v-loading.lock="loading">
+      <div class="left" v-loading.lock="data.loading">
         <input
           type="file"
           id="fileInput"
@@ -29,8 +25,8 @@
         />
         <div class="imgBox">
           <img
-            v-if="avatar"
-            :src="avatar"
+            v-if="data.avatar"
+            :src="data.avatar"
             class="passport"
             alt="未上传证件照或图片加载有误，请刷新"
           />
@@ -40,6 +36,10 @@
         <el-button class="uploadPassport" @click="fackBtn"
           >上传证件照</el-button
         >
+        <br />
+        <el-button class="uploadPassport" @click="data.drawer2 = true"
+          >修改密码</el-button
+        >
       </div>
       <!-- 信息区 -->
       <div class="right">
@@ -48,36 +48,36 @@
           <div class="grid-item">
             <div>
               <span class="tag">学生姓名 :</span
-              ><span>{{ student.username || "-" }}</span>
+              ><span>{{ data.student.username || "-" }}</span>
             </div>
             <div>
               <span class="tag">学生学号 :</span
-              ><span>{{ student.userNumber || "-" }}</span>
+              ><span>{{ data.student.userNumber || "-" }}</span>
             </div>
             <div>
               <span class="tag">身份证号 :</span
-              ><span>{{ student.idCard || "-" }}</span>
+              ><span>{{ data.student.idCard || "-" }}</span>
             </div>
             <div>
               <span class="tag">联系电话 :</span
-              ><span>{{ student.phone || "-" }}</span>
+              ><span>{{ data.student.phone || "-" }}</span>
             </div>
             <div>
               <span class="tag">父母电话 :</span
-              ><span>{{ student.parentPhone || "-" }}</span>
+              ><span>{{ data.student.parentPhone || "-" }}</span>
             </div>
             <div>
               <span class="tag">学生性别 :</span
-              ><span>{{ student.sex || "-" }}</span>
+              ><span>{{ data.student.sex || "-" }}</span>
             </div>
             <div>
               <span class="tag">学生班级 :</span
-              ><span>{{ student.className || "-" }}</span>
+              ><span>{{ data.student.className || "-" }}</span>
             </div>
           </div>
           <div style="margin-top: 1rem">
             <span class="tag">家庭地址 :</span
-            ><span>{{ student.address || "-" }}</span>
+            ><span>{{ data.student.address || "-" }}</span>
           </div>
         </div>
         <hr />
@@ -87,32 +87,33 @@
           <div class="grid-item">
             <div>
               <span class="tag">政治面貌 :</span
-              ><span>{{ student.politicsStatus || "-" }}</span>
+              ><span>{{ data.student.politicsStatus || "-" }}</span>
             </div>
             <div>
               <span class="tag">目标学校 :</span
-              ><span>{{ student.school || "-" }}</span>
+              ><span>{{ data.student.school || "-" }}</span>
             </div>
             <div>
               <span class="tag">民族 :</span
-              ><span>{{ student.nation || "-" }}</span>
+              ><span>{{ data.student.nation || "-" }}</span>
             </div>
             <div>
               <span class="tag">来源省份 :</span
-              ><span>{{ student.province || "-" }}</span>
+              ><span>{{ data.student.province || "-" }}</span>
             </div>
-            <div>
+            <!-- <div>
               <span class="tag">科类 :</span>
-              <!-- <span>{{ student.category || "-" }}</span> -->
-              <span>{{ "-" }}</span>
-            </div>
+              <span>{{ data.student.category || "-" }}</span>
+            </div> -->
             <div>
               <span class="tag">性质计划 :</span
-              ><span>{{ student.plan || "-" }}</span>
+              ><span>{{ data.student.plan || "-" }}</span>
             </div>
             <div>
-              <span class="tag">选考科目 :</span
-              ><span>{{ student.subjects || "-" }}</span>
+              <span class="tag">选考科目 :</span>
+              <span v-for="(item, index) in data.student.subjects" :key="index"
+                >{{ item }}&nbsp;</span
+              >
             </div>
           </div>
         </div>
@@ -123,28 +124,28 @@
           <div class="flex_box pickup_box">
             <div class="infoRow">
               <span class="tag">收件人 :</span>
-              <span>{{ student.consignee.username || "-" }}</span>
+              <span>{{ data.consignee.username || "-" }}</span>
             </div>
             <div class="infoRow">
               <span class="tag">收件电话 :</span>
-              <span>{{ student.consignee.phone || "-" }}</span>
+              <span>{{ data.consignee.phone || "-" }}</span>
             </div>
             <div class="infoRow">
               <span class="tag">详细地址 :</span>
-              <span>{{ student.consignee.address || "-" }}</span>
+              <span>{{ data.consignee.address || "-" }}</span>
             </div>
           </div>
         </div>
       </div>
       <!-- 按钮区 -->
       <div class="btnBox">
-        <el-button type="primary" class="changeInfo" @click="drawer = true"
+        <el-button type="primary" class="changeInfo" @click="data.drawer = true"
           >修改资料</el-button
         >
       </div>
     </div>
     <!-- 老师信息 -->
-    <div v-if="identity === 'TEACHER'" class="teacher">
+    <div v-if="identity == 0" class="teacher">
       <!-- 信息区 -->
       <div>
         <div class="box">
@@ -152,27 +153,27 @@
           <div class="grid-item">
             <div>
               <span class="tag">教师姓名 :</span
-              ><span>{{ teacher.username || "-" }}</span>
+              ><span>{{ data.teacher.username || "-" }}</span>
             </div>
             <div>
               <span class="tag">教师编号 :</span
-              ><span>{{ teacher.userNumber || "-" }}</span>
+              ><span>{{ data.teacher.userNumber || "-" }}</span>
             </div>
             <div>
               <span class="tag">联系电话 :</span
-              ><span>{{ teacher.phone || "-" }}</span>
+              ><span>{{ data.teacher.phone || "-" }}</span>
             </div>
             <div>
               <span class="tag">性别 :</span
-              ><span>{{ teacher.sex || "-" }}</span>
+              ><span>{{ data.teacher.sex || "-" }}</span>
             </div>
             <div>
               <span class="tag">民族 :</span
-              ><span>{{ student.nation || "-" }}</span>
+              ><span>{{ data.teacher.nation || "-" }}</span>
             </div>
             <div>
               <span class="tag">政治面貌 :</span
-              ><span>{{ teacher.politicsStatus || "-" }}</span>
+              ><span>{{ data.teacher.politicsStatus || "-" }}</span>
             </div>
           </div>
         </div>
@@ -183,26 +184,29 @@
           <div class="flex_box">
             <div class="infoRow">
               <span class="tag">主任班级 :</span
-              ><span>{{ teacher.manageClass || "非班主任" }}</span>
+              ><span>{{ data.teacher.manageClass || "非班主任" }}</span>
             </div>
             <!-- <div class="infoRow">
               <span class="tag">授课班级 :</span
-              ><span>{{ teacher.teachClass || "-" }}</span>
+              ><span>{{ data.teacher.teachClass || "-" }}</span>
             </div> -->
           </div>
         </div>
       </div>
       <!-- 按钮区 -->
       <div class="btnBox">
-        <el-button type="primary" class="changeInfo" @click="drawer = true"
+        <el-button type="primary" class="changeInfo" @click="data.drawer = true"
           >修改资料</el-button
+        >
+        <el-button class="changeInfo" @click="data.drawer2 = true"
+          >修改密码</el-button
         >
       </div>
     </div>
   </div>
 
   <!-- 修改资料抽屉 -->
-  <el-drawer v-model="drawer" direction="ttb" style="min-height: 50%">
+  <el-drawer v-model="data.drawer" direction="ttb" style="min-height: 50%">
     <!-- 标题 -->
     <template #header>
       <h4>修改资料</h4>
@@ -216,31 +220,31 @@
           <el-input
             v-model="updataData.phone"
             style="width: 30%"
-            :placeholder="student.phone || '-'"
+            :placeholder="data.student.phone || '-'"
           />
         </el-form-item>
-        <div v-if="moreDitail">
+        <div v-if="identity == 1">
           <h4>收件信息</h4>
           <br />
           <el-form-item label="收件名称 ：">
             <el-input
-              v-model="updataData.recipient"
+              v-model="updataData.consigneeBo.username"
               style="width: 30%"
-              :placeholder="student.consignee.username || '-'"
+              :placeholder="data.consignee.username || '-'"
             />
           </el-form-item>
           <el-form-item label="收件电话 ：">
             <el-input
-              v-model="updataData.phone2"
+              v-model="updataData.consigneeBo.phone"
               style="width: 30%"
-              :placeholder="student.consignee.phone || '-'"
+              :placeholder="data.consignee.phone || '-'"
             />
           </el-form-item>
           <el-form-item label="详细地址 ：">
             <el-input
-              v-model="updataData.address"
+              v-model="updataData.consigneeBo.address"
               style="width: 30%"
-              :placeholder="student.consignee.address || '-'"
+              :placeholder="data.consignee.address || '-'"
           /></el-form-item>
         </div>
       </div>
@@ -248,8 +252,42 @@
     <!-- 尾部按钮区 -->
     <template #footer>
       <div style="flex: auto">
-        <el-button @click="cancelClick">取消</el-button>
+        <el-button @click="data.drawer = false">取消</el-button>
         <el-button type="primary" @click="confirmClick">确定</el-button>
+      </div>
+    </template>
+  </el-drawer>
+  <!-- 修改资料抽屉 -->
+  <el-drawer v-model="data.drawer2" direction="ttb" style="min-height: 50%">
+    <!-- 标题 -->
+    <template #header>
+      <h4>修改密码</h4>
+    </template>
+    <!-- 内容区 -->
+    <template #default>
+      <div style="display: flex; flex-direction: column">
+        <el-form-item label="新设密码 ：">
+          <el-input
+            v-model="updatePasswords.password"
+            style="width: 30%"
+            type="password"
+            placeholder="请输入新设密码"
+          />
+        </el-form-item>
+        <el-form-item label="确认密码 ：">
+          <el-input
+            v-model="updatePasswords.password2"
+            style="width: 30%"
+            type="password"
+            placeholder="请确认密码"
+        /></el-form-item>
+      </div>
+    </template>
+    <!-- 尾部按钮区 -->
+    <template #footer>
+      <div style="flex: auto">
+        <el-button @click="data.drawer2 = false">取消</el-button>
+        <el-button type="primary" @click="updatePassword">确定</el-button>
       </div>
     </template>
   </el-drawer>
@@ -260,144 +298,148 @@ import { ElMessageBox, ElMessage } from "element-plus";
 import { getRole } from "@/constants/token";
 import studentFun from "@/api/student";
 import teacherFun from "@/api/teacher";
-const data = reactive({});
-
 onMounted(() => {
-  loading2.value=true;
-  Per();
-});
-
-function Per() {
+  data.loading2 = true;
   init();
-}
-const loading = ref(false);
-const loading2 = ref(false);
+});
 let identity = ref(getRole()); //获取当前用户身份
-console.log("获取当前用户身份", identity.value);
-identity.value = "STUDENT";
-
-//渲染初始数据
-const init = function () {
-  if (identity.value === "STUDENT") {
-    moreDitail.value = true;
-    //获取学生信息接口
-    studentFun.user.getInformation().then((res) => {
-      student.value = res;
-      avatar.value =
-      "https://img.zcool.cn/community/01cf695e71cda9a80120a8953bb057.jpg?x-oss-process=image/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100";
-      loading2.value=false;
-    });
-    } else if (identity.value === "TEACHER") {
-    moreDitail.value = false;
-    //获取老师信息接口
-    teacherFun.user.getInformation().then((res) => {
-      teacher.value = res;
-      loading2.value=false;
-    });
-  }
-};
-
-//方便测试
-function changeidentity() {
-  if (identity.value === "TEACHER") {
-    identity.value = "STUDENT";
-    init();
-  } else {
-    identity.value = "TEACHER";
-    init();
-  }
-}
-
-//修改资料抽屉
-const drawer = ref(false);
-const moreDitail = ref();
-let avatar = ref("");
-let student = ref({
-  username: "",
-  userNumber: "",
-  idCard: "",
+// console.log("获取当前用户身份", identity.value);
+const data = reactive({
+  loading: false,
+  loading2: false,
+  drawer: false,
+  drawer2: false,
+  avatar: "",
+  student: {},
+  consignee: {},
+  teacher: {},
+});
+//修改资料数据
+const updataData = reactive({
   phone: "",
-  parentPhone: "",
-  sex: "",
-  className: "",
-  politicsStatus: "",
-  school: "",
-  nation: "",
-  province: "",
-  plan: "",
-  subjects: "",
-  consignee: {
+  consigneeBo: {
     username: "",
     phone: "",
     address: "",
   },
-  address: "",
 });
-let updataData = reactive({
-  phone: "",
-  username: "",
-  phone2: "",
-  address: "",
+//修改密码数据
+const updatePasswords = reactive({
+  password: "",
+  password2: "",
 });
-let teacher = ref({});
+//渲染初始数据
+const init = function () {
+  if (identity.value == 1) {
+    //获取学生信息
+    studentFun.user.getInformation().then((res) => {
+      data.student = res;
+      data.consignee = res.consignee;
+      console.log("学生信息", data.student);
+      data.avatar =
+        "https://img.zcool.cn/community/01cf695e71cda9a80120a8953bb057.jpg?x-oss-process=image/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100";
+      data.loading2 = false;
+    });
+  } else if (identity.value == 0) {
+    //获取老师信息
+    teacherFun.user.getInformation().then((res) => {
+      data.teacher = res;
+      data.loading2 = false;
+    });
+  }
+};
 //上传证件照假按钮
 function fackBtn() {
   document.getElementById("fileInput").click();
 }
 //上传证件照并回显
 function handleFileSelect(e) {
-  loading.value = true;
+  data.loading = true;
   const file = e.target.files[0];
   console.log(file);
   const formData = new FormData();
   formData.append("file", file);
   //传文件给后端（对接口）
   // studentFun.user.setAvatar(formData).then((res)=>{
-  //   student.avatar = res.data.avatar;
+  //   data.avatar = res.data.avatar;
   // })
   let myAvatar =
     "https://th.bing.com/th/id/OIP.-yzce0XE8eHoGLr9Dqaw5wHaJ4?w=480&h=640&rs=1&pid=ImgDetMain";
   //返回虚拟路径
   setTimeout(() => {
-    avatar.value = myAvatar;
-    loading.value = false;
+    data.avatar = myAvatar;
+    data.loading = false;
   }, 2000);
 }
-//抽屉按钮
-function cancelClick() {
-  drawer.value = false;
-}
-// 修改资料
+//修改资料
 function confirmClick() {
   ElMessageBox.confirm("确定进行资料修改吗")
     .then(() => {
-      drawer.value = false;
+      data.drawer = false;
       //修改资料接口
-      if (identity.value === "STUDENT") {
-        // studentFun.user.updataInfo().then((res) => {
-        //   if (res.code === 200) {
-        ElMessage({
-          message: "修改资料成功",
-          type: "success",
+      if (identity.value == 1) {
+        studentFun.user.updateInformation(updataData).then((res) => {
+          ElMessage.success(res);
         });
-
-        //   }
-        // });
-      } else if (identity.value === "TEACHER") {
-        // teacherFun.user.updataInfo().then((res) => {
-        // if (res.code === 200) {
-        ElMessage({
-          message: "修改资料成功",
-          type: "success",
+      } else if (identity.value == 0) {
+        teacherFun.user.updatePhone(updataData.phone).then((res) => {
+          ElMessage.success(res);
         });
-        //   }
-        // });
       }
+      Object.keys(updataData).forEach((key) => (updataData[key] = "")); //快速清空内容
+      init();
     })
     .catch(() => {});
 }
-
+//修改密码
+function updatePassword() {
+  if (updatePasswords.password == "" || updatePasswords.password2 == "") {
+    ElMessage.error("新密码或确认密码不能为空");
+  } else {
+    if (updatePasswords.password !== updatePasswords.password2) {
+      ElMessage.error("两次密码输入不一致");
+    } else {
+      if (identity.value == 1) {
+        //学生修改密码
+        studentFun.user.updatePassword(updatePasswords.password).then((res) => {
+          ElMessage.success(res);
+          data.drawer2 = false;
+        });
+      } else if (identity.value == 0) {
+        //老师修改密码
+        teacherFun.user.updatePassword(updatePasswords.password).then((res) => {
+          ElMessage.success(res);
+          data.drawer2 = false;
+        });
+      }
+      Object.keys(updatePasswords).forEach(
+        (key) => (updatePasswords[key] = "")
+      ); //快速清空内容
+    }
+  }
+}
 //模拟数据
+// let student = ref({
+//   username: "",
+//   userNumber: "",
+//   idCard: "",
+//   phone: "",
+//   parentPhone: "",
+//   sex: "",
+//   className: "",
+//   politicsStatus: "",
+//   school: "",
+//   nation: "",
+//   province: "",
+//   plan: "",
+//   subjects: {},
+//   consignee: {
+//     username: "",
+//     phone: "",
+//     address: "",
+//   },
+//   address: "",
+// });
 // let studentData = {
 //   avatar:
 //     "https://th.bing.com/th/id/OIP.-yzce0XE8eHoGLr9Dqaw5wHaJ4?w=480&h=640&rs=1&pid=ImgDetMain",
@@ -540,4 +582,3 @@ function confirmClick() {
   }
 }
 </style>
-  

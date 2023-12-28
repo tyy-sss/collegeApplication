@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-14 21:25:26
+ * @LastEditTime: 2023-12-26 21:07:52
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -178,29 +178,37 @@ const options = reactive([
 ]);
 // 提交志愿
 function submitVolunteer() {
-  ElMessageBox.confirm(
-    `您的第一,第二,第三志愿分别为${volunteers.object1},${volunteers.object2},${volunteers.object3},请确认准确无误后提交。`,
-    "Warning",
-    {
-      confirmButtonText: "确认提交",
-      cancelButtonText: "返回修改",
-      type: "warning",
-    }
-  )
-    .then(() => {
-      //提交志愿接口(成功需要把志愿剩余次数减一)
-      // studentFun.user.updataVolunteer().then((res) => {
-      //   if (res.code === 200) {
-      //提交志愿到服务端
-      router.push({ name: "volunteer-check" });
-      ElMessage({
-        type: "success",
-        message: "提交志愿成功",
-      });
-      //   }
-      // });
-    })
-    .catch(() => {});
+  if (
+    volunteers.object1 == null ||
+    volunteers.object2 == null ||
+    volunteers.object3 == null
+  ) {
+    ElMessage.error("志愿不能为空，请认真完成志愿填报");
+  } else {
+    ElMessageBox.confirm(
+      `您的第一,第二,第三志愿分别为【${volunteers.object1}】,【${volunteers.object2}】,【${volunteers.object3}】,请确认准确无误后提交。`,
+      "Warning",
+      {
+        confirmButtonText: "确认提交",
+        cancelButtonText: "返回修改",
+        type: "warning",
+      }
+    )
+      .then(() => {
+        //提交志愿接口(成功需要把志愿剩余次数减一)
+        // studentFun.user.updataVolunteer().then((res) => {
+        //   if (res.code === 200) {
+        //提交志愿到服务端
+        router.push({ name: "volunteer-check" });
+        ElMessage({
+          type: "success",
+          message: "提交志愿成功",
+        });
+        //   }
+        // });
+      })
+      .catch(() => {});
+  }
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>

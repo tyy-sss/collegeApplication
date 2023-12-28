@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-05 21:22:27
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-24 11:44:53
+ * @LastEditTime: 2023-12-27 22:37:55
  * @FilePath: \collegeApplication\src\api\teacher.js
  * @Description: 介绍文件的作用
  */
@@ -13,6 +13,7 @@ let teacherFun = {
   user: {},
   class: {},
   assessment: {},
+  complaint:{},
 };
 /**
  * 老师获取个人信息
@@ -23,22 +24,22 @@ teacherFun.user.getInformation = () => {
 /**
  * 老师修改电话号码
  */
-teacherFun.user.updatePhone = () => {
-  return http.put("/teacher/phone");
+teacherFun.user.updatePhone = (phone) => {
+  return http.put("/teacher/phone",phone);
 };
 
 /**
  * 老师修改密码
  */
-teacherFun.user.updatePassword = () => {
-  return http.put("/teacher/password");
+teacherFun.user.updatePassword = (password) => {
+  return http.put("/teacher/password",password);
 };
 
 /**
  * 获取班级成员列表
  */
 teacherFun.class.updateInformation = (params) => {
-  return http.get(`/adviser/students?classId=${params.classId}&userNumber=${params.userNumber}&username=${params.username}&role=${params.role}&current=${params.current}&size=${params.size}`);
+  return http.get(`/adviser/students?userNumber=${params.userNumber}&username=${params.username}&role=${params.role}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
 };
 
 /**
@@ -79,7 +80,7 @@ teacherFun.assessment.getAssessments = (params) => {
 /**
  * 班主任修获取班级内的申诉
  */
-teacherFun.assessment.getAssessments = (params) => {
-  return http.get(`/adviser/appeals?username=${params.username}&userNumber=${params.userNumber}&state=${params.state}&current=${params.current}&size=${params.size}`);
+teacherFun.complaint.getAssessments = () => {
+  return http.get(`/adviser/appeals`);
 };
 export default teacherFun;
