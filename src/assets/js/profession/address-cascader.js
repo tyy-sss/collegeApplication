@@ -160,7 +160,7 @@ export const optionsChoose = (subjectScope, areaIdVal, subjectNumber) => {
           subjectNumber: 3,
           optionalSubjectScope: [...subjectList],
         },
-        strings: ["不限科目"],
+        strings: "不限科目",
       },
       label: "不限科目",
     },

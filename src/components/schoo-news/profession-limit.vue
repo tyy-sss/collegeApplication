@@ -65,7 +65,12 @@
       </div>
       <div class="add">
         <div class="add-item">
-          <el-button type="primary" :icon="Download" @click="handleExportProfession">导出单页信息</el-button>
+          <el-button
+            type="primary"
+            :icon="Download"
+            @click="handleExportProfession"
+            >导出单页信息</el-button
+          >
         </div>
         <div class="add-item">
           <el-button type="primary" :icon="Download">导出所有信息</el-button>
@@ -146,7 +151,7 @@ import { Download, Plus } from "@element-plus/icons-vue";
 import managerFun from "@/api/manager";
 // 获得路由显示的学校id
 const route = new useRoute();
-const schoolId = ref(route.query.id).value;
+const schoolId = ref(route.query.schoolId).value;
 // 下拉框数据
 import { optionsChoose } from "@/assets/js/profession/address-cascader";
 // 数据处理
@@ -154,7 +159,7 @@ import {
   handleCascaderData,
   handleCascaderDataForEnrollmentNumber,
 } from "@/assets/js/profession/profession-send-data";
-import { handleProfessionExportData } from '@/assets/js/excel/profession/profession-export'
+import { handleProfessionExportData } from "@/assets/js/excel/profession/profession-export";
 import {
   handleTableData,
   handleTableDataForSingle,
@@ -196,9 +201,9 @@ const handleSearchProfession = () => {
   }
 };
 // 导出信息
-const handleExportProfession = () =>{
-  handleProfessionExportData(data.tableHeader);
-}
+const handleExportProfession = () => {
+  handleProfessionExportData(data.tableHeader, data.tableData);
+};
 // 删除专业
 const handleDeleteProfession = (val) => {
   ElMessageBox.confirm("确定删除所选地址组合", {
@@ -288,7 +293,7 @@ const resetProfessionList = () => {
   data.searchData.searchType = "";
   data.searchData.searchName = "";
   getShcoolMajor();
-};  
+};
 watch(
   () => data.searchData.searchType,
   (newVal, oldVal) => {

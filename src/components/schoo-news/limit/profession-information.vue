@@ -65,7 +65,7 @@ import {
 import { professionInformationLimitCharacter } from "@/assets/js/excel/excel-leading-data";
 // 学校id
 const route = new useRoute();
-const schoolId = ref(route.query.id);
+const schoolId = ref(route.query.schoolId);
 // 接口
 import managerFun from "@/api/manager";
 import { ElMessage } from "element-plus";
