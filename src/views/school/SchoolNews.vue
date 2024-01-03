@@ -23,7 +23,7 @@ import { ref } from "vue";
 import volunteerTime from "@/components/schoo-news/volunteer-time.vue";
 import professionLimit from "@/components/schoo-news/profession-limit.vue";
 import professionShunt from "@/components/schoo-news/profession-shunt.vue";
-let activeName = ref("first");
+let activeName = ref("second");
 </script>
 <style src="@/assets/css/show-container.css" scoped/>
 <style scoped>

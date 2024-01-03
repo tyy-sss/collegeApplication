@@ -8,7 +8,6 @@
         <div class="main">
             <router-view />
         </div>
-       
       </el-main>
     </el-container>
   </div>
