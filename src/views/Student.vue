@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-28 20:01:40
+ * @LastEditTime: 2024-01-20 16:50:05
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -147,7 +147,7 @@
   <!-- 对话框1 -->
   <el-dialog v-model="data.dialogVisible" title="💬 待申述处理" width="50%">
     <div>
-      <el-table :data="complaintData" style="width: 100%">
+      <el-table :data="data.complaintData" style="width: 100%">
         <el-table-column type="index" />
         <el-table-column label="申诉学生姓名" prop="name" min-width="120" />
         <el-table-column label="学号" prop="id" min-width="100" />
@@ -244,15 +244,46 @@ const data = reactive({
   // dialogVisible2: false,
   dialogVisible3: false,
   multipleSelection: [],
-  studentsData:[],//学生列表
-  evaluationData: [],//测评小组列表
-  complaintData:[],//申诉列表
+  studentsData: [], //学生列表
+  evaluationData: [], //测评小组列表
+  //申诉列表
+  complaintData: [
+    {
+      date: "2023-05-07",
+      id: "2022100030",
+      name: "杨世博",
+      content: "个人信息性别错误，需要更改为男",
+    },
+    {
+      date: "2023-05-11",
+      name: "李珊",
+      id: "2022100030",
+      content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
+    },
+    {
+      date: "2023-05-24",
+      name: "涂圆元",
+      id: "2022100031",
+      content: "个人信息民族错误，需要更改为土家族",
+    },
+    {
+      date: "2023-05-11",
+      name: "陈翔",
+      id: "2022100032",
+      content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
+    },
+    {
+      date: "2023-05-12",
+      name: "刘橙晨",
+      id: "2022100040",
+      content: "个人信息目标学校错误，需要修改为‘长沙学院’",
+    },
+  ],
   page: {
     total: 200, // 总条数
     currentPage: 1, // 当前页
     pageSize: 8, //一页的数据量
   },
-
 });
 
 //获取数据
@@ -272,7 +303,7 @@ function getDatas() {
     .then((res) => {
       console.log(res);
       data.studentsData = res.records;
-      data.page.total=res.total;
+      data.page.total = res.total;
       //填装测评小组列表
       data.studentsData.forEach((item) => {
         if (item.identity == 2) {
@@ -281,39 +312,6 @@ function getDatas() {
       });
     });
 }
-// 申诉列表
-const complaintData = [
-  {
-    date: "2023-05-07",
-    id: "2022100030",
-    name: "杨世博",
-    content: "个人信息性别错误，需要更改为男",
-  },
-  {
-    date: "2023-05-11",
-    name: "李珊",
-    id: "2022100030",
-    content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
-  },
-  {
-    date: "2023-05-24",
-    name: "涂圆元",
-    id: "2022100031",
-    content: "个人信息民族错误，需要更改为土家族",
-  },
-  {
-    date: "2023-05-11",
-    name: "陈翔",
-    id: "2022100032",
-    content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
-  },
-  {
-    date: "2023-05-12",
-    name: "刘橙晨",
-    id: "2022100040",
-    content: "个人信息目标学校错误，需要修改为‘长沙学院’",
-  },
-];
 //多选选项改变
 const handleSelectionChange = (val) => {
   data.multipleSelection = val;

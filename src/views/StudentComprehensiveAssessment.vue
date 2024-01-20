@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-17 19:27:55
+ * @LastEditTime: 2024-01-20 16:37:51
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -15,18 +15,24 @@
     <br />
     <div>
       <el-form-item label="本月确认情况 ：">
-        {{ state }}
+        {{ data.state }}
         <span style="color: rgb(167, 167, 167); margin-left: 15px">
           (已确认/正在申报/待确认/未到确认时间)</span
         >
       </el-form-item>
+      <el-button type="primary" @click="data.dialogVisible3 = true"
+        >申报历史</el-button
+      >
+      <el-button type="danger" @click="data.dialogVisible2 = true"
+        >申报错误</el-button
+      >
     </div>
     <br />
     <div>
       <div>
         <h4>本月综测情况确认</h4>
         <br />
-        <el-table :data="assessment" style="width: 100%">
+        <el-table :data="data.assessment" style="width: 100%">
           <el-table-column prop="id" label="学号" width="120" />
           <el-table-column prop="name" label="姓名" width="150" />
           <el-table-column label="德育">
@@ -63,11 +69,8 @@
         </el-table>
         <br />
       </div>
-      <el-button type="primary" @click="dialogVisible = true"
+      <el-button type="primary" @click="data.dialogVisible = true"
         >前往电子签名</el-button
-      >
-      <el-button type="danger" @click="dialogVisible2 = true"
-        >申报错误</el-button
       >
       <br />
       <span style="color: rgb(167, 167, 167)"
@@ -78,7 +81,7 @@
       <div>
         <h4>本学期总体综测情况</h4>
         <br />
-        <el-table :data="assessment">
+        <el-table :data="data.assessment">
           <el-table-column prop="id" label="学号" />
           <el-table-column prop="name" label="姓名" />
           <el-table-column prop="point1" label="德育得分" />
@@ -97,22 +100,22 @@
     </div>
   </div>
   <!-- 电子签名对话框 -->
-  <el-dialog v-model="dialogVisible" title="电子签名" width="50%">
+  <el-dialog v-model="data.dialogVisible" title="电子签名" width="50%">
     <div>
       <signatures></signatures>
     </div>
   </el-dialog>
   <!-- 申报错误对话框 -->
-  <el-dialog v-model="dialogVisible2" title="申报错误" width="30%">
+  <el-dialog v-model="data.dialogVisible2" title="申报错误" width="30%">
     <div>
-      <el-form-item label="申报接收对象：">
+      <el-form-item label="申诉问题类型：">
         <el-select
-          v-model="target"
+          v-model="data.target"
           class="m-2"
-          placeholder="请选择申报接收对象"
+          placeholder="请选择申报问题类型"
         >
           <el-option
-            v-for="item in targets"
+            v-for="item in data.targets"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -121,7 +124,7 @@
       </el-form-item>
       <el-form-item label="错误申报内容：">
         <el-input
-          v-model="textarea"
+          v-model="data.textarea"
           :autosize="{ minRows: 6, maxRows: 10 }"
           type="textarea"
           placeholder="请输入错误申报内容"
@@ -134,6 +137,33 @@
       </span>
     </template>
   </el-dialog>
+  <!-- 申诉历史对话框 -->
+  <el-dialog v-model="data.dialogVisible3" title="💬 待申述处理" width="50%">
+    <div>
+      <el-table :data="data.complaintData" style="width: 100%">
+        <el-table-column type="index" />
+        <el-table-column label="申诉接收对象" prop="name" min-width="120" />
+        <el-table-column label="申诉内容" prop="content" min-width="300" />
+        <el-table-column label="申诉时间" prop="date" min-width="100" />
+        <el-table-column label="操作" min-width="150">
+          <template #default="scope">
+            <el-button
+              size="small"
+              type="danger"
+              @click="handleDelete(scope.$index, scope.row)"
+              >已处理</el-button
+            >
+            <el-button
+              size="small"
+              type="danger"
+              @click="handleDelete(scope.$index, scope.row)"
+              >删除</el-button
+            >
+          </template>
+        </el-table-column>
+      </el-table>
+    </div>
+  </el-dialog>
 </template>
 <script setup>
 import signatures from "@/components/utils/Signatures.vue";
@@ -142,58 +172,98 @@ import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 
-const assessment = [
-  {
-    id: "2021401449",
-    name: "付小小",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-];
-
-const { getColumnWidth } = adaptiveColumnWidthFun(assessment);
-let state = "未到确认时间";
-//对话框
-const dialogVisible = ref(false);
-const dialogVisible2 = ref(false);
-const target = ref("");
-
-const targets = [
-  {
-    value: "1",
-    label: "班主任",
-  },
-  {
-    value: "2",
-    label: "评测小组同学",
-  },
-];
-const textarea = ref("");
+const data = reactive({
+  state: "未到确认时间",
+  assessment: [
+    {
+      id: "2021401449",
+      name: "付小小",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+  ],
+  dialogVisible: false,
+  dialogVisible2: false,
+  dialogVisible3: false,
+  target: "",
+  targets: [
+    {
+      value: "1",
+      label: "综测问题",
+    },
+    {
+      value: "2",
+      label: "其他问题",
+    },
+  ],
+  textarea: "",
+  // 申诉列表
+  complaintData: [
+    {
+      date: "2023-05-07",
+      id: "2022100030",
+      name: "测评小组",
+      content: "个人信息性别错误，需要更改为男",
+    },
+    {
+      date: "2023-05-11",
+      name: "测评小组",
+      id: "2022100030",
+      content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
+    },
+    {
+      date: "2023-05-24",
+      name: "测评小组",
+      id: "2022100031",
+      content: "个人信息民族错误，需要更改为土家族",
+    },
+    {
+      date: "2023-05-11",
+      name: "班主任",
+      id: "2022100032",
+      content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
+    },
+    {
+      date: "2023-05-12",
+      name: "班主任",
+      id: "2022100040",
+      content: "个人信息目标学校错误，需要修改为‘长沙学院’",
+    },
+  ],
+});
 //提交申报
 function commit() {
-  dialogVisible2.value = false;
-  ElMessage({
-    message: "已申报错误，请耐心等待处理",
-    type: "success",
-  });
+  studentFun.complaint
+    .submitComplaint({
+      content: "",
+      type: "",
+    })
+    .then((res) => {
+      data.dialogVisible2 = false;
+      ElMessage({
+        message: "已申报错误，请耐心等待处理",
+        type: "success",
+      });
+    });
 }
+const { getColumnWidth } = adaptiveColumnWidthFun(data.assessment);
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
@@ -205,7 +275,7 @@ el-table el-table-column th {
 el-table el-table-column td {
   font-size: 1rem; /* 1rem相当于根元素的字体大小 */
 }
-.cell{
+.cell {
   font-size: 4rem !important;
 }
 </style>

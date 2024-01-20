@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-30 22:12:35
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-21 22:41:19
+ * @LastEditTime: 2024-01-03 21:36:05
  * @FilePath: \collegeApplication\src\components\utils\Signatures.vue
  * @Description:电子签名组件
 -->
@@ -69,11 +69,11 @@ const save = () => {
 </script>
 <style scoped>
 .btn button {
-  height: 25px;
-  width: 80px;
+  height: 2rem;
+  width: 6rem;
   border: 1px solid #5097ff;
   color: #5097ff;
-  border-radius: 15px;
+  border-radius: 1rem;
   background: none;
 }
 .hello {
@@ -85,8 +85,8 @@ const save = () => {
   border: 1px solid #cccccc;
 }
 .text {
-  margin-left: 10px;
-  margin-top: 20px;
+  margin-left: .5rem;
+  margin-top: 1rem;
   font-weight: bold;
 }
 .btn {
@@ -95,14 +95,14 @@ const save = () => {
 }
 .btnA {
   text-align: center;
-  margin-top: 30px;
+  margin-top: 1.5rem;
 }
 .btnA button {
-  height: 35px;
+  height: 2rem;
   width: 30%;
   color: white;
-  font-size: 16px;
-  border-radius: 15px;
+  font-size: 1rem;
+  border-radius: 1rem;
   background: #5097ff;
   border: none;
 }

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-21 22:40:12
+ * @LastEditTime: 2024-01-20 16:44:31
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -12,7 +12,7 @@
       <div class="text">综合测评表编辑</div>
     </div>
     <hr />
-    <h1>{{ myclass }}班级综合测评表[{{ month }}]</h1>
+    <h1>{{ data.myclass }}班级综合测评表[{{ data.month }}]</h1>
     <!-- 顶部，查询按钮，导出按钮 -->
     <div style="height: 40px">
       <span style="float: left">学生姓名: &nbsp;</span>
@@ -25,7 +25,7 @@
       <el-button
         type="warning"
         style="float: right; margin-left: 1rem"
-        @click="dialogVisible2 = true"
+        @click="data.dialogVisible2 = true"
         ><el-icon><Memo /></el-icon>&nbsp; 错误申报</el-button
       >
       <el-button style="float: right" @click="handleExcelExport"
@@ -34,7 +34,7 @@
     </div>
     <!-- 测评编辑表 -->
     <el-table
-      :data="assessments"
+      :data="data.assessments"
       style="width: 100%"
       @cell-mouse-enter="handleCellEnter"
       @cell-mouse-leave="handleCellLeave"
@@ -309,21 +309,21 @@
     </div>
     <!-- 提交按钮 -->
     <div class="submitBtn">
-      <el-button type="primary" @click="dialogVisible = true"
+      <el-button type="primary" @click="cdialogVisible = true"
         >提交本月测评结果</el-button
       >
     </div>
   </div>
   <!-- 电子签名对话框 -->
-  <el-dialog v-model="dialogVisible" title="电子签名" width="50%">
+  <el-dialog v-model="data.dialogVisible" title="电子签名" width="100%">
     <div>
       <signatures @finish="finish"></signatures>
     </div>
   </el-dialog>
   <!-- 申诉列表对话框 -->
-  <el-dialog v-model="dialogVisible2" title="💬 待申述处理" width="50%">
+  <el-dialog v-model="data.dialogVisible2" title="💬 待申述处理" width="50%">
     <div>
-      <el-table :data="complaintData" style="width: 100%">
+      <el-table :data="data.complaintData" style="width: 100%">
         <el-table-column type="index" />
         <el-table-column label="申诉学生姓名" prop="name" min-width="120" />
         <el-table-column label="学号" prop="id" min-width="100" />
@@ -360,241 +360,277 @@ import signatures from "@/components/utils/Signatures.vue";
 import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment-style";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import studentFun from "@/api/student";
-let myclass = "2023级1班";
-let month = "三月";
-const assessments = reactive([
-  {
-    id: "20222113001",
-    name: "吾尔肯·塞里克",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-  {
-    id: "20222113002",
-    name: "玉苏普·吐荪江",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-  {
-    id: "20222113003",
-    name: "沙亚拉·江阿努尔",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-  {
-    id: "20222113004",
-    name: "吐尔逊娜衣·托呼提",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-  {
-    id: "20222112006",
-    name: "阿合叶尔克·胡瓦提",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-  {
-    id: "20222112005",
-    name: "米热古丽·吾斯曼",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-  {
-    id: "20222112004",
-    name: "地娜拉·居帕尔",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-  {
-    id: "20222112003",
-    name: "沙尔恩高阿·吾日克塔",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-  {
-    id: "20222113001",
-    name: "吾尔肯·塞里克",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-  {
-    id: "20222113002",
-    name: "玉苏普·吐荪江",
-    add1: "帮助老师批改作业2分",
-    sub1: "旷课1分",
-    point1: 1,
-    add2: "绩点8分",
-    sub2: "挂科1门2分",
-    point2: 6,
-    add3: "铅球比赛一等奖5分1km二等奖4分",
-    sub3: "无",
-    point3: 9,
-    add4: "捐献书法画1分",
-    sub4: "破环草坪1分",
-    point4: 0,
-    add5: "值日2次4分",
-    sub5: "无",
-    point5: 4,
-    add_total: 24,
-    sub_total: 4,
-    pre_total: 18,
-    point_total: 20,
-  },
-]);
-
+const data = reactive({
+  myclass: "2023级1班",
+  month: "三月",
+  assessments: [
+    {
+      id: "20222113001",
+      name: "吾尔肯·塞里克",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+    {
+      id: "20222113002",
+      name: "玉苏普·吐荪江",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+    {
+      id: "20222113003",
+      name: "沙亚拉·江阿努尔",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+    {
+      id: "20222113004",
+      name: "吐尔逊娜衣·托呼提",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+    {
+      id: "20222112006",
+      name: "阿合叶尔克·胡瓦提",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+    {
+      id: "20222112005",
+      name: "米热古丽·吾斯曼",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+    {
+      id: "20222112004",
+      name: "地娜拉·居帕尔",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+    {
+      id: "20222112003",
+      name: "沙尔恩高阿·吾日克塔",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+    {
+      id: "20222113001",
+      name: "吾尔肯·塞里克",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+    {
+      id: "20222113002",
+      name: "玉苏普·吐荪江",
+      add1: "帮助老师批改作业2分",
+      sub1: "旷课1分",
+      point1: 1,
+      add2: "绩点8分",
+      sub2: "挂科1门2分",
+      point2: 6,
+      add3: "铅球比赛一等奖5分1km二等奖4分",
+      sub3: "无",
+      point3: 9,
+      add4: "捐献书法画1分",
+      sub4: "破环草坪1分",
+      point4: 0,
+      add5: "值日2次4分",
+      sub5: "无",
+      point5: 4,
+      add_total: 24,
+      sub_total: 4,
+      pre_total: 18,
+      point_total: 20,
+    },
+  ],
+  dialogVisible: false, //电子签名对话框
+  dialogVisible2: false, //申诉对话框
+  // 申诉列表
+  complaintData: [
+    {
+      date: "2023-05-07",
+      id: "2022100030",
+      name: "杨世博",
+      content: "个人信息性别错误，需要更改为男",
+    },
+    {
+      date: "2023-05-11",
+      name: "李珊",
+      id: "2022100030",
+      content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
+    },
+    {
+      date: "2023-05-24",
+      name: "涂圆元",
+      id: "2022100031",
+      content: "个人信息民族错误，需要更改为土家族",
+    },
+    {
+      date: "2023-05-11",
+      name: "陈翔",
+      id: "2022100032",
+      content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
+    },
+    {
+      date: "2023-05-12",
+      name: "刘橙晨",
+      id: "2022100040",
+      content: "个人信息目标学校错误，需要修改为‘长沙学院’",
+    },
+  ],
+});
 const editProp = [
   "add1",
   "sub1",
@@ -631,14 +667,13 @@ const handleCellLeave = (row, column, cell, event) => {
     cell.querySelector(".item__txt").style.display = "block";
   }
 };
-
 // 数据excel导出
 const handleExcelExport = () => {
   console.log(comprehensiveAssessmentHeader);
   export_json_to_excel(
     comprehensiveAssessmentHeader,
-    assessments,
-    `${myclass}班级综合测评表`
+    data.assessments,
+    `${data.myclass}班级综合测评表`
   );
 };
 //签名后提交数据和电子签名
@@ -652,44 +687,6 @@ function finish(sign) {
     });
   });
 }
-
-//电子签名对话框
-const dialogVisible = ref(false);
-//申诉对话框
-const dialogVisible2 = ref(false);
-// 申诉列表
-const complaintData = [
-  {
-    date: "2023-05-07",
-    id: "2022100030",
-    name: "杨世博",
-    content: "个人信息性别错误，需要更改为男",
-  },
-  {
-    date: "2023-05-11",
-    name: "李珊",
-    id: "2022100030",
-    content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
-  },
-  {
-    date: "2023-05-24",
-    name: "涂圆元",
-    id: "2022100031",
-    content: "个人信息民族错误，需要更改为土家族",
-  },
-  {
-    date: "2023-05-11",
-    name: "陈翔",
-    id: "2022100032",
-    content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
-  },
-  {
-    date: "2023-05-12",
-    name: "刘橙晨",
-    id: "2022100040",
-    content: "个人信息目标学校错误，需要修改为‘长沙学院’",
-  },
-];
 //删除申诉项
 const handleDelete = (index, row) => {
   console.log("删除申诉项", index, row);
