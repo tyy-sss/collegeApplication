@@ -56,7 +56,7 @@
   </div>
 </template>
 <script setup>
-import { onMounted, reactive } from "vue";
+import { reactive } from "vue";
 import { excelExport } from "@/assets/js/excel/excel-export";
 import {
   studentHeader,
@@ -104,7 +104,7 @@ const handleAddUser = async (ev) => {
     const excelData = getExcelData(data);
     const length = Object.keys(excelData[0]).length;
     let addData = [];
-    if (length === Object.keys(studentCharacter).length) {
+    if (length === Object.keys(studentCharacter).length || length+1 === Object.keys(studentCharacter).length) {
       // 批量添加学生
       addData = excelLeadingIn(excelData, studentCharacter);
       addData = handleStudentInformation(addData);

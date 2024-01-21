@@ -183,5 +183,5 @@ const nationList = reactive([
   },
 ]);
 // 考试科目
-const subjectList = ["物理", "化学", "生物", "历史", "地理", "政治"];
+const subjectList = ["物理", "化学", "生物", "历史", "地理", '政治'];
 export { nationList, politicsStatusList, subjectList };

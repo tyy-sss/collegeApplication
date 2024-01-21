@@ -7,17 +7,12 @@ const studentHeader = {
   userNumber: "学号",
   username: "姓名",
   sex: "性别",
-  idCard: "身份证号",
-  politicsStatus: "政治面貌",
-  nation: "民族",
   className: "班级",
   school: "目标学校",
   province: "来源省份",
   subjects: "选考科目",
   plan: "计划性质",
-  address: "家庭地址",
-  phone: "联系电话",
-  parentPhone: "父母电话",
+  object:"文理科类"
 };
 // 学生信息模板第一行信息
 const studentModelData = [
@@ -25,17 +20,12 @@ const studentModelData = [
     userNumber: "1",
     username: "张三",
     sex: "男",
-    idCard: "4xxxxx199901010022",
-    politicsStatus: "团员",
-    nation: "土家族",
     className: "2022级预科1班",
-    cchool: "吉首大学",
+    school: "吉首大学",
     province: "湖南省张家界市",
-    subjects: "物理+化学+地理（中间连接符可以使用 “ '*' '+' '，' '.' '&' ” ）",
+    subjects: "物理+化学+地理（中间连接符可以使用 “ '*' '+' '，' '.' '&' ，'/'” ）",
     plan: "国家计划",
-    address: "湖南省张家界市",
-    phone: "1xxxxxxxxxx",
-    parentPhone: "1xxxxxxxxxx",
+    object:""
   },
 ];
 

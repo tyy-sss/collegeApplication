@@ -14,18 +14,6 @@ export let studentCharacter = {
     text: "性别",
     type: "string",
   },
-  idCard: {
-    text: "身份证号",
-    type: "string",
-  },
-  politicsStatus: {
-    text: "政治面貌",
-    type: "string",
-  },
-  nation: {
-    text: "民族",
-    type: "string",
-  },
   className: {
     text: "班级",
     type: "string",
@@ -46,16 +34,8 @@ export let studentCharacter = {
     text: "计划性质",
     type: "string",
   },
-  address: {
-    text: "家庭地址",
-    type: "string",
-  },
-  phone: {
-    text: "联系电话",
-    type: "string",
-  },
-  parentPhone: {
-    text: "父母电话",
+  object: {
+    text: "文理科类",
     type: "string",
   },
 };
