@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-21 16:23:51
+ * @LastEditTime: 2024-01-21 17:42:16
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -252,7 +252,14 @@ onMounted(() => {
   init();
 });
 function init() {
-  getComplaintHistory();
+  // getComplaintHistory();
+  studentFun.assess
+    .getAssessment({
+      month: 1,
+    })
+    .then((res) => {
+      console.log("个人综测", res);
+    });
 }
 function getComplaintHistory() {
   studentFun.complaint
