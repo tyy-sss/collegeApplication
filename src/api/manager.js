@@ -8,6 +8,7 @@ let managerFun = {
   area: {},
   subject: {},
   major: {},
+  wishTime: {},
 };
 
 /**
@@ -201,7 +202,19 @@ managerFun.subject.deleteSubject = (subjectId) => {
 /** 专业 */
 /**
  * 通过学校id获得这个学校的专业信息
- * @param {学校id} schoolId
+ * @param {学校编号} schoolId
+ * @returns
+ */
+managerFun.major.allMajor = (schoolId) => {
+  return http.get("/major/selectSchoolMajor1?schoolId=" + schoolId);
+};
+/**
+ * 搜索专业
+ * @param {学校编号} schoolId
+ * @param {搜索类型} type
+ * @param {搜索词} word
+ * @param {当前页码} current
+ * @param {页数} size
  * @returns
  */
 managerFun.major.selectSchoolMajor = (schoolId, type, word, current, size) => {
@@ -231,10 +244,52 @@ managerFun.major.modifyMajor = (data) => {
 };
 /**
  * 删除专业
- * @param {专业id} majorIds 
- * @returns 
+ * @param {专业id} majorIds
+ * @returns
  */
-managerFun.major.deleteMajor = (majorIds) =>{
-  return http.delete("/major/deleteMajor?MajorId="+ majorIds)
+managerFun.major.deleteMajor = (majorIds) => {
+  return http.delete("/major/deleteMajor?MajorId=" + majorIds);
+};
+
+/**
+ * 根据入学时间搜索志愿时间接口
+ * @param {学校编号} schoolId
+ * @param {学年} age
+ * @param {*} current
+ * @param {*} size
+ * @returns
+ */
+managerFun.wishTime.selectWishTime1 = (schoolId, ago, current = 1, size = 2) => {
+  return http.get("/wishTime/selectWishTime1", {
+    schoolId,
+    ago,
+    current,
+    size,
+  });
+};
+/**
+ * 根据学校编号搜索志愿时间接口
+ * @param {学校编号} schoolId
+ * @param {*} current
+ * @param {*} size
+ * @returns
+ */
+managerFun.wishTime.selectWishTime = (schoolId,  current = 1, size = 10) => {
+  return http.get("/wishTime/selectWishTime", {
+    schoolId,
+    current,
+    size,
+  });
+};
+/**
+ *填写志愿时间
+ * @param {志愿时间对象} timeData
+ * @returns
+ */
+managerFun.wishTime.addWishTime = (timeData) => {
+  return http.post("/wishTime/addWishTime", timeData);
+};
+managerFun.wishTime.modifyWiseTime = (timeData) =>{
+  return http.put("/wishTime/modifyWiseTime", timeData);
 }
 export default managerFun;

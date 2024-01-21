@@ -5,7 +5,7 @@
       :with-header="false"
       v-model="form.dialogVisible"
       :before-close="handleClose"
-      size="40%"
+      size="50%"
       class="demo-drawer"
     >
       <div class="add-role-show">
@@ -30,17 +30,16 @@
                 <el-table-column prop="name" label="功能名称" min-width="120" />
                 <el-table-column prop="rule" label="权限" min-width="280">
                   <template #default="scope">
-                    <div
-                      class="checkbox"
-                      v-for="(item, index) in scope.row.rule"
-                      :key="index"
-                    >
+                    <el-checkbox-group>
                       <el-checkbox
-                        v-model="item.value"
+                        class="checkbox"
+                        v-for="(item, index) in scope.row.rule"
+                        :key="index"
                         :label="item.label"
                         size="large"
-                      /></div
-                  ></template>
+                      />
+                    </el-checkbox-group>
+                  </template>
                 </el-table-column>
               </el-table>
             </el-form-item>
@@ -74,23 +73,47 @@ const tableData = reactive([
   {
     name: "个人信息",
     rule: [
-      { label: "查看", value: true },
-      { label: "查看", value: true },
-      { label: "查看", value: true },
-      { label: "查看", value: true },
+      { label: "查看", value: false },
+      { label: "修改", value: false },
     ],
   },
   {
-    name: "志愿分流结果",
+    name: "志愿填报",
+    rule: [
+      { label: "查看", value: false },
+      { label: "修改", value: false },
+      { label: "导出", value: false },
+    ],
   },
   {
-    name: "志愿填报",
+    name: "学生个人综测",
+    rule: [
+      { label: "查看", value: false },
+      { label: "修改", value: false },
+    ],
   },
   {
     name: "综合测评",
+    rule: [
+      { label: "查看", value: false },
+      { label: "修改", value: false },
+      { label: "导出", value: false },
+    ],
   },
   {
-    name: "班级信息",
+    name: "学生查询排名",
+    rule: [
+      { label: "查看", value: false },
+      { label: "查询", value: false },
+    ],
+  },
+  {
+    name: "班主任班级管理",
+    rule: [
+      { label: "查看", value: false },
+      { label: "管理班级成员", value: false },
+      { label: "申诉处理", value: false },
+    ],
   },
 ]);
 // 调用父组件的方法
@@ -108,20 +131,9 @@ const handleClose = () => {
 //  修改角色的权限
 const handleChangeRuleRole = () => {};
 </script>
-  <style src="@/assets/css/role/role-drawer.css" scoped>
-</style>
-  <style scoped>
-/* 设置分页展示 */
-.table {
+<style src="@/assets/css/role/role-drawer.css" scoped/>
+<style scoped>
+::v-deep .el-checkbox-group {
   width: 100%;
-}
-.pager {
-  float: right;
-  padding: 0.5rem 0;
-}
-.checkbox{
-    width: 100%;
-    display: flex;
-    justify-content: flex-start;
 }
 </style>

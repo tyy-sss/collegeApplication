@@ -1,4 +1,5 @@
 import { excelExport } from "@/assets/js/excel/excel-export";
+import { changeStringsType } from "@/assets/js/profession/profeesion-receive-data";
 export const handleProfessionExportData = (tableHeader, tableData) => {
   let headerData = {};
   headerData["college"] = "教学学院";
@@ -9,7 +10,6 @@ export const handleProfessionExportData = (tableHeader, tableData) => {
     headerData[name] = val;
   }
   headerData["enrollmentNumber"] = "限制人数";
-  console.log(tableData);
   const data = [];
   for (let i = 0, len = tableData.length; i < len; i++) {
     let item = {
@@ -28,6 +28,12 @@ export const handleProfessionExportData = (tableHeader, tableData) => {
     item.enrollmentNumber = tableData[i].enrollmentNumber;
     data.push(item);
   }
-  console.log(data);
   excelExport(data, headerData, "学校专业限制信息表");
 };
+
+export const handleAllProfessionExportData = (tableHeader,tableData) =>{
+  tableData.forEach((element)=>{
+    changeStringsType(element);
+  })
+  handleProfessionExportData(tableHeader,tableData);
+}

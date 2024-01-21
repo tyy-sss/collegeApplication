@@ -73,7 +73,7 @@
           >
         </div>
         <div class="add-item">
-          <el-button type="primary" :icon="Download">导出所有信息</el-button>
+          <el-button type="primary" :icon="Download" @click="handleExportAllProfeesion">导出所有信息</el-button>
         </div>
       </div>
       <div class="middle">
@@ -159,7 +159,7 @@ import {
   handleCascaderData,
   handleCascaderDataForEnrollmentNumber,
 } from "@/assets/js/profession/profession-send-data";
-import { handleProfessionExportData } from "@/assets/js/excel/profession/profession-export";
+import { handleProfessionExportData,handleAllProfessionExportData } from "@/assets/js/excel/profession/profession-export";
 import {
   handleTableData,
   handleTableDataForSingle,
@@ -202,8 +202,16 @@ const handleSearchProfession = () => {
 };
 // 导出信息
 const handleExportProfession = () => {
+  console.log(data.tableData);
   handleProfessionExportData(data.tableHeader, data.tableData);
 };
+const handleExportAllProfeesion = () =>{
+  managerFun.major.allMajor(schoolId).then((res)=>{
+    handleAllProfessionExportData(data.tableHeader,res)
+  }).catch((err)=>{
+
+  })
+}
 // 删除专业
 const handleDeleteProfession = (val) => {
   ElMessageBox.confirm("确定删除所选地址组合", {
@@ -340,11 +348,14 @@ onMounted(() => {
   margin-bottom: 1rem;
 }
 .top .search .right {
-  width: 8%;
+  width: 10%;
   display: flex;
   justify-content: space-between;
   align-items: center;
   min-width: 5rem;
+}
+.top .search .right > div{
+  margin-right: 1rem;
 }
 .add {
   display: flex;
