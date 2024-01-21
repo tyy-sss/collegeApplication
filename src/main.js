@@ -19,8 +19,8 @@ import "element-plus/dist/index.css";
 import * as ElIconModules from "@element-plus/icons-vue";
 import zhCn from "element-plus/es/locale/lang/zh-cn";
 
-// import "default-passive-events";
-import './assets/css/index.css'; // 引入全局样式文
+import "default-passive-events";
+import "./assets/css/index.css"; // 引入全局样式文
 const app = createApp(App);
 app
   .use(store)

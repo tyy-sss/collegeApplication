@@ -3,17 +3,17 @@
     <div class="show-container">
       <div class="title">
         <div class="text">角色管理</div>
-        <div class="prompt">注意：角色个数设置最多为10个。</div>
+        <div class="prompt">注意：角色个数固定设置为4个，只有部分权限可以进行改动。</div>
       </div>
       <div class="context">
         <div class="top">
           <div class="search">
             <div class="left">
-              <div class="search-item">
+              <!-- <div class="search-item">
                 <el-button type="primary" :icon="Plus" @click="handleAddRole"
                   >添加角色</el-button
                 >
-              </div>
+              </div> -->
               <div class="search-item">
                 <el-input v-model="search.searchData" placeholder="请输入">
                   <template #suffix>
@@ -73,8 +73,8 @@
                 <el-button
                   link
                   type="danger"
-                  @click="handleDeleteRole(scope.row)"
-                  >删除</el-button
+                  @click="handleChangeRole(scope.row)"
+                  >修改信息</el-button
                 >
               </template></el-table-column
             >
@@ -88,7 +88,7 @@
             >批量禁用</el-button
           >
         </div>
-        <add-role v-if="form.choose === 'addRole'" @handleClose="handleClose" />
+        <change-role v-if="form.choose === 'changeRole'" @handleClose="handleClose" />
         <user-role
           v-else-if="form.choose === 'userRole'"
           @handleClose="handleClose"
@@ -106,7 +106,7 @@
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox } from "element-plus";
 import { reactive, ref } from "vue";
-import addRole from "@/components/role/add-role.vue";
+import changeRole from "@/components/role/change-role.vue";
 import userRole from "@/components/role/user-role.vue";
 import ruleRole from "@/components/role/rule-role.vue";
 // 数据
@@ -125,15 +125,6 @@ const form = reactive({
 });
 // 获取角色列表
 const getRoleList = () => {};
-// 添加角色
-const handleAddRole = () => {
-  // 判断角色是否超过10个超过之后就不能添加
-  if (tableData.length >= 10) {
-    ElMessage.error("角色超过10个,无法添加");
-  } else {
-    form.choose = "addRole";
-  }
-};
 // 查看一个角色的所有用户
 const handleCheckUserRole = (role) => {
   form.choose = "userRole";
@@ -143,24 +134,8 @@ const handleCheckRuleRole = (role) => {
   form.choose = "ruleRole";
 };
 // 删除一个角色
-const handleDeleteRole = (val) => {
-  ElMessageBox.confirm("确定要删除这个用户", "警告", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  })
-    .then(() => {
-      ElMessage({
-        type: "success",
-        message: "已删除该角色",
-      });
-    })
-    .catch(() => {
-      ElMessage({
-        type: "info",
-        message: "已取消删除",
-      });
-    });
+const handleChangeRole = (val) => {
+  form.choose = "changeRole";
 };
 // 搜索
 const onSearch = () => {
