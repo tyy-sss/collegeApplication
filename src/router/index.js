@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-28 23:16:04
+ * @LastEditTime: 2024-01-20 19:13:12
  * @FilePath: \collegeApplication\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -160,6 +160,7 @@ router.beforeEach((to, form, next) => {
     // 已登录
     if (to.path == "/") {
       // 跳转到菜单表的第一个菜单显示界面
+      // console.log(getRole())
       const firstPath = giveMenu(getRole())[0].path.slice(1);
       next({ name: firstPath });
     } else {

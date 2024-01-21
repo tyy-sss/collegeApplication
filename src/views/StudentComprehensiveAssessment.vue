@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-20 16:37:51
+ * @LastEditTime: 2024-01-21 16:23:51
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -17,11 +17,11 @@
       <el-form-item label="本月确认情况 ：">
         {{ data.state }}
         <span style="color: rgb(167, 167, 167); margin-left: 15px">
-          (已确认/正在申报/待确认/未到确认时间)</span
+          (已确认/待确认/未到确认时间)</span
         >
       </el-form-item>
       <el-button type="primary" @click="data.dialogVisible3 = true"
-        >申报历史</el-button
+        >申诉历史</el-button
       >
       <el-button type="danger" @click="data.dialogVisible2 = true"
         >申报错误</el-button
@@ -167,7 +167,7 @@
 </template>
 <script setup>
 import signatures from "@/components/utils/Signatures.vue";
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
@@ -248,6 +248,23 @@ const data = reactive({
     },
   ],
 });
+onMounted(() => {
+  init();
+});
+function init() {
+  getComplaintHistory();
+}
+function getComplaintHistory() {
+  studentFun.complaint
+    .getComplaints({
+      state: "",
+      current: 1,
+      size: 1000,
+    })
+    .then((res) => {
+      console.log(res);
+    });
+}
 //提交申报
 function commit() {
   studentFun.complaint

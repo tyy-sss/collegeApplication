@@ -299,11 +299,13 @@ import { getRole } from "@/constants/token";
 import studentFun from "@/api/student";
 import teacherFun from "@/api/teacher";
 onMounted(() => {
+  identity.value=getRole();
+  if(identity.value==3){identity.value=0;}//班主任也是老师信息页
   data.loading2 = true;
   init();
 });
 let identity = ref(getRole()); //获取当前用户身份
-// console.log("获取当前用户身份", identity.value);
+console.log("获取当前用户身份", identity.value);
 const data = reactive({
   loading: false,
   loading2: false,
@@ -352,7 +354,7 @@ const init = function () {
 function fackBtn() {
   document.getElementById("fileInput").click();
 }
-//上传证件照并回显
+//上传证件照并回显(×)
 function handleFileSelect(e) {
   data.loading = true;
   const file = e.target.files[0];

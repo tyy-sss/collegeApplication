@@ -140,7 +140,7 @@ const evaluatorMenuData = reactive([
 ])
 
 const giveMenu = (role) => {
-  return headteacherMenuData;
+  return studentMenuData;
   if (role == "manager") {
     return managerMenuData;
   } else if (role == 1) {

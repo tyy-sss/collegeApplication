@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-26 21:07:52
+ * @LastEditTime: 2024-01-20 20:20:42
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -57,6 +57,7 @@
           :options="options"
           placeholder="请输入专业名称"
           :show-all-levels="false"
+          :props="props"
           v-model="volunteers.object1"
         />
       </el-form-item>
@@ -65,6 +66,7 @@
           :options="options"
           placeholder="请输入专业名称"
           :show-all-levels="false"
+          :props="props"
           v-model="volunteers.object2"
         />
       </el-form-item>
@@ -73,6 +75,7 @@
           :options="options"
           placeholder="请输入专业名称"
           :show-all-levels="false"
+          :props="props"
           v-model="volunteers.object3"
         />
       </el-form-item>
@@ -93,13 +96,33 @@
       </div>
     </div>
   </div>
+  <!-- 电子签名对话框 -->
+  <el-dialog v-model="dialogVisible" title="提交志愿" width="50%">
+    <div>
+      <div style="margin-left: 1rem">
+        <span>您的第一,第二,第三志愿分别为</span><br />
+        <b>第一志愿：{{ volunteers.object1 }}</b
+        ><br />
+        <b>第二志愿：{{ volunteers.object2 }}</b
+        ><br />
+        <b>第三志愿：{{ volunteers.object3 }}</b
+        ><br />
+        <span>请确认准确无误后提交</span><br /><br />
+      </div>
+      <signatures @finish="finish"></signatures>
+    </div>
+  </el-dialog>
 </template>
 <script setup>
+import signatures from "@/components/utils/Signatures.vue";
 import { ref, reactive, computed } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { useRouter } from "vue-router";
 const router = useRouter();
+const props = {
+  emitPath: false, //绑定的内容只获取最后一级的value值。
+};
 let student = {
   name: "付小小",
   id: "415567569789",
@@ -177,6 +200,7 @@ const options = reactive([
   },
 ]);
 // 提交志愿
+let dialogVisible = ref(false);
 function submitVolunteer() {
   if (
     volunteers.object1 == null ||
@@ -185,30 +209,24 @@ function submitVolunteer() {
   ) {
     ElMessage.error("志愿不能为空，请认真完成志愿填报");
   } else {
-    ElMessageBox.confirm(
-      `您的第一,第二,第三志愿分别为【${volunteers.object1}】,【${volunteers.object2}】,【${volunteers.object3}】,请确认准确无误后提交。`,
-      "Warning",
-      {
-        confirmButtonText: "确认提交",
-        cancelButtonText: "返回修改",
-        type: "warning",
-      }
-    )
-      .then(() => {
-        //提交志愿接口(成功需要把志愿剩余次数减一)
-        // studentFun.user.updataVolunteer().then((res) => {
-        //   if (res.code === 200) {
-        //提交志愿到服务端
-        router.push({ name: "volunteer-check" });
-        ElMessage({
-          type: "success",
-          message: "提交志愿成功",
-        });
-        //   }
-        // });
-      })
-      .catch(() => {});
+    dialogVisible.value = true;
   }
+}
+//签名后提交数据和电子签名
+function finish(sign) {
+  console.log("签名img的base64", sign);
+  studentFun.sign.submitSignature(sign).then((res) => {
+  //提交志愿接口(成功需要把志愿剩余次数减一)
+  // studentFun.user.updataVolunteer().then((res) => {
+  //   if (res.code === 200) {
+  // 提交志愿到服务端
+  router.push({ name: "volunteer-check" });
+  ElMessage({
+    type: "success",
+    message: "提交志愿成功",
+  });
+  //   }
+  });
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
