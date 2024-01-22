@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-21 17:42:16
+ * @LastEditTime: 2024-01-22 22:15:19
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -102,6 +102,9 @@
   <!-- 电子签名对话框 -->
   <el-dialog v-model="data.dialogVisible" title="电子签名" width="50%">
     <div>
+      <div style="margin-left: 1rem; margin-bottom: 1rem">
+        该电子签名为确保综测信息经过本人确认后无误
+      </div>
       <signatures></signatures>
     </div>
   </el-dialog>
@@ -142,17 +145,41 @@
     <div>
       <el-table :data="data.complaintData" style="width: 100%">
         <el-table-column type="index" />
-        <el-table-column label="申诉接收对象" prop="name" min-width="120" />
+        <el-table-column label="申诉问题类型" prop="type" min-width="120" />
         <el-table-column label="申诉内容" prop="content" min-width="300" />
-        <el-table-column label="申诉时间" prop="date" min-width="100" />
+        <el-table-column label="申诉时间" prop="created" min-width="200" />
+        <el-table-column label="申诉状态" min-width="100">
+          <template #default="scope">
+            <span v-if="scope.row.state == 0">处理中</span>
+            <span v-if="scope.row.state == 1">已处理</span>
+            <span v-if="scope.row.state == 2">已撤销</span>
+          </template>
+        </el-table-column>
+        <el-table-column
+          label="申诉状态"
+          width="100"
+          :filters="[
+            { text: '处理中', value: '0' },
+            { text: '已处理', value: '1' },
+            { text: '已撤销', value: '2' },
+          ]"
+          :filter-method="filterTag"
+          filter-placement="bottom-end"
+        >
+          <template #default="scope">
+            <el-tag
+              :type="scope.row.state === 1 ? '' : 'success'"
+              disable-transitions
+            >
+              <span v-if="scope.row.state == 0">处理中</span>
+              <span v-if="scope.row.state == 1">已处理</span>
+              <span v-if="scope.row.state == 2">已撤销</span>
+            </el-tag
+            >
+          </template>
+        </el-table-column>
         <el-table-column label="操作" min-width="150">
           <template #default="scope">
-            <el-button
-              size="small"
-              type="danger"
-              @click="handleDelete(scope.$index, scope.row)"
-              >已处理</el-button
-            >
             <el-button
               size="small"
               type="danger"
@@ -171,7 +198,6 @@ import { ref, reactive, computed, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
-
 const data = reactive({
   state: "未到确认时间",
   assessment: [
@@ -217,50 +243,44 @@ const data = reactive({
   // 申诉列表
   complaintData: [
     {
-      date: "2023-05-07",
-      id: "2022100030",
-      name: "测评小组",
+      state: 0,
+      created: "2023-05-07",
+      userNumber: "2022100030",
+      type: "综测问题",
       content: "个人信息性别错误，需要更改为男",
     },
     {
-      date: "2023-05-11",
-      name: "测评小组",
-      id: "2022100030",
-      content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
+      state: 1,
+      created: "2023-05-17",
+      userNumber: "2022100030",
+      type: "其他问题",
+      content: "个人信息性别错误，需要更改为男",
     },
     {
-      date: "2023-05-24",
-      name: "测评小组",
-      id: "2022100031",
-      content: "个人信息民族错误，需要更改为土家族",
-    },
-    {
-      date: "2023-05-11",
-      name: "班主任",
-      id: "2022100032",
-      content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
-    },
-    {
-      date: "2023-05-12",
-      name: "班主任",
-      id: "2022100040",
-      content: "个人信息目标学校错误，需要修改为‘长沙学院’",
+      state: 2,
+      created: "2023-05-12",
+      userNumber: "2022100030",
+      type: "其他问题",
+      content: "个人信息性别错误，需要更改为男",
     },
   ],
 });
 onMounted(() => {
   init();
 });
+//初始化
 function init() {
-  // getComplaintHistory();
+  getComplaintHistory();
   studentFun.assess
     .getAssessment({
       month: 1,
     })
     .then((res) => {
       console.log("个人综测", res);
+      // data.assessment=res
     });
 }
+//获取申诉历史
 function getComplaintHistory() {
   studentFun.complaint
     .getComplaints({
@@ -270,6 +290,7 @@ function getComplaintHistory() {
     })
     .then((res) => {
       console.log(res);
+      data.complaintData = res.records;
     });
 }
 //提交申报
@@ -287,6 +308,11 @@ function commit() {
       });
     });
 }
+//筛选器
+const filterTag = (value, row) => {
+  console.log(row.state,value,row)
+  return row.state == value;
+};
 const { getColumnWidth } = adaptiveColumnWidthFun(data.assessment);
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>

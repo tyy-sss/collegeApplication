@@ -293,14 +293,16 @@
   </el-drawer>
 </template>
 <script setup>
-import { ref, reactive, onMounted, computed, onBeforeMount } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { getRole } from "@/constants/token";
 import studentFun from "@/api/student";
 import teacherFun from "@/api/teacher";
 onMounted(() => {
-  identity.value=getRole();
-  if(identity.value==3){identity.value=0;}//班主任也是老师信息页
+  identity.value = getRole();
+  if (identity.value == 3) {
+    identity.value = 0;
+  } //班主任也是老师信息页
   data.loading2 = true;
   init();
 });
@@ -335,11 +337,10 @@ const init = function () {
   if (identity.value == 1) {
     //获取学生信息
     studentFun.user.getInformation().then((res) => {
+      console.log("学生信息", data.student);
       data.student = res;
       data.consignee = res.consignee;
-      console.log("学生信息", data.student);
-      data.avatar =
-        "https://img.zcool.cn/community/01cf695e71cda9a80120a8953bb057.jpg?x-oss-process=image/auto-orient,1/resize,m_lfit,w_1280,limit_1/sharpen,100";
+      data.avatar = "http://192.168.50.35:8081" + res.headshot;
       data.loading2 = false;
     });
   } else if (identity.value == 0) {
@@ -354,24 +355,23 @@ const init = function () {
 function fackBtn() {
   document.getElementById("fileInput").click();
 }
-//上传证件照并回显(×)
+//上传证件照并回显
 function handleFileSelect(e) {
-  data.loading = true;
   const file = e.target.files[0];
-  console.log(file);
-  const formData = new FormData();
-  formData.append("file", file);
-  //传文件给后端（对接口）
-  // studentFun.user.setAvatar(formData).then((res)=>{
-  //   data.avatar = res.data.avatar;
-  // })
-  let myAvatar =
-    "https://th.bing.com/th/id/OIP.-yzce0XE8eHoGLr9Dqaw5wHaJ4?w=480&h=640&rs=1&pid=ImgDetMain";
-  //返回虚拟路径
-  setTimeout(() => {
-    data.avatar = myAvatar;
-    data.loading = false;
-  }, 2000);
+  const maxFileSize = 4 * 1024 * 1024; // 限制为4MB
+  if (file && file.size > maxFileSize) {
+    return ElMessage.error("文件大小超过限制，请选择小于4MB的文件。");
+  } else {
+    data.loading = true;
+    const formData = new FormData();
+    formData.append("file", file);
+    studentFun.user.setIDPhoto(formData).then((res) => {
+      data.avatar = "http://192.168.50.35:8081" + res;
+      data.loading = false;
+      ElMessage.success("证件照上传成功");
+      console.log(data.avatar);
+    });
+  }
 }
 //修改资料
 function confirmClick() {

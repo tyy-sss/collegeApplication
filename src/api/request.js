@@ -10,7 +10,7 @@ const ZWY = "http://192.168.50.159:8081/";
 const requests = axios.create({
   //配置对象
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径当中会出现api
-  baseURL: ZWY,
+  baseURL: YSB,
   //代表请求超时的时间
   timeout: 10000,
 });
@@ -53,8 +53,28 @@ requests.interceptors.response.use((res) => {
 const header = {
   "Content-Type": "application/json;charset=UTF-8",
 };
-
+const header2 = {
+  "Content-Type": "multipart/form-data;charset=UTF-8",
+};
 const http = {
+  upload(url="",formData){
+    console.log("我在这呢！",formData)
+    return new Promise((resolve, reject) => {
+      requests({
+        url,
+        data: formData,
+        headers: header2,
+        method: "POST",
+      })
+        .then((res) => {
+          resolve(res.data);
+          return res;
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
   get(url = "", params = {}) {
     return new Promise((resolve, reject) => {
       requests({

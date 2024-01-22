@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-06 20:57:50
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-21 17:39:12
+ * @LastEditTime: 2024-01-22 17:35:21
  * @FilePath: \collegeApplication\src\api\student.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -13,6 +13,7 @@ let studentFun = {
   sign: {},
   assess: {},
   complaint: {},
+
 };
 
 /**
@@ -34,6 +35,13 @@ studentFun.user.updateInformation = (params) => {
  */
 studentFun.user.updatePassword = (password) => {
   return http.put("/student/password", password);
+};
+
+/**
+ * 学生上传证件照
+ */
+studentFun.user.setIDPhoto = (formData) => {
+  return http.upload("/user/headshot", formData);
 };
 
 /**

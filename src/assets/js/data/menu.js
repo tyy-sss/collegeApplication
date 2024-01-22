@@ -104,14 +104,14 @@ const evaluatorMenuData = reactive([
 ])
 
 const giveMenu = (role) => {
-  // return studentMenuData;
+  return studentMenuData;
   if (role == "manager") {
     return managerMenuData;
   } else if (role == 1) {
     return studentMenuData;
   } else if (role == 0) {
     return headteacherMenuData;
-  } else if (role == "teacher") {
+  } else if (role == 3) {
     return teacherMenuData;
   } else if (role == "evaluator") {
     return evaluatorMenuData;
