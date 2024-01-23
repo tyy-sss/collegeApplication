@@ -183,8 +183,8 @@
           <div class="littleTitle">其他信息</div>
           <div class="flex_box">
             <div class="infoRow">
-              <span class="tag">主任班级 :</span
-              ><span>{{ data.teacher.manageClass || "非班主任" }}</span>
+              <span class="tag">老师身份 :</span
+              ><span>{{ data.teacherType == 0 ? "非班主任" : "班主任" }}</span>
             </div>
             <!-- <div class="infoRow">
               <span class="tag">授课班级 :</span
@@ -300,6 +300,7 @@ import studentFun from "@/api/student";
 import teacherFun from "@/api/teacher";
 onMounted(() => {
   identity.value = getRole();
+  data.teacherType = getRole();
   if (identity.value == 3) {
     identity.value = 0;
   } //班主任也是老师信息页
@@ -317,6 +318,7 @@ const data = reactive({
   student: {},
   consignee: {},
   teacher: {},
+  teacherType: "",
 });
 //修改资料数据
 const updataData = reactive({
@@ -346,6 +348,7 @@ const init = function () {
   } else if (identity.value == 0) {
     //获取老师信息
     teacherFun.user.getInformation().then((res) => {
+      console.log(res);
       data.teacher = res;
       data.loading2 = false;
     });

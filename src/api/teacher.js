@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-05 21:22:27
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-27 22:37:55
+ * @LastEditTime: 2024-01-23 17:14:49
  * @FilePath: \collegeApplication\src\api\teacher.js
  * @Description: 介绍文件的作用
  */
@@ -14,6 +14,8 @@ let teacherFun = {
   class: {},
   assessment: {},
   complaint:{},
+  post:{},
+
 };
 /**
  * 老师获取个人信息
@@ -80,7 +82,25 @@ teacherFun.assessment.getAssessments = (params) => {
 /**
  * 班主任修获取班级内的申诉
  */
-teacherFun.complaint.getAssessments = () => {
-  return http.get(`/adviser/appeals`);
+teacherFun.complaint.getAssessments = (params) => {
+  return http.get(`/adviser/appeals?state=${params.state}`);
 };
+
+/**
+ * 班主任删除已完成/已取消申述
+ */
+ teacherFun.complaint.deleteComplaint = (params) => {
+  return http.delete(`/adviser/appeal`,params);
+};
+
+/**
+ * 班主任处理申述
+ */
+ teacherFun.complaint.dealComplaint = (params) => {
+  return http.put(`/adviser/appeal`,params);
+};
+
+/**
+ * 
+ */
 export default teacherFun;

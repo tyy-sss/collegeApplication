@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-06 20:57:50
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-22 17:35:21
+ * @LastEditTime: 2024-01-23 22:31:07
  * @FilePath: \collegeApplication\src\api\student.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -54,20 +54,34 @@ studentFun.complaint.getComplaints = (params) => {
  * 学生申诉
  */
 studentFun.complaint.submitComplaint = (params) => {
-  return http.post(`/student/appeal`,params);
+  return http.post(`/student/appeal`, params);
 };
 /**
- * 撤销申诉
+ * 删除已完成申诉
  */
-studentFun.complaint.DeleteComplaint = (params) => {
-  return http.put(`/student/appeal`,params);
+studentFun.complaint.deleteComplaint = (params) => {
+  return http.delete(`/student/appeal`, params);
 };
 
 /**
- * 学生获取个人综测
+ * 撤销申诉
+ */
+ studentFun.complaint.revokeComplaint = (params) => {
+  return http.put(`/student/appeal`, params);
+};
+
+/**
+ * 获取本月学生个人的综测情况
 */
-studentFun.assess.getAssessment= (params) => {
-  return http.get(`/appraisal?month=${params.month}`);
+studentFun.assess.getAssessmentThisMonth = () => {
+  return http.get(`/student/this`);
+};
+
+/**
+ * 获取学生个人的综测情况(按月份)
+*/
+studentFun.assess.getAssessmentByMonth = (params) => {
+  return http.get(`/student?month=${params.month}`);
 };
 
 /**
@@ -78,10 +92,17 @@ studentFun.sign.submitSignature = (base64Url) => {
 };
 
 /**
- * 综测小组获取学生综测
+ * 综测小组获取本月学生综测
  */
 studentFun.assess.getAssessments = (params) => {
-  return http.get(`/appraisal-team?name=${params.name}&userNumber=${params.userNumber}&month=${params.month}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
+  return http.get(`/appraisal-team/appraisal/this?name=${params.name}&userNumber=${params.userNumber}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
+};
+
+/**
+ * 综测小组根据月份获取学生综测
+ */
+ studentFun.assess.getAssessmentsByMonth = (params) => {
+  return http.get(`/appraisal-team/appraisal?name=${params.name}&userNumber=${params.userNumber}&month=${params.month}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
 };
 
 /**
@@ -95,6 +116,20 @@ studentFun.assess.submitAssessments = (params) => {
  * 综测小组获取学生申诉
  */
 studentFun.assess.getComplaint = (params) => {
-  return http.get(`/appraisal-team/appeal?username=${params.username}&userNumber=${params.userNumber}&state=${params.state}&current=${params.current}&size=${params.size}`);
+  return http.get(`/appraisal-team/appeals?state=${params.state}`);
+};
+
+/**
+ * 综测小组删除学生申诉
+ */
+ studentFun.assess.deleteComplaint = (params) => {
+  return http.delete(`/appraisal-team/appeals`,params);
+};
+
+/**
+ * 综测小组处理学生申诉
+ */
+ studentFun.assess.dealComplaint = (params) => {
+  return http.put(`/appraisal-team/appeal`,params);
 };
 export default studentFun;

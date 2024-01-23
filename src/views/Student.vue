@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-21 15:05:25
+ * @LastEditTime: 2024-01-23 21:06:32
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -135,36 +135,73 @@
       <br />
       <!-- 分页 -->
       <el-pagination
-        :page-size="15"
-        :pager-count="1"
+        :page-size=data.page.pageSize
+        :pager-count=10
         layout="prev, pager, next"
-        :total="2"
+        :total=data.page.total
+        @current-change="handleCurrentChange"
         style="float: right"
       />
       <br />
     </div>
   </div>
   <!-- 对话框1 -->
-  <el-dialog v-model="data.dialogVisible" title="💬 待申述处理" width="50%">
+  <el-dialog v-model="data.dialogVisible" title="💬 待申述处理" width="60%">
     <div>
-      <el-table :data="data.complaintData" style="width: 100%">
+      <el-table :data="data.complaintData">
         <el-table-column type="index" />
-        <el-table-column label="申诉学生姓名" prop="name" min-width="120" />
-        <el-table-column label="学号" prop="id" min-width="100" />
+        <el-table-column label="申诉学生姓名" prop="username" min-width="120" />
+        <el-table-column label="学号" prop="userNumber" min-width="100" />
         <el-table-column label="申诉内容" prop="content" min-width="300" />
         <el-table-column
           label="申诉时间"
+          prop="created"
+          min-width="200"
           sortable
-          prop="date"
-          min-width="100"
         />
+        <el-table-column
+          label="申诉状态"
+          width="100"
+          :filters="[
+            { text: '待处理', value: '0' },
+            { text: '已处理', value: '1' },
+            { text: '已撤销', value: '2' },
+          ]"
+          :filter-method="filterTag"
+          filter-placement="bottom-end"
+        >
+          <template #default="scope">
+            <el-tag
+              :type="
+                scope.row.state === 0
+                  ? ''
+                  : scope.row.state === 1
+                  ? 'success'
+                  : 'info'
+              "
+              disable-transitions
+            >
+              <span v-if="scope.row.state == 0">待处理</span>
+              <span v-if="scope.row.state == 1">已处理</span>
+              <span v-if="scope.row.state == 2">已撤销</span>
+            </el-tag>
+          </template>
+        </el-table-column>
         <el-table-column label="操作">
           <template #default="scope">
             <el-button
               size="small"
               type="danger"
+              v-if="scope.row.state == 1 || scope.row.state == 2"
               @click="handleDelete(scope.$index, scope.row)"
-              >标为已处理</el-button
+              >删除</el-button
+            >
+            <el-button
+              size="small"
+              type="success"
+              v-if="scope.row.state == 0"
+              @click="handleDeal(scope.$index, scope.row)"
+              >完成</el-button
             >
           </template>
         </el-table-column>
@@ -342,7 +379,7 @@ import { ref, reactive, onMounted, computed } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import teacherFun from "@/api/teacher";
 onMounted(() => {
-  getDatas();
+  init();
 });
 const data = reactive({
   myclass: "2021级预科4班",
@@ -350,43 +387,12 @@ const data = reactive({
   dialogVisible: false,
   // dialogVisible2: false,
   dialogVisible3: false,
-  drawer:false,
+  drawer: false,
   multipleSelection: [],
   studentsData: [], //学生列表
   evaluationData: [], //测评小组列表
   //申诉列表
-  complaintData: [
-    {
-      date: "2023-05-07",
-      id: "2022100030",
-      name: "杨世博",
-      content: "个人信息性别错误，需要更改为男",
-    },
-    {
-      date: "2023-05-11",
-      name: "李珊",
-      id: "2022100030",
-      content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
-    },
-    {
-      date: "2023-05-24",
-      name: "涂圆元",
-      id: "2022100031",
-      content: "个人信息民族错误，需要更改为土家族",
-    },
-    {
-      date: "2023-05-11",
-      name: "陈翔",
-      id: "2022100032",
-      content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
-    },
-    {
-      date: "2023-05-12",
-      name: "刘橙晨",
-      id: "2022100040",
-      content: "个人信息目标学校错误，需要修改为‘长沙学院’",
-    },
-  ],
+  complaintData: [],
   page: {
     total: 200, // 总条数
     currentPage: 1, // 当前页
@@ -395,24 +401,38 @@ const data = reactive({
   student: {}, //学生信息
   consignee: {}, //学生收件信息
 });
-
 //获取数据
-function getDatas() {
-  // teacherFun.complaint.getAssessments((res)=>{
-  //   console.log("申诉列表",res)
-  // })
+function init() {
+  getComplaintsDeatils();
+  getStudentDeatils(1);
+}
+//获取申诉列表数据
+function getComplaintsDeatils() {
+  teacherFun.complaint
+    .getAssessments({
+      state: "",
+    })
+    .then((res) => {
+      // console.log("申诉列表", res);
+      data.complaintData = res;
+    });
+}
+//获取学生列表数据
+function getStudentDeatils(selectPage) {
   teacherFun.class
     .updateInformation({
       userNumber: null,
       username: null,
       role: null,
       rank: 0,
-      current: 1,
-      size: 15,
+      current: selectPage,
+      size: 12,
     })
     .then((res) => {
-      console.log(res);
+      console.log("学生信息：",res);
       data.studentsData = res.records;
+      data.page.currentPage=res.current;
+      data.page.pageSize=res.size;
       data.page.total = res.total;
       //填装测评小组列表
       data.studentsData.forEach((item) => {
@@ -426,9 +446,15 @@ function getDatas() {
 const handleSelectionChange = (val) => {
   data.multipleSelection = val;
 };
+//改变分页页数
+const handleCurrentChange = (val) => {
+  console.log(`current page: ${val}`)
+  getStudentDeatils(val);
+}
 //条件搜索
 function conditionSearch() {
   //条件搜索
+  console.log("XX")
 }
 //搜索逻辑
 const filterTableData = computed(() =>
@@ -441,26 +467,48 @@ const filterTableData = computed(() =>
 );
 //重置密码
 const handleRepasswd = (index, row) => {
-  console.log("重置密码", index, row);
+  teacherFun.class.updateStudentPassword([row.userNumber]).then((res) => {
+    ElMessage.success(res);
+  });
 };
 //批量重置密码
 const handleRepasswds = () => {
-  console.log("批量重置密码", data.multipleSelection);
+  const dealArray = [];
+  data.multipleSelection.forEach((item) => {
+    dealArray.push(item.userNumber);
+  });
+  // console.log("重置密码列表：",dealArray)
+  teacherFun.class.updateStudentPassword(dealArray).then((res) => {
+    ElMessage.success(res);
+  });
 };
 //详细信息(可编辑)
 const handleEdit = (index, row) => {
   console.log("详细信息(可编辑)", index, row);
-  teacherFun.class.getStudentInformation({
-    number:row.userNumber
-  }).then((res)=>{
+  console.log(row.userNumber);
+  teacherFun.class
+    .getStudentInformation({
+      number: row.userNumber,
+    })
+    .then((res) => {
       data.student = res;
       data.consignee = res.consignee;
-      data.drawer=true;
-  })
+      data.drawer = true;
+    });
 };
 //删除申诉项
 const handleDelete = (index, row) => {
-  console.log("删除申诉项", index, row);
+  teacherFun.complaint.deleteComplaint([row.appealId]).then((res) => {
+    data.complaintData.splice(index, 1);
+    ElMessage.success(res);
+  });
+};
+//处理申诉项
+const handleDeal = (index, row) => {
+  teacherFun.complaint.dealComplaint(row.appealId).then((res) => {
+    row.state = 1;
+    ElMessage.success(res);
+  });
 };
 //重置测评账号密码
 const handleRecover2 = (index, row) => {
@@ -470,6 +518,23 @@ const handleRecover2 = (index, row) => {
 const handleFired = (index, row) => {
   console.log("撤销评测小组人员账号", index, row);
 };
+//筛选器
+const filterTag = (value, row) => {
+  // console.log(row.state, value, row);
+  return row.state == value;
+};
+// //申诉列表
+// complaintData: [
+//   {
+//     appealId: "111",
+//     created: "2023-05-07",
+//     userNumber: "2022100030",
+//     username: "杨世博",
+//     content: "个人信息性别错误，需要更改为男",
+//     state: 1,
+//     type: true,
+//   },
+// ],
 // //恢复回收站项
 // const handleRecover = (index, row) => {
 //   console.log("恢复回收站项", index, row);
@@ -681,6 +746,5 @@ const handleFired = (index, row) => {
   gap: 1rem 1.2rem;
   grid-auto-flow: row dense;
 }
-
 </style>
   

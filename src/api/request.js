@@ -46,7 +46,7 @@ requests.interceptors.response.use((res) => {
     // }
     return Promise.reject(res.data);
   }
-  console.log("msg",res.msg)
+  // console.log("msg",res.msg)
   return res.data; //返回的是数据
 });
 
@@ -58,7 +58,6 @@ const header2 = {
 };
 const http = {
   upload(url="",formData){
-    console.log("我在这呢！",formData)
     return new Promise((resolve, reject) => {
       requests({
         url,
