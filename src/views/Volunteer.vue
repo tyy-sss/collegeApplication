@@ -36,11 +36,6 @@
         :min-width="getColumnWidth('target')"
       />
       <el-table-column
-        prop="num"
-        label="序号"
-        :min-width="getColumnWidth('num')"
-      />
-      <el-table-column
         prop="province"
         label="省份"
         :min-width="getColumnWidth('province')"
@@ -64,11 +59,6 @@
         prop="sex"
         label="性别"
         :min-width="getColumnWidth('sex')"
-      />
-      <el-table-column
-        prop="category"
-        label="科类"
-        :min-width="getColumnWidth('category')"
       />
       <el-table-column
         prop="selectSubjects"
@@ -122,14 +112,25 @@ const data = reactive({
   search: "",
   assessments: [
     {
+      target: "吉首大学", //目标学校
+      province: "贵州", //省份
+      class: "7", //班级
+      id: "20222113002", //学生学号
+      name: "玉苏普·吐荪江", //学生姓名
+      sex: "男", //学生性别
+      selectSubjects: "生物+地理", //选考科目
+      grades: "78.233", //分流成绩
+      voluntary1: "医学检验技术", //第一志愿
+      voluntary2: "护理学", //第二志愿
+      voluntary3: "软件工程", //第三志愿
+    },
+    {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -138,13 +139,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -153,13 +152,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -168,13 +165,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -183,13 +178,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -198,13 +191,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -213,13 +204,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -228,13 +217,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -243,13 +230,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -258,13 +243,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -273,13 +256,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -288,13 +269,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",
@@ -303,28 +282,11 @@ const data = reactive({
     },
     {
       target: "吉首大学",
-      num: "470",
       province: "贵州",
       class: "7",
       id: "20222113002",
       name: "玉苏普·吐荪江",
       sex: "男",
-      category: "理工",
-      selectSubjects: "生物+地理",
-      grades: "78.233",
-      voluntary1: "医学检验技术",
-      voluntary2: "护理学",
-      voluntary3: "软件工程",
-    },
-    {
-      target: "吉首大学",
-      num: "470",
-      province: "贵州",
-      class: "7",
-      id: "20222113002",
-      name: "玉苏普·吐荪江",
-      sex: "男",
-      category: "理工",
       selectSubjects: "生物+地理",
       grades: "78.233",
       voluntary1: "医学检验技术",

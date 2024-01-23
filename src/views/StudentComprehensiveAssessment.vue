@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-22 22:15:19
+ * @LastEditTime: 2024-01-23 14:52:33
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -33,8 +33,8 @@
         <h4>本月综测情况确认</h4>
         <br />
         <el-table :data="data.assessment" style="width: 100%">
-          <el-table-column prop="id" label="学号" width="120" />
-          <el-table-column prop="name" label="姓名" width="150" />
+          <el-table-column prop="userNumber" label="学号" width="120" />
+          <el-table-column prop="username" label="姓名" width="150" />
           <el-table-column label="德育">
             <el-table-column prop="add1" label="加分明细" width="120" />
             <el-table-column prop="sub1" label="减分明细" width="120" />
@@ -81,18 +81,16 @@
       <div>
         <h4>本学期总体综测情况</h4>
         <br />
-        <el-table :data="data.assessment">
-          <el-table-column prop="id" label="学号" />
-          <el-table-column prop="name" label="姓名" />
-          <el-table-column prop="point1" label="德育得分" />
-          <el-table-column prop="point2" label="智育得分" />
-          <el-table-column prop="point3" label="体育得分" />
-          <el-table-column prop="point4" label="美育得分" />
-          <el-table-column prop="point5" label="劳动得分" />
+        <el-table :data="data.total">
+          <el-table-column prop="class1" label="德育得分" />
+          <el-table-column prop="class2" label="智育得分" />
+          <el-table-column prop="class3" label="体育得分" />
+          <el-table-column prop="class4" label="美育得分" />
+          <el-table-column prop="class5" label="劳动得分" />
           <el-table-column label="综合测评得分" fixed="right">
-            <el-table-column prop="add_total" label="加分" />
-            <el-table-column prop="sub_total" label="减分" />
-            <el-table-column prop="point_total" label="综测总分" />
+            <el-table-column prop="add" label="加分" />
+            <el-table-column prop="sub" label="减分" />
+            <el-table-column prop="all" label="综测总分" />
           </el-table-column>
         </el-table>
         <br />
@@ -113,12 +111,12 @@
     <div>
       <el-form-item label="申诉问题类型：">
         <el-select
-          v-model="data.target"
+          v-model="data.type"
           class="m-2"
           placeholder="请选择申报问题类型"
         >
           <el-option
-            v-for="item in data.targets"
+            v-for="item in data.types"
             :key="item.value"
             :label="item.label"
             :value="item.value"
@@ -127,7 +125,7 @@
       </el-form-item>
       <el-form-item label="错误申报内容：">
         <el-input
-          v-model="data.textarea"
+          v-model="data.content"
           :autosize="{ minRows: 6, maxRows: 10 }"
           type="textarea"
           placeholder="请输入错误申报内容"
@@ -141,20 +139,18 @@
     </template>
   </el-dialog>
   <!-- 申诉历史对话框 -->
-  <el-dialog v-model="data.dialogVisible3" title="💬 待申述处理" width="50%">
+  <el-dialog v-model="data.dialogVisible3" title="💬 待申述处理" width="60%">
     <div>
       <el-table :data="data.complaintData" style="width: 100%">
         <el-table-column type="index" />
-        <el-table-column label="申诉问题类型" prop="type" min-width="120" />
-        <el-table-column label="申诉内容" prop="content" min-width="300" />
-        <el-table-column label="申诉时间" prop="created" min-width="200" />
-        <el-table-column label="申诉状态" min-width="100">
+        <el-table-column label="申诉问题类型" min-width="120">
           <template #default="scope">
-            <span v-if="scope.row.state == 0">处理中</span>
-            <span v-if="scope.row.state == 1">已处理</span>
-            <span v-if="scope.row.state == 2">已撤销</span>
+            <span v-if="scope.row.type == false">综测问题</span>
+            <span v-if="scope.row.type == true">信息/志愿问题</span>
           </template>
         </el-table-column>
+        <el-table-column label="申诉内容" prop="content" min-width="300" />
+        <el-table-column label="申诉时间" prop="created" min-width="200" />
         <el-table-column
           label="申诉状态"
           width="100"
@@ -168,23 +164,35 @@
         >
           <template #default="scope">
             <el-tag
-              :type="scope.row.state === 1 ? '' : 'success'"
+              :type="
+                scope.row.state === 0
+                  ? ''
+                  : scope.row.state === 1
+                  ? 'success'
+                  : 'info'
+              "
               disable-transitions
             >
               <span v-if="scope.row.state == 0">处理中</span>
               <span v-if="scope.row.state == 1">已处理</span>
               <span v-if="scope.row.state == 2">已撤销</span>
-            </el-tag
-            >
+            </el-tag>
           </template>
         </el-table-column>
         <el-table-column label="操作" min-width="150">
           <template #default="scope">
             <el-button
+              v-if="scope.row.state == 1 || scope.row.state == 2"
               size="small"
               type="danger"
               @click="handleDelete(scope.$index, scope.row)"
               >删除</el-button
+            >
+            <el-button
+              v-if="scope.row.state == 0"
+              size="small"
+              @click="handleRevoke(scope.$index, scope.row)"
+              >撤销</el-button
             >
           </template>
         </el-table-column>
@@ -194,7 +202,7 @@
 </template>
 <script setup>
 import signatures from "@/components/utils/Signatures.vue";
-import { ref, reactive, computed, onMounted } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
@@ -202,8 +210,8 @@ const data = reactive({
   state: "未到确认时间",
   assessment: [
     {
-      id: "2021401449",
-      name: "付小小",
+      userNumber: "2021401449",
+      username: "付小小",
       add1: "帮助老师批改作业2分",
       sub1: "旷课1分",
       point1: 1,
@@ -225,21 +233,34 @@ const data = reactive({
       point_total: 20,
     },
   ],
+  //目前综测合计
+  total: [
+    {
+      class1: 0,
+      class2: 0,
+      class3: 0,
+      class4: 0,
+      class5: 0,
+      add: 0,
+      sup: 0,
+      all: 0,
+    },
+  ],
   dialogVisible: false,
   dialogVisible2: false,
   dialogVisible3: false,
-  target: "",
-  targets: [
+  types: [
     {
-      value: "1",
+      value: false,
       label: "综测问题",
     },
     {
-      value: "2",
-      label: "其他问题",
+      value: true,
+      label: "信息/志愿问题",
     },
   ],
-  textarea: "",
+  type: "", //申诉类型
+  content: "", //申诉内容
   // 申诉列表
   complaintData: [
     {
@@ -271,14 +292,13 @@ onMounted(() => {
 //初始化
 function init() {
   getComplaintHistory();
-  studentFun.assess
-    .getAssessment({
-      month: 1,
-    })
-    .then((res) => {
-      console.log("个人综测", res);
-      // data.assessment=res
-    });
+  studentFun.assess.getAssessmentThisMonth().then((res) => {
+    console.log("个人综测", res);
+    data.assessment.pop();
+    data.assessment.push(res.content);
+    data.total.pop();
+    data.total.push(res.total);
+  });
 }
 //获取申诉历史
 function getComplaintHistory() {
@@ -290,18 +310,22 @@ function getComplaintHistory() {
     })
     .then((res) => {
       console.log(res);
-      data.complaintData = res.records;
+      data.complaintData = res.reverse();
     });
 }
 //提交申报
 function commit() {
   studentFun.complaint
     .submitComplaint({
-      content: "",
-      type: "",
+      content: data.content,
+      type: data.type,
     })
     .then((res) => {
+      // console.log("申诉结果：",res)
       data.dialogVisible2 = false;
+      getComplaintHistory();
+      data.content = "";
+      data.type = "";
       ElMessage({
         message: "已申报错误，请耐心等待处理",
         type: "success",
@@ -310,9 +334,28 @@ function commit() {
 }
 //筛选器
 const filterTag = (value, row) => {
-  console.log(row.state,value,row)
+  console.log(row.state, value, row);
   return row.state == value;
 };
+//删除（处理中/已取消）申诉项
+const handleDelete = (index, row) => {
+  // console.log("删除申诉项", index, row);
+  console.log("appealId:", row.appealId);
+  studentFun.complaint.deleteComplaint([row.appealId]).then((res) => {
+    data.complaintData.splice(index, 1);
+    ElMessage.success(res);
+  });
+};
+
+//撤销处理中的申诉项
+const handleRevoke = (index, row) => {
+  // console.log("撤销申诉项", index, row);
+  studentFun.complaint.revokeComplaint(row.appealId).then((res) => {
+    row.state = 2;
+    ElMessage.success(res);
+  });
+};
+
 const { getColumnWidth } = adaptiveColumnWidthFun(data.assessment);
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>

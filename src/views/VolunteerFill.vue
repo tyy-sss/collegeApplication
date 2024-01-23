@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-20 20:20:42
+ * @LastEditTime: 2024-01-23 10:21:03
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -115,8 +115,9 @@
 </template>
 <script setup>
 import signatures from "@/components/utils/Signatures.vue";
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
+import volunteerFun from "@/api/volunteer";
 import studentFun from "@/api/student";
 import { useRouter } from "vue-router";
 const router = useRouter();
@@ -149,16 +150,6 @@ const options = reactive([
       {
         value: "物联网工程",
         label: "物联网工程",
-      },
-      {
-        value: "人工智能",
-        label: "人工智能",
-        disabled: true,
-      },
-      {
-        value: "大数据网络",
-        label: "大数据网络",
-        disabled: true,
       },
     ],
   },
@@ -201,6 +192,23 @@ const options = reactive([
 ]);
 // 提交志愿
 let dialogVisible = ref(false);
+const initDetial = reactive({});
+onMounted(() => {
+  init();
+});
+function init() {
+  initDetial = router.params;
+  consloe.log("志愿情况初始值initDetial:",initDetial)
+  // //获取可选专业选项
+  // volunteerFun.options.selectStudentMajor().then((res) => {
+  //   consloe.log("获取可选专业选项:", res);
+
+  // });
+  // //获取初始专业选择
+  // volunteers.object1 = initDetial.first;
+  // volunteers.object2 = initDetial.second;
+  // volunteers.object3 = initDetial.third;
+}
 function submitVolunteer() {
   if (
     volunteers.object1 == null ||
@@ -216,16 +224,27 @@ function submitVolunteer() {
 function finish(sign) {
   console.log("签名img的base64", sign);
   studentFun.sign.submitSignature(sign).then((res) => {
-  //提交志愿接口(成功需要把志愿剩余次数减一)
-  // studentFun.user.updataVolunteer().then((res) => {
-  //   if (res.code === 200) {
-  // 提交志愿到服务端
-  router.push({ name: "volunteer-check" });
-  ElMessage({
-    type: "success",
-    message: "提交志愿成功",
-  });
-  //   }
+    //提交志愿接口(成功需要把志愿剩余次数减一)
+    volunteerFun.basis
+      .modifyWise({
+        id: initDetial.id, //志愿填报id
+        userId: initDetial.userId, //用户id
+        first: 0, //第一志愿
+        firstName: "", //第一志愿
+        second: 0, //第二志愿
+        secondName: "", //第二志愿
+        third: 0, //第三志愿
+        thirdName: "", //第三志愿
+        timeId: initDetial.timeId, //时间段id
+      })
+      .then((res) => {
+        console.log("提交志愿结果", res);
+        router.push({ name: "volunteer-check" });
+        ElMessage({
+          type: "success",
+          message: "提交志愿成功",
+        });
+      });
   });
 }
 </script>
