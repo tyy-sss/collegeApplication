@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-23 10:32:35
+ * @LastEditTime: 2024-01-24 16:18:09
  * @FilePath: \collegeApplication\src\views\VolunteerCheck.vue
  * @Description: 查看志愿页面
 -->
@@ -12,25 +12,28 @@
     <div class="info-box">
       <div class="grid-item">
         <div>
-          <span class="tag">学生姓名 :</span><span>{{ student.name }}</span>
+          <span class="tag">学生姓名 :</span
+          ><span>{{ data.student.name }}</span>
         </div>
         <div>
-          <span class="tag">学生学号 :</span><span>{{ student.id }}</span>
+          <span class="tag">学生学号 :</span><span>{{ data.student.id }}</span>
         </div>
         <div>
-          <span class="tag">身份证号 :</span><span>{{ student.card }}</span>
+          <span class="tag">身份证号 :</span
+          ><span>{{ data.student.card }}</span>
         </div>
         <div>
-          <span class="tag">学生性别 :</span><span>{{ student.sex }}</span>
+          <span class="tag">学生性别 :</span><span>{{ data.student.sex }}</span>
         </div>
         <div>
           <span class="tag">录取学校 :</span
           ><span
-            ><b>{{ student.school }}</b></span
+            ><b>{{ data.student.school }}</b></span
           >
         </div>
         <div>
-          <span class="tag">学生班级 :</span><span>{{ student.class }}</span>
+          <span class="tag">学生班级 :</span
+          ><span>{{ data.student.class }}</span>
         </div>
       </div>
     </div>
@@ -38,22 +41,22 @@
     <el-card shadow="hover" class="card voluteer-box">
       <div class="column-center-flex">
         <br />
-        <h1>第一志愿：{{ volunteers.object1 || "未填报" }}</h1>
+        <h1>第一志愿：{{ data.volunteers.firstName || "未填报" }}</h1>
         <br />
-        <h1>第二志愿：{{ volunteers.object2 || "未填报" }}</h1>
+        <h1>第二志愿：{{ data.volunteers.secondName || "未填报" }}</h1>
         <br />
-        <h1>第三志愿：{{ volunteers.object3 || "未填报" }}</h1>
+        <h1>第三志愿：{{ data.volunteers.thirdName || "未填报" }}</h1>
         <br /></div
     ></el-card>
     <el-button type="danger" @click="changeVolunteer"
-      >{{ volunteers.times == 3 ? "填报" : "修改" }}志愿</el-button
+      >{{ data.volunteers.frequency == 3 ? "填报" : "修改" }}志愿</el-button
     >
     <br />
     <!-- 修改截止日期，次数tip -->
     <div>
-      截止时间{{ volunteers.danger }}前，您还有<strong style="color: red">{{
-        volunteers.times
-      }}</strong
+      截止时间{{ data.volunteers.endTime }}前，您还有<strong
+        style="color: red"
+        >{{ data.volunteers.frequency }}</strong
       >次修改机会
     </div>
     <br />
@@ -74,23 +77,24 @@ import studentFun from "@/api/student";
 import volunteerFun from "@/api/volunteer";
 import { useRouter } from "vue-router";
 const router = useRouter();
-let student = reactive({
-  name: "付小小",
-  id: "415567569789",
-  card: "365124200103052214",
-  sex: "女",
-  class: "2023级预科1班",
-  school: "湘南学院",
+const data = reactive({
+  student: {
+    name: "付小小",
+    id: "415567569789",
+    card: "365124200103052214",
+    sex: "女",
+    class: "2023级预科1班",
+    school: "湘南学院",
+  },
+  volunteers: {
+    firstName: "",
+    secondName: "",
+    thirdName: "",
+    endTime: "2023.11.09",
+    frequency: 3,
+  },
 });
-// 志愿情况
-let volunteers = reactive({
-  initDetial: {},
-  object1: "",
-  object2: "",
-  object3: "",
-  danger: "2023.11.09",
-  times: 3,
-});
+
 onMounted(() => {
   init();
 });
@@ -100,19 +104,17 @@ function init() {
 //初始化志愿/剩余填写次数数据
 function getVolunteer() {
   volunteerFun.student.selectWish().then((res) => {
-    console.log("初始化志愿/剩余填写次数数据", res);
-    volunteers.initDetial = res;
-    // volunteers.object1 = res.firstName;
-    // volunteers.object2 = res.secondName;
-    // volunteers.object3 = res.thirdName;
-    // volunteers.times = res.times;
-    // volunteers.danger = res.datetime;
+    data.volunteers = res;
   });
 }
+
 // 跳转至志愿填报页面
 function changeVolunteer() {
-  if (volunteers.times > 0) {
-    router.push({ name: "volunteer-fill", params: volunteers.initDetial });
+  if (data.volunteers.frequency > 0) {
+    router.push({
+      name: "volunteer-fill",
+      query: { originVolunteers: data.volunteers },
+    });
   } else {
     ElMessage({
       type: "error",

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-23 10:21:03
+ * @LastEditTime: 2024-01-24 16:48:50
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -28,25 +28,28 @@
     <div class="info-box">
       <div class="grid-item">
         <div>
-          <span class="tag">学生姓名 :</span><span>{{ student.name }}</span>
+          <span class="tag">学生姓名 :</span
+          ><span>{{ data.student.name }}</span>
         </div>
         <div>
-          <span class="tag">学生学号 :</span><span>{{ student.id }}</span>
+          <span class="tag">学生学号 :</span><span>{{ data.student.id }}</span>
         </div>
         <div>
-          <span class="tag">身份证号 :</span><span>{{ student.card }}</span>
+          <span class="tag">身份证号 :</span
+          ><span>{{ data.student.card }}</span>
         </div>
         <div>
-          <span class="tag">学生性别 :</span><span>{{ student.sex }}</span>
+          <span class="tag">学生性别 :</span><span>{{ data.student.sex }}</span>
         </div>
         <div>
           <span class="tag">录取学校 :</span
           ><span
-            ><b>{{ student.school }}</b></span
+            ><b>{{ data.student.school }}</b></span
           >
         </div>
         <div>
-          <span class="tag">学生班级 :</span><span>{{ student.class }}</span>
+          <span class="tag">学生班级 :</span
+          ><span>{{ data.student.class }}</span>
         </div>
       </div>
     </div>
@@ -54,34 +57,63 @@
     <div class="volunteers-box">
       <el-form-item label="第一志愿 ：">
         <el-cascader
-          :options="options"
+          :options="data.options"
           placeholder="请输入专业名称"
           :show-all-levels="false"
           :props="props"
-          v-model="volunteers.object1"
+          v-model="data.volunteers.firstName"
         />
       </el-form-item>
       <el-form-item label="第二志愿 ：">
         <el-cascader
-          :options="options"
+          :options="data.options"
           placeholder="请输入专业名称"
           :show-all-levels="false"
           :props="props"
-          v-model="volunteers.object2"
+          v-model="data.volunteers.secondName"
         />
       </el-form-item>
       <el-form-item label="第三志愿 ：">
         <el-cascader
-          :options="options"
+          :options="data.options"
           placeholder="请输入专业名称"
           :show-all-levels="false"
           :props="props"
-          v-model="volunteers.object3"
+          v-model="data.volunteers.thirdName"
         />
       </el-form-item>
     </div>
     <el-button type="primary" @click="submitVolunteer">提交志愿</el-button>
-
+    <br />
+    <el-popover
+      :width="300"
+      popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
+    >
+      <template #reference>
+        <el-icon><InfoFilled /></el-icon>
+      </template>
+      <template #default>
+        <div>
+          <h3>您的上一次的志愿填报数据：</h3>
+          <br />
+          <span
+            >第一志愿 :<b>{{
+              data.originVolunteers.firstName || "暂无数据"
+            }}</b></span
+          ><br />
+          <span
+            >第二志愿 :<b>{{
+              data.originVolunteers.secondName || "暂无数据"
+            }}</b></span
+          ><br />
+          <span
+            >第三志愿 :<b>{{
+              data.originVolunteers.thirdName || "暂无数据"
+            }}</b></span
+          >
+        </div>
+      </template>
+    </el-popover>
     <div class="tip top-border">
       <div><b>说明</b></div>
       <br />
@@ -101,11 +133,11 @@
     <div>
       <div style="margin-left: 1rem">
         <span>您的第一,第二,第三志愿分别为</span><br />
-        <b>第一志愿：{{ volunteers.object1 }}</b
+        <b>第一志愿：{{ data.volunteers.firstName }}</b
         ><br />
-        <b>第二志愿：{{ volunteers.object2 }}</b
+        <b>第二志愿：{{ data.volunteers.secondName }}</b
         ><br />
-        <b>第三志愿：{{ volunteers.object3 }}</b
+        <b>第三志愿：{{ data.volunteers.thirdName }}</b
         ><br />
         <span>请确认准确无误后提交</span><br /><br />
       </div>
@@ -124,96 +156,116 @@ const router = useRouter();
 const props = {
   emitPath: false, //绑定的内容只获取最后一级的value值。
 };
-let student = {
-  name: "付小小",
-  id: "415567569789",
-  card: "365124200103052214",
-  sex: "女",
-  class: "2023级预科1班",
-  school: "湘南学院",
-};
-// 志愿
-let volunteers = reactive({
-  object1: null,
-  object2: null,
-  object3: null,
+const data = reactive({
+  student: {
+    name: "付小小",
+    id: "415567569789",
+    card: "365124200103052214",
+    sex: "女",
+    class: "2023级预科1班",
+    school: "湘南学院",
+  },
+  volunteers: {
+    firstName: "",
+    secondName: "",
+    thirdName: "",
+  },
+  originVolunteers: {},
+  options: [
+    {
+      value: "学院1",
+      label: "学院1",
+      children: [
+        {
+          value: "汉语言文学（师范）",
+          label: "汉语言文学（师范）",
+        },
+        {
+          value: "旅游管理",
+          label: "旅游管理",
+        },
+      ],
+    },
+    {
+      value: "学院2",
+      label: "学院2",
+      children: [
+        {
+          value: "文化产业管理",
+          label: "文化产业管理",
+        },
+        {
+          value: "视觉传达设计",
+          label: "视觉传达设计",
+        },
+        {
+          value: "漫画设计",
+          label: "漫画设计",
+        },
+      ],
+    },
+    {
+      value: "学院3",
+      label: "学院3",
+      children: [
+        {
+          value: "药物科学",
+          label: "药物科学",
+        },
+        {
+          value: "动物医学",
+          label: "动物医学",
+        },
+        {
+          value: "法医",
+          label: "法医",
+        },
+      ],
+    },
+  ],
 });
-const options = reactive([
-  {
-    value: "计算机科学与工程学院",
-    label: "计算机科学与工程学院",
-    children: [
-      {
-        value: "软件工程",
-        label: "软件工程",
-      },
-      {
-        value: "物联网工程",
-        label: "物联网工程",
-      },
-    ],
-  },
-  {
-    value: "美术学院",
-    label: "美术学院",
-    children: [
-      {
-        value: "服装设计",
-        label: "服装设计",
-      },
-      {
-        value: "视觉传达设计",
-        label: "视觉传达设计",
-      },
-      {
-        value: "漫画设计",
-        label: "漫画设计",
-      },
-    ],
-  },
-  {
-    value: "医学院",
-    label: "医学院",
-    children: [
-      {
-        value: "药物科学",
-        label: "药物科学",
-      },
-      {
-        value: "动物医学",
-        label: "动物医学",
-      },
-      {
-        value: "法医",
-        label: "法医",
-      },
-    ],
-  },
-]);
 // 提交志愿
 let dialogVisible = ref(false);
-const initDetial = reactive({});
 onMounted(() => {
   init();
 });
 function init() {
-  initDetial = router.params;
-  consloe.log("志愿情况初始值initDetial:",initDetial)
-  // //获取可选专业选项
-  // volunteerFun.options.selectStudentMajor().then((res) => {
-  //   consloe.log("获取可选专业选项:", res);
-
-  // });
+  data.originVolunteers = router.currentRoute.value.query.originVolunteers;
+  console.log("志愿情况初始值initDetial:", data.originVolunteers);
+  //获取可选专业选项
+  volunteerFun.options.selectStudentMajor().then((res) => {
+    console.log("获取可选专业选项:", res);
+    // 假设原始数据保存在变量data中
+    let myOptions = [];
+    for (let i = 0; i < res.length; i++) {
+      let college = res[i].college;
+      let majors = res[i].majors;
+      let children = [];
+      for (let j = 0; j < majors.length; j++) {
+        children.push({
+          value: majors[j].majorId,
+          label: majors[j].name,
+        });
+      }
+      myOptions.push({
+        value: college,
+        label: college,
+        children: children,
+      });
+    }
+    console.log("我的可选专业选项是：", myOptions);
+    data.options = myOptions;
+  });
   // //获取初始专业选择
-  // volunteers.object1 = initDetial.first;
-  // volunteers.object2 = initDetial.second;
-  // volunteers.object3 = initDetial.third;
+  // data.volunteers.firstName = data.originVolunteers.firstName;
+  // data.volunteers.secondName = data.originVolunteers.secondName;
+  // data.volunteers.thirdName = data.originVolunteers.thirdName;
 }
 function submitVolunteer() {
   if (
-    volunteers.object1 == null ||
-    volunteers.object2 == null ||
-    volunteers.object3 == null
+    data.volunteers.firstName == null ||
+    data.volunteers.secondName == null ||
+    data.volunteers.thirdName == null
   ) {
     ElMessage.error("志愿不能为空，请认真完成志愿填报");
   } else {
