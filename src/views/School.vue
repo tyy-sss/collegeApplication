@@ -61,7 +61,7 @@ const topChoose = reactive([
   },
   {
     img: require("@/assets/image/subject-manage.png"),
-    text: "高考科目管理",
+    text: "科目统一管理",
     color: "RGBA(6,196,109,0.7)",
     shadow: " 8px 8px 5px RGBA(6,196,109,0.3)",
   },

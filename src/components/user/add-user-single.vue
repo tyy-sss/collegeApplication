@@ -49,7 +49,7 @@
               </el-col>
             </el-row>
 
-            <el-row v-if="!form.isTeacher" :gutter="15">
+            <el-row  :gutter="15">
               <el-col :span="8">
                 <el-form-item label="来源省份:" prop="province">
                   <el-input v-model="form.ruleForm.province" /> </el-form-item
@@ -66,7 +66,7 @@
               </el-col>
             </el-row>
 
-            <el-row :gutter="80">
+            <el-row :gutter="80" v-if="form.isTeacher">
               <el-col :span="12">
                 <el-form-item label="政治面貌:" prop="politicalStatus">
                   <el-select
@@ -113,45 +113,10 @@
               >
             </el-row>
 
-            <el-row>
-              <el-col :span="16">
-                <el-form-item
-                  v-if="!form.isTeacher"
-                  label="身份证号:"
-                  prop="idCard"
-                >
-                  <el-input v-model="form.ruleForm.idCard" /> </el-form-item
-              ></el-col>
-            </el-row>
-
             <el-row v-if="!form.isTeacher">
               <el-col :span="16">
                 <el-form-item label="计划性质:" prop="plan">
                   <el-input v-model="form.ruleForm.plan" /> </el-form-item
-              ></el-col>
-            </el-row>
-
-            <el-row>
-              <el-col :span="16">
-                <el-form-item
-                  v-if="!form.isTeacher"
-                  label="家庭地址:"
-                  prop="address"
-                >
-                  <el-input v-model="form.ruleForm.address" /> </el-form-item
-              ></el-col>
-            </el-row>
-
-            <el-row :gutter="40">
-              <el-col :span="12">
-                <el-form-item label="联系电话:" prop="phone">
-                  <el-input v-model="form.ruleForm.phone" /> </el-form-item
-              ></el-col>
-              <el-col v-if="!form.isTeacher" :span="12">
-                <el-form-item label="父母电话:" prop="parentPhone">
-                  <el-input
-                    v-model="form.ruleForm.parentPhone"
-                  /> </el-form-item
               ></el-col>
             </el-row>
           </el-form>
@@ -178,8 +143,6 @@ import {
   subjectList,
 } from "@/assets/js/data/information-dropdown-data";
 import {
-  IDENTITY_TEST,
-  PHONE_TEST,
   NAME_TEST,
 } from "@/constants/regular-expression";
 import { ElMessage } from "element-plus";
@@ -201,17 +164,11 @@ const form = reactive({
     userNumber: "",
     username: "",
     sex: "",
-    idCard: "",
-    politicsStatus: "",
-    nation: "",
     className: "",
     school: "",
     province: "",
     subjects: [],
     plan: "",
-    address: "",
-    phone: "",
-    parentPhone: "",
   },
   rules: {
     userNumber: [{ required: true, message: "请输入", trigger: "blur" }],
@@ -224,32 +181,9 @@ const form = reactive({
     school: [{ required: true, message: "请输入", trigger: "blur" }],
     className: [{ required: true, message: "请输入", trigger: "blur" }],
     politicsStatus: [{ required: true, message: "请输入", trigger: "blur" }],
-    nation: [{ required: true, message: "请输入" }],
     subjects: [
       { required: true, message: "请输入", trigger: "blur" },
       { validator: validateElectiveSubject, trigger: "blur" },
-    ],
-    idCard: [
-      { required: true, message: "请输入", trigger: "blur" },
-      {
-        pattern: IDENTITY_TEST,
-        message: "请输入正确的身份证号",
-        trigger: "blur",
-      },
-    ],
-    phone: [
-      {
-        pattern: PHONE_TEST,
-        message: "请输入正确的手机号码",
-        trigger: "blur",
-      },
-    ],
-    parentPhone: [
-      {
-        pattern: PHONE_TEST,
-        message: "请输入正确的手机号码",
-        trigger: "blur",
-      },
     ],
   },
 });

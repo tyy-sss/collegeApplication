@@ -1,7 +1,6 @@
 // 文件导入
 import XLSX from "xlsx";
 import { subjectList } from "@/assets/js/data/information-dropdown-data";
-import { PHONE_TEST, IDENTITY_TEST } from "@/constants/regular-expression";
 
 // 按照二进制读取文件
 export const readFile = (file) => {
@@ -102,6 +101,8 @@ export const handleStudentInformation = (data) => {
       return;
     }
     item.subjects = Array.from(electiveSubjectList);
+    // 删除Object属性
+    delete item.object
     handleData.push(item);
   });
   console.log(handleData, "最后的数据");
