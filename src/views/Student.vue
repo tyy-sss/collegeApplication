@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-23 21:06:32
+ * @LastEditTime: 2024-01-24 17:33:56
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -128,8 +128,8 @@
       <el-button type="primary" @click="handleRepasswds"
         >批量重置密码</el-button
       >
-      <el-button type="primary" @click="handleSetPost">撤销职位</el-button>
-      <el-button type="primary" @click="handleSetPost"
+      <el-button type="primary" @click="handleDeletePosts">撤销职位</el-button>
+      <el-button type="primary" @click="handleSetPosts"
         >设为评测小组人员</el-button
       >
       <br />
@@ -482,6 +482,29 @@ const handleRepasswds = () => {
     ElMessage.success(res);
   });
 };
+//批量撤销测评小组职位
+const handleDeletePosts=()=>{
+  const dealArray = [];
+  data.multipleSelection.forEach((item) => {
+    dealArray.push(item.userNumber);
+  });
+  teacherFun.class.deleteAssessPost(dealArray).then((res) => {
+    console.log(res)
+    ElMessage.success("操作成功");
+  });
+}
+//批量设置测评小组职位
+//这个接口还没改成批量的，待测试
+const handleSetPosts=()=>{
+  const dealArray = [];
+  data.multipleSelection.forEach((item) => {
+    dealArray.push(item.userNumber);
+  });
+  teacherFun.class.setAssessPost(dealArray).then((res) => {
+    console.log(res)
+    ElMessage.success("操作成功");
+  });
+}
 //详细信息(可编辑)
 const handleEdit = (index, row) => {
   console.log("详细信息(可编辑)", index, row);
@@ -510,14 +533,26 @@ const handleDeal = (index, row) => {
     ElMessage.success(res);
   });
 };
-//重置测评账号密码
+//重置测评小组学生账号密码
 const handleRecover2 = (index, row) => {
   console.log("重置测评账号密码", index, row);
+  teacherFun.class.updateAssessPassword({
+    userNumber:row.userNumber
+  }).then((res)=>{
+    console.log(res)
+    ElMessage.success("重置成功");
+  })
 };
 //撤销评测小组人员账号
 const handleFired = (index, row) => {
   console.log("撤销评测小组人员账号", index, row);
+  teacherFun.class.deleteAssessPost([row.userNumber]).then((res)=>{
+    console.log(res)
+    ElMessage.success("撤销成功");
+    data.evaluationData.splice(index, 1);
+  })
 };
+
 //筛选器
 const filterTag = (value, row) => {
   // console.log(row.state, value, row);

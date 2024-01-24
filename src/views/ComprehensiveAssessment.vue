@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-23 22:07:41
+ * @LastEditTime: 2024-01-24 17:27:35
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -671,11 +671,10 @@ onMounted(() => {
 });
 function init() {
   getAssessmentDetails(); //获取综测信息
-  // getComplaintsDeatils(); //获取申诉列表数据
+  getComplaintsDeatils(); //获取申诉列表数据
 }
 //获取综测信息
 function getAssessmentDetails() {
-  console.log("XXX")
   studentFun.assess.getAssessments({
     name:null,
     userNumber:null,
@@ -693,7 +692,7 @@ function getComplaintsDeatils() {
       state: "",
     })
     .then((res) => {
-      // console.log("申诉列表", res);
+      console.log("申诉列表", res);
       data.complaintData = res;
     });
 }

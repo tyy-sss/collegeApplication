@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-20 16:47:58
+ * @LastEditTime: 2024-01-24 21:00:31
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:综合测评表公示页面
 -->
@@ -31,8 +31,8 @@
       @cell-mouse-enter="handleCellEnter"
       @cell-mouse-leave="handleCellLeave"
     >
-      <el-table-column prop="id" label="学号" min-width="120" />
-      <el-table-column prop="name" fixed label="姓名" min-width="150" />
+      <el-table-column prop="userNumber" label="学号" min-width="120" />
+      <el-table-column prop="username" fixed label="姓名" min-width="150" />
       <el-table-column label="德育">
         <el-table-column prop="add1" label="加分明细" min-width="120" />
         <el-table-column prop="sub1" label="减分明细" min-width="120" />
@@ -73,20 +73,22 @@
     <!-- 分页 -->
     <div class="pagination">
       <el-pagination
-        :page-size="7"
-        :pager-count="5"
+        :page-size=data.page.pageSize
+        :pager-count=10
         layout="prev, pager, next"
-        :total="60"
+        :total=data.page.total
+        @current-change="handleCurrentChange"
         style="margin-left: auto"
       />
     </div>
   </div>
 </template>
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, computed, onMounted } from "vue";
 import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment-style";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
+import teacherFun from "@/api/teacher";
 const data = reactive({
   myclass: "2023级1班",
   search: "",
@@ -253,12 +255,52 @@ const data = reactive({
       point_total: 10,
     },
   ],
+  page: {
+    total: 200, // 总条数
+    currentPage: 1, // 当前页
+    pageSize: 8, //一页的数据量
+  },
 });
 
-const filterTableData = computed(() =>
-  data.assessments.filter((d) => !data.search || data.name.includes(data.search))
-);
+onMounted(() => {
+  init();
+});
+function init() {
+  getAssessmentDetails(1); //获取综测信息
+}
+function getAssessmentDetails(currentPage) {
+  //这里是老师身份请求学生综测信息
+  teacherFun.assessment
+    .getAssessments({
+      name: "",
+      userNumber: "",
+      month: 1,//这里服务端有个问题还没解决
+      identity: 1,
+      current: currentPage,
+      size: 15,
+    })
+    .then((res) => {
+      console.log("获取综测信息结果：", res);
+      data.assessments=[];
+      data.page.currentPage=res.current;
+      data.page.pageSize=res.size;
+      data.page.total = res.total;
+      res.records.forEach((item)=>{
+        data.assessments.push(item.content)
+      })
+    });
+}
 
+const filterTableData = computed(() =>
+  data.assessments.filter(
+    (d) => !data.search || data.name.includes(data.search)
+  )
+);
+//改变分页页数
+const handleCurrentChange = (val) => {
+  console.log(`current page: ${val}`)
+  getAssessmentDetails(val);
+}
 // 数据excel导出
 const handleExcelExport = () => {
   export_json_to_excel(

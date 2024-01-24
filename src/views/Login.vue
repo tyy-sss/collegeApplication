@@ -81,6 +81,7 @@ const login = throttle(() => {
         .then((data) => {
           // 保存token 还有菜单信息
           setAccessToken(data.token.accessToken);
+          console.log("token:",data.token.accessToken)
           setRefreshToken(data.token.refreshToken);
           setRole(data.role);
           const href = router.resolve({
