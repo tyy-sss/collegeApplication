@@ -7,8 +7,10 @@ let managerFun = {
   school: {},
   area: {},
   subject: {},
+  examSubject: {},
   major: {},
   wishTime: {},
+  grades: {},
 };
 
 /**
@@ -199,6 +201,30 @@ managerFun.subject.deleteSubject = (subjectId) => {
   return http.delete("/subject/delete?subjectIds=" + subjectId);
 };
 
+/** 预科考试科目 */
+/**
+ * 获得预科考试列表
+ * @returns
+ */
+managerFun.examSubject.checkSubject = () => {
+  return http.get("/grade/subject");
+};
+/**
+ * 添加预科科目
+ * @param {科目名} gradeName
+ * @returns
+ */
+managerFun.examSubject.addSubject = (gradeName) => {
+  return http.post("/grade/subject", gradeName);
+};
+/**
+ * 删除预科科目
+ * @param {*} id
+ * @returns
+ */
+managerFun.examSubject.deleteSubject = (id) => {
+  return http.delete("/grade/subject?id=" + id);
+};
 /** 专业 */
 /**
  * 通过学校id获得这个学校的专业信息
@@ -259,7 +285,12 @@ managerFun.major.deleteMajor = (majorIds) => {
  * @param {*} size
  * @returns
  */
-managerFun.wishTime.selectWishTime1 = (schoolId, ago, current = 1, size = 2) => {
+managerFun.wishTime.selectWishTime1 = (
+  schoolId,
+  ago,
+  current = 1,
+  size = 2
+) => {
   return http.get("/wishTime/selectWishTime1", {
     schoolId,
     ago,
@@ -274,7 +305,7 @@ managerFun.wishTime.selectWishTime1 = (schoolId, ago, current = 1, size = 2) => 
  * @param {*} size
  * @returns
  */
-managerFun.wishTime.selectWishTime = (schoolId,  current = 1, size = 10) => {
+managerFun.wishTime.selectWishTime = (schoolId, current = 1, size = 10) => {
   return http.get("/wishTime/selectWishTime", {
     schoolId,
     current,
@@ -289,7 +320,22 @@ managerFun.wishTime.selectWishTime = (schoolId,  current = 1, size = 10) => {
 managerFun.wishTime.addWishTime = (timeData) => {
   return http.post("/wishTime/addWishTime", timeData);
 };
-managerFun.wishTime.modifyWiseTime = (timeData) =>{
+/**
+ * 修改志愿时间
+ * @param {志愿时间} timeData
+ * @returns
+ */
+managerFun.wishTime.modifyWiseTime = (timeData) => {
   return http.put("/wishTime/modifyWiseTime", timeData);
-}
+};
+
+/** 成绩 */
+/**
+ * 上传成绩数据
+ * @param {学生成绩数据} data 
+ * @returns 
+ */
+managerFun.grades.addGrades = (data) => {
+  return http.post("/grade", data);
+};
 export default managerFun;

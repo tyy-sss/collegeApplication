@@ -1,6 +1,6 @@
 <template>
   <div class="add-user">
-    <el-dialog v-model="data.dialogTableVisible" title="添加用户">
+    <el-dialog v-model="data.dialogTableVisible" title="导入学生成绩单">
       <el-divider />
       <div class="content top">
         <div class="upload">
@@ -46,37 +46,27 @@
             <div>（4）每一次上传数据最多上传1100条。</div>
           </div>
         </div>
-        <el-button type="primary" @click="handleExportStudent"
-          >下载学生信息模板</el-button
-        >
-        <el-button type="primary" @click="handleExportTeach"
-          >下载老师信息模板</el-button
+        <el-button type="primary" @click="handleExportGrades"
+          >下载成绩单模板</el-button
         >
       </div>
     </el-dialog>
   </div>
 </template>
-<script setup>
-import { reactive } from "vue";
+  <script setup>
+import { reactive, watch } from "vue";
 import { excelExport } from "@/assets/js/excel/excel-export";
-import {
-  studentHeader,
-  studentModelData,
-  teacherHeader,
-  teacherModelData,
-} from "@/assets/js/excel/excel-export-data";
 import {
   readFile,
   getExcelData,
   excelLeadingIn,
-  handleStudentInformation,
-  handleTeacherInformation,
 } from "@/assets/js/excel/excel-leading";
 import {
-  studentCharacter,
-  teacherCharacter,
-} from "@/assets/js/excel/excel-leading-data";
-
+  getGradesCharacter,
+  handleGradesInformation,
+} from "@/assets/js/excel/grades/grades-leading";
+import { getGradesHeader } from "@/assets/js/excel/grades/grades-export";
+const props = defineProps({ gradesList: Array });
 // 接口
 import managerFun from "@/api/manager";
 import { ElMessage } from "element-plus";
@@ -103,52 +93,36 @@ const handleAddUser = async (ev) => {
     //读取file中的数据
     let data = await readFile(file);
     const excelData = getExcelData(data);
-    const length = Object.keys(excelData[0]).length;
+    console.log(excelData);
     let addData = [];
-    if (
-      length === Object.keys(studentCharacter).length ||
-      length + 1 === Object.keys(studentCharacter).length
-    ) {
-      // 批量添加学生
-      addData = excelLeadingIn(excelData, studentCharacter);
-      addData = handleStudentInformation(addData);
-      adduerList(addData);
-    } else if (length === Object.keys(teacherCharacter).length) {
-      // 批量添加老师
-      addData = excelLeadingIn(excelData, teacherCharacter);
-      addData = handleTeacherInformation(addData);
-      addTeacherList(addData);
-    } else {
-      ElMessage.error("上传失败，表格格式错误");
-      handleClose();
-    }
+    console.log(getGradesCharacter(props.gradesList));
+    addData = excelLeadingIn(excelData, getGradesCharacter(props.gradesList));
+    addData = handleGradesInformation(addData, props.gradesList);
+    addGrades(addData);
   }
 };
 // 调用父组件的方法
-const emit = defineEmits(["getUserList"]);
+const emit = defineEmits(["getGradesList"]);
 // 上传之后
 const handleClose = () => {
   new Promise((resolve, reject) => {
     resolve((data.dialogTableVisible = false));
   }).then(() => {
+    console.log(data.dialogTableVisible);
     data.upload.isProgress = false;
-    emit("getUserList");
+    emit("getGradesList");
   });
 };
 
-// 导出学生信息表
-const handleExportStudent = () => {
-  excelExport(studentModelData, studentHeader, "学生信息模板表");
+// 导出成绩单模板表
+const handleExportGrades = () => {
+  const gradesHeader = getGradesHeader(props.gradesList);
+  excelExport([], gradesHeader, "成绩单模板表");
 };
-// 导出老师信息表
-const handleExportTeach = () => {
-  excelExport(teacherModelData, teacherHeader, "老师信息模板表");
-};
-// 添加用户接口
-const adduerList = (val) => {
-  // 把学生数据传给后端
-  managerFun.user
-    .addStudentsByExcel(val)
+// 上传成绩数据
+const addGrades = (val) => {
+  managerFun.grades
+    .addGrades(val)
     .then((res) => {
       ElMessage.success(res);
     })
@@ -157,24 +131,18 @@ const adduerList = (val) => {
       handleClose();
     });
 };
-// 添加老师接口
-const addTeacherList = (val) => {
-  managerFun.user
-    .addTeacherByExcel(val)
-    .then((res) => {
-      ElMessage.success(res);
-    })
-    .catch(() => {})
-    .finally(() => {
-      handleClose();
-    });
-};
+watch(
+  () => props.gradesList,
+  (newVal, oldVal) => {
+    console.log(newVal, oldVal);
+  }
+);
 // 把参数暴露给父组件，让父组件进行修改
 defineExpose({
   data,
 });
 </script>
-<style scoped>
+  <style scoped>
 ::v-deep .el-divider--horizontal {
   margin: 2px 0;
 }

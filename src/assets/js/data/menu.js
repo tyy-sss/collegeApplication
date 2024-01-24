@@ -30,6 +30,11 @@ const managerMenuData = reactive([
     icon: "location",
   },
   {
+    menuName: "成绩管理",
+    path: "/grades",
+    icon: "location",
+  },
+  {
     menuName: "历史管理",
     path: "/history",
     icon: "location",

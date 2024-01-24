@@ -56,7 +56,7 @@
             />
           </div>
         </div>
-        <div class="middle">
+        <div class="middle"> 
           <el-table
             ref="multipleTableRef"
             :data="data.tableData"
@@ -64,6 +64,7 @@
             stripe
             style="width: 100%"
             @selection-change="handleSelectionChange"
+            empty-text="暂无数据"
           >
             <el-table-column type="selection" width="35" />
             <el-table-column
@@ -72,26 +73,17 @@
               min-width="120"
             />
             <el-table-column prop="username" label="用户姓名" min-width="120" />
-            <el-table-column prop="idCard" label="身份证号" min-width="150">
-              <template #default="scope">{{
-                scope.row.idCard ? scope.row.idCard : "-"
-              }}</template>
-            </el-table-column>
-            <el-table-column prop="role" label="用户角色" min-width="120">
-              <template #default="scope">{{
-                scope.row.role ? scope.row.role : "-"
-              }}</template>
-            </el-table-column>
-            <el-table-column prop="className" label="所在班级">
-              <template #default="scope">{{
-                scope.row.className ? scope.row.className : "-"
-              }}</template> </el-table-column
-            >>
-            <el-table-column prop="updateTime" label="最近更新" min-width="100">
-              <template #default="scope">{{
-                scope.row.updateTime ? scope.row.updateTime : "-"
-              }}</template></el-table-column
+            <el-table-column prop="role" label="用户角色" min-width="120" />
+            <el-table-column prop="className" label="所在班级" />
+            <el-table-column
+              prop="lastDdlTime"
+              label="最近更新"
+              min-width="100"
             >
+            <template #default="scope">
+              {{ scope.row.lastDdlTime.replace('T',' ') }}
+            </template>
+            </el-table-column>
             <el-table-column label="操作" min-width="180px">
               <template #default="scope">
                 <el-button
