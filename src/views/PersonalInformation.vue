@@ -257,7 +257,7 @@
       </div>
     </template>
   </el-drawer>
-  <!-- 修改资料抽屉 -->
+  <!-- 修改密码抽屉 -->
   <el-drawer v-model="data.drawer2" direction="ttb" style="min-height: 50%">
     <!-- 标题 -->
     <template #header>

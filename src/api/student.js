@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-06 20:57:50
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-24 19:36:43
+ * @LastEditTime: 2024-01-25 21:11:19
  * @FilePath: \collegeApplication\src\api\student.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -66,7 +66,7 @@ studentFun.complaint.deleteComplaint = (params) => {
 /**
  * 撤销申诉
  */
- studentFun.complaint.revokeComplaint = (params) => {
+studentFun.complaint.revokeComplaint = (params) => {
   return http.put(`/student/appeal`, params);
 };
 
@@ -101,15 +101,15 @@ studentFun.assess.getAssessments = (params) => {
 /**
  * 综测小组根据月份获取学生综测
  */
- studentFun.assess.getAssessmentsByMonth = (params) => {
+studentFun.assess.getAssessmentsByMonth = (params) => {
   return http.get(`/appraisal-team/appraisal?name=${params.name}&userNumber=${params.userNumber}&month=${params.month}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
 };
 
 /**
  * 综测小组上传学生综测信息
  */
- studentFun.assess.submitAssessments = (params) => {
-  return http.post(`/appraisal-team/appeal`,params);
+studentFun.assess.submitAssessments = (params) => {
+  return http.post(`/appraisal-team/appeal`, params);
 };
 
 /**
@@ -122,15 +122,15 @@ studentFun.assess.getComplaint = (params) => {
 /**
  * 综测小组删除学生申诉
  */
- studentFun.assess.deleteComplaint = (params) => {
-  return http.delete(`/appraisal-team/appeals`,params);
+studentFun.assess.deleteComplaint = (params) => {
+  return http.delete(`/appraisal-team/appeals`, params);
 };
 
 /**
  * 综测小组处理学生申诉
  */
- studentFun.assess.dealComplaint = (params) => {
-  return http.put(`/appraisal-team/appeal`,params);
+studentFun.assess.dealComplaint = (params) => {
+  return http.put(`/appraisal-team/appeal`, params);
 };
 
 export default studentFun;

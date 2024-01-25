@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-28 21:00:57
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-20 16:32:38
+ * @LastEditTime: 2024-01-25 09:27:19
  * @FilePath: \collegeApplication\src\views\Volunteer.vue
  * @Description: 志愿填报情况页面
 -->
@@ -143,13 +143,15 @@ function getClassWish(currentPage) {
   teacherFun.wish
     .getClassWish({
       timeId: 20,
+      current:currentPage,
+      size:5,
     })
     .then((res) => {
       console.log("获取班级学生志愿情况：", res);
-      data.assessments = res;
-      // data.page.currentPage=res.current;
-      // data.page.pageSize=res.size;
-      // data.page.total = res.total;
+      data.assessments = res.records;
+      data.page.currentPage=res.current;
+      data.page.pageSize=res.size;
+      data.page.total = res.total;
     });
 }
 //改变分页页数

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-24 16:48:50
+ * @LastEditTime: 2024-01-25 22:37:22
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -133,15 +133,17 @@
     <div>
       <div style="margin-left: 1rem">
         <span>您的第一,第二,第三志愿分别为</span><br />
-        <b>第一志愿：{{ data.volunteers.firstName }}</b
+        <b>第一志愿：{{ data.first[0] }}</b
         ><br />
-        <b>第二志愿：{{ data.volunteers.secondName }}</b
+        <b>第二志愿：{{ data.second[0] }}</b
         ><br />
-        <b>第三志愿：{{ data.volunteers.thirdName }}</b
+        <b>第三志愿：{{ data.third[0] }}</b
         ><br />
         <span>请确认准确无误后提交</span><br /><br />
       </div>
-      <signatures @finish="finish"></signatures>
+      <!-- 签名组件有一点问题,需要进行修改 -->
+      <!-- <signatures @finish="finish"></signatures> -->
+      <el-button @click="finish">提交志愿测试接口</el-button>
     </div>
   </el-dialog>
 </template>
@@ -223,6 +225,9 @@ const data = reactive({
       ],
     },
   ],
+  first:[],
+  second:[],
+  third:[],
 });
 // 提交志愿
 let dialogVisible = ref(false);
@@ -231,7 +236,7 @@ onMounted(() => {
 });
 function init() {
   data.originVolunteers = router.currentRoute.value.query.originVolunteers;
-  console.log("志愿情况初始值initDetial:", data.originVolunteers);
+  console.log("志愿情况初始值data.originVolunteers:", data.originVolunteers);
   //获取可选专业选项
   volunteerFun.options.selectStudentMajor().then((res) => {
     console.log("获取可选专业选项:", res);
@@ -243,7 +248,7 @@ function init() {
       let children = [];
       for (let j = 0; j < majors.length; j++) {
         children.push({
-          value: majors[j].majorId,
+          value: majors[j].name+"&"+majors[j].majorId,
           label: majors[j].name,
         });
       }
@@ -256,48 +261,57 @@ function init() {
     console.log("我的可选专业选项是：", myOptions);
     data.options = myOptions;
   });
-  // //获取初始专业选择
-  // data.volunteers.firstName = data.originVolunteers.firstName;
-  // data.volunteers.secondName = data.originVolunteers.secondName;
-  // data.volunteers.thirdName = data.originVolunteers.thirdName;
 }
+//提交志愿进行签名按钮
 function submitVolunteer() {
+  //测试代码
+  console.log("填写的志愿情况", data.volunteers.firstName[0]);
+  console.log("填写的志愿情况", data.volunteers);
   if (
-    data.volunteers.firstName == null ||
-    data.volunteers.secondName == null ||
-    data.volunteers.thirdName == null
+    data.volunteers.firstName[0] == null ||
+    data.volunteers.secondName[0] == null ||
+    data.volunteers.thirdName[0] == null
   ) {
-    ElMessage.error("志愿不能为空，请认真完成志愿填报");
+    ElMessage.error("任何一项志愿不能为空，请认真完成志愿填报");
   } else {
     dialogVisible.value = true;
   }
 }
 //签名后提交数据和电子签名
 function finish(sign) {
-  console.log("签名img的base64", sign);
-  studentFun.sign.submitSignature(sign).then((res) => {
-    //提交志愿接口(成功需要把志愿剩余次数减一)
-    volunteerFun.basis
-      .modifyWise({
-        id: initDetial.id, //志愿填报id
-        userId: initDetial.userId, //用户id
-        first: 0, //第一志愿
-        firstName: "", //第一志愿
-        second: 0, //第二志愿
-        secondName: "", //第二志愿
-        third: 0, //第三志愿
-        thirdName: "", //第三志愿
-        timeId: initDetial.timeId, //时间段id
-      })
-      .then((res) => {
-        console.log("提交志愿结果", res);
-        router.push({ name: "volunteer-check" });
-        ElMessage({
-          type: "success",
-          message: "提交志愿成功",
-        });
+  // console.log("签名img的base64", sign);
+  //提交电子签名
+  // studentFun.sign.submitSignature(sign).then((res) => {
+  //   console.log(res);
+  //提交志愿接口(成功需要把志愿剩余次数减一)
+  data.first=splitString(data.volunteers.firstName);
+  data.second=splitString(data.volunteers.secondName);
+  data.third=splitString(data.volunteers.thirdName);
+  volunteerFun.basis
+    .modifyWise({
+      id: data.originVolunteers.id, //志愿填报id
+      userId: data.originVolunteers.userId, //用户id
+      first: data.first[1], //第一志愿
+      firstName: data.first[0], //第一志愿
+      second: data.second[1], //第二志愿
+      secondName: data.second[0], //第二志愿
+      third: data.third[1], //第三志愿
+      thirdName: data.third[0], //第三志愿
+      timeId: data.originVolunteers.timeId, //时间段id
+    })
+    .then((res) => {
+      console.log("提交志愿结果", res);
+      router.push({ name: "volunteer-check" });
+      ElMessage({
+        type: "success",
+        message: "提交志愿成功",
       });
-  });
+    });
+  // });
+}
+//处理数据:"专业名称&专业编号"=>["专业名称",专业编号]
+function splitString(str) {
+  return str.split('&');
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>

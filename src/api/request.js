@@ -12,7 +12,7 @@ const requests = axios.create({
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径当中会出现api
   baseURL: ZWY,
   //代表请求超时的时间
-  timeout: 30*1000,
+  timeout: 30 * 1000,
 });
 //请求拦截器：
 requests.interceptors.request.use((config) => {
@@ -29,15 +29,12 @@ requests.interceptors.response.use((res) => {
     return Promise.reject(res);
   }
   if (res.data.code != 200) {
-    // ElMessage.error(`${res.data}`);
     if (res.data.code === 2044) {
-      // 移除失效的短token
-      removeAccessToken();
-      // 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新
-      addRequest(() => resolve(server(config)));
-      // 携带长token去请求新的token
-      refreshToken();
+      removeAccessToken();// 移除失效的短token
+      addRequest(() => resolve(server(config)));// 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新
+      refreshToken();// 携带长token去请求新的token
     } else if (res.data.code == 2018) {
+
     } else {
       if (res.data.msg) ElMessage.error(res.data.msg);
     }
@@ -46,7 +43,6 @@ requests.interceptors.response.use((res) => {
     // }
     return Promise.reject(res.data);
   }
-  // console.log("msg",res.msg)
   return res.data; //返回的是数据
 });
 
@@ -57,7 +53,7 @@ const header2 = {
   "Content-Type": "multipart/form-data;charset=UTF-8",
 };
 const http = {
-  upload(url="",formData){
+  upload(url = "", formData) {
     return new Promise((resolve, reject) => {
       requests({
         url,

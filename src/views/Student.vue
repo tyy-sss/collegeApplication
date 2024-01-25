@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-24 17:33:56
+ * @LastEditTime: 2024-01-25 20:35:14
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -80,6 +80,8 @@
     <div class="box">
       <!-- 班级学生管理列表 -->
       <el-table
+        v-loading.lock="data.studentTableLoading"
+        ref="multipleTableRef"
         :data="filterTableData"
         :default-sort="{ prop: 'date', order: 'descending' }"
         @selection-change="handleSelectionChange"
@@ -135,10 +137,10 @@
       <br />
       <!-- 分页 -->
       <el-pagination
-        :page-size=data.page.pageSize
-        :pager-count=10
+        :page-size="data.page.pageSize"
+        :pager-count="10"
         layout="prev, pager, next"
-        :total=data.page.total
+        :total="data.page.total"
         @current-change="handleCurrentChange"
         style="float: right"
       />
@@ -151,7 +153,7 @@
       <el-table :data="data.complaintData">
         <el-table-column type="index" />
         <el-table-column label="申诉学生姓名" prop="username" min-width="120" />
-        <el-table-column label="学号" prop="userNumber" min-width="100" />
+        <el-table-column label="学号" prop="userNumber" min-width="120" />
         <el-table-column label="申诉内容" prop="content" min-width="300" />
         <el-table-column
           label="申诉时间"
@@ -239,9 +241,35 @@
   <!-- 对话框3 -->
   <el-dialog v-model="data.dialogVisible3" title="评测小组成员管理" width="50%">
     <div>
-      <el-table :data="data.evaluationData" style="width: 100%">
+      <el-table
+        v-loading.lock="data.evaluationTableLoading"
+        :data="data.evaluationData"
+        style="width: 100%"
+      >
+        <el-table-column type="expand">
+          <template #default="props">
+            <div style="margin-left: 6rem">
+              <h3>
+                【{{ props.row.username }}】所负责班级成员列表（{{
+                  props.row.appraisalTeamMemberVos.length
+                }}人）
+              </h3>
+              <el-table
+                :data="props.row.appraisalTeamMemberVos"
+                :border="childBorder"
+              >
+                <el-table-column label="班级成员" prop="username" />
+                <el-table-column label="学号" prop="userNumber" />
+              </el-table>
+            </div>
+          </template>
+        </el-table-column>
         <el-table-column type="index" />
-        <el-table-column label="学生学号" prop="userNumber" min-width="100" />
+        <el-table-column
+          label="测评小组账号"
+          prop="userNumber"
+          min-width="100"
+        />
         <el-table-column label="学生姓名" prop="username" min-width="120" />
         <el-table-column label="操作">
           <template #default="scope">
@@ -263,12 +291,30 @@
       <span style="color: gray"
         >【这里的重置密码指的是重置测评小组账号的密码为学生学号后6位】</span
       >
+      <div style="float: right">
+        <el-button type="primary" @click="allocat">一键分配班级成员</el-button>
+        <el-button
+          type="danger"
+          @click="revokeAllocat"
+          style="margin-right: 2rem"
+          >一键撤销成员分配</el-button
+        >
+      </div>
     </div>
   </el-dialog>
   <!-- 学生信息抽屉 -->
   <el-drawer v-model="data.drawer" direction="btt" style="min-height: 50%">
     <template #header>
-      <h4>学生信息</h4>
+      <h3>学生信息</h3>
+      <el-button
+        type="primary"
+        style="margin-right: 1rem"
+        @click="
+          data.drawer = false;
+          data.drawer2 = true;
+        "
+        >修改学生信息</el-button
+      >
     </template>
     <template #default>
       <div>
@@ -373,6 +419,82 @@
       </div>
     </template>
   </el-drawer>
+  <!-- 修改学生信息抽屉 -->
+  <el-drawer v-model="data.drawer2" direction="ttb" style="min-height: 50%">
+    <!-- 标题 -->
+    <template #header>
+      <h4>修改资料</h4>
+    </template>
+    <!-- 内容区 -->
+    <template #default>
+      <!-- <div style="display: flex; flex-direction: column">
+      <h4>基本信息</h4>
+      <br /> -->
+      <div class="littleTitle">基本信息</div>
+      <div class="grid-item">
+        <el-form-item label="学生姓名 ：">
+          <el-input
+            v-model="data.updataData.username"
+            :placeholder="data.student.username || '-'"
+          />
+        </el-form-item>
+        <el-form-item label="身份证号 ：">
+          <el-input
+            v-model="data.updataData.idCard"
+            :placeholder="data.student.idCard || '-'"
+          />
+        </el-form-item>
+        <el-form-item label="联系电话 ：">
+          <el-input
+            v-model="data.updataData.phone"
+            :placeholder="data.student.phone || '-'"
+          />
+        </el-form-item>
+        <el-form-item label="父母电话 ：">
+          <el-input
+            v-model="data.updataData.parentPhone"
+            :placeholder="data.student.parentPhone || '-'"
+          />
+        </el-form-item>
+        <el-form-item label="学生性别 ：">
+          <el-input
+            v-model="data.updataData.sex"
+            :placeholder="data.student.sex || '-'"
+          />
+        </el-form-item>
+        <el-form-item label="家庭地址 ：">
+          <el-input
+            v-model="data.updataData.address"
+            :placeholder="data.student.address || '-'"
+          />
+        </el-form-item>
+      </div>
+      <hr />
+      <br />
+      <div class="littleTitle">其他信息</div>
+      <div class="grid-item">
+        <el-form-item label="政治面貌 ：">
+          <el-input
+            v-model="data.updataData.politicsStatus"
+            :placeholder="data.student.politicsStatus || '-'"
+          />
+        </el-form-item>
+        <el-form-item label="民族 ：">
+          <el-input
+            v-model="data.updataData.nation"
+            :placeholder="data.student.nation || '-'"
+          />
+        </el-form-item>
+      </div>
+    </template>
+    <!-- 尾部按钮区 -->
+    <template #footer>
+      <div style="flex: auto">
+        <el-button @click="data.drawer = false">取消</el-button>
+        <el-button type="primary" @click="confirmClick">确定</el-button>
+      </div>
+    </template>
+  </el-drawer>
 </template>
 <script setup>
 import { ref, reactive, onMounted, computed } from "vue";
@@ -388,7 +510,8 @@ const data = reactive({
   // dialogVisible2: false,
   dialogVisible3: false,
   drawer: false,
-  multipleSelection: [],
+  drawer2: false,
+  // multipleSelection: [],
   studentsData: [], //学生列表
   evaluationData: [], //测评小组列表
   //申诉列表
@@ -400,25 +523,28 @@ const data = reactive({
   },
   student: {}, //学生信息
   consignee: {}, //学生收件信息
+  updataData: {}, //修改资料数据
+  studentTableLoading: false,
+  evaluationTableLoading: false,
 });
+const multipleTableRef = ref();
+const multipleSelection = ref([]);
 //获取数据
 function init() {
   getComplaintsDeatils();
   getStudentDeatils(1);
+  getAssessmentStudent();
 }
 //获取申诉列表数据
 function getComplaintsDeatils() {
-  teacherFun.complaint
-    .getAssessments({
-      state: "",
-    })
-    .then((res) => {
-      // console.log("申诉列表", res);
-      data.complaintData = res;
-    });
+  teacherFun.complaint.getAssessments().then((res) => {
+    console.log("申诉列表", res);
+    data.complaintData = res;
+  });
 }
 //获取学生列表数据
 function getStudentDeatils(selectPage) {
+  data.studentTableLoading = true;
   teacherFun.class
     .updateInformation({
       userNumber: null,
@@ -429,32 +555,46 @@ function getStudentDeatils(selectPage) {
       size: 12,
     })
     .then((res) => {
-      console.log("学生信息：",res);
+      console.log("学生信息：", res);
       data.studentsData = res.records;
-      data.page.currentPage=res.current;
-      data.page.pageSize=res.size;
+      data.page.currentPage = res.current;
+      data.page.pageSize = res.size;
       data.page.total = res.total;
-      //填装测评小组列表
-      data.studentsData.forEach((item) => {
-        if (item.identity == 2) {
-          data.evaluationData.push(item);
-        }
-      });
+      data.studentTableLoading = false;
     });
+}
+//获取测评小组成员列表数据
+function getAssessmentStudent() {
+  data.evaluationTableLoading = true;
+  teacherFun.assessment.getAssessmentStudent().then((res) => {
+    console.log("获取测评小组成员列表数据", res);
+    data.evaluationData = res;
+    data.evaluationTableLoading = false;
+  });
 }
 //多选选项改变
 const handleSelectionChange = (val) => {
-  data.multipleSelection = val;
+  multipleSelection.value = val;
+};
+//清空多选项
+const toggleSelection = (rows) => {
+  if (rows) {
+    rows.forEach((row) => {
+      multipleTableRef.value.toggleRowSelection(row, undefined);
+    });
+  } else {
+    multipleTableRef.value.clearSelection();
+  }
 };
 //改变分页页数
 const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`)
+  console.log(`current page: ${val}`);
   getStudentDeatils(val);
-}
+};
 //条件搜索
 function conditionSearch() {
   //条件搜索
-  console.log("XX")
+  console.log("XX");
 }
 //搜索逻辑
 const filterTableData = computed(() =>
@@ -474,41 +614,51 @@ const handleRepasswd = (index, row) => {
 //批量重置密码
 const handleRepasswds = () => {
   const dealArray = [];
-  data.multipleSelection.forEach((item) => {
+  multipleSelection.value.forEach((item) => {
     dealArray.push(item.userNumber);
   });
   // console.log("重置密码列表：",dealArray)
   teacherFun.class.updateStudentPassword(dealArray).then((res) => {
     ElMessage.success(res);
+    toggleSelection();
   });
 };
 //批量撤销测评小组职位
-const handleDeletePosts=()=>{
+const handleDeletePosts = () => {
   const dealArray = [];
-  data.multipleSelection.forEach((item) => {
+  multipleSelection.value.forEach((item) => {
     dealArray.push(item.userNumber);
   });
   teacherFun.class.deleteAssessPost(dealArray).then((res) => {
-    console.log(res)
-    ElMessage.success("操作成功");
+    ElMessage.success(res);
+    multipleSelection.value.forEach((item) => {
+      item.identity = 1;
+    });
+    toggleSelection();
   });
-}
+};
 //批量设置测评小组职位
-//这个接口还没改成批量的，待测试
-const handleSetPosts=()=>{
+const handleSetPosts = () => {
   const dealArray = [];
-  data.multipleSelection.forEach((item) => {
+  multipleSelection.value.forEach((item) => {
     dealArray.push(item.userNumber);
   });
   teacherFun.class.setAssessPost(dealArray).then((res) => {
-    console.log(res)
-    ElMessage.success("操作成功");
+    ElMessage.success(res);
+    multipleSelection.value.forEach((item) => {
+      item.identity = 2;
+    });
+    getAssessmentStudent();
+    toggleSelection();
   });
+};
+//刷新按钮
+function onReSearch() {
+  data.studentTableLoading = true;
+  getStudentDeatils(1);
 }
-//详细信息(可编辑)
+//详细信息
 const handleEdit = (index, row) => {
-  console.log("详细信息(可编辑)", index, row);
-  console.log(row.userNumber);
   teacherFun.class
     .getStudentInformation({
       number: row.userNumber,
@@ -519,6 +669,22 @@ const handleEdit = (index, row) => {
       data.drawer = true;
     });
 };
+//修改资料
+function confirmClick() {
+  ElMessageBox.confirm("确定进行资料修改吗")
+    .then(() => {
+      data.drawer2 = false;
+      data.updataData.userNumber = data.student.userNumber; //必须传回去被修改用户的学号，否则无法确定修改的是哪个学生的信息
+      //修改资料接口
+      teacherFun.class.updateStudentInformation(data.updataData).then((res) => {
+        ElMessage.success(res);
+      });
+      Object.keys(data.updataData).forEach(
+        (key) => (data.updataData[key] = "")
+      ); //快速清空内容
+    })
+    .catch(() => {});
+}
 //删除申诉项
 const handleDelete = (index, row) => {
   teacherFun.complaint.deleteComplaint([row.appealId]).then((res) => {
@@ -535,24 +701,46 @@ const handleDeal = (index, row) => {
 };
 //重置测评小组学生账号密码
 const handleRecover2 = (index, row) => {
-  console.log("重置测评账号密码", index, row);
-  teacherFun.class.updateAssessPassword({
-    userNumber:row.userNumber
-  }).then((res)=>{
-    console.log(res)
-    ElMessage.success("重置成功");
-  })
+  ElMessageBox.confirm(`确定要重置【${row.username}】的测评小组账号的密码吗？`)
+    .then(() => {
+      teacherFun.class
+        .updateAssessPassword({
+          userNumber: row.userNumber,
+        })
+        .then((res) => {
+          ElMessage.success(res);
+        });
+    })
+    .catch(() => {});
 };
 //撤销评测小组人员账号
 const handleFired = (index, row) => {
-  console.log("撤销评测小组人员账号", index, row);
-  teacherFun.class.deleteAssessPost([row.userNumber]).then((res)=>{
-    console.log(res)
-    ElMessage.success("撤销成功");
-    data.evaluationData.splice(index, 1);
-  })
+  ElMessageBox.confirm(
+    `确定要撤销【${row.username}】的测评小组账号吗？
+    提示：该操作一旦执行将无法撤销以及恢复数据，且分配给【${row.username}】的学生将暂时处于无测评人员负责状态。`
+  )
+    .then(() => {
+      teacherFun.class.deleteAssessPost([row.userNumber]).then((res) => {
+        ElMessage.success("撤销成功");
+        data.evaluationData.splice(index, 1);
+      });
+    })
+    .catch(() => {});
 };
-
+//一键分配成员给测评小组成员
+function allocat() {
+  teacherFun.class.averageAllocated().then((res) => {
+    ElMessage.success(res);
+    getAssessmentStudent();
+  });
+}
+//一键撤销成员分配
+function revokeAllocat() {
+  teacherFun.class.revokeAllocated().then((res) => {
+    ElMessage.success(res);
+    getAssessmentStudent();
+  });
+}
 //筛选器
 const filterTag = (value, row) => {
   // console.log(row.state, value, row);
@@ -751,12 +939,11 @@ const filterTag = (value, row) => {
 
 .mybox {
   padding: 0 0 1rem 0;
-  .littleTitle {
-    margin-bottom: 2rem;
-    font-weight: 1000;
-  }
 }
-
+.littleTitle {
+  margin-bottom: 2rem;
+  font-weight: 1000;
+}
 .tag {
   display: inline-block;
   margin-right: 1rem;

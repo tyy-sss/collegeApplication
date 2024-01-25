@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-24 21:00:31
+ * @LastEditTime: 2024-01-25 15:33:54
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:综合测评表公示页面
 -->
@@ -269,12 +269,12 @@ function init() {
   getAssessmentDetails(1); //获取综测信息
 }
 function getAssessmentDetails(currentPage) {
-  //这里是老师身份请求学生综测信息
+  //这里是老师身份请求本月学生综测信息
   teacherFun.assessment
     .getAssessments({
       name: "",
       userNumber: "",
-      month: 1,//这里服务端有个问题还没解决
+      month: "",
       identity: 1,
       current: currentPage,
       size: 15,
