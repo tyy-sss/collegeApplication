@@ -27,9 +27,6 @@
           <el-tab-pane label="录取名单" name="first">
             <admission-list class="tab-item" />
           </el-tab-pane>
-          <el-tab-pane label="人数冲突名单" name="second">
-            <admission-list />
-          </el-tab-pane>
           <el-tab-pane label="未录取名单" name="third">
             <conflict-list />
           </el-tab-pane>

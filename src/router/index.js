@@ -165,7 +165,6 @@ router.beforeEach((to, form, next) => {
     // 已登录
     if (to.path == "/") {
       // 跳转到菜单表的第一个菜单显示界面
-      // console.log(getRole())
       const firstPath = giveMenu(getRole())[0].path.slice(1);
       next({ name: firstPath });
     } else {
