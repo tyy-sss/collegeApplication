@@ -51,31 +51,31 @@
               <div class="table">
                 <el-table
                   ref="multipleTableRef"
-                  :data="tableData"
+                  :data="form.tableData"
                   border
                   stripe
                   style="width: 100%"
                   @selection-change="handleSelectionChange"
                 >
                   <el-table-column type="selection" width="30" />
-                  <el-table-column prop="id" label="用户账号" min-width="150" />
+                  <el-table-column prop="userNumber" label="用户账号" min-width="150" />
                   <el-table-column
-                    prop="name"
+                    prop="username"
                     label="用户名称"
                     min-width="100"
                   />
                   <el-table-column
-                    prop="role"
-                    label="用户角色"
+                    prop="sex"
+                    label="性别"
                     min-width="100"
                   />
                 </el-table>
                 <div class="pager">
                   <el-pagination
-                    :page-size="page.pageSize"
-                    :pager-count="page.pageCount"
+                    :page-size="form.page.pageSize"
+                    :pager-count="form.page.pageCount"
                     layout="prev, pager, next"
-                    :total="page.total"
+                    :total="form.page.total"
                     @current-change="handleCurrentChange"
                   />
                 </div>
@@ -98,55 +98,24 @@
 </template>
   <script setup>
 // 获得用户分页名单，搜索用户，给用户设置角色
+// 接口
+import roleFun from "@/api/role";
 import { ElMessage } from "element-plus";
-import { nextTick, onMounted, reactive, ref } from "vue";
+import { nextTick, onMounted, reactive, ref, watch } from "vue";
 const form = reactive({
   role: "老师",
-  dialogVisible: true,
+  dialogVisible: false,
   ruleForm: {
     name: "yyy",
     searchData: "",
   },
+  tableData: [],
+  page: {
+    pageSize: 7,
+    pageCount: 1,
+    total: 700,
+  },
 });
-const page = reactive({
-    pageSize:7,
-    pageCount: 5,
-    total:700,
-})
-const tableData = [
-  {
-    id: "2016-05-03",
-    name: "Tom",
-    role: "老师",
-  },
-  {
-    id: "2016-05-03",
-    name: "Tom",
-    role: "班主任",
-  },{
-    id: "2016-05-03",
-    name: "Tom",
-    role: "老师",
-  },
-  {
-    id: "2016-05-03",
-    name: "Tom",
-    role: "班主任",
-  },{
-    id: "2016-05-03",
-    name: "Tom",
-    role: "老师",
-  },
-  {
-    id: "2016-05-03",
-    name: "Tom",
-    role: "班主任",
-  },{
-    id: "2016-05-03",
-    name: "Tom",
-    role: "老师",
-  },
-];
 // 调用父组件的方法
 const emit = defineEmits(["handleClose"]);
 // 表单验证
@@ -178,20 +147,39 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
 // 切换用户数据
-const handleCurrentChange = () =>{
- // 获得用户列表
- console.log('changePage');
-}
+const handleCurrentChange = () => {
+  // 获得用户列表
+  console.log("changePage");
+};
 onMounted(() => {
   // 获得用户列表
   // 初始化是否选中
-  nextTick(() => {
-    for (let i = 0; i < tableData.length; i++) {
-      if (tableData[i].role === form.role) {
-        multipleTableRef.value.toggleRowSelection(tableData[i]);
-      }
-    }
-  });
+  // nextTick(() => {
+  //   // for (let i = 0; i < tableData.length; i++) {
+  //   //   if (tableData[i].role === form.role) {
+  //   //     multipleTableRef.value.toggleRowSelection(tableData[i]);
+  //   //   }
+  //   // }
+  // });
+});
+const getAllUserByRole = (data) => {
+  form.ruleForm.name = data.strName;
+  roleFun.user
+    .getUserByRole(data.roleId, form.page.pageCount, form.page.pageSize)
+    .then((res) => {
+      console.log(res);
+      form.tableData = res.records;
+      form.page = {
+        pageSize: res.size,
+        pageCount: res.current,
+        total: res.total,
+      };
+    });
+};
+
+defineExpose({
+  getAllUserByRole,
+  form,
 });
 </script>
 <style src="@/assets/css/role/role-drawer.css" scoped>

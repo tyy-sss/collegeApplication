@@ -16,7 +16,6 @@ let teacherFun = {
   complaint: {},
   post: {},
   wish: {},
-
 };
 /**
  * 老师获取个人信息
@@ -42,9 +41,10 @@ teacherFun.user.updatePassword = (password) => {
  * 获取班级成员列表
  */
 teacherFun.class.updateInformation = (params) => {
-  return http.get(`/adviser/students?userNumber=${params.userNumber}&username=${params.username}&role=${params.role}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
+  return http.get(
+    `/adviser/students?userNumber=${params.userNumber}&username=${params.username}&role=${params.role}&rank=${params.rank}&current=${params.current}&size=${params.size}`
+  );
 };
-
 
 /**
  * 班主任获取学生个人信息
@@ -71,9 +71,10 @@ teacherFun.class.updateStudentPassword = (params) => {
  * 班主任获取分页综测信息
  */
 teacherFun.assessment.getAssessments = (params) => {
-  return http.get(`/adviser/appraisal?name=${params.name}&userNumber=${params.userNumber}&month=${params.month}&identity=${params.identity}&current=${params.current}&size=${params.size}`);
+  return http.get(
+    `/adviser/appraisal?name=${params.name}&userNumber=${params.userNumber}&month=${params.month}&identity=${params.identity}&current=${params.current}&size=${params.size}`
+  );
 };
-
 
 // /**
 //  * 班主任修改班级成员身份
@@ -109,7 +110,6 @@ teacherFun.complaint.dealComplaint = (params) => {
 teacherFun.assessment.getAssessmentStudent = () => {
   return http.get(`/adviser/appraisal/team`);
 };
-
 
 /**
  * 班主任重置测评小组学生密码
@@ -149,6 +149,8 @@ teacherFun.class.revokeAllocated = () => {
  * 获取班级成员志愿情况
  */
 teacherFun.wish.getClassWish = (params) => {
-  return http.get(`/wish/selectClassWish?timeId=${params.timeId}&current=${params.current}&size=${params.size}`)
-}
+  return http.get(
+    `/wish/selectClassWish?timeId=${params.timeId}&current=${params.current}&size=${params.size}`
+  );
+};
 export default teacherFun;

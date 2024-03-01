@@ -360,7 +360,7 @@ managerFun.grades.getGradesList = (year, keyword, current, size) => {
  * @returns
  */
 managerFun.grades.getAllGradesList = (year) => {
-  return http.get("/grade/all", {year});
+  return http.get("/grade/all", { year });
 };
 /**
  * 删除成绩

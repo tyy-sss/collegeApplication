@@ -175,7 +175,7 @@ const getAllSubject = () => {
     form.subjectList = res;
   });
 };
-onMounted(() => {
+onMounted(() => {form
   getAllSubject();
   if (form.isChange == false) {
     form.ruleForm.subjectNumber = 3;
