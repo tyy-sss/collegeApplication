@@ -163,6 +163,7 @@ onMounted(() => {
   // });
 });
 const getAllUserByRole = (data) => {
+  form.dialogVisible = true;
   form.ruleForm.name = data.strName;
   roleFun.user
     .getUserByRole(data.roleId, form.page.pageCount, form.page.pageSize)
@@ -179,7 +180,6 @@ const getAllUserByRole = (data) => {
 
 defineExpose({
   getAllUserByRole,
-  form,
 });
 </script>
 <style src="@/assets/css/role/role-drawer.css" scoped>

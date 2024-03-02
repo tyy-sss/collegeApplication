@@ -210,12 +210,14 @@ const handleClose = () => {
 };
 // 查看学校的具体消息
 const checkSchoolNews = (val) => {
+  console.log(val);
   // 跳转界面
   const href = router.resolve({
     path: "/school-manager/school-news",
     query: {
       id: val.schoolId,
       schoolId: val.number,
+      schoolName: val.name
     },
   });
   window.open(href.href, "_blank");

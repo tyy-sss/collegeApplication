@@ -64,7 +64,7 @@
           @handleClose="handleClose"
         />
         <rule-role
-          v-if="data.form.choose === 'ruleRole'"
+          ref="ruleRoleRef"
           @handleClose="handleClose"
         />
       </div>
@@ -79,6 +79,7 @@ import { onMounted, reactive, ref } from "vue";
 import userRole from "@/components/role/user-role.vue";
 import ruleRole from "@/components/role/rule-role.vue";
 const userRoleRef = ref(null);
+const ruleRoleRef = ref(null);
 // 接口
 import roleFun from "@/api/role";
 // 数据
@@ -107,12 +108,12 @@ const getRoleList = () => {
 };
 // 查看一个角色的所有用户
 const handleCheckUserRole = (role) => {
-  userRoleRef.value.form.dialogVisible = true;
   userRoleRef.value.getAllUserByRole(role);
 };
 // 查看一个角色的所有权限
 const handleCheckRuleRole = (role) => {
-  data.form.choose = "ruleRole";
+  ruleRoleRef.value.getAllRuleByRole(role);
+
 };
 // 搜索
 const onSearch = () => {

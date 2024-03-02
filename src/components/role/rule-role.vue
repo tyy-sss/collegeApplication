@@ -26,17 +26,19 @@
               <el-input v-model="form.ruleForm.name" disabled />
             </el-form-item>
             <el-form-item label="权限明细">
-              <el-table :data="tableData" border style="width: 100%">
+              <el-table :data="form.tableData" border style="width: 100%">
                 <el-table-column prop="name" label="功能名称" min-width="120" />
                 <el-table-column prop="rule" label="权限" min-width="280">
                   <template #default="scope">
-                    <el-checkbox-group>
+                    <el-checkbox-group v-model="scope.row.rule.ruleDetail">
                       <el-checkbox
                         class="checkbox"
-                        v-for="(item, index) in scope.row.rule"
+                        v-for="(item, index) in scope.row.rule.allRule"
                         :key="index"
-                        :label="item.label"
+                        :label="item"
+                        :value="item"
                         size="large"
+                        disabled
                       />
                     </el-checkbox-group>
                   </template>
@@ -45,15 +47,6 @@
             </el-form-item>
           </el-form>
         </div>
-        <div class="footer">
-          <el-divider />
-          <span class="button-footer item">
-            <el-button type="primary" @click="handleChangeRuleRole">
-              确定
-            </el-button>
-            <el-button @click="handleClose">取消</el-button>
-          </span>
-        </div>
       </div>
     </el-drawer>
   </div>
@@ -61,61 +54,16 @@
     <script setup>
 // 获得角色的权限数据，修改权限数据
 import { reactive, ref } from "vue";
+import { getTableDataByRole } from "@/assets/js/data/rule-role";
 const form = reactive({
   role: "老师",
-  dialogVisible: true,
+  dialogVisible: false,
   ruleForm: {
     name: "yyy",
     searchData: "",
   },
+  tableData: [],
 });
-const tableData = reactive([
-  {
-    name: "个人信息",
-    rule: [
-      { label: "查看", value: false },
-      { label: "修改", value: false },
-    ],
-  },
-  {
-    name: "志愿填报",
-    rule: [
-      { label: "查看", value: false },
-      { label: "修改", value: false },
-      { label: "导出", value: false },
-    ],
-  },
-  {
-    name: "学生个人综测",
-    rule: [
-      { label: "查看", value: false },
-      { label: "修改", value: false },
-    ],
-  },
-  {
-    name: "综合测评",
-    rule: [
-      { label: "查看", value: false },
-      { label: "修改", value: false },
-      { label: "导出", value: false },
-    ],
-  },
-  {
-    name: "学生查询排名",
-    rule: [
-      { label: "查看", value: false },
-      { label: "查询", value: false },
-    ],
-  },
-  {
-    name: "班主任班级管理",
-    rule: [
-      { label: "查看", value: false },
-      { label: "管理班级成员", value: false },
-      { label: "申诉处理", value: false },
-    ],
-  },
-]);
 // 调用父组件的方法
 const emit = defineEmits(["handleClose"]);
 // 表单验证
@@ -128,8 +76,14 @@ const handleClose = () => {
   // 清楚父组件的信息
   emit("handleClose");
 };
-//  修改角色的权限
-const handleChangeRuleRole = () => {};
+const getAllRuleByRole = (data) => {
+  form.dialogVisible = true;
+  form.ruleForm.name = data.strName;
+  form.tableData = getTableDataByRole(data.strName);
+};
+defineExpose({
+  getAllRuleByRole,
+});
 </script>
 <style src="@/assets/css/role/role-drawer.css" scoped/>
 <style scoped>

@@ -1,7 +1,7 @@
 <template>
   <div class="show-container">
     <div class="title">
-      <div class="text">吉首大学</div>
+      <div class="text">{{ schoolName }}</div>
     </div>
     <div class="context">
       <el-tabs type="border-card" class="demo-tabs" v-model="activeName">
@@ -24,6 +24,10 @@ import volunteerTime from "@/components/schoo-news/volunteer-time.vue";
 import professionLimit from "@/components/schoo-news/profession-limit.vue";
 import professionShunt from "@/components/schoo-news/profession-shunt.vue";
 let activeName = ref("first");
+import { useRoute } from "vue-router";
+// 获得路由显示的学校id
+const route = new useRoute();
+const schoolName = ref(route.query.schoolName).value;
 </script>
 <style src="@/assets/css/show-container.css" scoped/>
 <style scoped>

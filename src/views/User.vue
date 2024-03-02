@@ -9,11 +9,11 @@
           <div class="search">
             <div class="left">
               <div class="search-item">
-                <div class="text">用户姓名:</div>
+                <div class="text">搜索信息:</div>
                 <div class="input">
                   <el-input
                     v-model="data.searchData.searchName"
-                    placeholder="请输入"
+                    placeholder="请输入用户账号或者姓名"
                   />
                 </div>
               </div>
