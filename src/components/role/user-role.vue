@@ -50,30 +50,27 @@
             <el-form-item>
               <div class="table">
                 <el-table
-                  ref="multipleTableRef"
                   :data="form.tableData"
                   border
                   stripe
                   style="width: 100%"
-                  @selection-change="handleSelectionChange"
                 >
-                  <el-table-column type="selection" width="30" />
-                  <el-table-column prop="userNumber" label="用户账号" min-width="150" />
+                  <el-table-column
+                    prop="userNumber"
+                    label="用户账号"
+                    min-width="150"
+                  />
                   <el-table-column
                     prop="username"
                     label="用户名称"
                     min-width="100"
                   />
-                  <el-table-column
-                    prop="sex"
-                    label="性别"
-                    min-width="100"
-                  />
+                  <el-table-column prop="className" label="所在班级" min-width="100" />
                 </el-table>
                 <div class="pager">
                   <el-pagination
                     :page-size="form.page.pageSize"
-                    :pager-count="form.page.pageCount"
+                    :current-page="form.page.pageCount"
                     layout="prev, pager, next"
                     :total="form.page.total"
                     @current-change="handleCurrentChange"
@@ -98,14 +95,14 @@
 </template>
   <script setup>
 // 获得用户分页名单，搜索用户，给用户设置角色
-// 接口
-import roleFun from "@/api/role";
+import managerFun from "@/api/manager";
 import { ElMessage } from "element-plus";
-import { nextTick, onMounted, reactive, ref, watch } from "vue";
+import { reactive, ref } from "vue";
 const form = reactive({
   role: "老师",
   dialogVisible: false,
   ruleForm: {
+    roleId: -1,
     name: "yyy",
     searchData: "",
   },
@@ -129,7 +126,9 @@ const handleClose = () => {
   emit("handleClose");
 };
 // 搜索用户
-const onSearch = () => {};
+const onSearch = () => {
+  getUserList();
+};
 // 添加角色用户
 const handleAddUserRole = () => {
   if (multipleSelection.value.length <= 0) {
@@ -141,43 +140,41 @@ const handleAddUserRole = () => {
   // 重新刷新角色列表
   ruleFormRef.value.resetFields();
 };
-const multipleSelection = ref([]);
-const multipleTableRef = ref(null);
-const handleSelectionChange = (val) => {
-  multipleSelection.value = val;
-};
 // 切换用户数据
-const handleCurrentChange = () => {
+const handleCurrentChange = (val) => {
+  form.page.pageCount = val;
   // 获得用户列表
-  console.log("changePage");
+  getUserList();
 };
-onMounted(() => {
-  // 获得用户列表
-  // 初始化是否选中
-  // nextTick(() => {
-  //   // for (let i = 0; i < tableData.length; i++) {
-  //   //   if (tableData[i].role === form.role) {
-  //   //     multipleTableRef.value.toggleRowSelection(tableData[i]);
-  //   //   }
-  //   // }
-  // });
-});
 const getAllUserByRole = (data) => {
   form.dialogVisible = true;
   form.ruleForm.name = data.strName;
-  roleFun.user
-    .getUserByRole(data.roleId, form.page.pageCount, form.page.pageSize)
+  form.ruleForm.roleId = data.roleId;
+  form.ruleForm.searchData = "";
+  form.page.pageCount = 1,
+  getUserList();
+};
+// 获取用户列表
+const getUserList = () => {
+  managerFun.user
+    .searchUser(
+      form.ruleForm.searchData,
+      form.ruleForm.name,
+      form.page.pageCount,
+      form.page.pageSize
+    )
     .then((res) => {
-      console.log(res);
       form.tableData = res.records;
       form.page = {
         pageSize: res.size,
         pageCount: res.current,
-        total: res.total,
+        total: parseInt(res.total),
       };
+    })
+    .catch((err) => {
+      console.log(err);
     });
 };
-
 defineExpose({
   getAllUserByRole,
 });

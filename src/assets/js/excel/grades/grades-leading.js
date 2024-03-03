@@ -42,7 +42,6 @@ const handleGradesInformation = (addData, gradesList) => {
         } else {
           gradeScore = 0;
         }
-        console.log(gradeScore);
         gradesSubjectList.push({
           gradeId: gradesList[i].gradeId,
           grade: gradeScore,

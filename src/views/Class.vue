@@ -36,12 +36,14 @@
             border
             stripe
             style="width: 100%"
+     
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" width="35" />
             <el-table-column label="班级编号" property="classId" />
             <el-table-column label="班级名称" property="className" />
-            <el-table-column label="班主任" property="username" />
+            <el-table-column label="班主任账号"  property="userNumber" />
+            <el-table-column label="班主任"  property="username" />
             <el-table-column label="班主任联系方式" property="phone" />
             <el-table-column label="班级人数" property="size" />
             <el-table-column label="操作" min-width="180px">
@@ -198,7 +200,6 @@ const addClass = () => {
 const handleAddClass = () => {
   ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
-      console.log(data.form.userNumber);
       if (data.isChange) {
         changeClassData();
       } else {
@@ -230,13 +231,18 @@ const onReSearch = () => {
 // 修改班级信息
 const handleChangeClass = (val) => {
   new Promise((resolve, reject) => {
+    // 获取老师列表
     resolve(getTeacherList());
   }).then(() => {
-    data.options.push({ userNumber: val.userNumber, username: val.username });
+    if(val.userNumber!=null){
+      data.options.push({ userNumber: val.userNumber, username: val.username });
+    }
   });
-
   data.form = Object.assign({}, val);
-  data.form.userNumber = val.userNumber;
+  // 如果有班主任
+  if(val.userNumber!=null){
+    data.form.userNumber = val.userNumber;
+  }
   data.oldClassName = val.className;
   data.isChange = true;
   data.dialogVisible = true;

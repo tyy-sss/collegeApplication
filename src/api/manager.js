@@ -136,8 +136,8 @@ managerFun.school.changeSchool = (data) => {
  * 删除学校
  * @param {*} number 学校编号
  */
-managerFun.school.deleteSchool = (number) => {
-  return http.delete("/school", number);
+managerFun.school.deleteSchool = (schoolId) => {
+  return http.delete("/school", schoolId);
 };
 
 /** 地区 */
@@ -294,20 +294,6 @@ managerFun.wishTime.selectWishTime1 = (
   return http.get("/wishTime/selectWishTime1", {
     schoolId,
     ago,
-    current,
-    size,
-  });
-};
-/**
- * 根据学校编号搜索志愿时间接口
- * @param {学校编号} schoolId
- * @param {*} current
- * @param {*} size
- * @returns
- */
-managerFun.wishTime.selectWishTime = (schoolId, current = 1, size = 10) => {
-  return http.get("/wishTime/selectWishTime", {
-    schoolId,
     current,
     size,
   });

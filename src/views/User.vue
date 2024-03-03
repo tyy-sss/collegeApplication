@@ -250,6 +250,7 @@ const handleChangeUserRole = (val) => {
   data.chooseUser = { ...val };
   data.chooseUser.roleId = "";
 };
+// 修改角色权限
 const handleChangeUserRoleEnd = () => {
   console.log(data.chooseUser);
   roleFun.user
@@ -260,6 +261,7 @@ const handleChangeUserRoleEnd = () => {
       getUserList();
     });
 };
+// 关闭对话框
 const handleClose = () => {
   data.dialogVisible = false;
 };
