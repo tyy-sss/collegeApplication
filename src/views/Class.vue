@@ -353,6 +353,7 @@ onMounted(() => {
 <style src="@/assets/css/show-container.css" scoped/>
 <style src="@/assets/css/search-top-left-right.css" scoped/>
 <style src="@/assets/css/pager.css" scoped/>
+<style src="@/assets/css/utils/table-empty.css" scoped/>
 <style scoped>
 .middle {
   display: flex;

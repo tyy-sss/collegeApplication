@@ -100,7 +100,7 @@ const assessment = [
     point3: 9,
     add4: "捐献书法画1分",
     sub4: "破环草坪1分",
-    point4: 0,
+    point4: null,
     add5: "值日2次4分",
     sub5: "无",
     point5: 4,
@@ -131,6 +131,7 @@ const handleExcelExport = () => {
 };
 </script>
 <style src="@/assets/css/search-top-left-right.css" scoped/>
+<style src="@/assets/css/utils/table-empty.css" scoped/>
 <style scoped>
 .comprehenisve-year > div:not(:last-child) {
   margin-bottom: 1rem;

@@ -1,0 +1,4 @@
+/* 表格内容为空时显示 */
+::v-deep .el-table .cell:empty::before {
+  content: "-";
+}
