@@ -1,5 +1,6 @@
 import axios from "axios";
 import qs from "qs"; //转json数据工具包
+import router from "@/router";
 import { ElMessage } from "element-plus";
 import { addRequest, refreshToken } from "./two-token";
 import { getAccessToken, removeAccessToken } from "@/constants/token";
@@ -11,7 +12,7 @@ const CX = "http://192.168.50.236:8081";
 const requests = axios.create({
   //配置对象
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径当中会出现api
-  baseURL: YSB,
+  baseURL: YSB ,
   //代表请求超时的时间
   timeout: 30 * 1000,
 });
@@ -30,19 +31,20 @@ requests.interceptors.response.use((res) => {
     return Promise.reject(res);
   }
   if (res.data.code != 200) {
-    if (res.data.code === 2044) {
+    if (res.data.code === 2039) {// 更新token
       removeAccessToken();// 移除失效的短token
       addRequest(() => resolve(server(config)));// 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新
       refreshToken();// 携带长token去请求新的token
-    } else if (res.data.code == 2018) {
-
+    } else if (res.data.code == 2039) {// 重新登录
+      router.push({ path: "/login" });
+      if (res.data.msg) ElMessage.error(res.data.msg);
     } else {
       if (res.data.msg) ElMessage.error(res.data.msg);
+      return Promise.reject(res.data);
     }
     // if (res.data.resultCode == 419) {
     //   router.push({ path: "/login" });
     // }
-    return Promise.reject(res.data);
   }
   return res.data; //返回的是数据
 });

@@ -8,33 +8,12 @@
         </div>
       </div>
       <div class="context">
-        <div class="top">
-          <div class="search">
-            <div class="left">
-              <div class="search-item">
-                <el-input v-model="data.search.searchData" placeholder="请输入">
-                  <template #suffix>
-                    <el-icon @click="onSearch"><Search /></el-icon>
-                  </template>
-                </el-input>
-              </div>
-            </div>
-            <div class="right">
-              <el-icon :size="23" color="#409EFC" @click="onReSearch"
-                ><Refresh
-              /></el-icon>
-            </div>
-          </div>
-        </div>
         <div class="middle">
           <el-table
-            ref="multipleTableRef"
             :data="data.tableData"
             border
             style="width: 100%"
-            @selection-change="handleSelectionChange"
           >
-            <el-table-column type="selection" width="40" />
             <el-table-column label="角色名称" property="strName" />
             <el-table-column
               class="description"
@@ -73,8 +52,6 @@
 </template>
 <script setup>
 // 接口 获取用户列表，修改用户状态，批量修改用户状态,搜索角色,删除角色
-import { Plus } from "@element-plus/icons-vue";
-import { ElMessage, ElMessageBox } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import userRole from "@/components/role/user-role.vue";
 import ruleRole from "@/components/role/rule-role.vue";
@@ -113,19 +90,6 @@ const handleCheckUserRole = (role) => {
 // 查看一个角色的所有权限
 const handleCheckRuleRole = (role) => {
   ruleRoleRef.value.getAllRuleByRole(role);
-
-};
-// 搜索
-const onSearch = () => {
-  console.log(data.search.searchData);
-};
-// 刷新搜索
-const onReSearch = () => {};
-const multipleTableRef = ref();
-const multipleSelection = ref([]);
-const handleSelectionChange = (val) => {
-  multipleSelection.value = val;
-  console.log(multipleSelection.value);
 };
 // 关闭子组件
 const handleClose = () => {

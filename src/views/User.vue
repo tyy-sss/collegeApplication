@@ -108,6 +108,7 @@
                 <el-button
                   link
                   type="danger"
+                  v-if="scope.row.role == '老师' || scope.row.role == '班主任'"
                   @click="handleChangeUserRole(scope.row)"
                   >修改角色</el-button
                 >
@@ -339,7 +340,9 @@ const getUserList = () => {
     .then((res) => {
       data.page.total = parseInt(res.total);
       data.page.currentPage = res.current;
-      data.tableData = res.records;
+      data.tableData = res.records.filter((element) => {
+        return element.role != "超级管理员";
+      });
     })
     .catch((err) => {
       console.log(err);

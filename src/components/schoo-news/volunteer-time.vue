@@ -99,24 +99,22 @@ const changeNotimeObject = () => {
 };
 // 获得当年的志愿填报时间
 const getWishTime = () => {
-  managerFun.wishTime
-    .selectWishTime1(schoolId, data.nowYear)
-    .then((res) => {
-      res.records.forEach((element) => {
-        if (element.type == true) {
-          data.volunteerTime = changeTimeObject(element);
-        }
-        if (element.type == false) {
-          data.preVolunteerTime = changeTimeObject(element);
-        }
-      });
-      if (!data.volunteerTime.time) {
-        data.volunteerTime = changeNotimeObject();
+  managerFun.wishTime.selectWishTime1(schoolId, data.nowYear).then((res) => {
+    res.records.forEach((element) => {
+      if (element.type == true) {
+        data.volunteerTime = changeTimeObject(element);
       }
-      if (!data.preVolunteerTime.time) {
-        data.preVolunteerTime = changeNotimeObject();
+      if (element.type == false) {
+        data.preVolunteerTime = changeTimeObject(element);
       }
     });
+    if (!data.volunteerTime.time) {
+      data.volunteerTime = changeNotimeObject();
+    }
+    if (!data.preVolunteerTime.time) {
+      data.preVolunteerTime = changeNotimeObject();
+    }
+  });
 };
 // 添加志愿时间
 const addWishTime = (type, startTime, endTime) => {

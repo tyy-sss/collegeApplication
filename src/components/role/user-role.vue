@@ -179,8 +179,8 @@ defineExpose({
   getAllUserByRole,
 });
 </script>
-<style src="@/assets/css/role/role-drawer.css" scoped>
-</style>
+<style src="@/assets/css/role/role-drawer.css" scoped/>
+<style src="@/assets/css/utils/table-empty.css" scoped/>
 <style scoped>
 .warn {
   padding: 0.5rem;

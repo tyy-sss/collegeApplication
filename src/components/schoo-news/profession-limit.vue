@@ -205,6 +205,7 @@ const handleExportProfession = () => {
   console.log(data.tableData);
   handleProfessionExportData(data.tableHeader, data.tableData);
 };
+// 导出所有的专业限制信息
 const handleExportAllProfeesion = () =>{
   managerFun.major.allMajor(schoolId).then((res)=>{
     handleAllProfessionExportData(data.tableHeader,res)
@@ -244,17 +245,20 @@ const handleChangeEnrollmentNumber = debounce((val) => {
 const cascaderRef = ref(null);
 // 修改限制专业地区的值
 const handleChangeChooseValue = (chooseVal, rowVal) => {
-  changeMajor(handleCascaderData(chooseVal, rowVal));
+  changeMajor(handleCascaderData(chooseVal, rowVal),rowVal);
 };
 // 修改单个专业限制信息
-const changeMajor = (val) => {
+const changeMajor = (val,rowVal) => {
+  // 
   managerFun.major
     .modifyMajor(val)
     .then((res) => {
       // 处理回显数据
       data.tableData = handleTableDataForSingle(res, data.tableData);
     })
-    .catch(() => {})
+    .catch(() => {
+     getShcoolMajor();
+    })
     .finally(() => {});
 };
 // 获取要展示的地区组合信息
@@ -289,6 +293,7 @@ const getShcoolMajor = () => {
       data.page.currentPage = res.current;
       data.page.total = res.total;
       data.page.nowPageSize = res.size;
+      console.log(res);
       // 表格数据处理 处理strings数组最后一个元素的strings属性
       data.tableData = handleTableData(res, data.tableHeader);
     })
