@@ -108,7 +108,7 @@ const routes = [
         path: "ranking-query",
         name: "ranking-query",
         component: () => import("@/views/RankingQuery.vue"),
-      }
+      },
     ],
   },
   {
@@ -154,8 +154,8 @@ router.beforeEach((to, form, next) => {
   var token = getAccessToken();
   if (!token) {
     // 未登录
-    // 在登录界面
-    if (to.path == "/login") {
+    if (to.name == "login") {
+      // 在登录界面
       next();
     } else {
       ElMessage.error("请先登录");
