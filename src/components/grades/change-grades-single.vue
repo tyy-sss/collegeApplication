@@ -117,7 +117,7 @@ watch(
 );
 defineExpose({ data });
 </script>
-    <style src="@/assets/css/role/role-drawer.css" scoped>
+    <style src="@/assets/css/role/role-drawer-footer.css" scoped>
 </style>
   <style scoped>
 .choose-role {

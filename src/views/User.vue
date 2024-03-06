@@ -340,9 +340,7 @@ const getUserList = () => {
     .then((res) => {
       data.page.total = parseInt(res.total);
       data.page.currentPage = res.current;
-      data.tableData = res.records.filter((element) => {
-        return element.role != "超级管理员";
-      });
+      data.tableData = res.records;
     })
     .catch((err) => {
       console.log(err);

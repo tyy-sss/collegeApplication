@@ -65,7 +65,11 @@
                     label="用户名称"
                     min-width="100"
                   />
-                  <el-table-column prop="className" label="所在班级" min-width="100" />
+                  <el-table-column
+                    prop="className"
+                    label="所在班级"
+                    min-width="100"
+                  />
                 </el-table>
                 <div class="pager">
                   <el-pagination
@@ -87,7 +91,6 @@
   <script setup>
 // 获得用户分页名单，搜索用户，给用户设置角色
 import managerFun from "@/api/manager";
-import { ElMessage } from "element-plus";
 import { reactive, ref } from "vue";
 const form = reactive({
   role: "老师",
@@ -120,17 +123,6 @@ const handleClose = () => {
 const onSearch = () => {
   getUserList();
 };
-// 添加角色用户
-const handleAddUserRole = () => {
-  if (multipleSelection.value.length <= 0) {
-    ElMessage.info("请选择用户");
-  }
-  // 添加角色用户
-  console.log(multipleSelection.value);
-  // 清空表单验证消息
-  // 重新刷新角色列表
-  ruleFormRef.value.resetFields();
-};
 // 切换用户数据
 const handleCurrentChange = (val) => {
   form.page.pageCount = val;
@@ -142,8 +134,7 @@ const getAllUserByRole = (data) => {
   form.ruleForm.name = data.strName;
   form.ruleForm.roleId = data.roleId;
   form.ruleForm.searchData = "";
-  form.page.pageCount = 1,
-  getUserList();
+  (form.page.pageCount = 1), getUserList();
 };
 // 获取用户列表
 const getUserList = () => {
