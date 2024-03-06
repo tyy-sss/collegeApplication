@@ -85,13 +85,13 @@
             <el-table-column
               prop="lastDdlTime"
               label="最近更新"
-              min-width="100"
+              min-width="120px"
             >
               <template #default="scope">
                 {{ scope.row.lastDdlTime.replace("T", " ") }}
               </template>
             </el-table-column>
-            <el-table-column label="操作" min-width="180px">
+            <el-table-column label="操作" min-width="150px">
               <template #default="scope">
                 <el-button
                   link
@@ -104,13 +104,6 @@
                   type="success"
                   @click="handleResetUser(scope.row)"
                   >重置密码</el-button
-                >
-                <el-button
-                  link
-                  type="danger"
-                  v-if="scope.row.role == '老师' || scope.row.role == '班主任'"
-                  @click="handleChangeUserRole(scope.row)"
-                  >修改角色</el-button
                 >
               </template></el-table-column
             >
@@ -244,12 +237,6 @@ const handleResetUser = (val) => {
   let userNumberList = [];
   userNumberList.push(val.userNumber);
   resetUserList(userNumberList);
-};
-// 修改角色
-const handleChangeUserRole = (val) => {
-  data.dialogVisible = true;
-  data.chooseUser = { ...val };
-  data.chooseUser.roleId = "";
 };
 // 修改角色权限
 const handleChangeUserRoleEnd = () => {

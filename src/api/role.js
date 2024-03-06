@@ -9,13 +9,5 @@ let roleFun = {
 roleFun.user.getAllRole = () => {
   return http.get("/role/allRole");
 };
-/**
- * 修改用户的角色
- * @param {*} userId
- * @param {*} roleId
- * @returns
- */
-roleFun.user.changeUserRole = (userId, roleId) => {
-  return http.put("/role/permission/" + userId + "?roleId=" + roleId);
-};
+
 export default roleFun;
