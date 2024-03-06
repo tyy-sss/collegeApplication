@@ -4,16 +4,12 @@
       <div class="title">
         <div class="text">角色管理</div>
         <div class="prompt">
-          注意：角色个数固定设置为4个，只有部分权限可以进行改动。
+          注意：角色个数固定设置为4个，可以查看角色权限和角色成员。
         </div>
       </div>
       <div class="context">
         <div class="middle">
-          <el-table
-            :data="data.tableData"
-            border
-            style="width: 100%"
-          >
+          <el-table :data="data.tableData" border style="width: 100%">
             <el-table-column label="角色名称" property="strName" />
             <el-table-column
               class="description"
@@ -38,14 +34,8 @@
             >
           </el-table>
         </div>
-        <user-role
-          ref="userRoleRef"
-          @handleClose="handleClose"
-        />
-        <rule-role
-          ref="ruleRoleRef"
-          @handleClose="handleClose"
-        />
+        <user-role ref="userRoleRef" @handleClose="handleClose" />
+        <rule-role ref="ruleRoleRef" @handleClose="handleClose" />
       </div>
     </div>
   </div>

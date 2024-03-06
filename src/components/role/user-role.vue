@@ -80,15 +80,6 @@
             </el-form-item>
           </el-form>
         </div>
-        <div class="footer">
-          <el-divider />
-          <span class="button-footer item">
-            <el-button type="primary" @click="handleAddUserRole">
-              提交
-            </el-button>
-            <el-button @click="handleClose">取消</el-button>
-          </span>
-        </div>
       </div>
     </el-drawer>
   </div>
@@ -108,7 +99,7 @@ const form = reactive({
   },
   tableData: [],
   page: {
-    pageSize: 7,
+    pageSize: 8,
     pageCount: 1,
     total: 700,
   },

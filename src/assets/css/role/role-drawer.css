@@ -21,12 +21,7 @@
   color: black;
 }
 .content {
-  height: 76%;
-}
-.button-footer {
-  display: flex;
-  align-items: center;
-  justify-content: flex-end;
+  height: 90%;
 }
 /* 提示语 */
 .prompt {
