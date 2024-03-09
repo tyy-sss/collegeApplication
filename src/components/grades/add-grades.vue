@@ -54,7 +54,7 @@
   </div>
 </template>
   <script setup>
-import { reactive, watch } from "vue";
+import { reactive } from "vue";
 import { excelExport } from "@/assets/js/excel/excel-export";
 import {
   readFile,
@@ -108,7 +108,6 @@ const handleClose = () => {
   new Promise((resolve, reject) => {
     resolve((data.dialogTableVisible = false));
   }).then(() => {
-    console.log(data.dialogTableVisible);
     data.upload.isProgress = false;
     emit("getGradesList");
   });
@@ -131,12 +130,6 @@ const addGrades = (val) => {
       handleClose();
     });
 };
-watch(
-  () => props.gradesList,
-  (newVal, oldVal) => {
-    console.log(newVal, oldVal);
-  }
-);
 // 把参数暴露给父组件，让父组件进行修改
 defineExpose({
   data,

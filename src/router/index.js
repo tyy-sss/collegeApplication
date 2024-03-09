@@ -108,7 +108,7 @@ const routes = [
         path: "ranking-query",
         name: "ranking-query",
         component: () => import("@/views/RankingQuery.vue"),
-      }
+      },
     ],
   },
   {
@@ -154,8 +154,8 @@ router.beforeEach((to, form, next) => {
   var token = getAccessToken();
   if (!token) {
     // 未登录
-    // 在登录界面
-    if (to.path == "/login") {
+    if (to.name == "login") {
+      // 在登录界面
       next();
     } else {
       ElMessage.error("请先登录");
@@ -165,7 +165,6 @@ router.beforeEach((to, form, next) => {
     // 已登录
     if (to.path == "/") {
       // 跳转到菜单表的第一个菜单显示界面
-      // console.log(getRole())
       const firstPath = giveMenu(getRole())[0].path.slice(1);
       next({ name: firstPath });
     } else {

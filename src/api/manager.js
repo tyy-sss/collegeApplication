@@ -136,8 +136,8 @@ managerFun.school.changeSchool = (data) => {
  * 删除学校
  * @param {*} number 学校编号
  */
-managerFun.school.deleteSchool = (number) => {
-  return http.delete("/school", number);
+managerFun.school.deleteSchool = (schoolId) => {
+  return http.delete("/school", schoolId);
 };
 
 /** 地区 */
@@ -299,20 +299,6 @@ managerFun.wishTime.selectWishTime1 = (
   });
 };
 /**
- * 根据学校编号搜索志愿时间接口
- * @param {学校编号} schoolId
- * @param {*} current
- * @param {*} size
- * @returns
- */
-managerFun.wishTime.selectWishTime = (schoolId, current = 1, size = 10) => {
-  return http.get("/wishTime/selectWishTime", {
-    schoolId,
-    current,
-    size,
-  });
-};
-/**
  *填写志愿时间
  * @param {志愿时间对象} timeData
  * @returns
@@ -332,10 +318,50 @@ managerFun.wishTime.modifyWiseTime = (timeData) => {
 /** 成绩 */
 /**
  * 上传成绩数据
- * @param {学生成绩数据} data 
- * @returns 
+ * @param {学生成绩数据} data
+ * @returns
  */
 managerFun.grades.addGrades = (data) => {
   return http.post("/grade", data);
+};
+/**
+ * 搜索成绩
+ * @param {成绩导入年} year
+ * @param {搜索词} keyword
+ * @param {当前页} current
+ * @param {页大小} size
+ * @returns
+ */
+managerFun.grades.getGradesList = (year, keyword, current, size) => {
+  return http.get("/grade", {
+    year,
+    keyword,
+    current,
+    size,
+  });
+};
+/**
+ * 获取一年的成绩
+ * @param {年份} year
+ * @returns
+ */
+managerFun.grades.getAllGradesList = (year) => {
+  return http.get("/grade/all", { year });
+};
+/**
+ * 删除成绩
+ * @param {被删除的成绩id数组} data
+ * @returns
+ */
+managerFun.grades.resetGrades = (data) => {
+  return http.put("/grade/reset", data);
+};
+/**
+ * 修改成绩
+ * @param {被修改的成绩数据} data
+ * @returns
+ */
+managerFun.grades.changeGrades = (data) => {
+  return http.put("/grade/grade", data);
 };
 export default managerFun;

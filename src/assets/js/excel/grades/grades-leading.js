@@ -1,3 +1,5 @@
+import { inputNumberEmits } from "element-plus";
+
 // 成绩单导入表头数据
 const getGradesCharacter = (gradesList) => {
   const gradesCharacter = {
@@ -7,6 +9,10 @@ const getGradesCharacter = (gradesList) => {
     },
     username: {
       text: "姓名",
+      type: "string",
+    },
+    score: {
+      text: "总成绩",
       type: "string",
     },
   };
@@ -30,19 +36,19 @@ const handleGradesInformation = (addData, gradesList) => {
       const gradesSubjectList = [];
       for (let i = 0; i < gradesList.length; i++) {
         let gradeScore = element[gradesList[i].gradeId];
-        let score = parseInt(gradeScore)
+        let score = parseInt(gradeScore);
         if (!isNaN(score)) {
           gradeScore = score;
         } else {
           gradeScore = 0;
         }
-        console.log(gradeScore);
         gradesSubjectList.push({
           gradeId: gradesList[i].gradeId,
           grade: gradeScore,
         });
       }
       item.gradeSubjectBos = gradesSubjectList;
+      item.score = element.score;
       handleData.push(item);
     }
   });

@@ -1,8 +1,13 @@
 import axios from "axios";
 import qs from "qs"; //转json数据工具包
+import router from "@/router";
 import { ElMessage } from "element-plus";
 import { addRequest, refreshToken } from "./two-token";
-import { getAccessToken, removeAccessToken } from "@/constants/token";
+import {
+  getAccessToken,
+  removeAccessToken,
+  removeRefreshToken,
+} from "@/constants/token";
 
 //1.利用axios对象的方法create，去创建一个axios实例。
 const YSB = "http://192.168.50.35:8081/";
@@ -11,7 +16,7 @@ const CX = "http://192.168.50.236:8081/";
 const requests = axios.create({
   //配置对象
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径当中会出现api
-  baseURL: YSB,
+  baseURL: ZWY,
   //代表请求超时的时间
   timeout: 30 * 1000,
 });
@@ -24,28 +29,33 @@ requests.interceptors.request.use((config) => {
   return config;
 });
 //接收请求拦截器
-requests.interceptors.response.use((res) => {
-  if (typeof res.data !== "object") {
-    ElMessage.error("服务端异常！");
-    return Promise.reject(res);
+requests.interceptors.response.use(
+  async (response) => {
+    // 获取到配置和后端响应的数据
+    let { config, data } = response;
+    return new Promise((resolve, reject) => {
+      if (data.code === 2039) {
+        // 短token失效
+        removeAccessToken();
+        // 保存请求，携带长token去请求新的token
+        addRequest(() => resolve(requests(config)));
+        refreshToken();
+      } else if (data.code === 2005) {
+        //长token失效，退出登录
+        removeRefreshToken();
+        router.push({ path: "/login" });
+      } else if (data.code === 200) {
+        resolve(data);
+      } else {
+        if (data.msg) ElMessage.error(data.msg);
+        reject(data);
+      }
+    });
+  },
+  (error) => {
+    return Promise.reject(error);
   }
-  if (res.data.code != 200) {
-    if (res.data.code === 2044) {
-      removeAccessToken();// 移除失效的短token
-      addRequest(() => resolve(server(config)));// 把过期请求存储起来，用于请求到新的短token，再次请求，达到无感刷新
-      refreshToken();// 携带长token去请求新的token
-    } else if (res.data.code == 2018) {
-
-    } else {
-      if (res.data.msg) ElMessage.error(res.data.msg);
-    }
-    // if (res.data.resultCode == 419) {
-    //   router.push({ path: "/login" });
-    // }
-    return Promise.reject(res.data);
-  }
-  return res.data; //返回的是数据
-});
+);
 
 const header = {
   "Content-Type": "application/json;charset=UTF-8",

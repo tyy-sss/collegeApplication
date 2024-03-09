@@ -55,4 +55,4 @@ const excelExport = (json, fields, filename = ".xlsx") => {
   fs.saveAs(blob, filename + ".xlsx");
 };
 
-export { excelExport,s2ab };
+export { excelExport, s2ab };

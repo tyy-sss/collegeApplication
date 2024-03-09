@@ -1,7 +1,7 @@
 <template>
   <div class="show-container">
     <div class="title">
-      <div class="text">高考科目管理</div>
+      <div class="text">预科考试科目管理</div>
     </div>
     <div class="context">
       <el-tag

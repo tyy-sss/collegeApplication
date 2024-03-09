@@ -9,21 +9,28 @@
           <div class="search">
             <div class="left">
               <div class="search-item">
-                <div class="text">用户姓名:</div>
+                <div class="text">搜索信息:</div>
                 <div class="input">
                   <el-input
                     v-model="data.searchData.searchName"
-                    placeholder="请输入"
+                    placeholder="请输入用户账号或者姓名"
                   />
                 </div>
               </div>
               <div class="search-item">
                 <div class="text">用户角色:</div>
                 <div class="input">
-                  <el-input
+                  <el-select
+                    placeholder="选择一个角色"
                     v-model="data.searchData.searchRole"
-                    placeholder="请输入"
-                  />
+                  >
+                    <el-option
+                      v-for="(item, index) in data.roleList"
+                      :key="index"
+                      :label="item.strName"
+                      :value="item.strName"
+                    />
+                  </el-select>
                 </div>
               </div>
             </div>
@@ -56,7 +63,7 @@
             />
           </div>
         </div>
-        <div class="middle"> 
+        <div class="middle">
           <el-table
             ref="multipleTableRef"
             :data="data.tableData"
@@ -78,13 +85,13 @@
             <el-table-column
               prop="lastDdlTime"
               label="最近更新"
-              min-width="100"
+              min-width="120px"
             >
-            <template #default="scope">
-              {{ scope.row.lastDdlTime.replace('T',' ') }}
-            </template>
+              <template #default="scope">
+                {{ scope.row.lastDdlTime.replace("T", " ") }}
+              </template>
             </el-table-column>
-            <el-table-column label="操作" min-width="180px">
+            <el-table-column label="操作" min-width="150px">
               <template #default="scope">
                 <el-button
                   link
@@ -97,12 +104,6 @@
                   type="success"
                   @click="handleResetUser(scope.row)"
                   >重置密码</el-button
-                >
-                <el-button
-                  link
-                  type="danger"
-                  @click="handleChangeUserRole(scope.row)"
-                  >修改角色</el-button
                 >
               </template></el-table-column
             >
@@ -134,11 +135,41 @@
         </div>
       </div>
     </div>
+    <!-- 对话框 -->
+    <el-dialog v-model="data.dialogVisible" title="修改角色" width="30%">
+      <el-form>
+        <el-form-item label="用户姓名:">
+          <div>{{ data.chooseUser.username }}</div>
+        </el-form-item>
+        <el-form-item label="用户角色:">
+          <el-select
+            placeholder="选择一个角色"
+            v-model="data.chooseUser.roleId"
+          >
+            <el-option
+              v-for="(item, index) in data.roleList"
+              :key="index"
+              :label="item.strName"
+              :value="item.roleId"
+            />
+          </el-select>
+        </el-form-item>
+      </el-form>
+      <template #footer>
+        <span class="dialog-footer">
+          <el-button @click="handleClose">取消</el-button>
+          <el-button type="primary" @click="handleChangeUserRoleEnd">
+            确定
+          </el-button>
+        </span>
+      </template>
+    </el-dialog>
   </div>
 </template>
 <script setup>
 // 接口 搜索用户 删除用户 重置密码 修改用户角色
 import managerFun from "@/api/manager";
+import roleFun from "@/api/role";
 import addUser from "@/components/user/add-user.vue";
 import addUserSingle from "@/components/user/add-user-single.vue";
 import { onMounted, reactive, ref } from "vue";
@@ -162,6 +193,14 @@ const data = reactive({
   },
   // 表格数据
   tableData: [],
+  // 对话框
+  dialogVisible: false,
+  chooseUser: {
+    username: "",
+    roleId: "",
+    userId: "",
+  },
+  roleList: [],
 });
 // 重置搜索
 const onReSearch = () => {
@@ -199,8 +238,21 @@ const handleResetUser = (val) => {
   userNumberList.push(val.userNumber);
   resetUserList(userNumberList);
 };
-// 修改角色
-const handleChangeUserRole = (val) => {};
+// 修改角色权限
+const handleChangeUserRoleEnd = () => {
+  console.log(data.chooseUser);
+  roleFun.user
+    .changeUserRole(data.chooseUser.userId, data.chooseUser.roleId)
+    .then((res) => {
+      ElMessage.success("修改用户角色成功");
+      handleClose();
+      getUserList();
+    });
+};
+// 关闭对话框
+const handleClose = () => {
+  data.dialogVisible = false;
+};
 // 批量重置密码
 const handleBatchResetUser = () => {
   if (multipleSelection.value.length === 0) {
@@ -281,14 +333,25 @@ const getUserList = () => {
       console.log(err);
     });
 };
+// 获得用户角色列表
+const getRoleList = () => {
+  roleFun.user.getAllRole().then((res) => {
+    res = res.filter((element) => {
+      return element.strName !== "超级管理员";
+    });
+    data.roleList = res;
+  });
+};
 onMounted(() => {
   getUserList();
+  getRoleList();
 });
 </script>
 <style src="@/assets/css/utils/table-center.css" scoped/>
 <style src="@/assets/css/show-container.css" scoped/>
 <style src="@/assets/css/search-top-left-right.css" scoped/>
 <style src="@/assets/css/pager.css" scoped/>
+<style src="@/assets/css/utils/table-empty.css" scoped/>
 <style scoped>
 /* 头部样式设置 */
 .top > div,

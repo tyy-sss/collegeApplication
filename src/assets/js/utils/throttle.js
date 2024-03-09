@@ -30,3 +30,20 @@ export const debounce = (fn, time) => {
     }, time);
   };
 };
+
+// 防抖 立即执行版
+export const debounceRight = (fn, time) => {
+  time = time || 200;
+  // 定时器
+  let timer = null;
+  return function (...args) {
+    const _this = this;
+    if (timer) {
+      clearTimeout(timer);
+    }
+    fn.apply(_this, args);
+    timer = setTimeout(function () {
+      timer = null;
+    }, time);
+  };
+};

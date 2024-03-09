@@ -163,8 +163,8 @@ const handleDeleteSchool = (val) => {
     type: "warning",
   })
     .then(() => {
-      // 删除学校
-      managerFun.school.deleteSchool(parseInt(val.number)).then((res) => {
+      // // 删除学校
+      managerFun.school.deleteSchool(parseInt(val.schoolId)).then((res) => {
         ElMessage.success("操作成功");
         getSchoolList();
       });
@@ -210,12 +210,13 @@ const handleClose = () => {
 };
 // 查看学校的具体消息
 const checkSchoolNews = (val) => {
+  console.log(val);
   // 跳转界面
   const href = router.resolve({
     path: "/school-manager/school-news",
     query: {
-      id: val.schoolId,
-      schoolId: val.number,
+      schoolId: val.schoolId,
+      schoolName: val.name,
     },
   });
   window.open(href.href, "_blank");

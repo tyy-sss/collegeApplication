@@ -3,6 +3,7 @@ const getGradesHeader = (gradesList) => {
   const gradesHeader = {
     userNumber: "学号",
     username: "姓名",
+    score: "总成绩",
   };
   for (let item of gradesList) {
     gradesHeader[String(item.gradeId)] = item.gradeName;

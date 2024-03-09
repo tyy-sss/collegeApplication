@@ -19,6 +19,7 @@
               <div class="search-item">
                 <el-input
                   v-model="data.searchData.descript"
+                  placeholder="请输入"
                   @change="onSearch"
                 />
               </div>
@@ -35,11 +36,19 @@
             <el-button type="primary" :icon="Plus" @click="handleAddGrades">
               批量导入成绩
             </el-button>
-            <add-grades ref="addGradesRef" :gradesList="data.tableHeader" @get-grades-list="getGradesList"/>
+            <add-grades
+              ref="addGradesRef"
+              :gradesList="data.tableHeader"
+              @get-grades-list="getGradesList"
+            />
           </div>
           <div class="add-item">
-            <el-button type="primary" :icon="Plus" @click="addGrades">
-              单个导入成绩
+            <el-button
+              type="primary"
+              :icon="Download"
+              @click="handleExportGrades"
+            >
+              导出成绩
             </el-button>
           </div>
         </div>
@@ -53,15 +62,27 @@
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" width="35" />
-            <el-table-column label="学号" property="classId" />
-            <el-table-column label="姓名" property="className" />
+            <el-table-column label="学号" property="userNumber" />
+            <el-table-column label="姓名" property="username" />
             <el-table-column
               v-for="(item, index) in data.tableHeader"
               :key="index"
-              :prop="String(item.gradeId)"
               :label="item.gradeName"
               min-width="60"
-            />
+            >
+              <template #default="scope">
+                {{
+                  scope.row.gradeSubjectBos.find(
+                    (element) => element.gradeId == item.gradeId
+                  )
+                    ? scope.row.gradeSubjectBos.find(
+                        (element) => element.gradeId == item.gradeId
+                      ).grade
+                    : 0
+                }}
+              </template>
+            </el-table-column>
+            <el-table-column label="总成绩" property="score" />
             <el-table-column label="操作" min-width="180px">
               <template #default="scope">
                 <el-button
@@ -73,14 +94,22 @@
                 <el-button
                   link
                   type="success"
-                  @click="handleDeleteGrades(scope.row)"
-                  >删除成绩信息</el-button
+                  @click="handleResetGrades(scope.row)"
+                  >重置成绩信息</el-button
                 >
               </template></el-table-column
             >
           </el-table>
         </div>
+        <add-grades-single
+          ref="addGradesSingleRef"
+          :gradesList="data.tableHeader"
+          @get-grades-list="getGradesList"
+        />
         <div class="bottom">
+          <el-button type="primary" @click="handleBatchResetGrades"
+            >批量重置成绩</el-button
+          >
           <el-divider />
           <div class="pager">
             <div class="page-news">共{{ data.page.total }}条信息</div>
@@ -102,13 +131,18 @@
 </template>
     <script setup>
 import { onMounted, reactive, ref } from "vue";
-import { Plus } from "@element-plus/icons-vue";
+import { Plus, Download } from "@element-plus/icons-vue";
 import { formatDate } from "@/assets/js/utils/format-date";
-import { debounce } from "@/assets/js/utils/throttle";
+import { debounceRight } from "@/assets/js/utils/throttle";
+import { excelExport } from "@/assets/js/excel/excel-export";
+import { getGradesHeader } from "@/assets/js/excel/grades/grades-export";
 import managerFun from "@/api/manager";
 import addGrades from "@/components/grades/add-grades.vue";
+import addGradesSingle from "@/components/grades/change-grades-single.vue";
+import { ElMessage, ElMessageBox } from "element-plus";
 
 const addGradesRef = ref(null);
+const addGradesSingleRef = ref(null);
 //   数据
 const data = reactive({
   searchData: {
@@ -132,31 +166,114 @@ const data = reactive({
 const handleAddGrades = () => {
   addGradesRef.value.data.dialogTableVisible = true;
 };
+// 导出学生成绩单
+const handleExportGrades = () => {
+  let year =
+    data.searchData.date != ""
+      ? formatDate(data.searchData.date).slice(0, 4)
+      : formatDate(new Date()).slice(0, 4);
+  console.log(year);
+  managerFun.grades.getAllGradesList(year).then((res) => {
+    res.forEach((element) => {
+      element.gradeSubjectBos.forEach((item) => {
+        element[String(item.gradeId)] = item.grade;
+      });
+    });
+    console.log(res);
+    const gradesHeader = getGradesHeader(data.tableHeader);
+    excelExport(res, gradesHeader, year + "年成绩单");
+  });
+};
 // 按年份搜索成绩单
-const onSearch = debounce(() => {
-  data.searchData.date = formatDate(data.searchData.date).slice(0, 4);
-}, 1000);
+const onSearch = debounceRight(() => {
+  if (data.searchData.date) {
+    data.searchData.date = formatDate(data.searchData.date).slice(0, 4);
+  }
+  getGradesList();
+}, 50);
 // 重置搜索
 const onReSearch = () => {
-  data.searchData = {};
+  data.searchData = {
+    date: "",
+    descript: "",
+  };
+  getGradesList();
 };
 // 修改成绩信息
-const handleChangeGrades = (val) => {};
-// 删除成绩信息
-const handleDeleteGrades = (val) => {};
+const handleChangeGrades = (val) => {
+  addGradesSingleRef.value.data.ruleForm = val;
+  addGradesSingleRef.value.data.dialogVisible = true;
+};
+// 重置成绩信息
+const handleResetGrades = (val) => {
+  resetGrades([val.userNumber]);
+};
 // 批量处理
 const multipleSelection = ref([]);
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
+// 批量重置成绩
+const handleBatchResetGrades = () => {
+  if (multipleSelection.value.length === 0) {
+    ElMessage.error("请至少选择一个成绩信息");
+  } else {
+    const gradesList = [];
+    multipleSelection.value.forEach((item) => {
+      gradesList.push(item.userNumber);
+    });
+    // 重置班级
+    resetGrades(gradesList);
+  }
+};
 // 获取预科考试科目列表
 const getExamSubjectList = () => {
   managerFun.examSubject.checkSubject().then((res) => {
     data.tableHeader = res;
+    getGradesList();
   });
 };
 // 获得成绩具体信息
-const getGradesList = () => {};
+const getGradesList = () => {
+  managerFun.grades
+    .getGradesList(
+      data.searchData.date,
+      data.searchData.descript,
+      data.page.currentPage,
+      data.page.nowPageSize
+    )
+    .then((res) => {
+      data.tableData = res.records;
+      data.page.total = res.total;
+      data.page.nowPageSize = res.size;
+      data.page.currentPage = res.current;
+    });
+};
+// 重置成绩信息
+const resetGrades = (val) => {
+  ElMessageBox.confirm("确定重置所选成绩信息", {
+    confirmButtonText: "确定",
+    cancelButtonText: "取消",
+    type: "warning",
+  })
+    .then(() => {
+      managerFun.grades
+        .resetGrades(val)
+        .then((res) => {
+          ElMessage.success(res);
+        })
+        .catch(() => {})
+        .finally(() => {
+          getGradesList();
+        });
+    })
+    .catch(() => {
+      ElMessage({
+        type: "info",
+        message: "已取消改操作",
+      });
+    });
+};
 onMounted(() => {
   getExamSubjectList();
 });
@@ -165,6 +282,7 @@ onMounted(() => {
 <style src="@/assets/css/show-container.css" scoped/>
 <style src="@/assets/css/search-top-left-right.css" scoped/>
 <style src="@/assets/css/pager.css" scoped/>
+<style src="@/assets/css/utils/table-empty.css" scoped/>
 <style scoped>
 /* 头部样式设置 */
 .top > div,

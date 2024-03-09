@@ -55,7 +55,7 @@ const data = reactive({
 import { useRoute } from "vue-router";
 // 获得路由显示的学校id
 const route = new useRoute();
-const schoolId = ref(route.query.schoolId).value;
+const schoolId = Number(ref(route.query.schoolId).value);
 // 设置预填报志愿的时间
 const handleSetPreVolunteerTime = () => {
   const startTime = formatDate(data.preVolunteerTime.time[0]);
@@ -99,24 +99,22 @@ const changeNotimeObject = () => {
 };
 // 获得当年的志愿填报时间
 const getWishTime = () => {
-  managerFun.wishTime
-    .selectWishTime1(Number(schoolId), data.nowYear)
-    .then((res) => {
-      res.records.forEach((element) => {
-        if (element.type == true) {
-          data.volunteerTime = changeTimeObject(element);
-        }
-        if (element.type == false) {
-          data.preVolunteerTime = changeTimeObject(element);
-        }
-      });
-      if (!data.volunteerTime.time) {
-        data.volunteerTime = changeNotimeObject();
+  managerFun.wishTime.selectWishTime1(schoolId, data.nowYear).then((res) => {
+    res.records.forEach((element) => {
+      if (element.type == true) {
+        data.volunteerTime = changeTimeObject(element);
       }
-      if (!data.preVolunteerTime.time) {
-        data.preVolunteerTime = changeNotimeObject();
+      if (element.type == false) {
+        data.preVolunteerTime = changeTimeObject(element);
       }
     });
+    if (!data.volunteerTime.time) {
+      data.volunteerTime = changeNotimeObject();
+    }
+    if (!data.preVolunteerTime.time) {
+      data.preVolunteerTime = changeNotimeObject();
+    }
+  });
 };
 // 添加志愿时间
 const addWishTime = (type, startTime, endTime) => {
@@ -143,7 +141,7 @@ const changeWishTime = (val, startTime, endTime) => {
       type: val.type, // true为正式填报
       startTime: startTime,
       endTime: endTime,
-      schoolId: val.schoolId,
+      schoolId: parseInt(val.schoolId),
       ago: val.ago,
     })
     .then(() => {})
