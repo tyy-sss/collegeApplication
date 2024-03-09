@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-25 15:33:54
+ * @LastEditTime: 2024-03-03 16:13:37
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:综合测评表公示页面
 -->
@@ -26,6 +26,7 @@
       >
     </div>
     <el-table
+      v-loading.lock="data.loading"
       :data="filterTableData"
       style="width: 100%"
       @cell-mouse-enter="handleCellEnter"
@@ -34,7 +35,7 @@
       <el-table-column prop="userNumber" label="学号" min-width="120" />
       <el-table-column prop="username" fixed label="姓名" min-width="150" />
       <el-table-column label="德育">
-        <el-table-column prop="add1" label="加分明细" min-width="120" />
+        <el-table-column prop="content.add1" label="加分明细" min-width="120" />
         <el-table-column prop="sub1" label="减分明细" min-width="120" />
         <el-table-column prop="point1" label="得分" min-width="60" />
       </el-table-column>
@@ -73,10 +74,10 @@
     <!-- 分页 -->
     <div class="pagination">
       <el-pagination
-        :page-size=data.page.pageSize
-        :pager-count=10
+        :page-size="data.page.pageSize"
+        :pager-count="10"
         layout="prev, pager, next"
-        :total=data.page.total
+        :total="data.page.total"
         @current-change="handleCurrentChange"
         style="margin-left: auto"
       />
@@ -260,12 +261,14 @@ const data = reactive({
     currentPage: 1, // 当前页
     pageSize: 8, //一页的数据量
   },
+  loading:false,
 });
 
 onMounted(() => {
   init();
 });
 function init() {
+  data.loading=true;
   getAssessmentDetails(1); //获取综测信息
 }
 function getAssessmentDetails(currentPage) {
@@ -274,20 +277,27 @@ function getAssessmentDetails(currentPage) {
     .getAssessments({
       name: "",
       userNumber: "",
-      month: "",
+      month: 0,
       identity: 1,
       current: currentPage,
       size: 15,
     })
     .then((res) => {
       console.log("获取综测信息结果：", res);
-      data.assessments=[];
-      data.page.currentPage=res.current;
-      data.page.pageSize=res.size;
+      data.assessments = [];
+      data.page.currentPage = res.current;
+      data.page.pageSize = res.size;
       data.page.total = res.total;
-      res.records.forEach((item)=>{
-        data.assessments.push(item.content)
-      })
+      res.records.forEach((item) => {
+        data.assessments.push({
+          username: item.username,
+          userNumber: item.userNumber,
+          pre_total: item.lastScore,
+          content: item.content,
+        });
+      });
+      console.log("XXX", data.assessments);
+      data.loading=false;
     });
 }
 
@@ -298,9 +308,9 @@ const filterTableData = computed(() =>
 );
 //改变分页页数
 const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`)
+  console.log(`current page: ${val}`);
   getAssessmentDetails(val);
-}
+};
 // 数据excel导出
 const handleExcelExport = () => {
   export_json_to_excel(

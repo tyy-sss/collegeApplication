@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-25 22:37:22
+ * @LastEditTime: 2024-02-27 22:40:40
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -225,9 +225,9 @@ const data = reactive({
       ],
     },
   ],
-  first:[],
-  second:[],
-  third:[],
+  first: [],
+  second: [],
+  third: [],
 });
 // 提交志愿
 let dialogVisible = ref(false);
@@ -248,7 +248,7 @@ function init() {
       let children = [];
       for (let j = 0; j < majors.length; j++) {
         children.push({
-          value: majors[j].name+"&"+majors[j].majorId,
+          value: majors[j].name + "&" + majors[j].majorId,
           label: majors[j].name,
         });
       }
@@ -274,6 +274,9 @@ function submitVolunteer() {
   ) {
     ElMessage.error("任何一项志愿不能为空，请认真完成志愿填报");
   } else {
+    data.first = splitString(data.volunteers.firstName);
+    data.second = splitString(data.volunteers.secondName);
+    data.third = splitString(data.volunteers.thirdName);
     dialogVisible.value = true;
   }
 }
@@ -284,18 +287,13 @@ function finish(sign) {
   // studentFun.sign.submitSignature(sign).then((res) => {
   //   console.log(res);
   //提交志愿接口(成功需要把志愿剩余次数减一)
-  data.first=splitString(data.volunteers.firstName);
-  data.second=splitString(data.volunteers.secondName);
-  data.third=splitString(data.volunteers.thirdName);
   volunteerFun.basis
     .modifyWise({
-      id: data.originVolunteers.id, //志愿填报id
-      userId: data.originVolunteers.userId, //用户id
-      first: data.first[1], //第一志愿
+      first: parseInt(data.first[1]), //第一志愿
       firstName: data.first[0], //第一志愿
-      second: data.second[1], //第二志愿
+      second: parseInt(data.second[1]), //第二志愿
       secondName: data.second[0], //第二志愿
-      third: data.third[1], //第三志愿
+      third: parseInt(data.third[1]), //第三志愿
       thirdName: data.third[0], //第三志愿
       timeId: data.originVolunteers.timeId, //时间段id
     })
@@ -311,7 +309,7 @@ function finish(sign) {
 }
 //处理数据:"专业名称&专业编号"=>["专业名称",专业编号]
 function splitString(str) {
-  return str.split('&');
+  return str.split("&");
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>

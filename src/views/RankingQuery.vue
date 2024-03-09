@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-24 09:21:56
+ * @LastEditTime: 2024-01-26 20:00:11
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -89,7 +89,7 @@
           class="m-2"
           placeholder="Select"
           size="large"
-          style="width: 240px"
+          style="width: 12rem; height: 3rem"
         >
           <el-option
             v-for="item in options"
@@ -98,6 +98,7 @@
             :value="item.value"
           />
         </el-select>
+        <br />
         <el-input
           v-model="data.score"
           placeholder="请输入您的分数"
@@ -137,7 +138,6 @@
     <template #header>
       <h4>历史查询</h4>
     </template>
-
     <template #default>
       <div>
         <el-table
@@ -312,7 +312,7 @@ const data = reactive({
     },
   ], //历史查询记录列表
 });
-
+//排名类型选择
 const options = [
   {
     value: "Option1",

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-23 14:52:33
+ * @LastEditTime: 2024-01-26 20:35:03
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -82,6 +82,12 @@
         <h4>本学期总体综测情况</h4>
         <br />
         <el-table :data="data.total">
+          <el-table-column label="学号" width="120">{{
+            data.userNumber
+          }}</el-table-column>
+          <el-table-column label="姓名" width="150">{{
+            data.username
+          }}</el-table-column>
           <el-table-column prop="class1" label="德育得分" />
           <el-table-column prop="class2" label="智育得分" />
           <el-table-column prop="class3" label="体育得分" />
@@ -246,6 +252,12 @@ const data = reactive({
       all: 0,
     },
   ],
+  lastScore: null, //上月综测
+  month: null, //当前确认综测的月份
+  score: null, //目前总分
+  signature: null, //签名
+  userNumber: null,
+  username: null,
   dialogVisible: false,
   dialogVisible2: false,
   dialogVisible3: false,
@@ -294,9 +306,15 @@ function init() {
   getComplaintHistory();
   studentFun.assess.getAssessmentThisMonth().then((res) => {
     console.log("个人综测", res);
-    data.assessment.pop();
+    data.lastScore = res.lastScore;
+    data.month = res.month;
+    data.score = res.score;
+    data.signature = res.signature;
+    data.userNumber = res.userNumber;
+    data.username = res.username;
+    data.assessment.length = 0;
     data.assessment.push(res.content);
-    data.total.pop();
+    data.total.length = 0;
     data.total.push(res.total);
   });
 }

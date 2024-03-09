@@ -57,11 +57,11 @@ const studentMenuData = reactive([
     path: "/student-comprehensive-assessment",
     icon: "location",
   },
-  {
-    menuName: "综合测评公示",
-    path: "/comprehensive-assessment-check",
-    icon: "location",
-  },
+  // {
+  //   menuName: "综合测评公示",
+  //   path: "/comprehensive-assessment-check",
+  //   icon: "location",
+  // },
   {
     menuName: "查询排名",
     path: "/ranking-query",

@@ -14,7 +14,7 @@
     <hr />
     <br />
     <!-- 学生信息 -->
-    <div v-if="identity == 1" class="student" v-loading.lock="data.loading2">
+    <div v-if="identity == 0" class="student" v-loading.lock="data.loading2">
       <!-- 证件照区 -->
       <div class="left" v-loading.lock="data.loading">
         <input
@@ -145,7 +145,7 @@
       </div>
     </div>
     <!-- 老师信息 -->
-    <div v-if="identity == 0" class="teacher">
+    <div v-if="identity == 1" class="teacher">
       <!-- 信息区 -->
       <div>
         <div class="box">
@@ -223,7 +223,7 @@
             :placeholder="data.student.phone || '-'"
           />
         </el-form-item>
-        <div v-if="identity == 1">
+        <div v-if="identity == 0">
           <h4>收件信息</h4>
           <br />
           <el-form-item label="收件名称 ：">
@@ -302,7 +302,7 @@ onMounted(() => {
   identity.value = getRole();
   data.teacherType = getRole();
   if (identity.value == 3) {
-    identity.value = 0;
+    identity.value = 1;
   } //班主任也是老师信息页
   data.loading2 = true;
   init();
@@ -336,7 +336,7 @@ const updatePasswords = reactive({
 });
 //渲染初始数据
 const init = function () {
-  if (identity.value == 1) {
+  if (identity.value == 0) {
     //获取学生信息
     studentFun.user.getInformation().then((res) => {
       console.log("学生信息", data.student);
@@ -345,7 +345,7 @@ const init = function () {
       data.avatar = "http://192.168.50.35:8081" + res.headshot;
       data.loading2 = false;
     });
-  } else if (identity.value == 0) {
+  } else if (identity.value == 1) {
     //获取老师信息
     teacherFun.user.getInformation().then((res) => {
       console.log(res);
@@ -382,11 +382,11 @@ function confirmClick() {
     .then(() => {
       data.drawer = false;
       //修改资料接口
-      if (identity.value == 1) {
+      if (identity.value == 0) {
         studentFun.user.updateInformation(updataData).then((res) => {
           ElMessage.success(res);
         });
-      } else if (identity.value == 0) {
+      } else if (identity.value == 1) {
         teacherFun.user.updatePhone(updataData.phone).then((res) => {
           ElMessage.success(res);
         });
@@ -404,13 +404,13 @@ function updatePassword() {
     if (updatePasswords.password !== updatePasswords.password2) {
       ElMessage.error("两次密码输入不一致");
     } else {
-      if (identity.value == 1) {
+      if (identity.value == 0) {
         //学生修改密码
         studentFun.user.updatePassword(updatePasswords.password).then((res) => {
           ElMessage.success(res);
           data.drawer2 = false;
         });
-      } else if (identity.value == 0) {
+      } else if (identity.value == 1) {
         //老师修改密码
         teacherFun.user.updatePassword(updatePasswords.password).then((res) => {
           ElMessage.success(res);
