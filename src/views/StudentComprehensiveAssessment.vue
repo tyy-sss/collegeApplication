@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-26 20:35:03
+ * @LastEditTime: 2024-03-09 22:03:20
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -88,15 +88,31 @@
           <el-table-column label="姓名" width="150">{{
             data.username
           }}</el-table-column>
-          <el-table-column prop="class1" label="德育得分" />
-          <el-table-column prop="class2" label="智育得分" />
-          <el-table-column prop="class3" label="体育得分" />
-          <el-table-column prop="class4" label="美育得分" />
-          <el-table-column prop="class5" label="劳动得分" />
+          <el-table-column prop="class1" label="德育得分">
+            {{ data.total.class1 || 0 }}</el-table-column
+          >
+          <el-table-column prop="class2" label="智育得分">{{
+            data.total.class2 || 0
+          }}</el-table-column>
+          <el-table-column prop="class3" label="体育得分">{{
+            data.total.class3 || 0
+          }}</el-table-column>
+          <el-table-column prop="class4" label="美育得分">{{
+            data.total.class4 || 0
+          }}</el-table-column>
+          <el-table-column prop="class5" label="劳动得分">{{
+            data.total.class5 || 0
+          }}</el-table-column>
           <el-table-column label="综合测评得分" fixed="right">
-            <el-table-column prop="add" label="加分" />
-            <el-table-column prop="sub" label="减分" />
-            <el-table-column prop="all" label="综测总分" />
+            <el-table-column prop="add" label="加分">{{
+              data.total.add || 0
+            }}</el-table-column>
+            <el-table-column prop="sub" label="减分">{{
+              data.total.sub || 0
+            }}</el-table-column>
+            <el-table-column prop="all" label="综测总分">{{
+              data.total.all || 0
+            }}</el-table-column>
           </el-table-column>
         </el-table>
         <br />
