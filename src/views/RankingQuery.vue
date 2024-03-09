@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-26 20:00:11
+ * @LastEditTime: 2024-03-09 23:08:49
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -15,45 +15,36 @@
       <h4>查询条件</h4>
       <br />
       <div class="condition">
-        <!-- 考生省份 -->
+        <!-- 考生学校 -->
         <div class="item">
           <div class="title">
-            <span class="tip">考生省份</span
+            <span class="tip">目标学校</span
             ><i
               ><el-icon><ArrowRight /></el-icon
             ></i>
           </div>
           <div class="condition_list">
-            <div v-if="data.provinces.length < 1">暂无数据</div>
-            <div
-              v-for="(item, i) in data.provinces"
-              :key="i"
-              :class="
-                item.name == data.curProvince ? 'tag_item select' : 'tag_item'
-              "
-              @click="selectProvince(item)"
-            >
-              {{ item.name }}
+            <div class="tag_item">
+              {{ data.schoolName }}
             </div>
           </div>
         </div>
-        <!-- 报考院校 -->
+        <!-- 报考学院 -->
         <div class="item">
           <div class="title">
-            <span class="tip">报考院校</span
+            <span class="tip">报考学院</span
             ><i
               ><el-icon><ArrowRight /></el-icon
             ></i>
           </div>
           <div class="condition_list">
-            <div v-if="data.schools.length < 1">请选择报考省份</div>
             <div
-              v-for="(item, i) in data.schools"
+              v-for="(item, i) in data.academy"
               :key="i"
               :class="
-                item.name == data.curSchool ? 'tag_item select' : 'tag_item'
+                item.name == data.curAcademy ? 'tag_item select' : 'tag_item'
               "
-              @click="selectSchool(item)"
+              @click="selectAcademy(item)"
             >
               {{ item.name }}
             </div>
@@ -68,7 +59,7 @@
             ></i>
           </div>
           <div class="condition_list">
-            <div v-if="data.majors.length < 1">请选择报考院校</div>
+            <div v-if="data.majors.length < 1">请选择报考学院</div>
             <div
               v-for="(item, i) in data.majors"
               :key="i"
@@ -87,7 +78,7 @@
         <el-select
           v-model="data.type"
           class="m-2"
-          placeholder="Select"
+          placeholder="请选择排名类型"
           size="large"
           style="width: 12rem; height: 3rem"
         >
@@ -123,10 +114,10 @@
           <hr />
           <div class="gk-rank">
             <div class="item">
-              <span>同分人数</span>{{ data.gkNum || "-" }}人
+              <span>我的排名</span>{{ data.gkNum || "-" }}名
             </div>
             <div class="item">
-              <span>排名区间</span>{{ data.gkLeft }}-{{ data.gkRight }}名
+              <span>条件人数</span>{{ data.gkCnt || "-" }}人
             </div>
           </div>
         </div>
@@ -147,11 +138,9 @@
           style="width: 100%"
         >
           <el-table-column type="index" width="50" />
-          <el-table-column label="时间" sortable prop="date" />
-          <el-table-column label="学校" prop="school" />
+          <el-table-column label="查询时间" sortable prop="date" />
+          <el-table-column label="学院" prop="school" />
           <el-table-column label="专业" prop="professional" />
-          <el-table-column label="省份" prop="province" />
-          <el-table-column label="考生类别" prop="type" />
           <el-table-column label="排名" sortable width="180" prop="num" />
         </el-table>
       </div>
@@ -169,12 +158,12 @@ const data = reactive({
   score: null, //填入分数
   gkScore: null, //高考分数
   gkNum: null, //同分人数
-  gkLeft: null, //排名区间左
-  gkRight: null, //排名区间右边
+  gkCnt: null, //排名区间左
   curProvince: "湖南", //选择省份
-  curSchool: "吉首大学", //选择学校
-  curMajor: "", //选择学校
+  curAcademy: "软件学院", //选择学校
+  curMajor: "金融学", //选择学校
   type: "", //查询排名类型
+  schoolName: "吉首大学", //目标院校
   provinces: [
     { name: "北京" },
     { name: "天津" },
@@ -206,20 +195,26 @@ const data = reactive({
     { name: "青海" },
     { name: "宁夏" },
   ], //省份列表
-  schools: [
-    { name: "吉首大学" },
-    { name: "湘南学院" },
-    { name: "湖南文理学院" },
-    { name: "湖南工业大学" },
-    { name: "长沙学院" },
-    { name: "湘潭大学" },
-    { name: "中南大学" },
-    { name: "湖南师范大学" },
-    { name: "湖南中医药大学" },
-    { name: "长沙理工大学" },
-    { name: "湖南农业大学" },
-    { name: "湖南大学" },
-  ], //学校列表
+  academy: [
+    { name: "软件学院" },
+    { name: "医学院" },
+    { name: "体育学院" },
+    { name: "音乐学院" },
+    { name: "文学院" },
+    { name: "化学院" },
+    { name: "旅游与管理学院" },
+    { name: "美术学院" },
+    { name: "农业学院" },
+    { name: "马克思主义学院" },
+    { name: "法学院" },
+    { name: "传媒学院" },
+    { name: "外国语学院" },
+    { name: "信息工程学院" },
+    { name: "化学与生物工程学院" },
+    { name: "车辆工程学院" },
+    { name: "经济与管理学院" },
+    { name: "智能制造学院" },
+  ], //学院列表
   majors: [
     { name: "金融学" },
     { name: "财政学" },
@@ -334,28 +329,34 @@ const options = [
 
 //查询排名
 function search() {
-  if (data.curProvince && data.curSchool && data.curMajor) {
+  if (data.curAcademy && data.curMajor && data.type && data.score) {
     data.loading = true;
+    //查询排名
+    // studentFun.rank.getStudentRanking(data.type).then((res) => {
+    //   console.log(res);
+
+    //   data.loading = false;
+    // });
+
     setTimeout(() => {
       data.gkScore = data.score;
       data.gkNum = 745;
-      data.gkLeft = 46820;
-      data.gkRight = 47564;
+      data.gkCnt = 1523;
       data.loading = false;
     }, 1000);
   } else {
     ElMessage({
-      message: "请选择查询条件",
+      message: "请选择查询条件或填入查询分数",
       type: "warning",
     });
   }
 }
 
-let selectProvince = (item) => {
-  data.curProvince = item.name;
-};
-let selectSchool = (item) => {
-  data.curSchool = item.name;
+// let selectProvince = (item) => {
+//   data.curProvince = item.name;
+// };
+let selectAcademy = (item) => {
+  data.curAcademy = item.name;
 };
 let selectMajor = (item) => {
   data.curMajor = item.name;

@@ -13,7 +13,7 @@ let studentFun = {
   sign: {},
   assess: {},
   complaint: {},
-
+  rank:{},
 };
 
 /**
@@ -133,4 +133,10 @@ studentFun.assess.dealComplaint = (params) => {
   return http.put(`/appraisal-team/appeal`, params);
 };
 
+/**
+ * 学生查询排名
+ */
+ studentFun.rank.getStudentRanking = (type) => {
+  return http.get(`/student/getStudentRanking?type=${type}`);
+};
 export default studentFun;

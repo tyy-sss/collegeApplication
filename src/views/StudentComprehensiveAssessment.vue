@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-09 22:03:20
+ * @LastEditTime: 2024-03-09 23:04:15
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -32,7 +32,7 @@
       <div>
         <h4>本月综测情况确认</h4>
         <br />
-        <el-table :data="data.assessment" style="width: 100%">
+        <el-table :data="data.assessment" v-loading.lock="data.loading" style="width: 100%">
           <el-table-column prop="userNumber" label="学号" width="120" />
           <el-table-column prop="username" label="姓名" width="150" />
           <el-table-column label="德育">
@@ -81,7 +81,7 @@
       <div>
         <h4>本学期总体综测情况</h4>
         <br />
-        <el-table :data="data.total">
+        <el-table :data="data.total" v-loading.lock="data.loading">
           <el-table-column label="学号" width="120">{{
             data.userNumber
           }}</el-table-column>
@@ -313,12 +313,14 @@ const data = reactive({
       content: "个人信息性别错误，需要更改为男",
     },
   ],
+  loading:false,
 });
 onMounted(() => {
   init();
 });
 //初始化
 function init() {
+  data.loading=true;
   getComplaintHistory();
   studentFun.assess.getAssessmentThisMonth().then((res) => {
     console.log("个人综测", res);
@@ -332,6 +334,7 @@ function init() {
     data.assessment.push(res.content);
     data.total.length = 0;
     data.total.push(res.total);
+    data.loading=false;
   });
 }
 //获取申诉历史
