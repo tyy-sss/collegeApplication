@@ -4,7 +4,12 @@
       <div class="index-right">
         <div class="container">
           <div class="form-container sign-in-container">
-            <el-form ref="ruleFormRef" :model="userData" :rules="rules">
+            <el-form
+              ref="ruleFormRef"
+              :model="data.userData"
+              :rules="data.rules"
+              class="demo-ruleForm"
+            >
               <el-form-item>
                 <h1>志愿填报系统</h1>
               </el-form-item>
@@ -12,14 +17,15 @@
                 <input
                   type="text"
                   placeholder="账号"
-                  v-model="userData.userNumber"
+                  v-model="data.userData.userNumber"
                 />
               </el-form-item>
               <el-form-item prop="password">
                 <input
                   type="password"
                   placeholder="密码"
-                  v-model="userData.password"
+                  v-model="data.userData.password"
+                  autocomplete="off"
                 />
               </el-form-item>
               <el-form-item>
@@ -41,53 +47,46 @@ import apiFun from "@/api/user";
 import { reactive, ref } from "vue";
 import { throttle } from "@/assets/js/utils/throttle";
 import { setRole, setAccessToken, setRefreshToken } from "@/constants/token";
-import {
-  ACCOUNT_TEST,
-  PASSWORD_TEST,
-} from "@/constants/regular-expression";
+import { ACCOUNT_TEST, PASSWORD_TEST } from "@/constants/regular-expression";
 import { useRouter } from "vue-router";
 const router = useRouter();
-// 用户数据
-const userData = reactive({
-  type: 1,
-  userNumber: "",
-  password: "",
-});
-// 验证规则
-const rules = reactive({
-  userNumber: [
-    {
-      pattern: ACCOUNT_TEST,
-      message: "请输入数字（2~16位）",
-      trigger: "blur",
-    },
-  ],
-  password: [
-    {
-      pattern: PASSWORD_TEST,
-      message: "请输入数字或者字母（6~16位）",
-      trigger: "blur",
-    },
-  ],
+const data = reactive({
+  userData: {
+    type: 1,
+    userNumber: "",
+    password: "",
+  },
+  rules: {
+    userNumber: [
+      { required: true, message: "请输入账号", trigger: "blur" },
+      { pattern: ACCOUNT_TEST, message: "请输入正确的账号", trigger: "blur" },
+    ],
+    password: [
+      { required: true, message: "请输入密码", trigger: "blur" },
+      {
+        pattern: PASSWORD_TEST,
+        message: "请输入数字或者字母（6~16位）",
+        trigger: "blur",
+      },
+    ],
+  },
 });
 const ruleFormRef = ref(null);
 //登录
 const login = throttle(() => {
   ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
-      // 节流 
+      // 节流
       apiFun.user
-        .login(userData)
-        .then((data) => {
+        .login(data.userData)
+        .then((val) => {
           // 保存token 还有菜单信息
-          setAccessToken(data.token.accessToken);
-          console.log("token:",data.token.accessToken)
-          setRefreshToken(data.token.refreshToken);
-          setRole(data.role);
+          setAccessToken(val.token.accessToken);
+          setRefreshToken(val.token.refreshToken);
+          setRole(val.role);
           const href = router.resolve({
             path: "/",
           });
-          console.log("data",data)
           window.open(href.href, "_self");
         })
         .catch((err) => {

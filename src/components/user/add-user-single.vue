@@ -49,7 +49,7 @@
               </el-col>
             </el-row>
 
-            <el-row  :gutter="15">
+            <el-row :gutter="15">
               <el-col :span="8">
                 <el-form-item label="来源省份:" prop="province">
                   <el-input v-model="form.ruleForm.province" /> </el-form-item
@@ -132,7 +132,7 @@
     </el-drawer>
   </div>
 </template>
-  <script setup>
+<script setup>
 // 添加用户
 // 接口
 import managerFun from "@/api/manager";
@@ -142,9 +142,7 @@ import {
   politicsStatusList,
   subjectList,
 } from "@/assets/js/data/information-dropdown-data";
-import {
-  NAME_TEST,
-} from "@/constants/regular-expression";
+import { NAME_TEST, ACCOUNT_TEST } from "@/constants/regular-expression";
 import { ElMessage } from "element-plus";
 
 // 验证信息
@@ -171,7 +169,10 @@ const form = reactive({
     plan: "",
   },
   rules: {
-    userNumber: [{ required: true, message: "请输入", trigger: "blur" }],
+    userNumber: [
+      { required: true, message: "请输入", trigger: "blur" },
+      { pattern: ACCOUNT_TEST, message: "请输入正确的账号", trigger: "blur" },
+    ],
     username: [
       { required: true, message: "请输入姓名", trigger: "blur" },
       { pattern: NAME_TEST, message: "请输入正确的姓名", trigger: "blur" },
@@ -276,8 +277,7 @@ onMounted(() => {
 });
 defineExpose({ form });
 </script>
-  <style src="@/assets/css/role/role-drawer-footer.css" scoped>
-</style>
+<style src="@/assets/css/role/role-drawer-footer.css" scoped></style>
 <style scoped>
 .choose-role {
   display: flex;
@@ -293,4 +293,3 @@ defineExpose({ form });
   display: flex;
 }
 </style>
-  
