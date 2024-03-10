@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-25 20:35:14
+ * @LastEditTime: 2024-03-10 21:26:06
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -130,7 +130,7 @@
       <el-button type="primary" @click="handleRepasswds"
         >批量重置密码</el-button
       >
-      <el-button type="primary" @click="handleDeletePosts">撤销职位</el-button>
+      <!-- <el-button type="primary" @click="handleDeletePosts">撤销职位</el-button> -->
       <el-button type="primary" @click="handleSetPosts"
         >设为评测小组人员</el-button
       >
@@ -720,6 +720,7 @@ const handleFired = (index, row) => {
     提示：该操作一旦执行将无法撤销以及恢复数据，且分配给【${row.username}】的学生将暂时处于无测评人员负责状态。`
   )
     .then(() => {
+      // console.log(row.userNumber)
       teacherFun.class.deleteAssessPost([row.userNumber]).then((res) => {
         ElMessage.success("撤销成功");
         data.evaluationData.splice(index, 1);

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-09 23:08:49
+ * @LastEditTime: 2024-03-10 17:09:15
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -18,14 +18,11 @@
         <!-- 考生学校 -->
         <div class="item">
           <div class="title">
-            <span class="tip">目标学校</span
-            ><i
-              ><el-icon><ArrowRight /></el-icon
-            ></i>
+            <span class="tip">目标学校 :</span>
           </div>
           <div class="condition_list">
-            <div class="tag_item">
-              {{ data.schoolName }}
+            <div>
+              <b>{{ data.schoolName }}</b>
             </div>
           </div>
         </div>
@@ -59,7 +56,7 @@
             ></i>
           </div>
           <div class="condition_list">
-            <div v-if="data.majors.length < 1">请选择报考学院</div>
+            <div v-if="data.majors.length < 1">请先选择报考学院</div>
             <div
               v-for="(item, i) in data.majors"
               :key="i"
@@ -80,7 +77,7 @@
           class="m-2"
           placeholder="请选择排名类型"
           size="large"
-          style="width: 12rem; height: 3rem"
+          style="width: 13rem; margin-right: 1rem"
         >
           <el-option
             v-for="item in options"
@@ -89,16 +86,8 @@
             :value="item.value"
           />
         </el-select>
-        <br />
-        <el-input
-          v-model="data.score"
-          placeholder="请输入您的分数"
-          class="input-with-select"
-        >
-          <template #append>
-            <el-button class="search" @click="search">查询</el-button>
-          </template>
-        </el-input>
+        <el-button class="search" @click="search">查询</el-button>
+
         <el-button class="history" @click="data.drawer = true"
           >历史查询</el-button
         >
@@ -109,15 +98,15 @@
       <div class="stack-line" v-loading.lock="data.loading">
         <div class="stack-info">
           <div class="gk-score">
-            <em><span>高考分数</span>{{ data.gkScore || "-" }}分</em>
+            <em><span>分流分数</span>{{ data.gkScore || "-" }} 分</em>
           </div>
           <hr />
           <div class="gk-rank">
             <div class="item">
-              <span>我的排名</span>{{ data.gkNum || "-" }}名
+              <span>我的排名</span>{{ data.gkNum || "-" }} 名
             </div>
             <div class="item">
-              <span>条件人数</span>{{ data.gkCnt || "-" }}人
+              <span>排名范围</span>{{ data.gkCnt || "-" }} 人
             </div>
           </div>
         </div>
@@ -148,7 +137,7 @@
   </el-drawer>
 </template>
 <script setup>
-import { ref, reactive, computed } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 
@@ -156,7 +145,7 @@ const data = reactive({
   loading: false,
   drawer: false,
   score: null, //填入分数
-  gkScore: null, //高考分数
+  gkScore: 512, //高考分数
   gkNum: null, //同分人数
   gkCnt: null, //排名区间左
   curProvince: "湖南", //选择省份
@@ -326,10 +315,10 @@ const options = [
     label: "同一个班的排名",
   },
 ];
-
+onMounted(() => {});
 //查询排名
 function search() {
-  if (data.curAcademy && data.curMajor && data.type && data.score) {
+  if (data.curAcademy && data.curMajor && data.type) {
     data.loading = true;
     //查询排名
     // studentFun.rank.getStudentRanking(data.type).then((res) => {
@@ -339,7 +328,6 @@ function search() {
     // });
 
     setTimeout(() => {
-      data.gkScore = data.score;
       data.gkNum = 745;
       data.gkCnt = 1523;
       data.loading = false;
@@ -352,9 +340,6 @@ function search() {
   }
 }
 
-// let selectProvince = (item) => {
-//   data.curProvince = item.name;
-// };
 let selectAcademy = (item) => {
   data.curAcademy = item.name;
 };
@@ -549,22 +534,16 @@ let selectMajor = (item) => {
   margin-bottom: 2rem;
   padding: 0.5rem 0;
   display: inline-block;
-  .input-with-select {
-    height: 3.5rem;
-    width: 25rem;
-  }
   .search {
-    height: 3.5rem;
+    height: 2.5rem;
     width: 6rem;
-    border-top-left-radius: 0px;
-    border-bottom-left-radius: 0px;
     background-color: #77adfe;
     color: #fff;
   }
   .history {
     margin-left: 1rem;
     width: 6rem;
-    height: 3.5rem;
+    height: 2.5rem;
     border-radius: 5px;
     border-color: #77adfe;
     color: #77adfe;

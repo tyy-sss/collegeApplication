@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-09 23:04:15
+ * @LastEditTime: 2024-03-10 17:15:56
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -32,39 +32,86 @@
       <div>
         <h4>本月综测情况确认</h4>
         <br />
-        <el-table :data="data.assessment" v-loading.lock="data.loading" style="width: 100%">
-          <el-table-column prop="userNumber" label="学号" width="120" />
-          <el-table-column prop="username" label="姓名" width="150" />
+        <el-table
+          :data="data.assessment"
+          v-loading.lock="data.loading"
+          style="width: 100%"
+          default="暂无数据"
+        >
+          <el-table-column prop="userNumber" label="学号" width="120">{{
+            data.userNumber
+          }}</el-table-column>
+          <el-table-column prop="username" label="姓名" width="150">{{
+            data.username
+          }}</el-table-column>
           <el-table-column label="德育">
-            <el-table-column prop="add1" label="加分明细" width="120" />
-            <el-table-column prop="sub1" label="减分明细" width="120" />
-            <el-table-column prop="point1" label="得分" width="60" />
+            <el-table-column prop="add1" label="加分明细" width="120">{{
+              data.assessment.add1 || "暂无数据"
+            }}</el-table-column>
+            <el-table-column prop="sub1" label="减分明细" width="120">{{
+              data.assessment.sub1 || "暂无数据"
+            }}</el-table-column>
+            <el-table-column prop="point1" label="得分" width="60">{{
+              data.assessment.point1 || 0
+            }}</el-table-column>
           </el-table-column>
           <el-table-column label="智育">
-            <el-table-column prop="add2" label="加分明细" width="120" />
-            <el-table-column prop="sub2" label="减分明细" width="120" />
-            <el-table-column prop="point2" label="得分" width="60" />
+            <el-table-column prop="add2" label="加分明细" width="120" >{{
+              data.assessment.add2 || "暂无数据"
+            }}</el-table-column>
+            <el-table-column prop="sub2" label="减分明细" width="120" >{{
+              data.assessment.sub2 || "暂无数据"
+            }}</el-table-column>
+            <el-table-column prop="point2" label="得分" width="60" >{{
+              data.assessment.point2 || 0
+            }}</el-table-column>
           </el-table-column>
           <el-table-column label="体育">
-            <el-table-column prop="add3" label="加分明细" width="120" />
-            <el-table-column prop="sub3" label="减分明细" width="120" />
-            <el-table-column prop="point3" label="得分" width="60" />
+            <el-table-column prop="add3" label="加分明细" width="120" >{{
+              data.assessment.add3 || "暂无数据"
+            }}</el-table-column>
+            <el-table-column prop="sub3" label="减分明细" width="120" >{{
+              data.assessment.sub3 || "暂无数据"
+            }}</el-table-column>
+            <el-table-column prop="point3" label="得分" width="60" >{{
+              data.assessment.point3 || 0
+            }}</el-table-column>
           </el-table-column>
           <el-table-column label="美育">
-            <el-table-column prop="add4" label="加分明细" width="120" />
-            <el-table-column prop="sub4" label="减分明细" width="120" />
-            <el-table-column prop="point4" label="得分" width="60" />
+            <el-table-column prop="add4" label="加分明细" width="120" >{{
+              data.assessment.add4 || "暂无数据"
+            }}</el-table-column>
+            <el-table-column prop="sub4" label="减分明细" width="120" >{{
+              data.assessment.sub4 || "暂无数据"
+            }}</el-table-column>
+            <el-table-column prop="point4" label="得分" width="60" >{{
+              data.assessment.point4 || 0
+            }}</el-table-column>
           </el-table-column>
           <el-table-column label="劳动">
-            <el-table-column prop="add5" label="加分明细" width="120" />
-            <el-table-column prop="sub5" label="减分明细" width="120" />
-            <el-table-column prop="point5" label="得分" width="60" />
+            <el-table-column prop="add5" label="加分明细" width="120" >{{
+              data.assessment.add5 || "暂无数据"
+            }}</el-table-column>
+            <el-table-column prop="sub5" label="减分明细" width="120" >{{
+              data.assessment.sub5 || "暂无数据"
+            }}</el-table-column>
+            <el-table-column prop="point5" label="得分" width="60" >{{
+              data.assessment.point5 || 0
+            }}</el-table-column>
           </el-table-column>
           <el-table-column label="当月综合测评得分" fixed="right">
-            <el-table-column prop="add_total" label="月加分" width="70" />
-            <el-table-column prop="sub_total" label="月减分" width="70" />
-            <el-table-column prop="pre_total" label="上月得分" width="85" />
-            <el-table-column prop="point_total" label="当月总分" width="85" />
+            <el-table-column prop="add_total" label="月加分" width="70" >{{
+              data.assessment.add_total || "-"
+            }}</el-table-column>
+            <el-table-column prop="sub_total" label="月减分" width="70" >{{
+              data.assessment.sub_total || "-"
+            }}</el-table-column>
+            <el-table-column prop="pre_total" label="上月得分" width="85" >{{
+              data.assessment.pre_total || "-"
+            }}</el-table-column>
+            <el-table-column prop="point_total" label="当月总分" width="85">{{
+              data.assessment.point_total || "-"
+            }}</el-table-column>
           </el-table-column>
         </el-table>
         <br />
@@ -88,29 +135,29 @@
           <el-table-column label="姓名" width="150">{{
             data.username
           }}</el-table-column>
-          <el-table-column prop="class1" label="德育得分">
+          <el-table-column label="德育得分">
             {{ data.total.class1 || 0 }}</el-table-column
           >
-          <el-table-column prop="class2" label="智育得分">{{
+          <el-table-column label="智育得分">{{
             data.total.class2 || 0
           }}</el-table-column>
-          <el-table-column prop="class3" label="体育得分">{{
+          <el-table-column label="体育得分">{{
             data.total.class3 || 0
           }}</el-table-column>
-          <el-table-column prop="class4" label="美育得分">{{
+          <el-table-column label="美育得分">{{
             data.total.class4 || 0
           }}</el-table-column>
-          <el-table-column prop="class5" label="劳动得分">{{
+          <el-table-column label="劳动得分">{{
             data.total.class5 || 0
           }}</el-table-column>
           <el-table-column label="综合测评得分" fixed="right">
-            <el-table-column prop="add" label="加分">{{
+            <el-table-column label="加分">{{
               data.total.add || 0
             }}</el-table-column>
-            <el-table-column prop="sub" label="减分">{{
+            <el-table-column label="减分">{{
               data.total.sub || 0
             }}</el-table-column>
-            <el-table-column prop="all" label="综测总分">{{
+            <el-table-column label="综测总分">{{
               data.total.all || 0
             }}</el-table-column>
           </el-table-column>
@@ -313,14 +360,14 @@ const data = reactive({
       content: "个人信息性别错误，需要更改为男",
     },
   ],
-  loading:false,
+  loading: false,
 });
 onMounted(() => {
   init();
 });
 //初始化
 function init() {
-  data.loading=true;
+  data.loading = true;
   getComplaintHistory();
   studentFun.assess.getAssessmentThisMonth().then((res) => {
     console.log("个人综测", res);
@@ -334,7 +381,7 @@ function init() {
     data.assessment.push(res.content);
     data.total.length = 0;
     data.total.push(res.total);
-    data.loading=false;
+    data.loading = false;
   });
 }
 //获取申诉历史

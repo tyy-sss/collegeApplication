@@ -203,6 +203,39 @@
         >
       </div>
     </div>
+    <!-- 测评小组信息 -->
+    <div v-if="identity == 2" class="teacher">
+      <!-- 信息区 -->
+      <div>
+        <div class="box">
+          <div class="littleTitle">基本信息</div>
+          <div class="grid-item">
+            <div>
+              <span class="tag">测评员姓名 :</span
+              ><span>{{ data.teacher.username || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">测评员账号 :</span
+              ><span>{{ data.teacher.userNumber || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">所在班级 :</span
+              ><span>{{ data.teacher.phone || "-" }}</span>
+            </div>
+          </div>
+        </div>
+        <br />
+      </div>
+      <!-- 按钮区 -->
+      <div class="btnBox">
+        <el-button v-if="identity != 2" type="primary" class="changeInfo" @click="data.drawer = true"
+          >修改资料</el-button
+        >
+        <el-button class="changeInfo" @click="data.drawer2 = true"
+          >修改密码</el-button
+        >
+      </div>
+    </div>
   </div>
 
   <!-- 修改资料抽屉 -->
@@ -337,9 +370,9 @@ const updatePasswords = reactive({
 //渲染初始数据
 const init = function () {
   if (identity.value == 0) {
-    //获取学生信息
+    //获取学生/测评小组信息
     studentFun.user.getInformation().then((res) => {
-      console.log("学生信息", data.student);
+      console.log("学生信息", res);
       data.student = res;
       data.consignee = res.consignee;
       data.avatar = "http://192.168.50.35:8081" + res.headshot;
@@ -352,6 +385,14 @@ const init = function () {
       data.teacher = res;
       data.loading2 = false;
     });
+  } else if (identity.value == 2) {
+    // studentFun.assess.getInformation().then((res) => {
+    //   console.log("学生信息", res);
+    //   data.student = res;
+    //   data.consignee = res.consignee;
+    //   data.avatar = "http://192.168.50.35:8081" + res.headshot;
+    //   data.loading2 = false;
+    // });
   }
 };
 //上传证件照假按钮
@@ -516,7 +557,7 @@ function updatePassword() {
 .tag {
   display: inline-block;
   margin-right: 1rem;
-  width: 5rem;
+  width: 6rem;
   text-align: right;
 }
 .infoRow {

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-24 16:18:09
+ * @LastEditTime: 2024-03-10 19:25:47
  * @FilePath: \collegeApplication\src\views\VolunteerCheck.vue
  * @Description: 查看志愿页面
 -->
@@ -78,6 +78,7 @@ import volunteerFun from "@/api/volunteer";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const data = reactive({
+  volunteerId:null,
   student: {
     name: "付小小",
     id: "415567569789",
@@ -96,6 +97,8 @@ const data = reactive({
 });
 
 onMounted(() => {
+  data.volunteerId=router.currentRoute.value.query.id;
+  console.log("MYID:",data.volunteerId)
   init();
 });
 function init() {

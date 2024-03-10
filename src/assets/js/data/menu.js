@@ -90,7 +90,11 @@ const teacherMenuData = reactive([{
   menuName: "个人信息",
   path: "/personal-information",
   icon: "location",
-}])
+}, {
+  menuName: "志愿填报情况",
+  path: "/volunteer",
+  icon: "location",
+},])
 const evaluatorMenuData = reactive([
   {
     menuName: "个人信息",
@@ -109,16 +113,16 @@ const evaluatorMenuData = reactive([
 ])
 
 const giveMenu = (role) => {
-  return studentMenuData;
+  return headteacherMenuData;
   if (role == -1) {// 超管
     return managerMenuData;
-  } else if (role == 1) {
-    return studentMenuData;
   } else if (role == 0) {
-    return headteacherMenuData;
+    return studentMenuData;
   } else if (role == 3) {
+    return headteacherMenuData;
+  } else if (role == 1) {
     return teacherMenuData;
-  } else if (role == "evaluator") {
+  } else if (role == 2) {
     return evaluatorMenuData;
   }
   return managerMenuData;
