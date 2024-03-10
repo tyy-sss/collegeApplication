@@ -37,7 +37,7 @@ requests.interceptors.response.use(
       if (data.code === 2039) {
         // 短token失效
         removeAccessToken();
-        // 保存请求，携带长token去请求新的token
+        // 保存未发送的请求，携带长token去请求新的token
         addRequest(() => resolve(requests(config)));
         refreshToken();
       } else if (data.code === 2005) {

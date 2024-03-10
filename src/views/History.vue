@@ -31,7 +31,7 @@
             />
           </div>
         </div>
-        <el-divider/>
+        <el-divider />
         <div class="bottom">
           <comprehensive-year />
         </div>
@@ -65,21 +65,11 @@ const searchData = reactive({
       label: "专业分流信息",
       value: "professional-triage-information",
     },
-    {
-      label: "专业限制信息",
-      value: "professional-limit-information",
-    },
-    {
-      label: "规则信息",
-      value: "rule-information",
-    },
   ],
 });
 const onSearch = () => {
   console.log(formatDate(searchData.year).slice(0, 4));
 };
 </script>
-<style src="@/assets/css/show-container.css" scoped/>
-<style src="@/assets/css/search-top.css" scoped/>
-
-  
+<style src="@/assets/css/show-container.css" scoped />
+<style src="@/assets/css/search-top.css" scoped />
