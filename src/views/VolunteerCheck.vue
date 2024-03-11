@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-10 19:25:47
+ * @LastEditTime: 2024-03-11 21:54:20
  * @FilePath: \collegeApplication\src\views\VolunteerCheck.vue
  * @Description: 查看志愿页面
 -->
@@ -98,7 +98,7 @@ const data = reactive({
 
 onMounted(() => {
   data.volunteerId=router.currentRoute.value.query.id;
-  console.log("MYID:",data.volunteerId)
+  console.log("获取到的TimeID是:",data.volunteerId)
   init();
 });
 function init() {
@@ -106,7 +106,8 @@ function init() {
 }
 //初始化志愿/剩余填写次数数据
 function getVolunteer() {
-  volunteerFun.student.selectWish().then((res) => {
+  volunteerFun.student.selectWish(data.volunteerId).then((res) => {
+    console.log("初始化志愿/剩余填写次数数据",res)
     data.volunteers = res;
   });
 }
@@ -116,7 +117,7 @@ function changeVolunteer() {
   if (data.volunteers.frequency > 0) {
     router.push({
       name: "volunteer-fill",
-      query: { originVolunteers: data.volunteers },
+      query: { originVolunteers: data.volunteers,id:data.volunteerId },
     });
   } else {
     ElMessage({

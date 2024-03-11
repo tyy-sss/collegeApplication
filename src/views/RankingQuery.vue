@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-10 17:09:15
+ * @LastEditTime: 2024-03-11 22:37:08
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -140,6 +140,7 @@
 import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
+import volunteerFun from "@/api/volunteer";
 
 const data = reactive({
   loading: false,
@@ -149,8 +150,8 @@ const data = reactive({
   gkNum: null, //同分人数
   gkCnt: null, //排名区间左
   curProvince: "湖南", //选择省份
-  curAcademy: "软件学院", //选择学校
-  curMajor: "金融学", //选择学校
+  curAcademy: "", //选择学校
+  curMajor: "", //选择学校
   type: "", //查询排名类型
   schoolName: "吉首大学", //目标院校
   provinces: [
@@ -205,21 +206,21 @@ const data = reactive({
     { name: "智能制造学院" },
   ], //学院列表
   majors: [
-    { name: "金融学" },
-    { name: "财政学" },
-    { name: "国际经济与贸易" },
-    { name: "法学" },
-    { name: "政治学与行政学" },
-    { name: "运动训练" },
-    { name: "汉语言文学" },
-    { name: "英语" },
-    { name: "数学与应用数学" },
-    { name: "历史学" },
-    { name: "信息与计算科学" },
-    { name: "化学" },
-    { name: "工程力学" },
-    { name: "机械设计制造及其自动化" },
-    { name: "车辆工程" },
+    // { name: "金融学" },
+    // { name: "财政学" },
+    // { name: "国际经济与贸易" },
+    // { name: "法学" },
+    // { name: "政治学与行政学" },
+    // { name: "运动训练" },
+    // { name: "汉语言文学" },
+    // { name: "英语" },
+    // { name: "数学与应用数学" },
+    // { name: "历史学" },
+    // { name: "信息与计算科学" },
+    // { name: "化学" },
+    // { name: "工程力学" },
+    // { name: "机械设计制造及其自动化" },
+    // { name: "车辆工程" },
   ], //专业列表
   queryData: [
     {
@@ -295,35 +296,54 @@ const data = reactive({
       type: "普通预科",
     },
   ], //历史查询记录列表
+  allData: [], //学院专业选择数据
 });
 //排名类型选择
 const options = [
   {
-    value: "Option1",
+    value: "1",
     label: "目标学校排名",
   },
   {
-    value: "Option2",
+    value: "2",
     label: "延保同一个专业的排名",
   },
   {
-    value: "Option3",
+    value: "3",
     label: "所有学生的排名",
   },
   {
-    value: "Option4",
+    value: "4",
     label: "同一个班的排名",
   },
 ];
-onMounted(() => {});
+onMounted(() => {
+  volunteerFun.options.selectStudentMajor().then((res) => {
+    console.log("AASSDAD");
+    console.log(res);
+    data.allData = res;
+    data.academy = res.map((item) => ({ name: item.college }));
+    console.log("VSDF",data.academy)
+  });
+});
+
+function getMajorsByCollege(college) {
+  const collegeData = data.allData.find((item) => item.college === college);
+  if (collegeData) {
+    return collegeData.majors;
+  }
+  return [];
+}
 //查询排名
 function search() {
+  console.log(`data.curAcademy=${data.curAcademy}, && data.curMajor=${data.curMajor}, && data.type=${data.type},`)
   if (data.curAcademy && data.curMajor && data.type) {
     data.loading = true;
     //查询排名
-    // studentFun.rank.getStudentRanking(data.type).then((res) => {
-    //   console.log(res);
+    // studentFun.rank.getStudentRanking({
 
+    // }).then((res) => {
+    //   console.log(res);
     //   data.loading = false;
     // });
 
@@ -341,7 +361,9 @@ function search() {
 }
 
 let selectAcademy = (item) => {
+  data.curMajor="";
   data.curAcademy = item.name;
+  data.majors = getMajorsByCollege(data.curAcademy);
 };
 let selectMajor = (item) => {
   data.curMajor = item.name;
@@ -584,5 +606,18 @@ let selectMajor = (item) => {
 }
 @media (min-width: 1000px) {
 }
+.loader {
+      border: 4px solid rgba(0, 0, 0, 0.1);
+      border-top: 4px solid #3498db;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
 </style>
   

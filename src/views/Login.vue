@@ -59,7 +59,7 @@ const data = reactive({
   rules: {
     userNumber: [
       { required: true, message: "请输入账号", trigger: "blur" },
-      { pattern: ACCOUNT_TEST, message: "请输入正确的账号", trigger: "blur" },
+      // { pattern: ACCOUNT_TEST, message: "请输入正确的账号", trigger: "blur" },
     ],
     password: [
       { required: true, message: "请输入密码", trigger: "blur" },

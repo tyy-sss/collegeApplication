@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-02-27 22:40:40
+ * @LastEditTime: 2024-03-11 22:03:11
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -228,6 +228,7 @@ const data = reactive({
   first: [],
   second: [],
   third: [],
+  volunteerId:null,
 });
 // 提交志愿
 let dialogVisible = ref(false);
@@ -235,6 +236,8 @@ onMounted(() => {
   init();
 });
 function init() {
+  data.volunteerId=router.currentRoute.value.query.id;
+  console.log("MYTIMEID:",data.volunteerId)
   data.originVolunteers = router.currentRoute.value.query.originVolunteers;
   console.log("志愿情况初始值data.originVolunteers:", data.originVolunteers);
   //获取可选专业选项
@@ -287,6 +290,8 @@ function finish(sign) {
   // studentFun.sign.submitSignature(sign).then((res) => {
   //   console.log(res);
   //提交志愿接口(成功需要把志愿剩余次数减一)
+console.log("SSDFESF",data.originVolunteers.timeId)
+
   volunteerFun.basis
     .modifyWise({
       first: parseInt(data.first[1]), //第一志愿
@@ -299,12 +304,13 @@ function finish(sign) {
     })
     .then((res) => {
       console.log("提交志愿结果", res);
-      router.push({ name: "volunteer-check" });
+      router.push({ name: "volunteer-table" });
       ElMessage({
         type: "success",
         message: "提交志愿成功",
       });
     });
+
   // });
 }
 //处理数据:"专业名称&专业编号"=>["专业名称",专业编号]

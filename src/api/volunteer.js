@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-05 21:22:27
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-26 19:20:24
+ * @LastEditTime: 2024-03-11 20:29:11
  * @FilePath: \collegeApplication\src\api\volunteer.js
  * @Description: 介绍文件的作用
  */
@@ -23,10 +23,17 @@ let volunteerFun = {
 };
 
 /**
+ * 学生查看志愿列表
+ */
+ volunteerFun.student.getWishTable = () => {
+  return http.get("/wishTime/selectWishTime2");
+};
+
+/**
  * 学生查看志愿
  */
-volunteerFun.student.selectWish = () => {
-  return http.get("/wish/selectWish");
+volunteerFun.student.selectWish = (timeId) => {
+  return http.get(`/wish/selectWish?timeId=${timeId}`);
 };
 
 /**
