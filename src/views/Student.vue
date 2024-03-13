@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-10 21:26:06
+ * @LastEditTime: 2024-03-12 20:11:48
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -139,7 +139,7 @@
       <el-pagination
         :page-size="data.page.pageSize"
         :pager-count="10"
-        layout="prev, pager, next"
+        layout="total,prev, pager, next"
         :total="data.page.total"
         @current-change="handleCurrentChange"
         style="float: right"

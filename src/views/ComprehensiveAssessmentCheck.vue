@@ -2,16 +2,19 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-10 20:08:09
+ * @LastEditTime: 2024-03-12 20:10:30
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:综合测评表公示页面
 -->
 <template>
   <div class="show-container">
     <div class="title"><div class="text">综合测评表公示</div></div>
-
     <hr />
-    <h1>{{ data.myclass }}班级综合测评表</h1>
+    <div class="checkMonth">
+
+      <h1>{{ data.myclass }}班级综合测评表</h1>
+    </div>
+    
     <br />
     <div style="height: 40px">
       <span style="float: left">学生姓名: &nbsp;</span>
@@ -76,7 +79,7 @@
       <el-pagination
         :page-size="data.page.pageSize"
         :pager-count="10"
-        layout="prev, pager, next"
+        layout="total,prev, pager, next"
         :total="data.page.total"
         @current-change="handleCurrentChange"
         style="margin-left: auto"
@@ -259,7 +262,7 @@ const data = reactive({
   page: {
     total: 200, // 总条数
     currentPage: 1, // 当前页
-    pageSize: 8, //一页的数据量
+    pageSize: 150, //一页的数据量
   },
   loading:false,
 });
@@ -280,7 +283,7 @@ function getAssessmentDetails(currentPage) {
       month: 0,
       identity: 1,
       current: currentPage,
-      size: 15,
+      size: data.page.pageSize,
     })
     .then((res) => {
       console.log("获取综测信息结果：", res);

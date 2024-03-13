@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-11 22:37:08
+ * @LastEditTime: 2024-03-12 19:18:24
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -35,6 +35,7 @@
             ></i>
           </div>
           <div class="condition_list">
+            <div v-if="data.academy.length < 1">没有可选择的学院</div>
             <div
               v-for="(item, i) in data.academy"
               :key="i"
@@ -92,6 +93,7 @@
           >历史查询</el-button
         >
       </div>
+      
       <!-- 结果 -->
       <h4>查询结果</h4>
       <br />
@@ -141,7 +143,7 @@ import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import volunteerFun from "@/api/volunteer";
-
+import { Search } from '@element-plus/icons-vue'
 const data = reactive({
   loading: false,
   drawer: false,
@@ -323,7 +325,7 @@ onMounted(() => {
     console.log(res);
     data.allData = res;
     data.academy = res.map((item) => ({ name: item.college }));
-    console.log("VSDF",data.academy)
+    console.log("VSDF", data.academy);
   });
 });
 
@@ -336,7 +338,9 @@ function getMajorsByCollege(college) {
 }
 //查询排名
 function search() {
-  console.log(`data.curAcademy=${data.curAcademy}, && data.curMajor=${data.curMajor}, && data.type=${data.type},`)
+  console.log(
+    `data.curAcademy=${data.curAcademy}, && data.curMajor=${data.curMajor}, && data.type=${data.type},`
+  );
   if (data.curAcademy && data.curMajor && data.type) {
     data.loading = true;
     //查询排名
@@ -361,7 +365,7 @@ function search() {
 }
 
 let selectAcademy = (item) => {
-  data.curMajor="";
+  data.curMajor = "";
   data.curAcademy = item.name;
   data.majors = getMajorsByCollege(data.curAcademy);
 };
@@ -607,17 +611,21 @@ let selectMajor = (item) => {
 @media (min-width: 1000px) {
 }
 .loader {
-      border: 4px solid rgba(0, 0, 0, 0.1);
-      border-top: 4px solid #3498db;
-      border-radius: 50%;
-      width: 40px;
-      height: 40px;
-      animation: spin 1s linear infinite;
-    }
+  border: 4px solid rgba(0, 0, 0, 0.1);
+  border-top: 4px solid #3498db;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  animation: spin 1s linear infinite;
+}
 
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
 </style>
   
