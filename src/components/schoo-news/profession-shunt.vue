@@ -12,5 +12,3 @@
 import finalProfession from "@/components/schoo-news/shunt/final-profession.vue";
 import forecastProfession from "@/components/schoo-news/shunt/forecast-profession.vue";
 </script>
-<style scoped>
-</style>
