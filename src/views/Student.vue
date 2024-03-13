@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-12 20:11:48
+ * @LastEditTime: 2024-03-13 23:46:25
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -260,6 +260,15 @@
               >
                 <el-table-column label="班级成员" prop="username" />
                 <el-table-column label="学号" prop="userNumber" />
+                <el-table-column label="操作">
+                  <template #default="scope">
+                    <el-button
+                      size="small"
+                      @click="handleRecover2(scope.$index, scope.row)"
+                      >切换综测小组负责人</el-button
+                    >
+                  </template>
+                </el-table-column>
               </el-table>
             </div>
           </template>

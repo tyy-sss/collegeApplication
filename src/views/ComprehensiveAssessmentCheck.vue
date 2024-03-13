@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-12 20:10:30
+ * @LastEditTime: 2024-03-13 23:38:56
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:综合测评表公示页面
 -->
@@ -11,10 +11,22 @@
     <div class="title"><div class="text">综合测评表公示</div></div>
     <hr />
     <div class="checkMonth">
-
+      <el-select
+        v-model="curMonth"
+        placeholder="请选择要查询的综测月份"
+        style="width: 200px"
+        @change="changeCurMonth"
+      >
+        <el-option
+          v-for="item in data.monthes"
+          :key="item.value"
+          :label="item.label"
+          :value="item.value"
+        />
+      </el-select>
       <h1>{{ data.myclass }}班级综合测评表</h1>
     </div>
-    
+
     <br />
     <div style="height: 40px">
       <span style="float: left">学生姓名: &nbsp;</span>
@@ -93,6 +105,7 @@ import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehe
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import teacherFun from "@/api/teacher";
+import apiFun from "@/api/user";
 const data = reactive({
   myclass: "2023级1班",
   search: "",
@@ -264,17 +277,48 @@ const data = reactive({
     currentPage: 1, // 当前页
     pageSize: 150, //一页的数据量
   },
-  loading:false,
+  curMonth:0,
+  monthes: [
+    {
+      value: "1",
+      label: "一月",
+    },
+    {
+      value: "2",
+      label: "二月",
+    },
+    {
+      value: "3",
+      label: "三月",
+    },
+    {
+      value: "4",
+      label: "四月",
+    },
+  ],
+  loading: false,
 });
 
 onMounted(() => {
   init();
 });
 function init() {
-  data.loading=true;
-  getAssessmentDetails(1); //获取综测信息
+  // getAssessmentDetails(1); //获取综测信息
 }
+//获取可选月份方法
+function getAssessmentMonth() {
+  apiFun.user.getAssessmentsMonth().then((res) => {
+    console.log("获取可选月份方法:", res);
+  });
+}
+//更改月份触发搜索
+function changeCurMonth(value){
+  console.log("选择了月份：",value)
+  // getAssessmentDetails(value);
+}
+//获取综测信息方法
 function getAssessmentDetails(currentPage) {
+  data.loading = true;
   //这里是老师身份请求本月学生综测信息
   teacherFun.assessment
     .getAssessments({
@@ -300,7 +344,7 @@ function getAssessmentDetails(currentPage) {
         });
       });
       console.log("XXX", data.assessments);
-      data.loading=false;
+      data.loading = false;
     });
 }
 
@@ -326,9 +370,14 @@ const { getColumnWidth } = adaptiveColumnWidthFun(data.assessments);
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style lang="scss" scoped>
-h1 {
+.checkMonth {
   margin-top: 30px;
   text-align: center;
+  transform: translateX(-7%);
+}
+h1 {
+  margin-left: 1rem;
+  display: inline-block;
 }
 .pagination {
   display: flex;

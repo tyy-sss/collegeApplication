@@ -25,4 +25,12 @@ apiFun.user.refreshToken = () => {
 apiFun.user.loginOut = () => {
   return http.get('/user/loginOut');
 }
+
+/**
+ * 老师端/学生端/测评小组端获取综测公示可查月份页面
+ */
+ apiFun.user.getAssessmentsMonth = () => {
+  return http.get('/adviser/appraisal/month');
+}
+
 export default apiFun;

@@ -212,15 +212,15 @@
           <div class="grid-item">
             <div>
               <span class="tag">测评员姓名 :</span
-              ><span>{{ data.teacher.username || "-" }}</span>
+              ><span>{{ data.student.username || "-" }}</span>
             </div>
             <div>
               <span class="tag">测评员账号 :</span
-              ><span>{{ data.teacher.userNumber || "-" }}</span>
+              ><span>{{ data.student.userNumber || "-" }}</span>
             </div>
             <div>
               <span class="tag">所在班级 :</span
-              ><span>{{ data.teacher.phone || "-" }}</span>
+              ><span>{{ data.student.className || "-" }}</span>
             </div>
           </div>
         </div>
@@ -337,7 +337,6 @@ onMounted(() => {
   if (identity.value == 3) {
     identity.value = 1;
   } //班主任也是老师信息页
-  data.loading2 = true;
   init();
 });
 let identity = ref(getRole()); //获取当前用户身份
@@ -369,6 +368,7 @@ const updatePasswords = reactive({
 });
 //渲染初始数据
 const init = function () {
+  data.loading2 = true;
   if (identity.value == 0) {
     //获取学生/测评小组信息
     studentFun.user.getInformation().then((res) => {
@@ -386,13 +386,13 @@ const init = function () {
       data.loading2 = false;
     });
   } else if (identity.value == 2) {
-    // studentFun.assess.getInformation().then((res) => {
-    //   console.log("学生信息", res);
-    //   data.student = res;
-    //   data.consignee = res.consignee;
-    //   data.avatar = "http://192.168.50.35:8081" + res.headshot;
-    //   data.loading2 = false;
-    // });
+    studentFun.assess.getInformation().then((res) => {
+      console.log("测评小组基本信息", res);
+      data.student.userNumber = res.userNumber;
+      data.student.username = res.username;
+      data.student.className=res.className;
+      data.loading2 = false;
+    });
   }
 };
 //上传证件照假按钮
@@ -445,7 +445,7 @@ function updatePassword() {
     if (updatePasswords.password !== updatePasswords.password2) {
       ElMessage.error("两次密码输入不一致");
     } else {
-      if (identity.value == 0) {
+      if (identity.value == 0 ||identity.value == 2 ) {
         //学生修改密码
         studentFun.user.updatePassword(updatePasswords.password).then((res) => {
           ElMessage.success(res);
