@@ -1,3 +1,11 @@
+<!--
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2023-12-13 22:35:52
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2024-03-15 14:32:14
+ * @FilePath: \collegeApplication\src\views\Main.vue
+ * @Description: 介绍文件的作用
+-->
 <template>
   <div class="common-layout">
     <el-container>
@@ -39,7 +47,7 @@ const setAsideWidth = (val) => {
   }
 };
 onBeforeMount(() => {
-  store.commit("setMenu", giveMenu(getRole));
+  store.commit("setMenu", giveMenu(getRole()));
   // console.log(giveMenu(getRole));
   store.commit("addMenu");
   setAsideWidth(store.state.menu.isCollapse);

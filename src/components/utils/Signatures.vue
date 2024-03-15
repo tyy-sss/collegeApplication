@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-30 22:12:35
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-03 21:36:05
+ * @LastEditTime: 2024-03-15 13:05:46
  * @FilePath: \collegeApplication\src\components\utils\Signatures.vue
  * @Description:电子签名组件
 -->
@@ -53,7 +53,7 @@ const reset = () => {
 const save = () => {
   // 可选配置参数 ，在未设置format或quality属性时可在生成图片时配置 例如： {format:'image/jpeg', quality: 0.5}
   esign.value
-    .generate()
+    .generate({willReadFrequently:true})
     .then((res) => {
       resultImg.value = res;
       emits("finish", res);

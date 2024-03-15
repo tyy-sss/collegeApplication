@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-24 17:27:35
+ * @LastEditTime: 2024-03-15 13:43:59
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -714,13 +714,20 @@ const handleCellLeave = (row, column, cell, event) => {
 //签名后提交数据和电子签名
 function finish(sign) {
   console.log("签名img的base64", sign);
-  studentFun.sign.submitSignature(sign).then((res) => {
-    console.log(res);
+  // studentFun.sign.submitSignature(sign).then((res) => {
+  //   console.log(res);
+  //   ElMessage({
+  //     message: "提交本月综测情况成功",
+  //     type: "success",
+  //   });
+  // });
+  setTimeout(() => {
+    data.dialogVisible=false;
     ElMessage({
       message: "提交本月综测情况成功",
       type: "success",
     });
-  });
+  }, 60);
 }
 //删除申诉项
 const handleDelete = (index, row) => {

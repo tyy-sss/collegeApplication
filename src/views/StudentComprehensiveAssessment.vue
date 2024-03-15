@@ -56,57 +56,57 @@
             }}</el-table-column>
           </el-table-column>
           <el-table-column label="智育">
-            <el-table-column prop="add2" label="加分明细" width="120" >{{
+            <el-table-column prop="add2" label="加分明细" width="120">{{
               data.assessment.add2 || "暂无数据"
             }}</el-table-column>
-            <el-table-column prop="sub2" label="减分明细" width="120" >{{
+            <el-table-column prop="sub2" label="减分明细" width="120">{{
               data.assessment.sub2 || "暂无数据"
             }}</el-table-column>
-            <el-table-column prop="point2" label="得分" width="60" >{{
+            <el-table-column prop="point2" label="得分" width="60">{{
               data.assessment.point2 || 0
             }}</el-table-column>
           </el-table-column>
           <el-table-column label="体育">
-            <el-table-column prop="add3" label="加分明细" width="120" >{{
+            <el-table-column prop="add3" label="加分明细" width="120">{{
               data.assessment.add3 || "暂无数据"
             }}</el-table-column>
-            <el-table-column prop="sub3" label="减分明细" width="120" >{{
+            <el-table-column prop="sub3" label="减分明细" width="120">{{
               data.assessment.sub3 || "暂无数据"
             }}</el-table-column>
-            <el-table-column prop="point3" label="得分" width="60" >{{
+            <el-table-column prop="point3" label="得分" width="60">{{
               data.assessment.point3 || 0
             }}</el-table-column>
           </el-table-column>
           <el-table-column label="美育">
-            <el-table-column prop="add4" label="加分明细" width="120" >{{
+            <el-table-column prop="add4" label="加分明细" width="120">{{
               data.assessment.add4 || "暂无数据"
             }}</el-table-column>
-            <el-table-column prop="sub4" label="减分明细" width="120" >{{
+            <el-table-column prop="sub4" label="减分明细" width="120">{{
               data.assessment.sub4 || "暂无数据"
             }}</el-table-column>
-            <el-table-column prop="point4" label="得分" width="60" >{{
+            <el-table-column prop="point4" label="得分" width="60">{{
               data.assessment.point4 || 0
             }}</el-table-column>
           </el-table-column>
           <el-table-column label="劳动">
-            <el-table-column prop="add5" label="加分明细" width="120" >{{
+            <el-table-column prop="add5" label="加分明细" width="120">{{
               data.assessment.add5 || "暂无数据"
             }}</el-table-column>
-            <el-table-column prop="sub5" label="减分明细" width="120" >{{
+            <el-table-column prop="sub5" label="减分明细" width="120">{{
               data.assessment.sub5 || "暂无数据"
             }}</el-table-column>
-            <el-table-column prop="point5" label="得分" width="60" >{{
+            <el-table-column prop="point5" label="得分" width="60">{{
               data.assessment.point5 || 0
             }}</el-table-column>
           </el-table-column>
           <el-table-column label="当月综合测评得分" fixed="right">
-            <el-table-column prop="add_total" label="月加分" width="70" >{{
+            <el-table-column prop="add_total" label="月加分" width="70">{{
               data.assessment.add_total || "-"
             }}</el-table-column>
-            <el-table-column prop="sub_total" label="月减分" width="70" >{{
+            <el-table-column prop="sub_total" label="月减分" width="70">{{
               data.assessment.sub_total || "-"
             }}</el-table-column>
-            <el-table-column prop="pre_total" label="上月得分" width="85" >{{
+            <el-table-column prop="pre_total" label="上月得分" width="85">{{
               data.assessment.pre_total || "-"
             }}</el-table-column>
             <el-table-column prop="point_total" label="当月总分" width="85">{{
@@ -116,7 +116,10 @@
         </el-table>
         <br />
       </div>
-      <el-button type="primary" @click="data.dialogVisible = true"
+      <el-button
+        type="primary"
+        @click="data.dialogVisible = true"
+        :disabled="data.state != '待确认'"
         >前往电子签名</el-button
       >
       <br />
@@ -172,7 +175,7 @@
       <div style="margin-left: 1rem; margin-bottom: 1rem">
         该电子签名为确保综测信息经过本人确认后无误
       </div>
-      <signatures></signatures>
+      <signatures @finish="finish"></signatures>
     </div>
   </el-dialog>
   <!-- 申报错误对话框 -->
@@ -276,7 +279,7 @@ import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 const data = reactive({
-  state: "未到确认时间",
+  state: "待确认",
   assessment: [
     {
       userNumber: "2021401449",
@@ -440,6 +443,25 @@ const handleRevoke = (index, row) => {
   });
 };
 
+//签名后提交数据和电子签名
+function finish(sign) {
+  console.log("签名img的base64", sign);
+  // studentFun.sign.submitSignature(sign).then((res) => {
+  //   console.log(res);
+  //   ElMessage({
+  //     message: "提交本月综测情况成功",
+  //     type: "success",
+  //   });
+  // });
+  setTimeout(() => {
+    data.state = "已确认";
+    data.dialogVisible=false;
+    ElMessage({
+      message: "提交本月综测情况成功",
+      type: "success",
+    });
+  }, 60);
+}
 const { getColumnWidth } = adaptiveColumnWidthFun(data.assessment);
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
