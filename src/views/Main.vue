@@ -21,7 +21,7 @@
     </el-container>
   </div>
 </template>
-  <script setup>
+<script setup>
 import { onMounted, ref } from "vue";
 import CommonAside from "@/components/common/common-aside.vue";
 import commonFloatAside from "@/components/common/common-float-aside.vue";
