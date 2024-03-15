@@ -9,6 +9,8 @@
 <template>
   <div class="common-layout">
     <el-container>
+      <!-- {{ phone }}
+      {{ store.state.menu.isCollapse }} -->
       <!-- 手机端收缩时 -->
       <common-float-aside v-if="phone && store.state.menu.isCollapse" />
       <!-- 电脑端 -->
@@ -48,7 +50,6 @@ const setAsideWidth = (val) => {
 };
 onBeforeMount(() => {
   store.commit("setMenu", giveMenu(getRole()));
-  // console.log(giveMenu(getRole));
   store.commit("addMenu");
   setAsideWidth(store.state.menu.isCollapse);
   // 判断是否是手机

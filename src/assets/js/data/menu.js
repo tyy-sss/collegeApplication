@@ -121,8 +121,8 @@ const evaluatorMenuData = reactive([
 ]);
 
 const giveMenu = (role) => {
-  return evaluatorMenuData;
-  if (role == -1) {// 超管
+  if (role == 4) {
+    // 超管
     return managerMenuData;
   } else if (role == 0) {
     return studentMenuData;

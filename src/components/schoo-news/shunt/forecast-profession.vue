@@ -9,7 +9,7 @@
           @change="getVounteerDiversion"
         >
           <el-tooltip
-            v-for="(item, index) in data.typeData"
+            v-for="(item, index) in data.mateTtypeData"
             :key="index"
             class="box-item"
             effect="light"
@@ -27,11 +27,28 @@
     </div>
     <div class="middle">
       <div class="left">
-        <el-radio-group v-model="data.activeName" size="large">
-          <el-radio-button label="全部名单" value="all" />
-          <el-radio-button label="录取名单" value="first" />
-          <el-radio-button label="未录取名单" value="third" />
+        <el-radio-group
+          v-model="data.activeName"
+          size="large"
+          @change="handleGetCheckVounteerDiversion"
+        >
+          <el-radio-button
+            v-for="(item, index) in data.typeData"
+            :key="index"
+            :label="item.type"
+            size="large"
+            >{{ item.label }}</el-radio-button
+          >
         </el-radio-group>
+      </div>
+      <div class="right">
+        <el-button
+          type="primary"
+          :icon="Download"
+          @click="handleExportVolunteerDiversion"
+        >
+          导出成绩
+        </el-button>
       </div>
     </div>
     <div class="bottom">
@@ -43,7 +60,11 @@
           <el-table-column prop="sex" label="性别" width="60" />
           <el-table-column prop="province" label="省份" />
           <el-table-column prop="className" label="班级" min-width="130" />
-          <el-table-column prop="subjects" label="选考科目" min-width="120" />
+          <el-table-column prop="subjects" label="选考科目" min-width="120">
+            <template #default="scope">
+              {{ handleSubject(scope.row.subjects) }}
+            </template>
+          </el-table-column>
           <el-table-column prop="score" label="分流成绩" min-width="90" />
           <el-table-column label="志愿填报" fixed="right">
             <el-table-column prop="firstName" label="一志愿" />
@@ -78,10 +99,12 @@
   </div>
 </template>
 <script setup>
-import { reactive, ref } from "vue";
+import { reactive, ref, onMounted } from "vue";
+import { formatDate } from "@/assets/js/utils/format-date";
 import ruleExplain from "@/components/rule/rule-explain.vue";
 import { rangeVolunteer, firstVolunteer } from "@/assets/js/data/rule-explain";
-import { getSchoolTimeId } from "@/constants/schoolId-timeId";
+import { Download } from "@element-plus/icons-vue";
+import managerFun from "@/api/manager";
 // 接口
 import volunteerFun from "@/api/volunteer";
 import { ElMessage } from "element-plus";
@@ -89,7 +112,7 @@ import { useRoute } from "vue-router";
 const route = new useRoute();
 const schoolId = Number(ref(route.query.schoolId).value);
 const data = reactive({
-  typeData: [
+  mateTtypeData: [
     {
       label: "第一志愿优先",
       type: 1,
@@ -101,20 +124,70 @@ const data = reactive({
       volunteerRule: rangeVolunteer,
     },
   ],
+  typeData: [
+    {
+      label: "录取名单",
+      type: 0,
+    },
+    {
+      label: "未录取名单",
+      type: 1,
+    },
+  ],
   volunteerRule: "",
-  activeName: "first",
+  activeName: "",
   tableData: [],
-  timeId: getSchoolTimeId()[0].timeId,
+  timeId: "",
   pager: {
     current: 1,
     size: 10,
     total: 100,
   },
 });
+// 对科目展示进行处理
+const handleSubject = (val) => {
+  val = JSON.parse(val);
+  let endString = "";
+  for (let i = 0; i < val.length; i++) {
+    endString += val[i];
+    if (i != val.length - 1) {
+      endString += ",";
+    }
+  }
+  return endString;
+};
 // 跳转界面
 const handleChangePage = (val) => {
   data.pager.current = val;
-  getVounteerDiversion();
+  getCheckVounteerDiversion();
+};
+// 选择录取还是未录取的展示界面
+const handleGetCheckVounteerDiversion = (value) => {
+  data.activeName = value;
+  data.pager.current = 1;
+  getCheckVounteerDiversion();
+};
+// 导出最后的分流结果
+const handleExportVolunteerDiversion = () => {
+  if (data.volunteerRule == "") {
+    ElMessage.error("请先选择志愿规则");
+  } else {
+    volunteerFun.manager
+      .exportVolunteerDiversion(schoolId, data.timeId, data.volunteerRule, 0)
+      .then((res) => {
+        console.log(res, "第一次");
+        volunteerFun.manager
+          .exportVolunteerDiversion(
+            schoolId,
+            data.timeId,
+            data.volunteerRule,
+            1
+          )
+          .then((res) => {
+            console.log(res, "第二次");
+          });
+      });
+  }
 };
 // 获得最后志愿结果
 const getCheckVounteerDiversion = () => {
@@ -125,8 +198,11 @@ const getCheckVounteerDiversion = () => {
       mateWay: data.volunteerRule,
       current: data.pager.current,
       size: data.pager.size,
+      type: data.activeName,
     })
     .then((res) => {
+      console.log(res);
+      data.tableData = res.records;
       data.pager = {
         size: res.size,
         total: res.total,
@@ -138,15 +214,35 @@ const getCheckVounteerDiversion = () => {
 const getVounteerDiversion = (value) => {
   data.volunteerRule = value;
   volunteerFun.manager
-    .volunteerDiversion(schoolId, data.volunteerRule, data.timeId)
+    .volunteerDiversion({
+      schoolId: schoolId,
+      type: data.volunteerRule,
+      timeId: data.timeId,
+    })
     .then((res) => {
       ElMessage.success("志愿匹配成功，正在获取志愿结果");
+      data.activeName = 0;
       getCheckVounteerDiversion();
     })
     .catch((res) => {
       ElMessage.error(res);
     });
 };
+// 获得正式志愿填报时间Id
+const getWishTime = () => {
+  managerFun.wishTime
+    .selectWishTime1(schoolId, Number(formatDate(new Date()).substring(0, 4)))
+    .then((res) => {
+      res.records.forEach((element) => {
+        if (element.type == true) {
+          data.timeId = Number(element.id);
+        }
+      });
+    });
+};
+onMounted(() => {
+  getWishTime();
+});
 </script>
 <style scoped>
 .forecast-profession > div:not(:last-child) {
@@ -171,5 +267,9 @@ const getVounteerDiversion = (value) => {
 .pager {
   display: flex;
   justify-content: flex-end;
+}
+.middle {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

@@ -10,7 +10,7 @@
     </div>
     <div class="middle">
       <div class="table">
-        <el-table :data="tableData" border>
+        <el-table :data="data.tableData" border>
           <el-table-column
             prop="targetSchool"
             label="目标学校"
@@ -38,10 +38,10 @@
       </div>
       <div class="pager">
         <el-pagination
-          :page-size="pager.size"
+          :page-size="data.pager.size"
           :pager-count="9"
           layout="prev, pager, next"
-          :total="pager.total"
+          :total="data.pager.total"
           @current-change="handleChangePage"
         />
       </div>
@@ -49,30 +49,36 @@
   </div>
 </template>
 <script setup>
-import { reactive, ref } from "vue";
+import { onMounted, reactive, ref } from "vue";
+import { formatDate } from "@/assets/js/utils/format-date";
 import { Download, Plus } from "@element-plus/icons-vue";
-// 表格数据
-const tableData = [
-  {
-    uId: "2021401449",
-    name: "付小小",
-    class: "2022级预科1班",
-    targetSchool: "吉首大学",
-    province: "湖南省",
-    sex: "女",
-    electiveSubject: ["物理", "化学", "生物"],
-    point: 89.88,
-    firstVolunteer: "物理学",
-    secondVolunteer: "土木工程",
-    thirdVolunteer: "计算机科学与技术",
-    reverso: "物理学",
-    remark: "一志愿",
+import managerFun from "@/api/manager";
+import { useRoute } from "vue-router";
+const route = new useRoute();
+const schoolId = Number(ref(route.query.schoolId).value);
+const data = reactive({
+  timeId: "",
+  tableData: [
+    {
+      uId: "2021401449",
+      name: "付小小",
+      class: "2022级预科1班",
+      targetSchool: "吉首大学",
+      province: "湖南省",
+      sex: "女",
+      electiveSubject: ["物理", "化学", "生物"],
+      point: 89.88,
+      firstVolunteer: "物理学",
+      secondVolunteer: "土木工程",
+      thirdVolunteer: "计算机科学与技术",
+      reverso: "物理学",
+      remark: "一志愿",
+    },
+  ],
+  pager: {
+    size: 10,
+    total: 100,
   },
-];
-// 分页数据
-const pager = reactive({
-  size: 10,
-  total: 100,
 });
 // 导出模板表
 const handleExport = () => {};
@@ -80,6 +86,21 @@ const handleExport = () => {};
 const handleLeading = () => {};
 // 跳转界面
 const handleChangePage = (val) => {};
+// 获得正式志愿填报时间Id
+const getWishTime = () => {
+  managerFun.wishTime
+    .selectWishTime1(schoolId, Number(formatDate(new Date()).substring(0, 4)))
+    .then((res) => {
+      res.records.forEach((element) => {
+        if (element.type == true) {
+          data.timeId = Number(element.id);
+        }
+      });
+    });
+};
+onMounted(() => {
+  getWishTime();
+});
 </script>
 <style scoped>
 .final-profession > div:not(:last-child) {
@@ -89,7 +110,7 @@ const handleChangePage = (val) => {};
   display: flex;
   justify-content: space-between;
 }
-.middle> div:not(:last-child) {
+.middle > div:not(:last-child) {
   margin-bottom: 1rem;
 }
 .pager {
