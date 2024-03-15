@@ -13,7 +13,7 @@
     </el-container>
   </div>
 </template>
-  <script setup>
+<script setup>
 import { onMounted, ref } from "vue";
 import CommonAside from "@/components/common/common-aside.vue";
 import commonFloatAside from "@/components/common/common-float-aside.vue";
@@ -39,7 +39,7 @@ const setAsideWidth = (val) => {
   }
 };
 onBeforeMount(() => {
-  store.commit("setMenu", giveMenu(getRole));
+  store.commit("setMenu", giveMenu(getRole()));
   // console.log(giveMenu(getRole));
   store.commit("addMenu");
   setAsideWidth(store.state.menu.isCollapse);
