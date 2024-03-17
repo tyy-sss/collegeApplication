@@ -4,6 +4,10 @@
       <el-button type="primary" :icon="Plus" @click="handleLeading"
         >导入最终分流表</el-button
       >
+      <add-final-profession
+        ref="addFinalProfessionRef"
+        @get-final-profession-list="getFinalProfessionList"
+      />
       <el-button type="info" :icon="Download" @click="handleExport"
         >导出最终分流模板表</el-button
       >
@@ -11,28 +15,35 @@
     <div class="middle">
       <div class="table">
         <el-table :data="data.tableData" border>
-          <el-table-column
-            prop="targetSchool"
-            label="目标学校"
-            min-width="90"
-          />
-          <el-table-column prop="name" label="姓名" />
-          <el-table-column prop="uId" label="学号" min-width="110" />
+          <el-table-column prop="name" label="目标学校" min-width="90" />
+          <el-table-column prop="userName" label="姓名" />
+          <el-table-column prop="userNumber" label="学号" min-width="110" />
           <el-table-column prop="sex" label="性别" width="60" />
           <el-table-column prop="province" label="省份" />
-          <el-table-column prop="class" label="班级" min-width="130" />
-          <el-table-column
-            prop="electiveSubject"
-            label="选考科目"
-            min-width="120"
-          />
-          <el-table-column prop="point" label="分流成绩" min-width="90" />
+          <el-table-column prop="className" label="班级" min-width="130" />
+          <el-table-column prop="subjects" label="选考科目" min-width="120">
+            <template #default="scope">
+              {{ handleSubject(scope.row.subjects) }}
+            </template>
+          </el-table-column>
+          <el-table-column prop="score" label="分流成绩" min-width="90" />
           <el-table-column label="志愿填报" fixed="right">
-            <el-table-column prop="firstVolunteer" label="一志愿" />
-            <el-table-column prop="secondVolunteer" label="二志愿" />
-            <el-table-column prop="thirdVolunteer" label="三志愿" />
-            <el-table-column prop="reverso" label="拟录专业" min-width="100" />
-            <el-table-column prop="remark" label="备注" />
+            <el-table-column prop="firstName" label="一志愿" />
+            <el-table-column prop="secondName" label="二志愿" />
+            <el-table-column prop="thirdName" label="三志愿" />
+            <el-table-column
+              prop="majorName"
+              label="拟录专业"
+              min-width="100"
+            />
+          </el-table-column>
+          <el-table-column label="联系方式" fixed="right">
+            <el-table-column prop="phone" label="电话号码" min-width="120" />
+            <el-table-column
+              prop="parentPhone"
+              label="父母电话"
+              min-width="120"
+            />
           </el-table-column>
         </el-table>
       </div>
@@ -52,40 +63,50 @@
 import { onMounted, reactive, ref } from "vue";
 import { formatDate } from "@/assets/js/utils/format-date";
 import { Download, Plus } from "@element-plus/icons-vue";
+import addFinalProfession from "@/components/schoo-news/shunt/add-final-profession.vue";
+import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
+import { professionHeader } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
 import managerFun from "@/api/manager";
+import volunteerFun from "@/api/volunteer";
 import { useRoute } from "vue-router";
 const route = new useRoute();
 const schoolId = Number(ref(route.query.schoolId).value);
 const data = reactive({
   timeId: "",
-  tableData: [
-    {
-      uId: "2021401449",
-      name: "付小小",
-      class: "2022级预科1班",
-      targetSchool: "吉首大学",
-      province: "湖南省",
-      sex: "女",
-      electiveSubject: ["物理", "化学", "生物"],
-      point: 89.88,
-      firstVolunteer: "物理学",
-      secondVolunteer: "土木工程",
-      thirdVolunteer: "计算机科学与技术",
-      reverso: "物理学",
-      remark: "一志愿",
-    },
-  ],
+  tableData: [],
   pager: {
+    current: 1,
     size: 10,
     total: 100,
   },
+  allData: [],
 });
+// 对科目展示进行处理
+const handleSubject = (val) => {
+  val = JSON.parse(val);
+  let endString = "";
+  for (let i = 0; i < val.length; i++) {
+    endString += val[i];
+    if (i != val.length - 1) {
+      endString += ",";
+    }
+  }
+  return endString;
+};
 // 导出模板表
-const handleExport = () => {};
+const handleExport = () => {
+  getAllFinalProfessionList();
+};
+const addFinalProfessionRef = ref(null);
 // 导入数据表
-const handleLeading = () => {};
+const handleLeading = () => {
+  addFinalProfessionRef.value.data.dialogTableVisible = true;
+};
 // 跳转界面
-const handleChangePage = (val) => {};
+const handleChangePage = (val) => {
+  data.pager.current = val;
+  getFinalProfessionList();
+};
 // 获得正式志愿填报时间Id
 const getWishTime = () => {
   managerFun.wishTime
@@ -94,8 +115,41 @@ const getWishTime = () => {
       res.records.forEach((element) => {
         if (element.type == true) {
           data.timeId = Number(element.id);
+          getFinalProfessionList();
         }
       });
+    });
+};
+// 获取分页的最后分流结果
+const getFinalProfessionList = () => {
+  volunteerFun.manager
+    .checkEndVolunteerDiversion({
+      schoolId: schoolId,
+      timeId: data.timeId,
+      current: data.pager.current,
+      size: data.pager.size,
+    })
+    .then((res) => {
+      data.tableData = res.records;
+      data.pager = {
+        size: res.size,
+        total: res.total,
+        current: res.current,
+      };
+    });
+};
+// 获取所有的最后分流结果
+const getAllFinalProfessionList = () => {
+  volunteerFun.manager
+    .checkAllEndVolunteerDiversion({
+      schoolId: schoolId,
+      timeId: data.timeId,
+    })
+    .then((res) => {
+      data.allData = res;
+      let schoolName = ref(route.query.schoolName).value;
+      let headerTitle = schoolName + "-" + "最终分流表";
+      export_json_to_excel(professionHeader, data.allData, headerTitle);
     });
 };
 onMounted(() => {

@@ -66,9 +66,9 @@ volunteerFun.options.selectStudentMajor = () => {
  */
 volunteerFun.manager.volunteerDiversion = (data) => {
   return http.post("/volunteerDiversion/Mate", {
-    schoolId:data.schoolId,
-    type:data.type,
-    timeId:data.timeId,
+    schoolId: data.schoolId,
+    type: data.type,
+    timeId: data.timeId,
   });
 };
 /**
@@ -125,10 +125,23 @@ volunteerFun.manager.uploadResult = (data) => {
  * @param {*} data
  * @returns
  */
-volunteerFun.manager.checkEndVolunteerDiversion = (data) => {
+volunteerFun.manager.checkAllEndVolunteerDiversion = (data) => {
   return http.get("/volunteerDiversion/getResult2", {
     schoolId: data.schoolId,
     timeId: data.timeId,
+  });
+};
+/**
+ * 分页查看最后的分流结果
+ * @param {*} data
+ * @returns
+ */
+volunteerFun.manager.checkEndVolunteerDiversion = (data) => {
+  return http.get("/volunteerDiversion/getPagingResult", {
+    schoolId: data.schoolId,
+    timeId: data.timeId,
+    current: data.current,
+    size: data.size,
   });
 };
 export default volunteerFun;

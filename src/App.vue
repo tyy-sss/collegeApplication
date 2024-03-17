@@ -33,6 +33,12 @@ body {
   margin: 0;
   cursor: pointer;
 }
+body,
+html,
+#app {
+  height: 100%;
+  width: 100%;
+}
 * {
   /* 滑动时报错 */
   touch-action: pan-y;
