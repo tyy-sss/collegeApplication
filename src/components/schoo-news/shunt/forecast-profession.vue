@@ -104,6 +104,8 @@ import { formatDate } from "@/assets/js/utils/format-date";
 import ruleExplain from "@/components/rule/rule-explain.vue";
 import { rangeVolunteer, firstVolunteer } from "@/assets/js/data/rule-explain";
 import { Download } from "@element-plus/icons-vue";
+import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
+import { professionHeader } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
 import managerFun from "@/api/manager";
 // 接口
 import volunteerFun from "@/api/volunteer";
@@ -127,11 +129,11 @@ const data = reactive({
   typeData: [
     {
       label: "录取名单",
-      type: 0,
+      type: 1,
     },
     {
       label: "未录取名单",
-      type: 1,
+      type: 0,
     },
   ],
   volunteerRule: "",
@@ -172,19 +174,28 @@ const handleExportVolunteerDiversion = () => {
   if (data.volunteerRule == "") {
     ElMessage.error("请先选择志愿规则");
   } else {
+    let endData = [];
+    let schoolName = ref(route.query.schoolName).value;
+    let volunteerRuleName = data.mateTtypeData.filter((element) => {
+      return element.type == data.volunteerRule;
+    })[0].label;
+    let headerTitle = schoolName + "-" + volunteerRuleName + "-" + "预测分流表";
     volunteerFun.manager
-      .exportVolunteerDiversion(schoolId, data.timeId, data.volunteerRule, 0)
+      .exportVolunteerDiversion(schoolId, data.timeId, data.volunteerRule, 1)
       .then((res) => {
-        console.log(res, "第一次");
+        endData = res;
         volunteerFun.manager
           .exportVolunteerDiversion(
             schoolId,
             data.timeId,
             data.volunteerRule,
-            1
+            0
           )
           .then((res) => {
-            console.log(res, "第二次");
+            res.forEach((element) => {
+              endData.push(element);
+            });
+            export_json_to_excel(professionHeader, endData, headerTitle);
           });
       });
   }
@@ -221,11 +232,16 @@ const getVounteerDiversion = (value) => {
     })
     .then((res) => {
       ElMessage.success("志愿匹配成功，正在获取志愿结果");
-      data.activeName = 0;
+      data.activeName = 1;
       getCheckVounteerDiversion();
     })
     .catch((res) => {
-      ElMessage.error(res);
+      switch (res.code) {
+        case 3009:
+          data.activeName = 1;
+          getCheckVounteerDiversion();
+          break;
+      }
     });
 };
 // 获得正式志愿填报时间Id

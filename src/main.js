@@ -22,6 +22,7 @@ import zhCn from "element-plus/es/locale/lang/zh-cn";
 import "default-passive-events";
 import "./assets/css/index.css"; // 引入全局样式文
 const app = createApp(App);
+
 app
   .use(store)
   .use(router)
