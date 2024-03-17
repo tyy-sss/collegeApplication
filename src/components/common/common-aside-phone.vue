@@ -118,7 +118,7 @@ onMounted(() => {
 }
 .menu {
   overflow: hidden;
-  /* height: 100vh; */
+  height: 100vh;
   background-color: #fff;
   border-radius: 2rem;
   display: flex;
@@ -132,8 +132,8 @@ onMounted(() => {
   padding-bottom: 1rem;
 }
 .avatar > img {
-  height: 4rem;
-  width: 4rem;
+  height: 5rem;
+  width: 5rem;
 }
 .user-name {
   font-size: 1.5rem;
@@ -162,15 +162,16 @@ onMounted(() => {
 }
 .el-menu-item {
   justify-content: center;
-  height: 3rem;
+  height: 5rem;
+  font-size: 1.2rem;
 }
 .menu-icon {
-  margin-right: 0.8rem;
+  margin-right: 0.5rem;
 }
 /* 设置菜单触发和点击的样式 */
 .el-menu-item:hover,
 .el-menu-item.is-active {
-  border-right: 0.1rem solid RGB(65, 141, 254);
+  border-right: 0.2rem solid RGB(65, 141, 254);
   color: RGB(63, 140, 255);
   background: RGB(235, 243, 255);
   border-top-left-radius: 1rem;
@@ -184,6 +185,7 @@ onMounted(() => {
   display: flex;
   justify-content: center;
   color: RGB(125, 133, 146);
+  font-size: 1.1rem;
 }
 .exit > div {
   display: flex;
@@ -192,7 +194,7 @@ onMounted(() => {
   margin-left: 0.5rem;
 }
 .exit img {
-  height: 1rem;
-  width: 1rem;
+  height: 1.2rem;
+  width: 1.2rem;
 }
 </style>

@@ -3,6 +3,7 @@
     <el-container>
       <!-- 手机端收缩时 -->
       <common-float-aside v-if="phone && store.state.menu.isCollapse" />
+      <common-aside-phone v-else-if="phone && !store.state.menu.isCollapse"/>
       <!-- 电脑端 -->
       <el-aside v-else :width="asideWidth">
         <common-aside />
@@ -17,6 +18,7 @@
 import { onMounted, ref } from "vue";
 import CommonAside from "@/components/common/common-aside.vue";
 import commonFloatAside from "@/components/common/common-float-aside.vue";
+import commonAsidePhone from "@/components/common/common-aside-phone.vue";
 import { onBeforeMount, watch } from "vue";
 import { giveMenu } from "@/assets/js/data/menu";
 import { getRole } from "@/constants/token";
@@ -40,7 +42,6 @@ const setAsideWidth = (val) => {
 };
 onBeforeMount(() => {
   store.commit("setMenu", giveMenu(getRole()));
-  // console.log(giveMenu(getRole));
   store.commit("addMenu");
   setAsideWidth(store.state.menu.isCollapse);
   // 判断是否是手机

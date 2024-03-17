@@ -26,7 +26,7 @@ volunteerFun.basis.getClassWish = () => {
 /**
  * 学生查看志愿列表
  */
- volunteerFun.student.getWishTable = () => {
+volunteerFun.student.getWishTable = () => {
   return http.get("/wishTime/selectWishTime2");
 };
 
@@ -64,11 +64,11 @@ volunteerFun.options.selectStudentMajor = () => {
  * @param {匹配时间id} timeId
  * @returns
  */
-volunteerFun.manager.volunteerDiversion = (schoolId, type, timeId) => {
+volunteerFun.manager.volunteerDiversion = (data) => {
   return http.post("/volunteerDiversion/Mate", {
-    schoolId,
-    type,
-    timeId,
+    schoolId:data.schoolId,
+    type:data.type,
+    timeId:data.timeId,
   });
 };
 /**
@@ -76,8 +76,30 @@ volunteerFun.manager.volunteerDiversion = (schoolId, type, timeId) => {
  * @param {*} schoolId
  * @param {*} timeId
  * @param {*} mateWay
+ * @param {*} type
+ * @returns
+ */
+volunteerFun.manager.exportVolunteerDiversion = (
+  schoolId,
+  timeId,
+  mateWay,
+  type
+) => {
+  return http.get("/volunteerDiversion/getResult", {
+    schoolId,
+    timeId,
+    mateWay,
+    type,
+  });
+};
+/**
+ * 分页查看志愿匹配数据
+ * @param {*} schoolId
+ * @param {*} timeId
+ * @param {*} mateWay
  * @param {*} current
  * @param {*} size
+ * @param {*} type
  * @returns
  */
 volunteerFun.manager.checkVolunteerDiversion = (data) => {
@@ -87,6 +109,26 @@ volunteerFun.manager.checkVolunteerDiversion = (data) => {
     mateWay: data.mateWay,
     current: data.current,
     size: data.size,
+    type: data.type,
+  });
+};
+/**
+ * 上传最后的分流结果
+ * @param {*} data
+ * @returns
+ */
+volunteerFun.manager.uploadResult = (data) => {
+  return http.post("/volunteerDiversion/uploadResult", data);
+};
+/**
+ * 查看最后的分流结果
+ * @param {*} data
+ * @returns
+ */
+volunteerFun.manager.checkEndVolunteerDiversion = (data) => {
+  return http.get("/volunteerDiversion/getResult2", {
+    schoolId: data.schoolId,
+    timeId: data.timeId,
   });
 };
 export default volunteerFun;
