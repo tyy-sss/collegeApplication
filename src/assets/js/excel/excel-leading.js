@@ -31,7 +31,7 @@ export const excelLeadingIn = (data, character) => {
       let v = character[key];
       const text = v.text;
       const type = v.type;
-      v = item[text] || "";
+      v = item[text] || ""; 
       type === "string" ? (v = String(v)) : null;
       type === "number" ? (v = Number(v)) : null;
       obj[key] = v;
@@ -42,9 +42,7 @@ export const excelLeadingIn = (data, character) => {
   console.log(list, "得到要处理的数据");
   return list;
 };
-
 // 把前端获取的数据 进行正则判断，或者处理筛选后处理成上传给后端的数据
-
 // 对学生信息进行处理
 export const handleStudentInformation = (data) => {
   const handleData = [];
@@ -102,7 +100,7 @@ export const handleStudentInformation = (data) => {
     }
     item.subjects = Array.from(electiveSubjectList);
     // 删除Object属性
-    delete item.object
+    delete item.object;
     handleData.push(item);
   });
   console.log(handleData, "最后的数据");
