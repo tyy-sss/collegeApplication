@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-12 19:18:24
+ * @LastEditTime: 2024-03-17 20:13:39
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -88,10 +88,7 @@
           />
         </el-select>
         <el-button class="search" @click="search">查询</el-button>
-
-        <el-button class="history" @click="data.drawer = true"
-          >历史查询</el-button
-        >
+        <!-- <el-button class="history" @click="data.drawer = true">历史查询</el-button> -->
       </div>
       
       <!-- 结果 -->
@@ -116,7 +113,7 @@
     </div>
   </div>
   <!-- 抽屉 -->
-  <el-drawer v-model="data.drawer" direction="btt" style="min-height: 50%">
+  <!-- <el-drawer v-model="data.drawer" direction="btt" style="min-height: 50%">
     <template #header>
       <h4>历史查询</h4>
     </template>
@@ -129,14 +126,16 @@
           style="width: 100%"
         >
           <el-table-column type="index" width="50" />
+          <el-table-column label="查询类型" prop="type" />
           <el-table-column label="查询时间" sortable prop="date" />
           <el-table-column label="学院" prop="school" />
           <el-table-column label="专业" prop="professional" />
+          <el-table-column label="符合条件人数" prop="cnt" />
           <el-table-column label="排名" sortable width="180" prop="num" />
         </el-table>
       </div>
     </template>
-  </el-drawer>
+  </el-drawer> -->
 </template>
 <script setup>
 import { ref, reactive, onMounted } from "vue";
@@ -146,7 +145,7 @@ import volunteerFun from "@/api/volunteer";
 import { Search } from '@element-plus/icons-vue'
 const data = reactive({
   loading: false,
-  drawer: false,
+  // drawer: false,
   score: null, //填入分数
   gkScore: 512, //高考分数
   gkNum: null, //同分人数
@@ -224,80 +223,44 @@ const data = reactive({
     // { name: "机械设计制造及其自动化" },
     // { name: "车辆工程" },
   ], //专业列表
-  queryData: [
-    {
-      date: "2023.10.4 12:10:23",
-      school: "湘南学院",
-      professional: "汉语言文学（师范）",
-      province: "湖南省",
-      num: "56",
-      type: "新疆专项",
-    },
-    {
-      date: "2023.10.4 12:10:21",
-      school: "湘南学院",
-      professional: "秘书学",
-      province: "湖南省",
-      num: "85",
-      type: "新疆专项",
-    },
-    {
-      date: "2023.10.4 12:09:23",
-      school: "湘南学院",
-      professional: "法学",
-      province: "湖南省",
-      num: "45",
-      type: "新疆专项",
-    },
-    {
-      date: "2023.10.4 12:08:11",
-      school: "湖南文理学院",
-      professional: "国际经济与贸易",
-      province: "湖南省",
-      num: "45",
-      type: "普通预科",
-    },
-    {
-      date: "2023.10.3 12:10:23",
-      school: "湖南文理学院",
-      professional: "市场营销",
-      province: "湖南省",
-      num: "45",
-      type: "普通预科",
-    },
-    {
-      date: "2023.10.4 12:10:21",
-      school: "湘南学院",
-      professional: "秘书学",
-      province: "湖南省",
-      num: "85",
-      type: "普通预科",
-    },
-    {
-      date: "2023.10.4 12:09:23",
-      school: "湘南学院",
-      professional: "法学",
-      province: "湖南省",
-      num: "45",
-      type: "普通预科",
-    },
-    {
-      date: "2023.10.4 12:08:11",
-      school: "湖南文理学院",
-      professional: "国际经济与贸易",
-      province: "湖南省",
-      num: "45",
-      type: "普通预科",
-    },
-    {
-      date: "2023.10.3 12:10:23",
-      school: "湖南文理学院",
-      professional: "市场营销",
-      province: "湖南省",
-      num: "45",
-      type: "普通预科",
-    },
-  ], //历史查询记录列表
+  // queryData: [
+  //   {
+  //     date: "2023.10.4 12:10:23",
+  //     school: "湘南学院",
+  //     professional: "汉语言文学（师范）",
+  //     province: "湖南省",
+  //     num: "56",
+  //     cnt:"124",
+  //     type: "目标学校排名",
+  //   },
+  //   {
+  //     date: "2023.10.4 12:10:21",
+  //     school: "湘南学院",
+  //     professional: "秘书学",
+  //     province: "湖南省",
+  //     num: "85",
+  //     cnt:"1224",
+  //     type: "延保同一个专业的排名",
+  //   },
+  //   {
+  //     date: "2023.10.4 12:09:23",
+  //     school: "湘南学院",
+  //     professional: "法学",
+  //     province: "湖南省",
+  //     num: "45",
+  //     cnt:"424",
+  //     type: "所有学生的排名",
+  //   },
+  //   {
+  //     date: "2023.10.4 12:08:11",
+  //     school: "湖南文理学院",
+  //     professional: "国际经济与贸易",
+  //     province: "湖南省",
+  //     num: "45",
+  //     cnt:"224",
+  //     type: "同一个班的排名",
+  //   },
+  // ], //历史查询记录列表
   allData: [], //学院专业选择数据
 });
 //排名类型选择
@@ -320,15 +283,14 @@ const options = [
   },
 ];
 onMounted(() => {
+  //查询可选专业
   volunteerFun.options.selectStudentMajor().then((res) => {
-    console.log("AASSDAD");
-    console.log(res);
     data.allData = res;
     data.academy = res.map((item) => ({ name: item.college }));
-    console.log("VSDF", data.academy);
   });
 });
 
+//格式化学院专业数据
 function getMajorsByCollege(college) {
   const collegeData = data.allData.find((item) => item.college === college);
   if (collegeData) {
@@ -336,6 +298,7 @@ function getMajorsByCollege(college) {
   }
   return [];
 }
+
 //查询排名
 function search() {
   console.log(

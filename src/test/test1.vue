@@ -1,11 +1,14 @@
 <template>
   <el-button plain @click="dialogFormVisible = true"> 修改综测 </el-button>
-
-  <el-dialog v-model="dialogFormVisible" title="编辑学生综合测评" width="500">
+  <el-dialog
+    v-model="dialogFormVisible"
+    :title="row.curTitle"
+    width="500"
+    lock-scroll
+  >
     <el-form :model="form">
-      <el-form-item label="编辑内容" :label-width="formLabelWidth">
-        <el-select v-model="form.type" placeholder="全部">
-          <el-option label="全部" value="0" />
+      <el-form-item label="编辑部分" :label-width="formLabelWidth">
+        <el-select v-model="form.type" placeholder="请选择需要修改的综测部分">
           <el-option label="德育" value="1" />
           <el-option label="智育" value="2" />
           <el-option label="体育" value="3" />
@@ -13,14 +16,14 @@
           <el-option label="劳动" value="5" />
         </el-select>
       </el-form-item>
-      <div v-show="form.type == 1 || form.type == 0">
+      <div v-show="form.type == 1">
         <hr style="border-color: rgba(231, 229, 226, 0.459)" />
         <el-form-item label="德育" :label-width="formLabelWidth"></el-form-item>
         <el-form-item label="加分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
             style="width: 215px"
-            v-model="form.name"
+            v-model="form.add1"
             autocomplete="off"
           />
         </el-form-item>
@@ -28,7 +31,7 @@
           <el-input
             type="textarea"
             style="width: 215px"
-            v-model="form.name"
+            v-model="form.sub1"
             autocomplete="off"
           />
         </el-form-item>
@@ -36,7 +39,127 @@
           <el-input-number
             style="width: 100px"
             class="item__input"
-            v-model="form.name"
+            v-model="form.point1"
+            :min="-100"
+            :max="100"
+            size="small"
+          />
+        </el-form-item>
+      </div>
+      <div v-show="form.type == 2">
+        <hr style="border-color: rgba(231, 229, 226, 0.459)" />
+        <el-form-item label="智育" :label-width="formLabelWidth"></el-form-item>
+        <el-form-item label="加分明细" :label-width="formLabelWidth">
+          <el-input
+            type="textarea"
+            style="width: 215px"
+            v-model="form.add2"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="减分明细" :label-width="formLabelWidth">
+          <el-input
+            type="textarea"
+            style="width: 215px"
+            v-model="form.sub2"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="德育得分" :label-width="formLabelWidth">
+          <el-input-number
+            style="width: 100px"
+            class="item__input"
+            v-model="form.point2"
+            :min="-100"
+            :max="100"
+            size="small"
+          />
+        </el-form-item>
+      </div>
+      <div v-show="form.type == 3">
+        <hr style="border-color: rgba(231, 229, 226, 0.459)" />
+        <el-form-item label="体育" :label-width="formLabelWidth"></el-form-item>
+        <el-form-item label="加分明细" :label-width="formLabelWidth">
+          <el-input
+            type="textarea"
+            style="width: 215px"
+            v-model="form.add3"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="减分明细" :label-width="formLabelWidth">
+          <el-input
+            type="textarea"
+            style="width: 215px"
+            v-model="form.sub3"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="德育得分" :label-width="formLabelWidth">
+          <el-input-number
+            style="width: 100px"
+            class="item__input"
+            v-model="form.point3"
+            :min="-100"
+            :max="100"
+            size="small"
+          />
+        </el-form-item>
+      </div>
+      <div v-show="form.type == 4">
+        <hr style="border-color: rgba(231, 229, 226, 0.459)" />
+        <el-form-item label="美育" :label-width="formLabelWidth"></el-form-item>
+        <el-form-item label="加分明细" :label-width="formLabelWidth">
+          <el-input
+            type="textarea"
+            style="width: 215px"
+            v-model="form.add4"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="减分明细" :label-width="formLabelWidth">
+          <el-input
+            type="textarea"
+            style="width: 215px"
+            v-model="form.sub4"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="德育得分" :label-width="formLabelWidth">
+          <el-input-number
+            style="width: 100px"
+            class="item__input"
+            v-model="form.point4"
+            :min="-100"
+            :max="100"
+            size="small"
+          />
+        </el-form-item>
+      </div>
+      <div v-show="form.type == 5">
+        <hr style="border-color: rgba(231, 229, 226, 0.459)" />
+        <el-form-item label="劳动" :label-width="formLabelWidth"></el-form-item>
+        <el-form-item label="加分明细" :label-width="formLabelWidth">
+          <el-input
+            type="textarea"
+            style="width: 215px"
+            v-model="form.add5"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="减分明细" :label-width="formLabelWidth">
+          <el-input
+            type="textarea"
+            style="width: 215px"
+            v-model="form.sub5"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="德育得分" :label-width="formLabelWidth">
+          <el-input-number
+            style="width: 100px"
+            class="item__input"
+            v-model="form.point5"
             :min="-100"
             :max="100"
             size="small"
@@ -62,6 +185,7 @@ const dialogFormVisible = ref(true);
 const formLabelWidth = "140px";
 
 const row = reactive({
+  curTitle:"编辑学生 吾尔肯·塞里克 的综合测评",
   id: "20222113001",
   name: "吾尔肯·塞里克",
   add1: "帮助老师批改作业2分",

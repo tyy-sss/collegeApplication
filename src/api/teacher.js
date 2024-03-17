@@ -68,6 +68,13 @@ teacherFun.class.updateStudentPassword = (params) => {
 };
 
 /**
+ * 班主任按月份获取综测签名确认进度
+ */
+teacherFun.assessment.getAssessmentsProcess = (params) => {
+  return http.get(`/adviser/appraisal/state?month=${params.month}`);
+};
+
+/**
  * 班主任获取分页综测信息
  */
 teacherFun.assessment.getAssessments = (params) => {

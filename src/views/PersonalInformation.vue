@@ -253,6 +253,7 @@
           <el-input
             v-model="updataData.phone"
             style="width: 30%"
+            autocomplete="off"
             :placeholder="data.student.phone || '-'"
           />
         </el-form-item>
@@ -263,6 +264,7 @@
             <el-input
               v-model="updataData.consigneeBo.username"
               style="width: 30%"
+              autocomplete="off"
               :placeholder="data.consignee.username || '-'"
             />
           </el-form-item>
@@ -270,6 +272,7 @@
             <el-input
               v-model="updataData.consigneeBo.phone"
               style="width: 30%"
+              autocomplete="off"
               :placeholder="data.consignee.phone || '-'"
             />
           </el-form-item>
@@ -277,6 +280,7 @@
             <el-input
               v-model="updataData.consigneeBo.address"
               style="width: 30%"
+              autocomplete="off"
               :placeholder="data.consignee.address || '-'"
           /></el-form-item>
         </div>
@@ -303,6 +307,7 @@
           <el-input
             v-model="updatePasswords.password"
             style="width: 30%"
+            autocomplete="off"
             type="password"
             placeholder="请输入新设密码"
           />
@@ -311,6 +316,7 @@
           <el-input
             v-model="updatePasswords.password2"
             style="width: 30%"
+            autocomplete="off"
             type="password"
             placeholder="请确认密码"
         /></el-form-item>

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-17 17:17:25
+ * @LastEditTime: 2024-03-17 20:47:45
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -35,19 +35,19 @@
         <el-table
           :data="data.assessment"
           v-loading.lock="data.loading"
-          style="width: 100%;"
+          style="width: 100%"
           default="暂无数据"
         >
-          <el-table-column prop="userNumber" label="学号" width="120">{{
-            data.userNumber
-          }}</el-table-column>
-          <el-table-column prop="username" label="姓名" width="150">{{
-            data.username
-          }}</el-table-column>
+          <el-table-column prop="userNumber" label="学号" width="120" />
+          <el-table-column prop="username" label="姓名" width="150" />
           <el-table-column label="德育">
-            <el-table-column prop="add1" label="加分明细" width="120">{{
-              data.assessment.add1 || "暂无数据"
-            }}</el-table-column>
+            <el-table-column
+              prop="add1"
+              label="加分明细"
+              width="120"
+              :default="'dd名'"
+              >{{ data.assessment.add1 || "暂无数据" }}</el-table-column
+            >
             <el-table-column prop="sub1" label="减分明细" width="120">{{
               data.assessment.sub1 || "暂无数据"
             }}</el-table-column>
@@ -100,16 +100,16 @@
             }}</el-table-column>
           </el-table-column>
           <el-table-column label="当月综合测评得分" fixed="right">
-            <el-table-column prop="add_total" label="月加分" width="70">{{
+            <el-table-column prop="add_total" label="月加分" width="50">{{
               data.assessment.add_total || "-"
             }}</el-table-column>
-            <el-table-column prop="sub_total" label="月减分" width="70">{{
+            <el-table-column prop="sub_total" label="月减分" width="50">{{
               data.assessment.sub_total || "-"
             }}</el-table-column>
-            <el-table-column prop="pre_total" label="上月得分" width="85">{{
+            <el-table-column prop="pre_total" label="上月得分" width="50">{{
               data.assessment.pre_total || "-"
             }}</el-table-column>
-            <el-table-column prop="point_total" label="当月总分" width="85">{{
+            <el-table-column prop="point_total" label="当月总分" width="50">{{
               data.assessment.point_total || "-"
             }}</el-table-column>
           </el-table-column>
@@ -132,12 +132,6 @@
         <h4>本学期总体综测情况</h4>
         <br />
         <el-table :data="data.total" v-loading.lock="data.loading">
-          <el-table-column label="学号" width="120">{{
-            data.userNumber
-          }}</el-table-column>
-          <el-table-column label="姓名" width="150">{{
-            data.username
-          }}</el-table-column>
           <el-table-column label="德育得分">
             {{ data.total.class1 || 0 }}</el-table-column
           >
@@ -279,7 +273,7 @@ import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 const data = reactive({
-  state: "待确认",
+  state: "",
   assessment: [
     // {
     //   userNumber: "2021401449",
@@ -318,15 +312,10 @@ const data = reactive({
       all: 0,
     },
   ],
-  lastScore: null, //上月综测
   month: null, //当前确认综测的月份
   score: null, //目前总分
   signature: null, //签名
-  userNumber: null,
-  username: null,
-  dialogVisible: false,
-  dialogVisible2: false,
-  dialogVisible3: false,
+  isEnd: null, //确认阶段是否开启
   types: [
     {
       value: false,
@@ -338,7 +327,29 @@ const data = reactive({
     },
   ],
   type: "", //申诉类型
-  content: "", //申诉内容
+  content: {
+    add1: null,
+    add2: null,
+    add3: null,
+    add4: null,
+    add5: null,
+    add_total: null,
+    point1: null,
+    point2: null,
+    point3: null,
+    point4: null,
+    point5: null,
+    point_total: null,
+    pre_total: 100,
+    sub1: null,
+    sub2: null,
+    sub3: null,
+    sub4: null,
+    sub5: null,
+    sub_total: null,
+    userNumber: "20232114022",
+    username: "田嘉惠",
+  }, //申诉内容
   // 申诉列表
   complaintData: [
     {
@@ -364,6 +375,9 @@ const data = reactive({
     },
   ],
   loading: false,
+  dialogVisible: false,
+  dialogVisible2: false,
+  dialogVisible3: false,
 });
 onMounted(() => {
   init();
@@ -374,17 +388,23 @@ function init() {
   getComplaintHistory();
   studentFun.assess.getAssessmentThisMonth().then((res) => {
     console.log("个人综测", res);
-    data.lastScore = res.lastScore;
+    data.isEnd = res.isEnd;
     data.month = res.month;
     data.score = res.score;
     data.signature = res.signature;
-    data.userNumber = res.userNumber;
-    data.username = res.username;
-    data.assessment.length = 0;
-    data.assessment.push(res.content);
-    data.total.length = 0;
-    data.total.push(res.total);
+    data.assessment = [res.content];
+    data.total = [res.total];
     data.loading = false;
+    console.log(res.isEnd)
+    if (res.isEnd === null) {
+      data.state = "未到确认时间";
+    } else if (res.isEnd == true) {
+      data.state = "已结束";
+    } else if (data.signature) {
+      data.state = "已确认";
+    } else if (data.signature == null) {
+      data.state = "待确认";
+    }
   });
 }
 //获取申诉历史
@@ -455,8 +475,8 @@ function finish(file) {
   console.log("签名img的base64转为file的结果", file);
   const formData = new FormData();
   formData.append("file", file);
-  //还有问题
-  studentFun.sign.studentConfirmSign(data.month,formData).then((res) => {
+
+  studentFun.sign.studentConfirmSign(data.month, formData).then((res) => {
     console.log(res);
     data.state = "已确认";
     data.dialogVisible = false;
