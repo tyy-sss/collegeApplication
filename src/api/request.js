@@ -14,7 +14,7 @@ const YSB = "http://192.168.50.36:8081/";
 const ZWY = "http://192.168.50.159:8081/";
 const CX = "http://192.168.50.236:8081/";
 const requests = axios.create({
-  //配置对象
+  //配置对象 
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径当中会出现api
   baseURL: YSB,
   //代表请求超时的时间

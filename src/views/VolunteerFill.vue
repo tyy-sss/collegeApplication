@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-11 22:03:11
+ * @LastEditTime: 2024-03-15 22:17:01
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -29,14 +29,14 @@
       <div class="grid-item">
         <div>
           <span class="tag">学生姓名 :</span
-          ><span>{{ data.student.name }}</span>
+          ><span>{{ data.student.username }}</span>
         </div>
         <div>
-          <span class="tag">学生学号 :</span><span>{{ data.student.id }}</span>
+          <span class="tag">学生学号 :</span><span>{{ data.student.userNumber }}</span>
         </div>
         <div>
           <span class="tag">身份证号 :</span
-          ><span>{{ data.student.card }}</span>
+          ><span>{{ data.student.idCard }}</span>
         </div>
         <div>
           <span class="tag">学生性别 :</span><span>{{ data.student.sex }}</span>
@@ -49,7 +49,7 @@
         </div>
         <div>
           <span class="tag">学生班级 :</span
-          ><span>{{ data.student.class }}</span>
+          ><span>{{ data.student.className }}</span>
         </div>
       </div>
     </div>
@@ -141,9 +141,7 @@
         ><br />
         <span>请确认准确无误后提交</span><br /><br />
       </div>
-      <!-- 签名组件有一点问题,需要进行修改 -->
-      <!-- <signatures @finish="finish"></signatures> -->
-      <el-button @click="finish">提交志愿测试接口</el-button>
+      <signatures @finish="finish"></signatures>
     </div>
   </el-dialog>
 </template>
@@ -160,12 +158,12 @@ const props = {
 };
 const data = reactive({
   student: {
-    name: "付小小",
-    id: "415567569789",
-    card: "365124200103052214",
+    username: "付小小",
+    userNumber: "415567569789",
+    idCard: "365124200103052214",
     sex: "女",
     class: "2023级预科1班",
-    school: "湘南学院",
+    className: "湘南学院",
   },
   volunteers: {
     firstName: "",
@@ -228,19 +226,22 @@ const data = reactive({
   first: [],
   second: [],
   third: [],
-  volunteerId:null,
+  volunteerId: null,
 });
 // 提交志愿
 let dialogVisible = ref(false);
 onMounted(() => {
-  init();
-});
-function init() {
-  data.volunteerId=router.currentRoute.value.query.id;
-  console.log("MYTIMEID:",data.volunteerId)
+  data.volunteerId = router.currentRoute.value.query.id;
   data.originVolunteers = router.currentRoute.value.query.originVolunteers;
   console.log("志愿情况初始值data.originVolunteers:", data.originVolunteers);
-  //获取可选专业选项
+  studentFun.user.getInformation().then((res) => {
+    console.log("学生信息", res);
+    data.student = res;
+  });
+  selectStudentMajor();
+});
+//获取可选专业选项
+function selectStudentMajor() {
   volunteerFun.options.selectStudentMajor().then((res) => {
     console.log("获取可选专业选项:", res);
     // 假设原始数据保存在变量data中
@@ -290,7 +291,7 @@ function finish(sign) {
   // studentFun.sign.submitSignature(sign).then((res) => {
   //   console.log(res);
   //提交志愿接口(成功需要把志愿剩余次数减一)
-console.log("SSDFESF",data.originVolunteers.timeId)
+  console.log("SSDFESF", data.originVolunteers.timeId);
 
   volunteerFun.basis
     .modifyWise({

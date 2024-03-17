@@ -1,11 +1,3 @@
-<!--
- * @Author: STATICHIT 2394412110@qq.com
- * @Date: 2023-12-13 22:35:52
- * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-15 14:32:14
- * @FilePath: \collegeApplication\src\views\Main.vue
- * @Description: 介绍文件的作用
--->
 <template>
   <div class="common-layout">
     <el-container>
@@ -21,7 +13,7 @@
     </el-container>
   </div>
 </template>
-<script setup>
+  <script setup>
 import { onMounted, ref } from "vue";
 import CommonAside from "@/components/common/common-aside.vue";
 import commonFloatAside from "@/components/common/common-float-aside.vue";
@@ -76,12 +68,12 @@ watch(
   top: 0px;
   left: 0px;
   /* width: 140px; */
-  height: 100vh;
+  /* height: 100vh; */
 }
 .el-main {
   position: relative;
   width: 100%;
-  height: 100vh;
+  /* height: 100vh; */
   overflow-y: scroll;
 }
 </style>

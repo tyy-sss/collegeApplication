@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-30 22:12:35
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-15 13:05:46
+ * @LastEditTime: 2024-03-15 21:33:58
  * @FilePath: \collegeApplication\src\components\utils\Signatures.vue
  * @Description:电子签名组件
 -->
@@ -38,6 +38,7 @@
 import { ElMessage } from "element-plus";
 import vueEsign from "vue-esign";
 import { ref, defineEmits } from "vue";
+import { base64ToPNGFile } from "@/assets/js/utils/base64-png-file"
 const emits = defineEmits(["finish"]);
 const lineWidth = ref(0);
 const lineColor = ref("#000000");
@@ -56,7 +57,8 @@ const save = () => {
     .generate({willReadFrequently:true})
     .then((res) => {
       resultImg.value = res;
-      emits("finish", res);
+      const file = base64ToPNGFile(res);
+      emits("finish", file);
     })
     .catch((err) => {
       console.log(err); // 画布没有签字时会执行这里err= 'Not Signned'

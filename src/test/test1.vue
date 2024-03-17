@@ -1,80 +1,171 @@
-<!--
- * @Author: STATICHIT 2394412110@qq.com
- * @Date: 2023-11-08 19:08:52
- * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2023-12-27 15:13:34
- * @FilePath: \collegeApplication\src\test\test1.vue
- * @Description:测试vue文件1
--->
 <template>
   <div>
-    <div class="search">
-      <div class="left">
-        <div class="search-item">
-          <el-button
-            type="primary"
-            :icon="Plus"
-            @click="form.dialogVisible = true"
-            min-width="150"
-            >添加学校</el-button
+    <el-table
+      :data="tableData"
+      size="mini"
+      style="width: 600px"
+      @cell-mouse-enter="handleCellEnter"
+      @cell-mouse-leave="handleCellLeave"
+      @cell-click="handleCellClick"
+    >
+      <el-table-column prop="date" label="日期" width="180">
+        <template #default="scope"
+          ><div class="item">
+            <el-input
+              class="item__input"
+              v-model="scope.row.date"
+              placeholder="请输入内容"
+            ></el-input>
+            <div class="item__txt">{{ scope.row.date }}</div>
+          </div></template
+        >
+      </el-table-column>
+      <el-table-column prop="name" label="姓名" width="180">
+        <template #default="scope"
+          ><div class="item">
+            <el-input
+              class="item__input"
+              v-model="scope.row.name"
+              placeholder="请输入内容"
+            ></el-input>
+            <div class="item__txt">{{ scope.row.name }}</div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column prop="food" label="食物">
+        <template #default="scope"
+          ><div class="item">
+            <el-select
+              class="item__input"
+              v-model="scope.row.food"
+              placeholder="请选择"
+            >
+              <el-option
+                v-for="item in options"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              >
+              </el-option>
+            </el-select>
+            <div class="item__txt">{{ foodLabel(scope.row.food) }}</div>
+          </div>
+        </template>
+      </el-table-column>
+      <el-table-column label="操作" width="100">
+        <template #default="scope">
+          <el-button @click="save(scope.row)" type="text" size="small"
+            >保存</el-button
           >
-        </div>
-        <div class="search-item">
-          <el-input
-            v-model="form.searchData"
-            placeholder="请输入"
-            min-width="100"
-          >
-            <template #suffix>
-              <el-icon @click="onSearch"><Search /></el-icon>
-            </template>
-          </el-input>
-        </div>
-      </div>
-      <div class="right">
-        <el-icon :size="23" color="#409EFC" @click="onReSearch"
-          ><Refresh
-        /></el-icon>
-      </div>
-    </div>
+           <el-button @click="cancelEditable(cell, row)" type="text" size="small">取消</el-button>
+        </template>
+      </el-table-column>
+    </el-table>
   </div>
-  <!-- 三角形实现 -->
-  <div class="xx"></div>
 </template>
-
 <script setup>
-import { ref, reactive, computed } from "vue";
-//   数据
-const form = reactive({
-  searchData: "",
-});
+import { ref, defineProps } from "vue";
+
+const options = [
+  { value: "选项1", label: "黄金糕" },
+  { value: "选项2", label: "双皮奶" },
+  { value: "选项3", label: "蚵仔煎" },
+  { value: "选项4", label: "龙须面" },
+  { value: "选项5", label: "北京烤鸭" },
+];
+
+const tableData = ref([
+  { id: 0, date: "2016-05-02", name: "王小虎", food: "选项5" },
+  { id: 1, date: "2016-05-04", name: "王小虎", food: "选项5" },
+  { id: 2, date: "2016-05-01", name: "王小虎", food: "选项5" },
+  { id: 3, date: "2016-05-03", name: "王小虎", food: "选项5" },
+]);
+
+const editProp = ["date", "name", "food"];
+const clickCellMap = ref({});
+
+const foodLabel = (val) => {
+  return options.find((o) => o.value === val).label;
+};
+
+const handleCellEnter = (row, column, cell, event) => {
+  const property = column.property;
+  if (property === "date" || property === "name" || property === "food") {
+    cell.querySelector(".item__txt").classList.add("item__txt--hover");
+  }
+};
+
+const handleCellLeave = (row, column, cell, event) => {
+  const property = column.property;
+  if (editProp.includes(property)) {
+    cell.querySelector(".item__txt").classList.remove("item__txt--hover");
+  }
+};
+
+const handleCellClick = (row, column, cell, event) => {
+  const property = column.property;
+  if (editProp.includes(property)) {
+    saveCellClick(row, cell);
+    cell.querySelector(".item__txt").style.display = "none";
+    cell.querySelector(".item__input").style.display = "block";
+    cell.querySelector("input").focus();
+  }
+};
+
+const cancelEditable = (cell) => {
+  cell.querySelector(".item__txt").style.display = "block";
+  cell.querySelector(".item__input").style.display = "none";
+};
+
+const saveCellClick = (row, cell) => {
+  const id = row.id;
+  if (clickCellMap.value[id] !== undefined) {
+    if (!clickCellMap.value[id].includes(cell)) {
+      clickCellMap.value[id].push(cell);
+    }
+  } else {
+    clickCellMap.value[id] = [cell];
+  }
+};
+
+const save = (row) => {
+  const id = row.id;
+  if (clickCellMap.value[id]) {
+    clickCellMap.value[id].forEach((cell) => {
+      cancelEditable(cell);
+    });
+    clickCellMap.value[id] = [];
+  }
+};
 </script>
-
-<style lang="scss" scoped>
-.xx{
-  width: 0;
-  height: 0;
-  border-width: 20px;
-  border-style: solid;
-  border-color: transparent transparent red transparent;
-}
-.search {
-  display: flex;
-  justify-content: space-between;
-}
-.search .left,
-.search .right {
-  display: flex;
-  margin-right: 1rem;
-}
-.search-item {
-  display: flex;
-  margin-right: 2rem;
-  align-items: center;
-}
-
-.search-item .text {
-  margin-right: 0.5rem;
-  min-width: 5rem;
+<style lang='scss'>
+.item {
+  .item__input {
+    display: none;
+    width: 100px;
+    /* 调整elementUI中样式 如果不需要调整请忽略 */
+    .el-input__inner {
+      height: 24px !important;
+    }
+    /* 调整elementUI中样式 如果不需要调整请忽略 */
+    .el-input__suffix {
+      i {
+        font-size: 12px !important;
+        line-height: 26px !important;
+      }
+    }
+  }
+  .item__txt {
+    box-sizing: border-box;
+    border: 1px solid transparent;
+    width: 100px;
+    line-height: 24px;
+    padding: 0 8px;
+  }
+  .item__txt--hover {
+    border: 1px solid #dddddd;
+    border-radius: 4px;
+    cursor: text;
+  }
 }
 </style>

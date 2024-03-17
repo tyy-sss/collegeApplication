@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-10 17:15:56
+ * @LastEditTime: 2024-03-15 22:03:29
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -444,23 +444,29 @@ const handleRevoke = (index, row) => {
 };
 
 //签名后提交数据和电子签名
-function finish(sign) {
-  console.log("签名img的base64", sign);
-  // studentFun.sign.submitSignature(sign).then((res) => {
-  //   console.log(res);
-  //   ElMessage({
-  //     message: "提交本月综测情况成功",
-  //     type: "success",
-  //   });
-  // });
-  setTimeout(() => {
+function finish(file) {
+  console.log("签名img的base64转为file的结果", file);
+  const formData = new FormData();
+  formData.append("file", file);
+  //还有问题
+  studentFun.sign.confirmSign(formData).then((res) => {
+    console.log(res);
     data.state = "已确认";
-    data.dialogVisible=false;
+    data.dialogVisible = false;
     ElMessage({
       message: "提交本月综测情况成功",
       type: "success",
     });
-  }, 60);
+  });
+
+  // setTimeout(() => {
+  //   data.state = "已确认";
+  //   data.dialogVisible = false;
+  //   ElMessage({
+  //     message: "提交本月综测情况成功",
+  //     type: "success",
+  //   });
+  // }, 60);
 }
 const { getColumnWidth } = adaptiveColumnWidthFun(data.assessment);
 </script>

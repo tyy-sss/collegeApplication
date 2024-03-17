@@ -13,14 +13,14 @@
       <div class="grid-item">
         <div>
           <span class="tag">学生姓名 :</span
-          ><span>{{ data.student.name }}</span>
+          ><span>{{ data.student.username }}</span>
         </div>
         <div>
-          <span class="tag">学生学号 :</span><span>{{ data.student.id }}</span>
+          <span class="tag">学生学号 :</span><span>{{ data.student.userNumber }}</span>
         </div>
         <div>
           <span class="tag">身份证号 :</span
-          ><span>{{ data.student.card }}</span>
+          ><span>{{ data.student.idCard }}</span>
         </div>
         <div>
           <span class="tag">学生性别 :</span><span>{{ data.student.sex }}</span>
@@ -33,7 +33,7 @@
         </div>
         <div>
           <span class="tag">学生班级 :</span
-          ><span>{{ data.student.class }}</span>
+          ><span>{{ data.student.className }}</span>
         </div>
       </div>
     </div>
@@ -80,12 +80,12 @@ const router = useRouter();
 const data = reactive({
   volunteerId:null,
   student: {
-    name: "付小小",
-    id: "415567569789",
-    card: "365124200103052214",
+    username: "付小小",
+    userNumber: "415567569789",
+    idCard: "365124200103052214",
     sex: "女",
     class: "2023级预科1班",
-    school: "湘南学院",
+    className: "湘南学院",
   },
   volunteers: {
     firstName: "",
@@ -99,6 +99,10 @@ const data = reactive({
 onMounted(() => {
   data.volunteerId=router.currentRoute.value.query.id;
   console.log("获取到的TimeID是:",data.volunteerId)
+  studentFun.user.getInformation().then((res) => {
+    console.log("学生信息", res);
+    data.student = res;
+  });
   init();
 });
 function init() {

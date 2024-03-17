@@ -4,7 +4,7 @@
  * @LastEditors: STATICHIT 2394412110@qq.com
  * @LastEditTime: 2023-12-12 22:29:14
  * @FilePath: \collegeApplication\src\test\test2.vue
- * @Description: 测试vue文件2
+ * @Description: 自适应长度
 -->
 <template>
   <el-table :data="tableData" style="width: 1200px">

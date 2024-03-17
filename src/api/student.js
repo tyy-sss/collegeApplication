@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-06 20:57:50
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-13 23:12:01
+ * @LastEditTime: 2024-03-15 21:59:16
  * @FilePath: \collegeApplication\src\api\student.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -85,12 +85,14 @@ studentFun.assess.getAssessmentByMonth = (params) => {
 };
 
 /**
- * 上传电子签名
+ * 学生确认综测上传电子签名
  */
-studentFun.sign.submitSignature = (base64Url) => {
-  return http.post("/appraisal/signature", base64Url);
+// studentFun.sign.confirmSign = (month, formData) => {
+//   return http.upload(`/appraisal-team/appraisal/signature?month=${month}`, formData);
+// };
+studentFun.sign.confirmSign = (formData) => {
+  return http.upload(`/appraisal-team/appraisal/signature?month=3`, formData);
 };
-
 /**
  * 综测小组获取基本信息
  */
@@ -101,7 +103,7 @@ studentFun.assess.getInformation = () => {
 /**
  * 综测小组获取可查询综测月份
  */
- studentFun.assess.getAssessmentsMonth = () => {
+studentFun.assess.getAssessmentsMonth = () => {
   return http.get(`/appraisal-team/appraisal/month`);
 };
 

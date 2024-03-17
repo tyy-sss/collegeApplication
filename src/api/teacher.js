@@ -72,7 +72,7 @@ teacherFun.class.updateStudentPassword = (params) => {
  */
 teacherFun.assessment.getAssessments = (params) => {
   return http.get(
-    `/adviser/appraisal?name=${params.name}&userNumber=${params.userNumber}&month=${params.month}&identity=${params.identity}&current=${params.current}&size=${params.size}`
+    `/adviser/appraisal?keyword=${params.keyword}&month=${params.month}&identity=${params.identity}&current=${params.current}&size=${params.size}`
   );
 };
 
