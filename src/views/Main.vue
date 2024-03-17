@@ -1,12 +1,11 @@
 <template>
   <div class="common-layout">
-    <el-container>
+    <el-container style="height: 100%">
       <!-- 手机端收缩时 -->
       <common-float-aside v-if="phone && store.state.menu.isCollapse" />
-      <common-aside-phone v-else-if="phone && !store.state.menu.isCollapse"/>
       <!-- 电脑端 -->
       <el-aside v-else :width="asideWidth">
-        <common-aside />
+        <common-aside style="height: 100%" />
       </el-aside>
       <el-main>
         <router-view />
@@ -14,11 +13,10 @@
     </el-container>
   </div>
 </template>
-  <script setup>
+<script setup>
 import { onMounted, ref } from "vue";
 import CommonAside from "@/components/common/common-aside.vue";
 import commonFloatAside from "@/components/common/common-float-aside.vue";
-import commonAsidePhone from "@/components/common/common-aside-phone.vue";
 import { onBeforeMount, watch } from "vue";
 import { giveMenu } from "@/assets/js/data/menu";
 import { getRole } from "@/constants/token";
@@ -64,17 +62,19 @@ watch(
   height: 100%;
   background-color: RGBA(237, 242, 246);
 }
+.el-container {
+  height: 100%;
+}
 .el-aside {
-  position: relative;
   top: 0px;
   left: 0px;
-  /* width: 140px; */
-  /* height: 100vh; */
+  height: 100%;
+  overflow: hidden;
 }
 .el-main {
-  position: relative;
   width: 100%;
-  /* height: 100vh; */
+  height: 100%;
+  overflow-x: hidden;
   overflow-y: scroll;
 }
 </style>

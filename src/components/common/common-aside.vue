@@ -1,57 +1,55 @@
 <template>
   <div class="common-aside">
-    <div class="menu">
-      <div class="middle">
-        <div class="user">
-          <div class="avatar">
-            <img
-              src="@/assets/image/jsdxLogo.png"
-              :style="{ width: imgWidth, height: imgWidth }"
-            />
+    <div class="top">
+      <div class="user">
+        <div class="avatar">
+          <img
+            src="@/assets/image/jsdxLogo.png"
+            :style="{ width: imgWidth, height: imgWidth }"
+          />
+        </div>
+        <div class="name">
+          <div class="user-name" v-if="!store.state.menu.isCollapse">
+            吉首大学
           </div>
-          <div class="name">
-            <div class="user-name" v-if="!store.state.menu.isCollapse">
-              吉首大学
-            </div>
-            <div class="collapse" @click="handleCollapse">
-              <img src="@/assets/image/collapse.png" />
-            </div>
-          </div>
-          <div class="description" v-if="!store.state.menu.isCollapse">
-            Jishou University
+          <div class="collapse" @click="handleCollapse">
+            <img src="@/assets/image/collapse.png" />
           </div>
         </div>
-        <el-menu
-          :default-active="$route.path"
-          class="el-menu-vertical-demo"
-          text-color="RGB(125,133,146)"
-          :collapse="store.state.menu.isCollapse"
-          :collapse-transition="false"
-          @select="handleSelect"
-        >
-          <el-menu-item
-            :index="item.path"
-            v-for="item in menuDataForVue"
-            :key="item.path"
-          >
-            <el-icon v-if="item.path !== '/information'" class="menu-icon"
-              ><component :is="item.icon"
-            /></el-icon>
-            <template v-if="item.path !== '/information'" #title>{{
-              item.menuName
-            }}</template>
-            <el-badge
-              v-if="item.path === '/information'"
-              :value="1"
-              class="item"
-            >
-              <el-icon class="menu-icon"><component :is="item.icon" /></el-icon>
-              <span>{{ item.menuName }}</span>
-            </el-badge>
-          </el-menu-item>
-          <!-- 消息管理 -->
-        </el-menu>
+        <div class="description" v-if="!store.state.menu.isCollapse">
+          Jishou University
+        </div>
       </div>
+    </div>
+    <div class="middle">
+      <el-menu
+        :default-active="$route.path"
+        class="el-menu-vertical-demo"
+        text-color="RGB(125,133,146)"
+        :collapse="store.state.menu.isCollapse"
+        :collapse-transition="false"
+        @select="handleSelect"
+      >
+        <el-menu-item
+          :index="item.path"
+          v-for="item in menuDataForVue"
+          :key="item.path"
+        >
+          <el-icon v-if="item.path !== '/information'" class="menu-icon"
+            ><component :is="item.icon"
+          /></el-icon>
+          <template v-if="item.path !== '/information'" #title>{{
+            item.menuName
+          }}</template>
+          <el-badge v-if="item.path === '/information'" :value="1" class="item">
+            <el-icon class="menu-icon"><component :is="item.icon" /></el-icon>
+            <span>{{ item.menuName }}</span>
+          </el-badge>
+        </el-menu-item>
+        <!-- 消息管理 -->
+      </el-menu>
+    </div>
+    <div class="bottom">
       <div class="exit" @click="handleExit">
         <div>
           <img src="@/assets/image/exit.png" />
@@ -111,19 +109,13 @@ onMounted(() => {
 </script>
 <style scoped>
 .common-aside {
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background-color: #fff;
-}
-.menu {
-  overflow: hidden;
-  /* height: 100vh; */
-  background-color: #fff;
-  border-radius: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: space-around;
+}
+.top {
+  padding-top: 5rem;
 }
 /* 个人信息 */
 .user > div {
@@ -131,6 +123,15 @@ onMounted(() => {
   justify-content: center;
   padding-bottom: 1rem;
 }
+.menu {
+  overflow: hidden;
+  background-color: #fff;
+  border-radius: 2rem;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
 .avatar > img {
   height: 4rem;
   width: 4rem;
@@ -178,6 +179,9 @@ onMounted(() => {
 }
 ::v-deep .el-badge__content.is-fixed {
   transform: translateY(-20%) translateX(100%);
+}
+.bottom {
+  margin-bottom: 4rem;
 }
 /* 退出登录 */
 .exit {

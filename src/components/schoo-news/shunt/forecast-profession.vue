@@ -47,7 +47,7 @@
           :icon="Download"
           @click="handleExportVolunteerDiversion"
         >
-          导出成绩
+          导出分流表
         </el-button>
       </div>
     </div>
@@ -212,7 +212,6 @@ const getCheckVounteerDiversion = () => {
       type: data.activeName,
     })
     .then((res) => {
-      console.log(res);
       data.tableData = res.records;
       data.pager = {
         size: res.size,

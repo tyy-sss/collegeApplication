@@ -64,7 +64,10 @@ import { onMounted, reactive, ref } from "vue";
 import { formatDate } from "@/assets/js/utils/format-date";
 import { Download, Plus } from "@element-plus/icons-vue";
 import addFinalProfession from "@/components/schoo-news/shunt/add-final-profession.vue";
+import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
+import { professionHeader } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
 import managerFun from "@/api/manager";
+import volunteerFun from "@/api/volunteer";
 import { useRoute } from "vue-router";
 const route = new useRoute();
 const schoolId = Number(ref(route.query.schoolId).value);
@@ -72,9 +75,11 @@ const data = reactive({
   timeId: "",
   tableData: [],
   pager: {
+    current: 1,
     size: 10,
     total: 100,
   },
+  allData: [],
 });
 // 对科目展示进行处理
 const handleSubject = (val) => {
@@ -89,14 +94,19 @@ const handleSubject = (val) => {
   return endString;
 };
 // 导出模板表
-const handleExport = () => {};
-const addFinalProfessionRef = ref(null)
+const handleExport = () => {
+  getAllFinalProfessionList();
+};
+const addFinalProfessionRef = ref(null);
 // 导入数据表
 const handleLeading = () => {
   addFinalProfessionRef.value.data.dialogTableVisible = true;
 };
 // 跳转界面
-const handleChangePage = (val) => {};
+const handleChangePage = (val) => {
+  data.pager.current = val;
+  getFinalProfessionList();
+};
 // 获得正式志愿填报时间Id
 const getWishTime = () => {
   managerFun.wishTime
@@ -105,12 +115,43 @@ const getWishTime = () => {
       res.records.forEach((element) => {
         if (element.type == true) {
           data.timeId = Number(element.id);
+          getFinalProfessionList();
         }
       });
     });
 };
-// 获取最后的分流结果
-const getFinalProfessionList = () => {};
+// 获取分页的最后分流结果
+const getFinalProfessionList = () => {
+  volunteerFun.manager
+    .checkEndVolunteerDiversion({
+      schoolId: schoolId,
+      timeId: data.timeId,
+      current: data.pager.current,
+      size: data.pager.size,
+    })
+    .then((res) => {
+      data.tableData = res.records;
+      data.pager = {
+        size: res.size,
+        total: res.total,
+        current: res.current,
+      };
+    });
+};
+// 获取所有的最后分流结果
+const getAllFinalProfessionList = () => {
+  volunteerFun.manager
+    .checkAllEndVolunteerDiversion({
+      schoolId: schoolId,
+      timeId: data.timeId,
+    })
+    .then((res) => {
+      data.allData = res;
+      let schoolName = ref(route.query.schoolName).value;
+      let headerTitle = schoolName + "-" + "最终分流表";
+      export_json_to_excel(professionHeader, data.allData, headerTitle);
+    });
+};
 onMounted(() => {
   getWishTime();
 });
