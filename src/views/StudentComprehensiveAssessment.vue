@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-15 22:03:29
+ * @LastEditTime: 2024-03-17 17:17:25
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -35,7 +35,7 @@
         <el-table
           :data="data.assessment"
           v-loading.lock="data.loading"
-          style="width: 100%"
+          style="width: 100%;"
           default="暂无数据"
         >
           <el-table-column prop="userNumber" label="学号" width="120">{{
@@ -281,29 +281,29 @@ import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width"
 const data = reactive({
   state: "待确认",
   assessment: [
-    {
-      userNumber: "2021401449",
-      username: "付小小",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
+    // {
+    //   userNumber: "2021401449",
+    //   username: "付小小",
+    //   add1: "帮助老师批改作业2分",
+    //   sub1: "旷课1分",
+    //   point1: 1,
+    //   add2: "绩点8分",
+    //   sub2: "挂科1门2分",
+    //   point2: 6,
+    //   add3: "铅球比赛一等奖5分1km二等奖4分",
+    //   sub3: "无",
+    //   point3: 9,
+    //   add4: "捐献书法画1分",
+    //   sub4: "破环草坪1分",
+    //   point4: 0,
+    //   add5: "值日2次4分",
+    //   sub5: "无",
+    //   point5: 4,
+    //   add_total: 24,
+    //   sub_total: 4,
+    //   pre_total: 18,
+    //   point_total: 20,
+    // },
   ],
   //目前综测合计
   total: [
@@ -402,22 +402,29 @@ function getComplaintHistory() {
 }
 //提交申报
 function commit() {
-  studentFun.complaint
-    .submitComplaint({
-      content: data.content,
-      type: data.type,
-    })
-    .then((res) => {
-      // console.log("申诉结果：",res)
-      data.dialogVisible2 = false;
-      getComplaintHistory();
-      data.content = "";
-      data.type = "";
-      ElMessage({
-        message: "已申报错误，请耐心等待处理",
-        type: "success",
-      });
+  if (data.type == "" || data.content == "") {
+    ElMessage({
+      message: "请选择申诉类型或填写申诉内容",
+      type: "error",
     });
+  } else {
+    studentFun.complaint
+      .submitComplaint({
+        content: data.content,
+        type: data.type,
+      })
+      .then((res) => {
+        // console.log("申诉结果：",res)
+        data.dialogVisible2 = false;
+        getComplaintHistory();
+        data.content = "";
+        data.type = "";
+        ElMessage({
+          message: "已申报错误，请耐心等待处理",
+          type: "success",
+        });
+      });
+  }
 }
 //筛选器
 const filterTag = (value, row) => {
@@ -449,7 +456,7 @@ function finish(file) {
   const formData = new FormData();
   formData.append("file", file);
   //还有问题
-  studentFun.sign.confirmSign(formData).then((res) => {
+  studentFun.sign.studentConfirmSign(data.month,formData).then((res) => {
     console.log(res);
     data.state = "已确认";
     data.dialogVisible = false;

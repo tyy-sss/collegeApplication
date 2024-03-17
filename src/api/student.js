@@ -87,12 +87,17 @@ studentFun.assess.getAssessmentByMonth = (params) => {
 /**
  * 学生确认综测上传电子签名
  */
-// studentFun.sign.confirmSign = (month, formData) => {
-//   return http.upload(`/appraisal-team/appraisal/signature?month=${month}`, formData);
-// };
-studentFun.sign.confirmSign = (formData) => {
-  return http.upload(`/appraisal-team/appraisal/signature?month=3`, formData);
+studentFun.sign.studentConfirmSign = (month, formData) => {
+  return http.upload(`/student/signature?month=${month}`, formData);
 };
+
+/**
+ * 学生确认综测上传电子签名
+ */
+ studentFun.sign.AssessConfirmSign = (month, formData) => {
+  return http.upload(`/appraisal-team/appraisal/signature?month=${month}`, formData);
+};
+
 /**
  * 综测小组获取基本信息
  */

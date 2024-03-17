@@ -118,7 +118,7 @@ onMounted(() => {
 }
 .menu {
   overflow: hidden;
-  height: 100vh;
+  /* height: 100vh; */
   background-color: #fff;
   border-radius: 2rem;
   display: flex;

@@ -1,171 +1,106 @@
 <template>
-  <div>
-    <el-table
-      :data="tableData"
-      size="mini"
-      style="width: 600px"
-      @cell-mouse-enter="handleCellEnter"
-      @cell-mouse-leave="handleCellLeave"
-      @cell-click="handleCellClick"
-    >
-      <el-table-column prop="date" label="日期" width="180">
-        <template #default="scope"
-          ><div class="item">
-            <el-input
-              class="item__input"
-              v-model="scope.row.date"
-              placeholder="请输入内容"
-            ></el-input>
-            <div class="item__txt">{{ scope.row.date }}</div>
-          </div></template
-        >
-      </el-table-column>
-      <el-table-column prop="name" label="姓名" width="180">
-        <template #default="scope"
-          ><div class="item">
-            <el-input
-              class="item__input"
-              v-model="scope.row.name"
-              placeholder="请输入内容"
-            ></el-input>
-            <div class="item__txt">{{ scope.row.name }}</div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column prop="food" label="食物">
-        <template #default="scope"
-          ><div class="item">
-            <el-select
-              class="item__input"
-              v-model="scope.row.food"
-              placeholder="请选择"
-            >
-              <el-option
-                v-for="item in options"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
-              >
-              </el-option>
-            </el-select>
-            <div class="item__txt">{{ foodLabel(scope.row.food) }}</div>
-          </div>
-        </template>
-      </el-table-column>
-      <el-table-column label="操作" width="100">
-        <template #default="scope">
-          <el-button @click="save(scope.row)" type="text" size="small"
-            >保存</el-button
-          >
-           <el-button @click="cancelEditable(cell, row)" type="text" size="small">取消</el-button>
-        </template>
-      </el-table-column>
-    </el-table>
-  </div>
+  <el-button plain @click="dialogFormVisible = true"> 修改综测 </el-button>
+
+  <el-dialog v-model="dialogFormVisible" title="编辑学生综合测评" width="500">
+    <el-form :model="form">
+      <el-form-item label="编辑内容" :label-width="formLabelWidth">
+        <el-select v-model="form.type" placeholder="全部">
+          <el-option label="全部" value="0" />
+          <el-option label="德育" value="1" />
+          <el-option label="智育" value="2" />
+          <el-option label="体育" value="3" />
+          <el-option label="美育" value="4" />
+          <el-option label="劳动" value="5" />
+        </el-select>
+      </el-form-item>
+      <div v-show="form.type == 1 || form.type == 0">
+        <hr style="border-color: rgba(231, 229, 226, 0.459)" />
+        <el-form-item label="德育" :label-width="formLabelWidth"></el-form-item>
+        <el-form-item label="加分明细" :label-width="formLabelWidth">
+          <el-input
+            type="textarea"
+            style="width: 215px"
+            v-model="form.name"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="减分明细" :label-width="formLabelWidth">
+          <el-input
+            type="textarea"
+            style="width: 215px"
+            v-model="form.name"
+            autocomplete="off"
+          />
+        </el-form-item>
+        <el-form-item label="德育得分" :label-width="formLabelWidth">
+          <el-input-number
+            style="width: 100px"
+            class="item__input"
+            v-model="form.name"
+            :min="-100"
+            :max="100"
+            size="small"
+          />
+        </el-form-item>
+      </div>
+    </el-form>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="dialogFormVisible = false">取消</el-button>
+        <el-button type="primary" @click="dialogFormVisible = false">
+          确认
+        </el-button>
+      </div>
+    </template>
+  </el-dialog>
 </template>
+
 <script setup>
-import { ref, defineProps } from "vue";
+import { reactive, ref } from "vue";
 
-const options = [
-  { value: "选项1", label: "黄金糕" },
-  { value: "选项2", label: "双皮奶" },
-  { value: "选项3", label: "蚵仔煎" },
-  { value: "选项4", label: "龙须面" },
-  { value: "选项5", label: "北京烤鸭" },
-];
+const dialogFormVisible = ref(true);
+const formLabelWidth = "140px";
 
-const tableData = ref([
-  { id: 0, date: "2016-05-02", name: "王小虎", food: "选项5" },
-  { id: 1, date: "2016-05-04", name: "王小虎", food: "选项5" },
-  { id: 2, date: "2016-05-01", name: "王小虎", food: "选项5" },
-  { id: 3, date: "2016-05-03", name: "王小虎", food: "选项5" },
-]);
+const row = reactive({
+  id: "20222113001",
+  name: "吾尔肯·塞里克",
+  add1: "帮助老师批改作业2分",
+  sub1: "旷课1分",
+  point1: 1,
+  add2: "绩点8分",
+  sub2: "挂科1门2分",
+  point2: 6,
+  add3: "铅球比赛一等奖5分1km二等奖4分",
+  sub3: "无",
+  point3: 9,
+  add4: "捐献书法画1分",
+  sub4: "破环草坪1分",
+  point4: 0,
+  add5: "值日2次4分",
+  sub5: "无",
+  point5: 4,
+  add_total: 24,
+  sub_total: 4,
+  pre_total: 18,
+  point_total: 20,
+});
 
-const editProp = ["date", "name", "food"];
-const clickCellMap = ref({});
-
-const foodLabel = (val) => {
-  return options.find((o) => o.value === val).label;
-};
-
-const handleCellEnter = (row, column, cell, event) => {
-  const property = column.property;
-  if (property === "date" || property === "name" || property === "food") {
-    cell.querySelector(".item__txt").classList.add("item__txt--hover");
-  }
-};
-
-const handleCellLeave = (row, column, cell, event) => {
-  const property = column.property;
-  if (editProp.includes(property)) {
-    cell.querySelector(".item__txt").classList.remove("item__txt--hover");
-  }
-};
-
-const handleCellClick = (row, column, cell, event) => {
-  const property = column.property;
-  if (editProp.includes(property)) {
-    saveCellClick(row, cell);
-    cell.querySelector(".item__txt").style.display = "none";
-    cell.querySelector(".item__input").style.display = "block";
-    cell.querySelector("input").focus();
-  }
-};
-
-const cancelEditable = (cell) => {
-  cell.querySelector(".item__txt").style.display = "block";
-  cell.querySelector(".item__input").style.display = "none";
-};
-
-const saveCellClick = (row, cell) => {
-  const id = row.id;
-  if (clickCellMap.value[id] !== undefined) {
-    if (!clickCellMap.value[id].includes(cell)) {
-      clickCellMap.value[id].push(cell);
-    }
-  } else {
-    clickCellMap.value[id] = [cell];
-  }
-};
-
-const save = (row) => {
-  const id = row.id;
-  if (clickCellMap.value[id]) {
-    clickCellMap.value[id].forEach((cell) => {
-      cancelEditable(cell);
-    });
-    clickCellMap.value[id] = [];
-  }
-};
+const form = reactive({
+  type: "",
+  add1: "",
+  sub1: "",
+  point1: "",
+  add2: "",
+  sub2: "",
+  point2: "",
+  add3: "",
+  sub3: "",
+  point3: "",
+  add4: "",
+  sub4: "",
+  point4: "",
+  add5: "",
+  sub5: "",
+  point5: "",
+});
 </script>
-<style lang='scss'>
-.item {
-  .item__input {
-    display: none;
-    width: 100px;
-    /* 调整elementUI中样式 如果不需要调整请忽略 */
-    .el-input__inner {
-      height: 24px !important;
-    }
-    /* 调整elementUI中样式 如果不需要调整请忽略 */
-    .el-input__suffix {
-      i {
-        font-size: 12px !important;
-        line-height: 26px !important;
-      }
-    }
-  }
-  .item__txt {
-    box-sizing: border-box;
-    border: 1px solid transparent;
-    width: 100px;
-    line-height: 24px;
-    padding: 0 8px;
-  }
-  .item__txt--hover {
-    border: 1px solid #dddddd;
-    border-radius: 4px;
-    cursor: text;
-  }
-}
-</style>

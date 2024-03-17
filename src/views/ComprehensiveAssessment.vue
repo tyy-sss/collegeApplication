@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-15 13:43:59
+ * @LastEditTime: 2024-03-17 17:03:00
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -247,7 +247,7 @@
         </el-table-column>
       </el-table-column>
       <el-table-column label="当月综合测评得分" fixed="right">
-        <el-table-column prop="add_total" label="月加分" width="80">
+        <el-table-column prop="add_total" label="月加分" width="50">
           <template #default="scope">
             <div class="item">
               <el-input
@@ -259,7 +259,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="sub_total" label="月减分" width="80">
+        <el-table-column prop="sub_total" label="月减分" width="50">
           <template #default="scope">
             <div class="item">
               <el-input
@@ -271,7 +271,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="pre_total" label="上月得分" width="90">
+        <el-table-column prop="pre_total" label="上月得分" width="50">
           <template #default="scope">
             <div class="item">
               <el-input
@@ -283,7 +283,7 @@
             </div>
           </template>
         </el-table-column>
-        <el-table-column prop="point_total" label="当月总分" width="90">
+        <el-table-column prop="point_total" label="当月总分" width="50">
           <template #default="scope">
             <div class="item">
               <el-input

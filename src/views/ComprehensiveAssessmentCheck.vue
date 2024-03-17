@@ -81,14 +81,14 @@
           <el-table-column prop="point5" label="得分" min-width="60" />
         </el-table-column>
         <el-table-column label="当月综合测评得分" fixed="right">
-          <el-table-column prop="add_total" label="月加分" min-width="80" />
-          <el-table-column prop="sub_total" label="月减分" min-width="80" />
-          <el-table-column prop="pre_total" label="上月得分" min-width="90" />
+          <el-table-column prop="add_total" label="月加分" min-width="50" />
+          <el-table-column prop="sub_total" label="月减分" min-width="50" />
+          <el-table-column prop="pre_total" label="上月得分" min-width="50" />
           <el-table-column
             prop="point_total"
             label="当月总分"
             sortable
-            min-width="110"
+            min-width="50"
           />
         </el-table-column>
       </el-table>
