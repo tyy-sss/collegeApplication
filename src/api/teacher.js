@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-05 21:22:27
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-25 15:49:51
+ * @LastEditTime: 2024-03-18 22:30:58
  * @FilePath: \collegeApplication\src\api\teacher.js
  * @Description: 介绍文件的作用
  */
@@ -42,7 +42,7 @@ teacherFun.user.updatePassword = (password) => {
  */
 teacherFun.class.updateInformation = (params) => {
   return http.get(
-    `/adviser/students?userNumber=${params.userNumber}&username=${params.username}&role=${params.role}&rank=${params.rank}&current=${params.current}&size=${params.size}`
+    `/adviser/students?keyword=${params.keyword}&role=${params.role}&rank=${params.rank}&current=${params.current}&size=${params.size}`
   );
 };
 
@@ -83,6 +83,12 @@ teacherFun.assessment.getAssessments = (params) => {
   );
 };
 
+/**
+ * 班主任修改某月综测进度
+ */
+ teacherFun.assessment.updateAssessmentState = (params) => {
+  return http.put(`/adviser/end?month=${params.month}&end=${params.end}`);
+};
 // /**
 //  * 班主任修改班级成员身份
 //  */

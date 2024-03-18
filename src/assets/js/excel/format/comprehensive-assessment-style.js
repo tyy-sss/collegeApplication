@@ -36,8 +36,8 @@ const comprehensiveAssessmentHeader = reactive({
    "加分明细", "减分明细", "得分", "加分明细", "减分明细", "得分", "月加分", "月减法", "上月得分","当月总分"
   ], //第二行的表头数据
   filterVal: [
-    "name",
-    "id",
+    "username",
+    "userNumber",
     "add1",
     "sub1",
     "point1",

@@ -108,11 +108,11 @@ const evaluatorMenuData = reactive([
     path: "/personal-information",
     icon: "location",
   },
-  {
-    menuName: "综合测评公示",
-    path: "/comprehensive-assessment-check",
-    icon: "location",
-  },
+  // {
+  //   menuName: "综合测评公示",
+  //   path: "/comprehensive-assessment-check",
+  //   icon: "location",
+  // },
   {
     menuName: "综合测评编辑",
     path: "/comprehensive-assessment",

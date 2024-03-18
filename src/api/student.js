@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-06 20:57:50
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-15 21:59:16
+ * @LastEditTime: 2024-03-18 22:42:11
  * @FilePath: \collegeApplication\src\api\student.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -92,9 +92,16 @@ studentFun.sign.studentConfirmSign = (month, formData) => {
 };
 
 /**
- * 学生确认综测上传电子签名
+ * 综测小组获取综测签名
  */
- studentFun.sign.AssessConfirmSign = (month, formData) => {
+ studentFun.sign.assessGetMonthSign = (params) => {
+  return http.get(`/appraisal-team/appraisal/signature?month=${params.month}`);
+};
+
+/**
+ * 综测小组确认综测上传电子签名
+ */
+ studentFun.sign.assessConfirmSign = (month, formData) => {
   return http.upload(`/appraisal-team/appraisal/signature?month=${month}`, formData);
 };
 
@@ -115,22 +122,22 @@ studentFun.assess.getAssessmentsMonth = () => {
 /**
  * 综测小组获取本月学生综测
  */
-studentFun.assess.getAssessments = (params) => {
-  return http.get(`/appraisal-team/appraisal/this?name=${params.name}&userNumber=${params.userNumber}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
-};
+// studentFun.assess.getAssessments = (params) => {
+//   return http.get(`/appraisal-team/appraisal/this?keyword=${params.keyword}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
+// };
 
 /**
  * 综测小组根据月份获取学生综测
  */
 studentFun.assess.getAssessmentsByMonth = (params) => {
-  return http.get(`/appraisal-team/appraisal?name=${params.name}&userNumber=${params.userNumber}&month=${params.month}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
+  return http.get(`/appraisal-team/appraisal?keyword=${params.keyword}&month=${params.month}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
 };
 
 /**
  * 综测小组上传学生综测信息
  */
 studentFun.assess.submitAssessments = (params) => {
-  return http.post(`/appraisal-team/appeal`, params);
+  return http.post(`/appraisal-team/appraisal`, params);
 };
 
 /**
@@ -144,7 +151,7 @@ studentFun.assess.getComplaint = (params) => {
  * 综测小组删除学生申诉
  */
 studentFun.assess.deleteComplaint = (params) => {
-  return http.delete(`/appraisal-team/appeals`, params);
+  return http.delete(`/appraisal-team/appeal`, params);
 };
 
 /**
@@ -152,6 +159,20 @@ studentFun.assess.deleteComplaint = (params) => {
  */
 studentFun.assess.dealComplaint = (params) => {
   return http.put(`/appraisal-team/appeal`, params);
+};
+
+/**
+ * 综测小组获取班级综测流程状态
+ */
+ studentFun.assess.getState = (params) => {
+  return http.get(`/appraisal-team/appraisal/state?month=${params.month}`);
+};
+
+/**
+ * 综测小组获取班级综测可选月份
+ */
+ studentFun.assess.getMonthes = () => {
+  return http.get(`/appraisal-team/appraisal/month`);
 };
 
 /**
