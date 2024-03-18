@@ -145,7 +145,7 @@
       </div>
     </div>
     <!-- 老师信息 -->
-    <div v-if="identity == 1" class="teacher">
+    <div v-if="identity == 1 || identity == 3" class="teacher">
       <!-- 信息区 -->
       <div>
         <div class="box">
@@ -184,12 +184,12 @@
           <div class="flex_box">
             <div class="infoRow">
               <span class="tag">老师身份 :</span
-              ><span>{{ data.teacherType == 0 ? "非班主任" : "班主任" }}</span>
+              ><span>{{ identity == 3 ? "班主任" : "非班主任" }}</span>
             </div>
-            <!-- <div class="infoRow">
-              <span class="tag">授课班级 :</span
-              ><span>{{ data.teacher.teachClass || "-" }}</span>
-            </div> -->
+            <div class="infoRow">
+              <span class="tag">管理班级 :</span
+              ><span>{{ data.teacher.className || "-" }}</span>
+            </div>
           </div>
         </div>
       </div>
@@ -340,9 +340,6 @@ import teacherFun from "@/api/teacher";
 onMounted(() => {
   identity.value = getRole();
   data.teacherType = getRole();
-  if (identity.value == 3) {
-    identity.value = 1;
-  } //班主任也是老师信息页
   init();
 });
 let identity = ref(getRole()); //获取当前用户身份
@@ -384,7 +381,7 @@ const init = function () {
       data.avatar = "http://192.168.50.36:8081" + res.headshot;
       data.loading2 = false;
     });
-  } else if (identity.value == 1) {
+  } else if (identity.value == 1 || identity.value == 3) {
     //获取老师信息
     teacherFun.user.getInformation().then((res) => {
       console.log(res);
@@ -435,7 +432,7 @@ function confirmClick() {
         studentFun.user.updateInformation(updataData).then((res) => {
           ElMessage.success(res);
         });
-      } else if (identity.value == 1) {
+      } else if (identity.value == 1 || identity.value == 3) {
         teacherFun.user.updatePhone(updataData.phone).then((res) => {
           ElMessage.success(res);
         });
@@ -459,7 +456,7 @@ function updatePassword() {
           ElMessage.success(res);
           data.drawer2 = false;
         });
-      } else if (identity.value == 1) {
+      } else if (identity.value == 1 ||identity.value == 3) {
         //老师修改密码
         teacherFun.user.updatePassword(updatePasswords.password).then((res) => {
           ElMessage.success(res);

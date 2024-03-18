@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-17 22:41:53
+ * @LastEditTime: 2024-03-18 22:30:23
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -229,7 +229,7 @@
       <el-select
         v-model="data.curMonth"
         placeholder="请选择要查询的综测月份"
-        style="width: 100px;margin-right: 1rem;"
+        style="width: 100px; margin-right: 1rem"
         @change="getAssessmentDetails"
       >
         <el-option
@@ -239,12 +239,21 @@
           :value="item.value"
         />
       </el-select>
-      开启本月电子签名确认期: <el-switch v-model="data.isEnd" :disabled="data.isEnd==null" />
-      <br><br>
-      <div style="color:rgba(14, 13, 13, 0.493)">
+      开启本月电子签名确认期:
+      <el-switch v-model="data.isEnd" :disabled="data.isEnd == null" />
+      <br /><br />
+      <div style="color: rgba(14, 13, 13, 0.493)">
         当您开启按钮时,学生和测评小组端将会开放电子签名确认综测入口.
       </div>
     </div>
+    <template #footer>
+      <div class="dialog-footer">
+        <el-button @click="data.dialogVisible2 = false">取消</el-button>
+        <el-button type="primary" @click="changeAssessState">
+          确认修改
+        </el-button>
+      </div>
+    </template>
   </el-dialog>
   <!-- 对话框3 -->
   <el-dialog v-model="data.dialogVisible3" title="评测小组成员管理" width="50%">
@@ -519,7 +528,7 @@ const data = reactive({
   myclass: "2021级预科4班",
   search: "",
   dialogVisible: false,
-  dialogVisible2: true,
+  dialogVisible2: false,
   dialogVisible3: false,
   drawer: false,
   drawer2: false,
@@ -548,7 +557,7 @@ const data = reactive({
   }, //修改资料数据
   studentTableLoading: false,
   evaluationTableLoading: false,
-  curMonth: 2,//测试默认值
+  curMonth: 2, //测试默认值
   monthes: [
     // {
     //   value: "1",
@@ -567,7 +576,7 @@ const data = reactive({
     //   label: "四月",
     // },
   ],
-  isEnd:null,
+  isEnd: null,
 });
 const multipleTableRef = ref();
 const multipleSelection = ref([]);
@@ -578,6 +587,7 @@ function init() {
   getAssessmentStudent();
   getAssessmentMonth();
   getAssessmentDetails();
+  getClass();
 }
 //获取申诉列表数据
 function getComplaintsDeatils() {
@@ -589,6 +599,7 @@ function getComplaintsDeatils() {
 //获取学生列表数据
 function getStudentDeatils() {
   data.studentTableLoading = true;
+  console.log("SDF");
   teacherFun.class
     .updateInformation({
       keyword: data.search,
@@ -613,6 +624,12 @@ function getAssessmentStudent() {
     console.log("获取测评小组成员列表数据", res);
     data.evaluationData = res;
     data.evaluationTableLoading = false;
+  });
+}
+//获取班级
+function getClass() {
+  teacherFun.user.getInformation().then((res) => {
+    data.myclass = res.className;
   });
 }
 //多选选项改变
@@ -649,15 +666,29 @@ function getAssessmentMonth() {
   });
 }
 //获取当月情况
-function getAssessmentDetails(){
-  teacherFun.assessment.getAssessmentsProcess({
-    month:data.curMonth,
-  }).then((res)=>{
-    console.log(res)
-    data.isEnd=res;
-  })
+function getAssessmentDetails() {
+  teacherFun.assessment
+    .getAssessmentsProcess({
+      month: data.curMonth,
+    })
+    .then((res) => {
+      console.log(res);
+      data.isEnd = res;
+    });
 }
-
+//修改选择月综测情况
+function changeAssessState() {
+  console.log("修改选择月情况,月：", data.curMonth, ",状态：", data.isEnd);
+  teacherFun.assessment
+    .updateAssessmentState({
+      month: data.curMonth,
+      end: data.isEnd,
+    })
+    .then((res) => {
+      data.dialogVisible2 = false;
+      ElMessage.success(res);
+    });
+}
 //重置密码
 const handleRepasswd = (index, row) => {
   teacherFun.class.updateStudentPassword([row.userNumber]).then((res) => {
@@ -728,12 +759,13 @@ function confirmClick() {
       data.drawer2 = false;
       data.updataData.userNumber = data.student.userNumber; //必须传回去被修改用户的学号，否则无法确定修改的是哪个学生的信息
       //修改资料接口
-      console.log("AFSDF", data.updataData);
+      console.log("AFSDF", data.updataData.idCard);
       teacherFun.class.updateStudentInformation(data.updataData).then((res) => {
         ElMessage.success(res);
         Object.keys(data.updataData).forEach(
           (key) => (data.updataData[key] = null)
         ); //快速清空内容
+        console.log("ssssss", data.updataData);
       });
     })
     .catch(() => {});

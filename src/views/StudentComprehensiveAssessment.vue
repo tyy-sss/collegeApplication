@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-17 20:47:45
+ * @LastEditTime: 2024-03-18 22:27:04
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -15,9 +15,12 @@
     <br />
     <div>
       <el-form-item label="本月确认情况 ：">
-        {{ data.state }}
+        <span v-show="data.isOpen==null">未到确认时间</span>
+        <span v-show="data.isOpen==false">已结束</span>
+        <span v-show="data.isOpen==true && data.signature">已确认</span>
+        <span v-show="data.isOpen==true && data.signature==null">待确认</span>
         <span style="color: rgb(167, 167, 167); margin-left: 15px">
-          (已确认/待确认/未到确认时间)</span
+          (已确认/待确认/已结束/未到确认时间)</span
         >
       </el-form-item>
       <el-button type="primary" @click="data.dialogVisible3 = true"
@@ -119,7 +122,7 @@
       <el-button
         type="primary"
         @click="data.dialogVisible = true"
-        :disabled="data.state != '待确认'"
+        :disabled="!(data.isOpen==true && data.signature==null)"
         >前往电子签名</el-button
       >
       <br />
@@ -273,7 +276,7 @@ import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 const data = reactive({
-  state: "",
+  state: null,
   assessment: [
     // {
     //   userNumber: "2021401449",
@@ -315,7 +318,7 @@ const data = reactive({
   month: null, //当前确认综测的月份
   score: null, //目前总分
   signature: null, //签名
-  isEnd: null, //确认阶段是否开启
+  isOpen: null, //确认阶段是否开启
   types: [
     {
       value: false,
@@ -388,23 +391,13 @@ function init() {
   getComplaintHistory();
   studentFun.assess.getAssessmentThisMonth().then((res) => {
     console.log("个人综测", res);
-    data.isEnd = res.isEnd;
+    data.isOpen = res.isEnd;
     data.month = res.month;
     data.score = res.score;
     data.signature = res.signature;
     data.assessment = [res.content];
     data.total = [res.total];
     data.loading = false;
-    console.log(res.isEnd)
-    if (res.isEnd === null) {
-      data.state = "未到确认时间";
-    } else if (res.isEnd == true) {
-      data.state = "已结束";
-    } else if (data.signature) {
-      data.state = "已确认";
-    } else if (data.signature == null) {
-      data.state = "待确认";
-    }
   });
 }
 //获取申诉历史
@@ -475,7 +468,6 @@ function finish(file) {
   console.log("签名img的base64转为file的结果", file);
   const formData = new FormData();
   formData.append("file", file);
-
   studentFun.sign.studentConfirmSign(data.month, formData).then((res) => {
     console.log(res);
     data.state = "已确认";
@@ -485,7 +477,7 @@ function finish(file) {
       type: "success",
     });
   });
-
+  //模拟提交
   // setTimeout(() => {
   //   data.state = "已确认";
   //   data.dialogVisible = false;
