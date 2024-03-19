@@ -62,11 +62,18 @@ managerFun.user.deleteUser = (data) => {
 managerFun.user.getTeacherList = () => {
   return http.get("/user/teachers");
 };
+/** 班级 */
+/**
+ * 分页获取班级
+ * @param {*} year
+ * @param {*} current
+ * @param {*} size
+ * @returns
+ */
 managerFun.class.searchClass = (year, current, size) => {
   return http.get("/class", { year, current, size });
 };
-
-/** 班级 */
+managerFun.class.getAllClass = (year) => {};
 /**
  * 班级名查重
  * @param {*} className

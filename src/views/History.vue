@@ -21,45 +21,33 @@
               />
             </el-select>
           </div>
-          <div class="search-item">
-            <div class="text">选择年份：</div>
-            <el-date-picker
-              v-model="searchData.year"
-              type="year"
-              placeholder="请选择年份"
-              @change="onSearch"
-            />
-          </div>
         </div>
         <el-divider />
         <div class="bottom">
-          <comprehensive-year />
+          <student-news v-if="searchData.class == 'student-news'" />
+          <comprehensive-assessment
+            v-else-if="searchData.class == 'comprehensive-assessment'"
+          />
         </div>
       </div>
     </div>
   </div>
 </template>
 <script setup>
-import ComprehensiveAssessmentCheck from "./ComprehensiveAssessmentCheck.vue";
-import comprehensiveYear from "@/components/history/comprehensive-year.vue";
+import studentNews from "@/components/history/student-news.vue";
+import comprehensiveAssessment from "@/components/history/comprehensive-assessment.vue";
 // 时间转换
-import { formatDate } from "@/assets/js/utils/format-date";
 import { reactive } from "vue";
 const searchData = reactive({
-  class: "student-information",
-  year: "",
+  class: "student-news",
   list: [
     {
       label: "学生信息",
-      value: "student-information",
-    },
-    {
-      label: "志愿填报信息",
-      value: "volunteer-write-information",
+      value: "student-news",
     },
     {
       label: "学生综测信息",
-      value: "comprehensive-information",
+      value: "comprehensive-assessment",
     },
     {
       label: "专业分流信息",
@@ -67,8 +55,8 @@ const searchData = reactive({
     },
   ],
 });
-const onSearch = () => {
-  console.log(formatDate(searchData.year).slice(0, 4));
+const onSearch = (val) => {
+  searchData.class = val;
 };
 </script>
 <style src="@/assets/css/show-container.css" scoped />

@@ -114,9 +114,6 @@ onMounted(() => {
   flex-direction: column;
   justify-content: space-around;
 }
-.top {
-  padding-top: 5rem;
-}
 /* 个人信息 */
 .user > div {
   display: flex;

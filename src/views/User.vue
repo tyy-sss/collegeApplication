@@ -262,7 +262,7 @@ const handleBatchResetUser = () => {
     multipleSelection.value.forEach((item) => {
       userNumberList.push(item.userNumber);
     });
-    resetUserList(userNumberList());
+    resetUserList(userNumberList);
   }
 };
 // 批量删除用户
@@ -347,11 +347,11 @@ onMounted(() => {
   getRoleList();
 });
 </script>
-<style src="@/assets/css/utils/table-center.css" scoped/>
-<style src="@/assets/css/show-container.css" scoped/>
-<style src="@/assets/css/search-top-left-right.css" scoped/>
-<style src="@/assets/css/pager.css" scoped/>
-<style src="@/assets/css/utils/table-empty.css" scoped/>
+<style src="@/assets/css/utils/table-center.css" scoped />
+<style src="@/assets/css/show-container.css" scoped />
+<style src="@/assets/css/search-top-left-right.css" scoped />
+<style src="@/assets/css/pager.css" scoped />
+<style src="@/assets/css/utils/table-empty.css" scoped />
 <style scoped>
 /* 头部样式设置 */
 .top > div,
@@ -372,5 +372,3 @@ onMounted(() => {
   margin-right: 1rem;
 }
 </style>
-
-  
