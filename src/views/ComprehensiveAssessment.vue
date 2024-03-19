@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-18 22:41:14
+ * @LastEditTime: 2024-03-19 13:54:57
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -365,7 +365,7 @@
           min-width="50"
         />
       </el-table-column>
-      <el-table-column label="操作" fixed="right">
+      <el-table-column label="操作" fixed="right" v-if="(data.isEnd == null || data.isEnd == true)">
         <template #default="scope">
           <el-button
             size="small"
@@ -392,18 +392,19 @@
     </div>
     <!-- 提交按钮 -->
     <el-form-item label="本月确认情况 ：">
-      <span v-show="data.isOpen==null">未到确认时间</span>
-        <span v-show="data.isOpen==false">已结束</span>
-        <span v-show="data.isOpen==true && data.signature">已确认</span>
-        <span v-show="data.isOpen==true && data.signature==null">待确认</span>
+      <span v-show="data.isEnd == null || data.isEnd == true">未到确认时间</span>
+        <span v-show="data.isEnd == false && data.signature">已确认</span>
+        <span v-show="data.isEnd == false && data.signature == null"
+          >待确认</span
+        >
         <span style="color: rgb(167, 167, 167); margin-left: 15px">
-          (已确认/待确认/已结束/未到确认时间)</span
+          (已确认/待确认/未到确认时间)</span
         >
       <el-button
         type="primary"
         style="margin-left: 1rem"
         @click="data.dialogVisible = true"
-        :disabled="!(data.isOpen==true && data.signature==null)"
+        :disabled="!(data.isEnd == false && data.signature == null)"
         >前往电子签名</el-button
       >
     </el-form-item>
@@ -707,9 +708,11 @@ import studentFun from "@/api/student";
 
 const data = reactive({
   myclass: "2023级1班", //班级
+  state: null,
   curMonth: 0,
   monthes: [], //可选月份
-  state: "待确认",
+  isEnd: null, //当前综测签名流程是否开放
+  signature: null, //是否签名
   loading: false, //列表加载动画
   assessments: [
     {
@@ -1025,17 +1028,18 @@ const data = reactive({
     currentPage: 1, // 当前页
     pageSize: 15, //一页的数据量
   }, //分页
-  isOpen:null,//当前综测签名流程是否开放
-  signature: null,//是否签名
 });
 const formLabelWidth = "140px";
 onMounted(() => {
+  init();
+});
+//初始化
+function init() {
   getClassDetials(); //获取班级信息
   getAssessmentMonth(); //获取可选月份
   getAssessmentDetails(); //获取综测信息
   getComplaintsDeatils(); //获取申诉列表数据
-});
-
+}
 //获取班级信息
 function getClassDetials() {
   studentFun.assess.getInformation().then((res) => {
@@ -1055,6 +1059,7 @@ function getAssessmentDetails() {
     })
     .then((res) => {
       console.log("获取综测信息结果：", res);
+      console.log("综测流程", res.isEnd);
       data.assessments = [];
       data.page.currentPage = res.current;
       data.page.pageSize = res.size;
@@ -1065,8 +1070,8 @@ function getAssessmentDetails() {
       if (data.curMonth == 0) {
         data.curMonth = res.records[0].month;
       }
-      data.isOpen=res.isEnd;
-      data.signature=res.signature;
+      data.isEnd = res.isEnd;
+      data.signature = res.signature;
       data.loading = false;
     });
 }
@@ -1137,22 +1142,27 @@ function confirmEdit() {
   }
 }
 //签名后提交数据和电子签名
-function finish(sign) {
-  console.log("签名img的base64", sign);
-  // studentFun.sign.submitSignature(sign).then((res) => {
-  //   console.log(res);
-  //   ElMessage({
-  //     message: "提交本月综测情况成功",
-  //     type: "success",
-  //   });
-  // });
-  setTimeout(() => {
+function finish(file) {
+  console.log("签名img的base64转为file的结果", file);
+  const formData = new FormData();
+  formData.append("file", file);
+  studentFun.sign.assessConfirmSign(data.curMonth, formData).then((res) => {
+    console.log(res);
+    data.signature = "ABC"; //不为空即可
     data.dialogVisible = false;
     ElMessage({
       message: "提交本月综测情况成功",
       type: "success",
     });
-  }, 60);
+  });
+  //模拟提交
+  // setTimeout(() => {
+  //   data.dialogVisible = false;
+  //   ElMessage({
+  //     message: "提交本月综测情况成功",
+  //     type: "success",
+  //   });
+  // }, 60);
 }
 //删除申诉项
 const handleDelete = (index, row) => {

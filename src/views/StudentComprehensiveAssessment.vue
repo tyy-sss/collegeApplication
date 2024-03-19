@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-18 22:27:04
+ * @LastEditTime: 2024-03-19 13:44:24
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -15,12 +15,13 @@
     <br />
     <div>
       <el-form-item label="本月确认情况 ：">
-        <span v-show="data.isOpen==null">未到确认时间</span>
-        <span v-show="data.isOpen==false">已结束</span>
-        <span v-show="data.isOpen==true && data.signature">已确认</span>
-        <span v-show="data.isOpen==true && data.signature==null">待确认</span>
+        <span v-show="data.isEnd == null || data.isEnd == true">未到确认时间</span>
+        <span v-show="data.isEnd == false && data.signature">已确认</span>
+        <span v-show="data.isEnd == false && data.signature == null"
+          >待确认</span
+        >
         <span style="color: rgb(167, 167, 167); margin-left: 15px">
-          (已确认/待确认/已结束/未到确认时间)</span
+          (已确认/待确认/未到确认时间)</span
         >
       </el-form-item>
       <el-button type="primary" @click="data.dialogVisible3 = true"
@@ -122,7 +123,7 @@
       <el-button
         type="primary"
         @click="data.dialogVisible = true"
-        :disabled="!(data.isOpen==true && data.signature==null)"
+        :disabled="!(data.isEnd == false && data.signature == null)"
         >前往电子签名</el-button
       >
       <br />
@@ -276,7 +277,6 @@ import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 const data = reactive({
-  state: null,
   assessment: [
     // {
     //   userNumber: "2021401449",
@@ -315,10 +315,11 @@ const data = reactive({
       all: 0,
     },
   ],
+  state: null,
   month: null, //当前确认综测的月份
   score: null, //目前总分
   signature: null, //签名
-  isOpen: null, //确认阶段是否开启
+  isEnd: null,
   types: [
     {
       value: false,
@@ -391,7 +392,7 @@ function init() {
   getComplaintHistory();
   studentFun.assess.getAssessmentThisMonth().then((res) => {
     console.log("个人综测", res);
-    data.isOpen = res.isEnd;
+    data.isEnd = res.isEnd;
     data.month = res.month;
     data.score = res.score;
     data.signature = res.signature;
@@ -470,7 +471,7 @@ function finish(file) {
   formData.append("file", file);
   studentFun.sign.studentConfirmSign(data.month, formData).then((res) => {
     console.log(res);
-    data.state = "已确认";
+    data.signature = "ABC"; //不为空即可
     data.dialogVisible = false;
     ElMessage({
       message: "提交本月综测情况成功",

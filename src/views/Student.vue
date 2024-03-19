@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-18 22:30:23
+ * @LastEditTime: 2024-03-19 13:50:25
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -239,11 +239,13 @@
           :value="item.value"
         />
       </el-select>
-      开启本月电子签名确认期:
+      综测编辑权限:
       <el-switch v-model="data.isEnd" :disabled="data.isEnd == null" />
       <br /><br />
       <div style="color: rgba(14, 13, 13, 0.493)">
-        当您开启按钮时,学生和测评小组端将会开放电子签名确认综测入口.
+        当月进行时按钮默认为开启；<br>
+        当按钮开启时，综测小组可以对学生综测进行编辑，不可以进行电子签名;<br>
+        当按钮关闭后，综测小组不可以再对学生综测进行编辑，学生和测评小组端将会开放电子签名确认综测入口.
       </div>
     </div>
     <template #footer>
@@ -557,7 +559,7 @@ const data = reactive({
   }, //修改资料数据
   studentTableLoading: false,
   evaluationTableLoading: false,
-  curMonth: 2, //测试默认值
+  curMonth: null, //测试默认值
   monthes: [
     // {
     //   value: "1",
@@ -586,7 +588,6 @@ function init() {
   getStudentDeatils();
   getAssessmentStudent();
   getAssessmentMonth();
-  getAssessmentDetails();
   getClass();
 }
 //获取申诉列表数据
@@ -655,7 +656,10 @@ const handleCurrentChange = (val) => {
 //获取可选月份方法
 function getAssessmentMonth() {
   apiFun.user.getAssessmentsMonth().then((res) => {
+    res.reverse();
     console.log("获取可选月份方法:", res);
+    data.curMonth=res[0];
+    getAssessmentDetails();
     res.forEach((item) => {
       console.log(item);
       data.monthes.push({

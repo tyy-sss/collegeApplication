@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-17 21:14:52
+ * @LastEditTime: 2024-03-19 13:57:55
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:综合测评表公示页面
 -->
@@ -351,6 +351,9 @@ function getAssessmentDetails() {
       res.records.forEach((item) => {
         data.assessments.push(item.content);
       });
+      if (data.curMonth == 0) {
+        data.curMonth = res.records[0].month;
+      }
       console.log(data.assessments);
       data.loading = false;
     });
