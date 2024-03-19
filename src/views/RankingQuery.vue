@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-17 20:13:39
+ * @LastEditTime: 2024-03-19 22:28:48
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -11,149 +11,149 @@
     <div class="title"><div class="text">查询排名</div></div>
     <hr />
     <div class="box">
-      <!-- 条件 -->
-      <h4>查询条件</h4>
-      <br />
-      <div class="condition">
-        <!-- 考生学校 -->
-        <div class="item">
-          <div class="title">
-            <span class="tip">目标学校 :</span>
-          </div>
-          <div class="condition_list">
-            <div>
-              <b>{{ data.schoolName }}</b>
-            </div>
-          </div>
-        </div>
-        <!-- 报考学院 -->
-        <div class="item">
-          <div class="title">
-            <span class="tip">报考学院</span
-            ><i
-              ><el-icon><ArrowRight /></el-icon
-            ></i>
-          </div>
-          <div class="condition_list">
-            <div v-if="data.academy.length < 1">没有可选择的学院</div>
-            <div
-              v-for="(item, i) in data.academy"
-              :key="i"
-              :class="
-                item.name == data.curAcademy ? 'tag_item select' : 'tag_item'
-              "
-              @click="selectAcademy(item)"
-            >
-              {{ item.name }}
-            </div>
-          </div>
-        </div>
-        <!-- 报考专业 -->
-        <div class="item">
-          <div class="title">
-            <span class="tip">报考专业</span
-            ><i
-              ><el-icon><ArrowRight /></el-icon
-            ></i>
-          </div>
-          <div class="condition_list">
-            <div v-if="data.majors.length < 1">请先选择报考学院</div>
-            <div
-              v-for="(item, i) in data.majors"
-              :key="i"
-              :class="
-                item.name == data.curMajor ? 'tag_item select' : 'tag_item'
-              "
-              @click="selectMajor(item)"
-            >
-              {{ item.name }}
-            </div>
-          </div>
+      <!-- 综合排名 -->
+      <div style="margin-bottom: 1rem">
+        <h3>1️⃣综合排名</h3>
+        <br />
+        <div>
+          <el-table :data="data.numTable" style="width: 100%">
+            <el-table-column prop="type" label="排名类型" />
+            <el-table-column label="排名结果">
+              <el-table-column prop="ranking" label="我的排名 /名" />
+              <el-table-column prop="rankings" label="排名总人数 /人" />
+            </el-table-column>
+          </el-table>
         </div>
       </div>
-      <!-- 搜索框 -->
-      <div class="searchBox">
-        <el-select
-          v-model="data.type"
-          class="m-2"
-          placeholder="请选择排名类型"
-          size="large"
-          style="width: 13rem; margin-right: 1rem"
-        >
-          <el-option
-            v-for="item in options"
-            :key="item.value"
-            :label="item.label"
-            :value="item.value"
-          />
-        </el-select>
+      <!-- 查询延保同—个专业的排名 -->
+      <div>
+        <h3>2️⃣查询延保同—个专业的排名</h3>
+        <br />
+        <div>
+          <h4>确认批次</h4>
+          <br />
+          <div style="color: gray; margin-bottom: 8px">
+            💬查询排名的依据为流程已结束的预填报批次情况，请根据时间选择参考的填报批次。
+          </div>
+          <span>确认批次： </span>
+          <div class="searchBox">
+            <el-select
+              v-model="data.preWishId"
+              class="m-2"
+              placeholder="请选择预填报批次"
+              size="large"
+              style="width: 13rem; margin-right: 1rem"
+            >
+              <el-option
+                v-for="item in data.preWishList"
+                :key="item.value"
+                :label="item.label"
+                :value="item.value"
+              />
+            </el-select>
+          </div>
+        </div>
+        <h4>查询条件</h4>
+        <br />
+        <div class="condition">
+          <!-- 考生学校 -->
+          <div class="item">
+            <div class="title">
+              <span class="tip">目标学校 :</span>
+            </div>
+            <div class="condition_list">
+              <div>
+                <b>{{ data.schoolName }}</b>
+              </div>
+            </div>
+          </div>
+          <!-- 报考学院 -->
+          <div class="item">
+            <div class="title">
+              <span class="tip">报考学院</span
+              ><i
+                ><el-icon><ArrowRight /></el-icon
+              ></i>
+            </div>
+            <div class="condition_list">
+              <div v-if="data.academy.length < 1">没有可选择的学院</div>
+              <div
+                v-for="(item, i) in data.academy"
+                :key="i"
+                :class="
+                  item.name == data.curAcademy ? 'tag_item select' : 'tag_item'
+                "
+                @click="selectAcademy(item)"
+              >
+                {{ item.name }}
+              </div>
+            </div>
+          </div>
+          <!-- 报考专业 -->
+          <div class="item">
+            <div class="title">
+              <span class="tip">报考专业</span
+              ><i
+                ><el-icon><ArrowRight /></el-icon
+              ></i>
+            </div>
+            <div class="condition_list">
+              <div v-if="data.majors.length < 1">请先选择报考学院</div>
+              <div
+                v-for="(item, i) in data.majors"
+                :key="i"
+                :class="
+                  item.name == data.curMajor ? 'tag_item select' : 'tag_item'
+                "
+                @click="selectMajor(item)"
+              >
+                {{ item.name }}
+              </div>
+            </div>
+          </div>
+        </div>
         <el-button class="search" @click="search">查询</el-button>
-        <!-- <el-button class="history" @click="data.drawer = true">历史查询</el-button> -->
-      </div>
-      
-      <!-- 结果 -->
-      <h4>查询结果</h4>
-      <br />
-      <div class="stack-line" v-loading.lock="data.loading">
-        <div class="stack-info">
-          <div class="gk-score">
-            <em><span>分流分数</span>{{ data.gkScore || "-" }} 分</em>
-          </div>
-          <hr />
-          <div class="gk-rank">
-            <div class="item">
-              <span>我的排名</span>{{ data.gkNum || "-" }} 名
+        <!-- 结果 -->
+        <h4>查询结果</h4>
+        <br />
+        <div class="stack-line" v-loading.lock="data.loading">
+          <div class="stack-info">
+            <div class="gk-score">
+              <em><span>查询条件</span> {{ data.curAcademy || "-" }} </em
+              ><span> 学院</span> <em>{{ data.curMajor || "-" }} </em
+              ><span> 专业 </span>
             </div>
-            <div class="item">
-              <span>排名范围</span>{{ data.gkCnt || "-" }} 人
+            <hr />
+            <div class="gk-rank">
+              <div class="item">
+                <span>我的排名</span>{{ data.ranking || "-" }} 名
+              </div>
+              <div class="item">
+                <span>排名范围</span>共 {{ data.rankings || "-" }} 人
+              </div>
             </div>
           </div>
         </div>
       </div>
     </div>
   </div>
-  <!-- 抽屉 -->
-  <!-- <el-drawer v-model="data.drawer" direction="btt" style="min-height: 50%">
-    <template #header>
-      <h4>历史查询</h4>
-    </template>
-    <template #default>
-      <div>
-        <el-table
-          :data="data.queryData"
-          ref="multipleTableRef"
-          @selection-change="handleSelectionChange"
-          style="width: 100%"
-        >
-          <el-table-column type="index" width="50" />
-          <el-table-column label="查询类型" prop="type" />
-          <el-table-column label="查询时间" sortable prop="date" />
-          <el-table-column label="学院" prop="school" />
-          <el-table-column label="专业" prop="professional" />
-          <el-table-column label="符合条件人数" prop="cnt" />
-          <el-table-column label="排名" sortable width="180" prop="num" />
-        </el-table>
-      </div>
-    </template>
-  </el-drawer> -->
 </template>
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import volunteerFun from "@/api/volunteer";
-import { Search } from '@element-plus/icons-vue'
+import { Search } from "@element-plus/icons-vue";
+//数据
 const data = reactive({
   loading: false,
-  // drawer: false,
   score: null, //填入分数
-  gkScore: 512, //高考分数
-  gkNum: null, //同分人数
-  gkCnt: null, //排名区间左
+  ranking: null, //同分人数
+  rankings: null, //排名区间
   curProvince: "湖南", //选择省份
-  curAcademy: "", //选择学校
-  curMajor: "", //选择学校
-  type: "", //查询排名类型
+  curAcademy: "", //选择学院
+  curMajor: "", //选择专业
+  curMajorId: "", //选择专业id
   schoolName: "吉首大学", //目标院校
   provinces: [
     { name: "北京" },
@@ -223,73 +223,68 @@ const data = reactive({
     // { name: "机械设计制造及其自动化" },
     // { name: "车辆工程" },
   ], //专业列表
-  // queryData: [
-  //   {
-  //     date: "2023.10.4 12:10:23",
-  //     school: "湘南学院",
-  //     professional: "汉语言文学（师范）",
-  //     province: "湖南省",
-  //     num: "56",
-  //     cnt:"124",
-  //     type: "目标学校排名",
-  //   },
-  //   {
-  //     date: "2023.10.4 12:10:21",
-  //     school: "湘南学院",
-  //     professional: "秘书学",
-  //     province: "湖南省",
-  //     num: "85",
-  //     cnt:"1224",
-  //     type: "延保同一个专业的排名",
-  //   },
-  //   {
-  //     date: "2023.10.4 12:09:23",
-  //     school: "湘南学院",
-  //     professional: "法学",
-  //     province: "湖南省",
-  //     num: "45",
-  //     cnt:"424",
-  //     type: "所有学生的排名",
-  //   },
-  //   {
-  //     date: "2023.10.4 12:08:11",
-  //     school: "湖南文理学院",
-  //     professional: "国际经济与贸易",
-  //     province: "湖南省",
-  //     num: "45",
-  //     cnt:"224",
-  //     type: "同一个班的排名",
-  //   },
-  // ], //历史查询记录列表
   allData: [], //学院专业选择数据
+  loading: false,
+  preWishId: null,
+  preWishList: [
+    // {
+    //   value: "100001",
+    //   label: "2016-05-04",
+    // },
+    // {
+    //   value: "100002",
+    //   label: "2016-05-01",
+    // },
+  ], //查询批次列表
+  numTable: [
+    {
+      type: "年级排名",
+      ranking: "",
+      rankings: "",
+    },
+    {
+      type: "班级排名",
+      ranking: "",
+      rankings: "",
+    },
+    {
+      type: "同目标学校排名",
+      ranking: "",
+      rankings: "",
+    },
+  ],
 });
-//排名类型选择
-const options = [
-  {
-    value: "1",
-    label: "目标学校排名",
-  },
-  {
-    value: "2",
-    label: "延保同一个专业的排名",
-  },
-  {
-    value: "3",
-    label: "所有学生的排名",
-  },
-  {
-    value: "4",
-    label: "同一个班的排名",
-  },
-];
+//组件被挂载到 DOM 后立即调用的钩子函数
 onMounted(() => {
-  //查询可选专业
+  init();
+});
+//初始化
+function init() {
+  getVolunteerTable(); //查询志愿列表
+  selectStudentMajor(); //查询可选择的学院专业
+  getAllNum(); //查询综合排名
+}
+//查询可选专业
+function selectStudentMajor() {
   volunteerFun.options.selectStudentMajor().then((res) => {
     data.allData = res;
+    console.log("查询可选专业", data.allData);
     data.academy = res.map((item) => ({ name: item.college }));
   });
-});
-
+}
+//查询预填报志愿列表
+function getVolunteerTable() {
+  volunteerFun.student.getWishTable().then((res) => {
+    res.forEach((volunteer) => {
+      if (volunteer.state === 2 && volunteer.type === false) {
+        data.preWishList.push({
+          value: volunteer.id,
+          label: volunteer.startTime + "批次",
+        });
+      }
+    });
+  });
+}
 //格式化学院专业数据
 function getMajorsByCollege(college) {
   const collegeData = data.allData.find((item) => item.college === college);
@@ -298,76 +293,62 @@ function getMajorsByCollege(college) {
   }
   return [];
 }
-
-//查询排名
+//查询专业排名
 function search() {
   console.log(
-    `data.curAcademy=${data.curAcademy}, && data.curMajor=${data.curMajor}, && data.type=${data.type},`
+    `data.curAcademy=${data.curAcademy}, && data.curMajor=${data.curMajor},&&data.preWishId=${data.preWishId}`
   );
-  if (data.curAcademy && data.curMajor && data.type) {
+  if (data.curAcademy && data.curMajor && data.preWishId) {
     data.loading = true;
     //查询排名
-    // studentFun.rank.getStudentRanking({
-
-    // }).then((res) => {
-    //   console.log(res);
+    studentFun.rank
+      .getMajorRanking({
+        majorId: data.curMajorId,
+        timeId: data.preWishId,
+      })
+      .then((res) => {
+        console.log("查询排名结果", res);
+        data.ranking = res.ranking;
+        data.rankings = res.rankings;
+        data.loading = false;
+      });
+    //模拟查询效果
+    // setTimeout(() => {
+    //   data.ranking = 13;
+    //   data.rankings = 25;
     //   data.loading = false;
-    // });
-
-    setTimeout(() => {
-      data.gkNum = 745;
-      data.gkCnt = 1523;
-      data.loading = false;
-    }, 1000);
+    // }, 1000);
   } else {
     ElMessage({
-      message: "请选择查询条件或填入查询分数",
+      message: "请选择预填报批次或查询专业",
       type: "warning",
     });
   }
 }
-
+//查询综合排名
+function getAllNum() {
+  studentFun.rank.getAllRanking().then((res) => {
+    console.log("查询综合排名", res);
+    for (let i = 0; i < 3; i++) {
+      data.numTable[i].ranking = res[i].ranking;
+      data.numTable[i].rankings = res[i].rankings;
+    }
+  });
+}
+//选择学院
 let selectAcademy = (item) => {
   data.curMajor = "";
   data.curAcademy = item.name;
   data.majors = getMajorsByCollege(data.curAcademy);
 };
+//选择专业
 let selectMajor = (item) => {
+  console.log(item);
   data.curMajor = item.name;
+  data.curMajorId = item.majorId;
 };
 
 // 模拟数据
-// const provinces = reactive([
-//   { name: "北京" },
-//   { name: "天津" },
-//   { name: "河北" },
-//   { name: "山西" },
-//   { name: "内蒙古" },
-//   { name: "辽宁" },
-//   { name: "吉林" },
-//   { name: "黑龙江" },
-//   { name: "上海" },
-//   { name: "江苏" },
-//   { name: "浙江" },
-//   { name: "安徽" },
-//   { name: "福建" },
-//   { name: "江西" },
-//   { name: "山东" },
-//   { name: "河南" },
-//   { name: "湖北" },
-//   { name: "湖南" },
-//   { name: "广东" },
-//   { name: "广西" },
-//   { name: "海南" },
-//   { name: "重庆" },
-//   { name: "四川" },
-//   { name: "贵州" },
-//   { name: "云南" },
-//   { name: "陕西" },
-//   { name: "甘肃" },
-//   { name: "青海" },
-//   { name: "宁夏" },
-// ]);
 // const schools = reactive([
 //   { name: "吉首大学" },
 //   { name: "湘南学院" },
@@ -399,80 +380,6 @@ let selectMajor = (item) => {
 //   { name: "机械设计制造及其自动化" },
 //   { name: "车辆工程" },
 // ]);
-// const queryData = [
-//   {
-//     date: "2023.10.4 12:10:23",
-//     school: "湘南学院",
-//     professional: "汉语言文学（师范）",
-//     province: "湖南省",
-//     num: "56",
-//     type: "新疆专项",
-//   },
-//   {
-//     date: "2023.10.4 12:10:21",
-//     school: "湘南学院",
-//     professional: "秘书学",
-//     province: "湖南省",
-//     num: "85",
-//     type: "新疆专项",
-//   },
-//   {
-//     date: "2023.10.4 12:09:23",
-//     school: "湘南学院",
-//     professional: "法学",
-//     province: "湖南省",
-//     num: "45",
-//     type: "新疆专项",
-//   },
-//   {
-//     date: "2023.10.4 12:08:11",
-//     school: "湖南文理学院",
-//     professional: "国际经济与贸易",
-//     province: "湖南省",
-//     num: "45",
-//     type: "普通预科",
-//   },
-//   {
-//     date: "2023.10.3 12:10:23",
-//     school: "湖南文理学院",
-//     professional: "市场营销",
-//     province: "湖南省",
-//     num: "45",
-//     type: "普通预科",
-//   },
-//   {
-//     date: "2023.10.4 12:10:21",
-//     school: "湘南学院",
-//     professional: "秘书学",
-//     province: "湖南省",
-//     num: "85",
-//     type: "普通预科",
-//   },
-//   {
-//     date: "2023.10.4 12:09:23",
-//     school: "湘南学院",
-//     professional: "法学",
-//     province: "湖南省",
-//     num: "45",
-//     type: "普通预科",
-//   },
-//   {
-//     date: "2023.10.4 12:08:11",
-//     school: "湖南文理学院",
-//     professional: "国际经济与贸易",
-//     province: "湖南省",
-//     num: "45",
-//     type: "普通预科",
-//   },
-//   {
-//     date: "2023.10.3 12:10:23",
-//     school: "湖南文理学院",
-//     professional: "市场营销",
-//     province: "湖南省",
-//     num: "45",
-//     type: "普通预科",
-//   },
-// ];
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style  lang="scss" scoped>
@@ -522,27 +429,29 @@ let selectMajor = (item) => {
 .searchBox {
   margin-bottom: 2rem;
   padding: 0.5rem 0;
-  display: inline-block;
-  .search {
-    height: 2.5rem;
-    width: 6rem;
-    background-color: #77adfe;
-    color: #fff;
-  }
-  .history {
-    margin-left: 1rem;
-    width: 6rem;
-    height: 2.5rem;
-    border-radius: 5px;
-    border-color: #77adfe;
-    color: #77adfe;
-    overflow: hidden;
-  }
+  display: inline;
+}
+.search {
+  height: 2.5rem;
+  width: 6rem;
+  background-color: #77adfe;
+  color: #fff;
+  margin-bottom: 1rem;
+}
+.history {
+  margin-left: 1rem;
+  width: 6rem;
+  height: 2.5rem;
+  border-radius: 5px;
+  border-color: #77adfe;
+  color: #77adfe;
+  overflow: hidden;
 }
 .stack-line {
   background: #f2f7ff;
   padding: 1.2rem;
   line-height: 1.2rem;
+  margin-bottom: 1rem;
   span {
     font-size: 17px;
     color: rgb(98, 97, 97);
@@ -559,35 +468,6 @@ let selectMajor = (item) => {
     justify-content: flex-start;
     align-items: center;
     margin-bottom: 1rem;
-  }
-}
-@media (max-width: 600px) {
-  /* 当屏幕宽度小于等于800px时 */
-  .searchBox {
-    .input-with-select {
-      width: 22rem;
-    }
-  }
-}
-@media (min-width: 600px) and (max-width: 1000px) {
-}
-@media (min-width: 1000px) {
-}
-.loader {
-  border: 4px solid rgba(0, 0, 0, 0.1);
-  border-top: 4px solid #3498db;
-  border-radius: 50%;
-  width: 40px;
-  height: 40px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% {
-    transform: rotate(0deg);
-  }
-  100% {
-    transform: rotate(360deg);
   }
 }
 </style>
