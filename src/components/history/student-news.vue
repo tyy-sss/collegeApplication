@@ -53,14 +53,18 @@
           <el-table-column prop="username" fixed label="姓名" min-width="100" />
           <el-table-column prop="sex" label="性别" />
           <el-table-column prop="school" label="目标学校" min-width="120" />
-          <el-table-column prop="plan" label="性质计划" />
+          <el-table-column prop="plan" label="性质计划" min-width="100" />
           <el-table-column prop="subjects" label="选考科目" min-width="120" />
           <el-table-column prop="className" label="班级" min-width="130" />
-          <el-table-column prop="idcard" label="身份证号" min-width="150" />
+          <el-table-column prop="idCard" label="身份证号" min-width="150" />
           <el-table-column prop="nation" label="民族" />
-          <el-table-column prop="politicsStatus" label="政治面貌" />
+          <el-table-column
+            prop="politicsStatus"
+            label="政治面貌"
+            min-width="100"
+          />
           <el-table-column prop="province" label="省份" />
-          <el-table-column label="联系方式" fixed="right" min-width="100">
+          <el-table-column label="联系方式" min-width="100">
             <el-table-column prop="phone" label="电话" min-width="120" />
             <el-table-column
               prop="parentPhone"
@@ -68,6 +72,23 @@
               min-width="120"
             />
             <el-table-column prop="address" label="地址" min-width="120" />
+          </el-table-column>
+          <el-table-column label="收件信息" fixed="right" min-width="100">
+            <el-table-column
+              prop="consigneeName"
+              label="收件人"
+              min-width="120"
+            />
+            <el-table-column
+              prop="consigneePhone"
+              label="收件电话"
+              min-width="120"
+            />
+            <el-table-column
+              prop="consigneeAddress"
+              label="收件地址"
+              min-width="120"
+            />
           </el-table-column>
         </el-table>
       </div>
@@ -88,7 +109,7 @@
 <script setup>
 import { reactive, onMounted } from "vue";
 // 导出数据
-import { historyComprehensiveYearHeader } from "@/assets/js/excel/history/comprehensive-style";
+import { historyStudentHeader } from "@/assets/js/excel/history/student";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import { formatDate } from "@/assets/js/utils/format-date";
 import managerFun from "@/api/manager";
@@ -114,9 +135,7 @@ const onSearchYear = (val) => {
   data.searchData.year = formatDate(val).slice(0, 4);
   data.searchData.class = "";
   data.searchData.student = "";
-  console.log(data.searchData.year);
   managerFun.class.getAllClass(data.searchData.year).then((res) => {
-    console.log(res);
     res.forEach((element) => {
       data.searchData.list.push({
         className: element.className,
@@ -139,11 +158,30 @@ const handleChangePage = (val) => {
   data.pager.current = val;
   getStudentNews();
 };
+// 整理收件人的信息
+const getConsignee = (val) => {
+  val.forEach((element) => {
+    element.consigneeName = element.consignee.username;
+    element.consigneePhone = element.consignee.phone;
+    element.consigneeAddress = element.consignee.address;
+  });
+  return val;
+};
 // 导出信息
 const handleExcelExport = () => {
   if (data.searchData.class == "") {
     ElMessage.error("请选择班级");
   } else {
+    let className = data.searchData.list.filter((element) => {
+      return element.classId === data.searchData.class;
+    })[0].className;
+    historyFun.manager.getStudentByClass(data.searchData.class).then((res) => {
+      export_json_to_excel(
+        historyStudentHeader,
+        getConsignee(res),
+        data.searchData.year + "年-" + className + "学生信息表"
+      );
+    });
   }
 };
 // 获取学生信息
@@ -157,8 +195,8 @@ const getStudentNews = throttle(() => {
       size: data.pager.size,
     })
     .then((res) => {
-      console.log(res);
       data.assessment = res.records;
+      data.assessment = getConsignee(data.assessment);
       data.pager = {
         current: res.current,
         size: res.size,

@@ -32,5 +32,12 @@ historyFun.manager.student = (data) => {
     size: data.size,
   });
 };
-
+/**
+ * 获取一个班级所有的学生信息
+ * @param {*} classId
+ * @returns
+ */
+historyFun.manager.getStudentByClass = (classId) => {
+  return http.get("/class/student?classId="+classId);
+};
 export default historyFun;

@@ -1,0 +1,81 @@
+import { reactive } from "vue";
+
+// 导出复杂的头部
+// 历史学生信息
+const historyStudentHeader = reactive({
+  multiHeader: [
+    [
+      "姓名",
+      "学号",
+      "性别",
+      "目标学校",
+      "性质计划",
+      "选考科目",
+      "班级",
+      "身份证号",
+      "民族",
+      "政治面貌",
+      "省份",
+      "联系方式",
+      "",
+      "",
+      "收件信息",
+      "",
+      "",
+    ],
+  ], // 第一行
+  header: [
+    "姓名",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "电话",
+    "父母电话",
+    "地址",
+    "收件人",
+    "收件电话",
+    "收件地址",
+  ], //最后一行的表头数据
+  filterVal: [
+    "username",
+    "userNumber",
+    "sex",
+    "school",
+    "plan",
+    "subjects",
+    "className",
+    "idCard",
+    "nation",
+    "politicsStatus",
+    "province",
+    "phone",
+    "parentPhone",
+    "address",
+    "consigneeName",
+    "consigneePhone",
+    "consigneeAddress",
+  ], // 从左到右每一个属性名
+  merges: [
+    "A1:A2",
+    "B1:B2",
+    "C1:C2",
+    "D1:D2",
+    "E1:E2",
+    "F1:F2",
+    "G1:G2",
+    "H1:H2",
+    "I1:I2",
+    "J1:J2",
+    "K1:K2",
+    "L1:N1",
+    "O1:Q1",
+  ],
+});
+export { historyStudentHeader };
