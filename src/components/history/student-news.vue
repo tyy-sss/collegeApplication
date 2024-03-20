@@ -7,7 +7,7 @@
           v-model="data.searchData.year"
           type="year"
           placeholder="请选择年份"
-          @change="onSearch"
+          @change="onSearchYear"
         />
       </div>
     </div>
@@ -23,20 +23,24 @@
             >
               <el-option
                 v-for="item in data.searchData.list"
-                :key="item.value"
-                :label="item.label"
-                :value="item.value"
+                :key="item.classId"
+                :label="item.className"
+                :value="item.classId"
               />
             </el-select>
           </div>
           <div class="search-item">
             <div class="text">选择学生：</div>
-            <el-input v-model="data.searchData.student" placeholder="请输入" />
+            <el-input
+              v-model="data.searchData.student"
+              placeholder="请输入学生学号或者姓名"
+              @change="onSearchStudent"
+            />
           </div>
         </div>
         <div class="right">
           <el-button type="primary" @click="handleExcelExport"
-            >导出
+            >按班级导出
             <el-icon :size="18"><Download /></el-icon>
           </el-button>
         </div>
@@ -45,38 +49,26 @@
     <div class="middle">
       <div class="table">
         <el-table :data="data.assessment" style="width: 100%">
-          <el-table-column prop="userNumber" label="学号" min-width="120" />
-          <el-table-column prop="username" fixed label="姓名" min-width="150" />
-          <el-table-column label="德育">
+          <el-table-column prop="userNumber" label="学号" min-width="100" />
+          <el-table-column prop="username" fixed label="姓名" min-width="100" />
+          <el-table-column prop="sex" label="性别" />
+          <el-table-column prop="school" label="目标学校" min-width="120" />
+          <el-table-column prop="plan" label="性质计划" />
+          <el-table-column prop="subjects" label="选考科目" min-width="120" />
+          <el-table-column prop="className" label="班级" min-width="130" />
+          <el-table-column prop="idcard" label="身份证号" min-width="150" />
+          <el-table-column prop="nation" label="民族" />
+          <el-table-column prop="politicsStatus" label="政治面貌" />
+          <el-table-column prop="province" label="省份" />
+          <el-table-column label="联系方式" fixed="right" min-width="100">
+            <el-table-column prop="phone" label="电话" min-width="120" />
             <el-table-column
-              prop="content.add1"
-              label="加分明细"
+              prop="parentPhone"
+              label="父母电话"
               min-width="120"
             />
-            <el-table-column prop="sub1" label="减分明细" min-width="120" />
-            <el-table-column prop="point1" label="得分" min-width="60" />
+            <el-table-column prop="address" label="地址" min-width="120" />
           </el-table-column>
-          <el-table-column label="智育">
-            <el-table-column prop="add2" label="加分明细" min-width="120" />
-            <el-table-column prop="sub2" label="减分明细" min-width="120" />
-            <el-table-column prop="point2" label="得分" min-width="60" />
-          </el-table-column>
-          <el-table-column label="体育">
-            <el-table-column prop="add3" label="加分明细" min-width="120" />
-            <el-table-column prop="sub3" label="减分明细" min-width="120" />
-            <el-table-column prop="point3" label="得分" min-width="60" />
-          </el-table-column>
-          <el-table-column label="美育">
-            <el-table-column prop="add4" label="加分明细" min-width="120" />
-            <el-table-column prop="sub4" label="减分明细" min-width="120" />
-            <el-table-column prop="point4" label="得分" min-width="60" />
-          </el-table-column>
-          <el-table-column label="劳动">
-            <el-table-column prop="add5" label="加分明细" min-width="120" />
-            <el-table-column prop="sub5" label="减分明细" min-width="120" />
-            <el-table-column prop="point5" label="得分" min-width="60" />
-          </el-table-column>
-          <el-table-column label="综测总得分" fixed="right" min-width="100" />
         </el-table>
       </div>
     </div>
@@ -94,48 +86,86 @@
   </div>
 </template>
 <script setup>
-import { reactive,onMounted  } from "vue";
+import { reactive, onMounted } from "vue";
 // 导出数据
 import { historyComprehensiveYearHeader } from "@/assets/js/excel/history/comprehensive-style";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import { formatDate } from "@/assets/js/utils/format-date";
+import managerFun from "@/api/manager";
+import historyFun from "@/api/history";
+import { throttle } from "@/assets/js/utils/throttle";
+import { ElMessage } from "element-plus";
 const data = reactive({
   searchData: {
     year: "",
-    class: "cid",
+    class: "",
     student: "",
-    list: [
-      {
-        label: "2021预科1班",
-        value: "cid",
-      },
-    ],
+    list: [],
   },
   assessment: [],
   pager: {
     current: 1,
     size: 10,
-    total: 1000,
+    total: 0,
   },
 });
+// 搜索年份获得当年的班级信息
+const onSearchYear = (val) => {
+  data.searchData.year = formatDate(val).slice(0, 4);
+  data.searchData.class = "";
+  data.searchData.student = "";
+  console.log(data.searchData.year);
+  managerFun.class.getAllClass(data.searchData.year).then((res) => {
+    console.log(res);
+    res.forEach((element) => {
+      data.searchData.list.push({
+        className: element.className,
+        classId: element.classId,
+      });
+    });
+  });
+};
+// 搜索学生信息
+const onSearchStudent = () => {
+  getStudentNews();
+};
 // 搜索
 const onSearch = () => {
-  console.log(formatDate(data.searchData.year).slice(0, 4));
+  data.searchData.student = "";
+  getStudentNews();
 };
 // 手动修改页码数
 const handleChangePage = (val) => {
-  console.log(val);
+  data.pager.current = val;
+  getStudentNews();
 };
-// 数据excel导出
+// 导出信息
 const handleExcelExport = () => {
-  export_json_to_excel(
-    historyComprehensiveYearHeader,
-    assessment,
-    "历史综合测评信息"
-  );
+  if (data.searchData.class == "") {
+    ElMessage.error("请选择班级");
+  } else {
+  }
 };
-const getStudentNews = () => {};
-onMounted(() => {});
+// 获取学生信息
+const getStudentNews = throttle(() => {
+  historyFun.manager
+    .student({
+      year: data.searchData.year,
+      className: data.searchData.class,
+      keyword: data.searchData.student,
+      current: data.pager.current,
+      size: data.pager.size,
+    })
+    .then((res) => {
+      console.log(res);
+      data.assessment = res.records;
+      data.pager = {
+        current: res.current,
+        size: res.size,
+        total: res.total,
+      };
+    });
+}, 100);
 </script>
 <style src="@/assets/css/search-top-left-right.css" scoped />
 <style src="@/assets/css/utils/table-empty.css" scoped />

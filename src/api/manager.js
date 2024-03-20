@@ -73,7 +73,14 @@ managerFun.user.getTeacherList = () => {
 managerFun.class.searchClass = (year, current, size) => {
   return http.get("/class", { year, current, size });
 };
-managerFun.class.getAllClass = (year) => {};
+/**
+ * 获得所有班级的信息
+ * @param {*} year 
+ * @returns 
+ */
+managerFun.class.getAllClass = (year) => {
+  return http.get("/class/list?year=" + year);
+};
 /**
  * 班级名查重
  * @param {*} className

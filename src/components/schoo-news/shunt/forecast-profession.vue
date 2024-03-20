@@ -105,7 +105,11 @@ import ruleExplain from "@/components/rule/rule-explain.vue";
 import { rangeVolunteer, firstVolunteer } from "@/assets/js/data/rule-explain";
 import { Download } from "@element-plus/icons-vue";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
-import { professionHeader } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
+import { excelExport } from "@/assets/js/excel/excel-export";
+import {
+  professionHeader,
+  professionMajor,
+} from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
 import managerFun from "@/api/manager";
 // 接口
 import volunteerFun from "@/api/volunteer";
@@ -179,7 +183,14 @@ const handleExportVolunteerDiversion = () => {
     let volunteerRuleName = data.mateTtypeData.filter((element) => {
       return element.type == data.volunteerRule;
     })[0].label;
-    let headerTitle = schoolName + "-" + volunteerRuleName + "-" + "预测分流表";
+    let headerTitle =
+      Number(formatDate(new Date()).substring(0, 4)) +
+      "-" +
+      schoolName +
+      "-" +
+      volunteerRuleName +
+      "-" +
+      "预测分流表";
     volunteerFun.manager
       .exportVolunteerDiversion(schoolId, data.timeId, data.volunteerRule, 1)
       .then((res) => {
@@ -195,8 +206,15 @@ const handleExportVolunteerDiversion = () => {
             res.forEach((element) => {
               endData.push(element);
             });
+            // 导出最后分流结果
             export_json_to_excel(professionHeader, endData, headerTitle);
           });
+      });
+    volunteerFun.manager
+      .getRemainMajor(data.activeName, data.timeId)
+      .then((res) => {
+        console.log(res, "未录取的专业结果");
+        excelExport(res, professionMajor, headerTitle + "-剩余专业信息");
       });
   }
 };

@@ -378,7 +378,7 @@ const init = function () {
       console.log("学生信息", res);
       data.student = res;
       data.consignee = res.consignee;
-      data.avatar = "http://192.168.50.36:8081" + res.headshot;
+      data.avatar = "http://192.168.3.164:8081" + res.headshot;
       data.loading2 = false;
     });
   } else if (identity.value == 1 || identity.value == 3) {
@@ -413,7 +413,7 @@ function handleFileSelect(e) {
     const formData = new FormData();
     formData.append("file", file);
     studentFun.user.setIDPhoto(formData).then((res) => {
-      data.avatar = "http://192.168.50.36:8081" + res;
+      data.avatar = "http://192.168.3.164:8081" + res;
       console.log(data.avatar)
       data.loading = false;
       ElMessage.success("证件照上传成功");
