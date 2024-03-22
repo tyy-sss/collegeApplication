@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-19 22:28:48
+ * @LastEditTime: 2024-03-21 21:30:30
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -117,7 +117,7 @@
         <h4>查询结果</h4>
         <br />
         <div class="stack-line" v-loading.lock="data.loading">
-          <div class="stack-info">
+          <div>
             <div class="gk-score">
               <em><span>查询条件</span> {{ data.curAcademy || "-" }} </em
               ><span> 学院</span> <em>{{ data.curMajor || "-" }} </em

@@ -57,11 +57,11 @@ const studentMenuData = reactive([
     path: "/student-comprehensive-assessment",
     icon: "location",
   },
-  // {
-  //   menuName: "综合测评公示",
-  //   path: "/comprehensive-assessment-check",
-  //   icon: "location",
-  // },
+  {
+    menuName: "综合测评公示",
+    path: "/comprehensive-assessment-check2",
+    icon: "location",
+  },
   {
     menuName: "查询排名",
     path: "/ranking-query",
@@ -90,29 +90,12 @@ const headteacherMenuData = reactive([
     icon: "location",
   },
 ]);
-const teacherMenuData = reactive([
-  {
-    menuName: "个人信息",
-    path: "/personal-information",
-    icon: "location",
-  },
-  {
-    menuName: "志愿填报情况",
-    path: "/volunteer",
-    icon: "location",
-  },
-]);
 const evaluatorMenuData = reactive([
   {
     menuName: "个人信息",
     path: "/personal-information",
     icon: "location",
   },
-  // {
-  //   menuName: "综合测评公示",
-  //   path: "/comprehensive-assessment-check",
-  //   icon: "location",
-  // },
   {
     menuName: "综合测评编辑",
     path: "/comprehensive-assessment",
@@ -127,8 +110,6 @@ const giveMenu = (role) => {
     return studentMenuData;
   } else if (role == 3) {
     return headteacherMenuData;
-  } else if (role == 1) {
-    return teacherMenuData;
   } else if (role == 2) {
     return evaluatorMenuData;
   }

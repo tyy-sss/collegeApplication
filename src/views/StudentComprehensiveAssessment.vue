@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-19 13:44:24
+ * @LastEditTime: 2024-03-22 15:29:11
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -14,27 +14,49 @@
     <hr />
     <br />
     <div>
-      <el-form-item label="本月确认情况 ：">
-        <span v-show="data.isEnd == null || data.isEnd == true">未到确认时间</span>
-        <span v-show="data.isEnd == false && data.signature">已确认</span>
-        <span v-show="data.isEnd == false && data.signature == null"
-          >待确认</span
-        >
-        <span style="color: rgb(167, 167, 167); margin-left: 15px">
-          (已确认/待确认/未到确认时间)</span
-        >
-      </el-form-item>
+      <div style="color: rgb(167, 167, 167)">
+        <span>请注意检查综测情况，如有错误请及时向测评小组进行申诉。</span
+        ><br />
+        <span>请在对本月最终的整体综测情况确认无误后再进行电子签名。</span>
+      </div>
+      <br />
       <el-button type="primary" @click="data.dialogVisible3 = true"
         >申诉历史</el-button
       >
       <el-button type="danger" @click="data.dialogVisible2 = true"
         >申报错误</el-button
       >
+      <br />
+      <br />
+      <div>
+        <span>请选择查询月份：</span>
+        <el-select
+          v-model="data.month"
+          :disabled="data.loadOk"
+          placeholder="请选择查询月份"
+          style="width: 200px"
+          @change="getAssessmentDetails"
+        >
+          <el-option
+            v-for="item in data.monthes"
+            :key="item.value"
+            :label="item.label"
+            :value="item.value"
+          />
+        </el-select>
+      </div>
+      <br />
+      <el-form-item label="该月确认情况 ：">
+        <span v-show="data.signature">已确认</span>
+        <span v-show="data.signature == null">待确认</span>
+        <span style="color: rgb(167, 167, 167); margin-left: 15px">
+          (已确认/待确认)</span
+        >
+      </el-form-item>
     </div>
-    <br />
     <div>
       <div>
-        <h4>本月综测情况确认</h4>
+        <h4>该月综测情况确认</h4>
         <br />
         <el-table
           :data="data.assessment"
@@ -45,77 +67,35 @@
           <el-table-column prop="userNumber" label="学号" width="120" />
           <el-table-column prop="username" label="姓名" width="150" />
           <el-table-column label="德育">
-            <el-table-column
-              prop="add1"
-              label="加分明细"
-              width="120"
-              :default="'dd名'"
-              >{{ data.assessment.add1 || "暂无数据" }}</el-table-column
-            >
-            <el-table-column prop="sub1" label="减分明细" width="120">{{
-              data.assessment.sub1 || "暂无数据"
-            }}</el-table-column>
-            <el-table-column prop="point1" label="得分" width="60">{{
-              data.assessment.point1 || 0
-            }}</el-table-column>
+            <el-table-column prop="add1" label="加分明细" width="120" />
+            <el-table-column prop="sub1" label="减分明细" width="120" />
+            <el-table-column prop="point1" label="得分" width="60" />
           </el-table-column>
           <el-table-column label="智育">
-            <el-table-column prop="add2" label="加分明细" width="120">{{
-              data.assessment.add2 || "暂无数据"
-            }}</el-table-column>
-            <el-table-column prop="sub2" label="减分明细" width="120">{{
-              data.assessment.sub2 || "暂无数据"
-            }}</el-table-column>
-            <el-table-column prop="point2" label="得分" width="60">{{
-              data.assessment.point2 || 0
-            }}</el-table-column>
+            <el-table-column prop="add2" label="加分明细" width="120" />
+            <el-table-column prop="sub2" label="减分明细" width="120" />
+            <el-table-column prop="point2" label="得分" width="60" />
           </el-table-column>
           <el-table-column label="体育">
-            <el-table-column prop="add3" label="加分明细" width="120">{{
-              data.assessment.add3 || "暂无数据"
-            }}</el-table-column>
-            <el-table-column prop="sub3" label="减分明细" width="120">{{
-              data.assessment.sub3 || "暂无数据"
-            }}</el-table-column>
-            <el-table-column prop="point3" label="得分" width="60">{{
-              data.assessment.point3 || 0
-            }}</el-table-column>
+            <el-table-column prop="add3" label="加分明细" width="120" />
+            <el-table-column prop="sub3" label="减分明细" width="120" />
+            <el-table-column prop="point3" label="得分" width="60" />
           </el-table-column>
           <el-table-column label="美育">
-            <el-table-column prop="add4" label="加分明细" width="120">{{
-              data.assessment.add4 || "暂无数据"
-            }}</el-table-column>
-            <el-table-column prop="sub4" label="减分明细" width="120">{{
-              data.assessment.sub4 || "暂无数据"
-            }}</el-table-column>
-            <el-table-column prop="point4" label="得分" width="60">{{
-              data.assessment.point4 || 0
-            }}</el-table-column>
+            <el-table-column prop="add4" label="加分明细" width="120" />
+            <el-table-column prop="sub4" label="减分明细" width="120" />
+            <el-table-column prop="point4" label="得分" width="60" />
           </el-table-column>
           <el-table-column label="劳动">
-            <el-table-column prop="add5" label="加分明细" width="120">{{
-              data.assessment.add5 || "暂无数据"
-            }}</el-table-column>
-            <el-table-column prop="sub5" label="减分明细" width="120">{{
-              data.assessment.sub5 || "暂无数据"
-            }}</el-table-column>
-            <el-table-column prop="point5" label="得分" width="60">{{
-              data.assessment.point5 || 0
-            }}</el-table-column>
+            <el-table-column prop="add5" label="加分明细" width="120" />
+            <el-table-column prop="sub5" label="减分明细" width="120" />
+            <el-table-column prop="point5" label="得分" width="60" />
           </el-table-column>
           <el-table-column label="当月综合测评得分" fixed="right">
-            <el-table-column prop="add_total" label="月加分" width="50">{{
-              data.assessment.add_total || "-"
-            }}</el-table-column>
-            <el-table-column prop="sub_total" label="月减分" width="50">{{
-              data.assessment.sub_total || "-"
-            }}</el-table-column>
-            <el-table-column prop="pre_total" label="上月得分" width="50">{{
-              data.assessment.pre_total || "-"
-            }}</el-table-column>
-            <el-table-column prop="point_total" label="当月总分" width="50">{{
-              data.assessment.point_total || "-"
-            }}</el-table-column>
+            <el-table-column prop="add_total" label="月加分" width="50" />
+            <el-table-column prop="sub_total" label="月减分" width="50" />
+            <el-table-column prop="pre_total" label="上月得分" width="50" />
+            <el-table-column prop="point_total" label="当月总分" width="50" />
           </el-table-column>
         </el-table>
         <br />
@@ -123,17 +103,17 @@
       <el-button
         type="primary"
         @click="data.dialogVisible = true"
-        :disabled="!(data.isEnd == false && data.signature == null)"
+        :disabled="!(data.signature == null)"
         >前往电子签名</el-button
       >
       <br />
-      <span style="color: rgb(167, 167, 167)"
+      <!-- <span style="color: rgb(167, 167, 167)"
         >⊙综合素质测评成绩 = 德育 x 20% + 智育 x 20% + 体育 x 20% + 美育　x 20%
         +劳动 x 20%</span
-      >
+      > -->
       <br /><br />
       <div>
-        <h4>本学期总体综测情况</h4>
+        <h4>截止该月本学期总体综测情况</h4>
         <br />
         <el-table :data="data.total" v-loading.lock="data.loading">
           <el-table-column label="德育得分">
@@ -275,6 +255,7 @@ import signatures from "@/components/utils/Signatures.vue";
 import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import studentFun from "@/api/student";
+import { getMonthName } from "@/assets/js/utils/month";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 const data = reactive({
   assessment: [
@@ -331,29 +312,7 @@ const data = reactive({
     },
   ],
   type: "", //申诉类型
-  content: {
-    add1: null,
-    add2: null,
-    add3: null,
-    add4: null,
-    add5: null,
-    add_total: null,
-    point1: null,
-    point2: null,
-    point3: null,
-    point4: null,
-    point5: null,
-    point_total: null,
-    pre_total: 100,
-    sub1: null,
-    sub2: null,
-    sub3: null,
-    sub4: null,
-    sub5: null,
-    sub_total: null,
-    userNumber: "20232114022",
-    username: "田嘉惠",
-  }, //申诉内容
+  content: "", //申诉内容
   // 申诉列表
   complaintData: [
     {
@@ -378,7 +337,9 @@ const data = reactive({
       content: "个人信息性别错误，需要更改为男",
     },
   ],
+  monthes: [],
   loading: false,
+  loadOk:true,
   dialogVisible: false,
   dialogVisible2: false,
   dialogVisible3: false,
@@ -388,8 +349,14 @@ onMounted(() => {
 });
 //初始化
 function init() {
-  data.loading = true;
+  getAssessmentThisMonth();
+  getAssessmentMonth();
   getComplaintHistory();
+}
+//获取本月综测情况
+function getAssessmentThisMonth() {
+  data.loading = true;
+  data.loadOk=true;
   studentFun.assess.getAssessmentThisMonth().then((res) => {
     console.log("个人综测", res);
     data.isEnd = res.isEnd;
@@ -399,6 +366,38 @@ function init() {
     data.assessment = [res.content];
     data.total = [res.total];
     data.loading = false;
+    data.loadOk=false;
+  });
+}
+//按月份获取综测情况
+function getAssessmentDetails() {
+  data.loading = true;
+  studentFun.assess
+    .getAssessmentByMonth({
+      month: data.month,
+    })
+    .then((res) => {
+      console.log("个人综测", res);
+      data.isEnd = res.isEnd;
+      data.month = res.month;
+      data.score = res.score;
+      data.signature = res.signature;
+      data.assessment = [res.content];
+      data.total = [res.total];
+      data.loading = false;
+    });
+}
+//获取可选月份方法
+function getAssessmentMonth() {
+  studentFun.assess.studentGetMonthes().then((res) => {
+    console.log("获取可选月份方法:", res);
+    res.forEach((item) => {
+      console.log(item);
+      data.monthes.push({
+        value: item,
+        label: getMonthName(item),
+      });
+    });
   });
 }
 //获取申诉历史
@@ -416,7 +415,8 @@ function getComplaintHistory() {
 }
 //提交申报
 function commit() {
-  if (data.type == "" || data.content == "") {
+  console.log(data.type, data.content);
+  if (data.type === "" || data.content === "") {
     ElMessage({
       message: "请选择申诉类型或填写申诉内容",
       type: "error",
@@ -474,7 +474,7 @@ function finish(file) {
     data.signature = "ABC"; //不为空即可
     data.dialogVisible = false;
     ElMessage({
-      message: "提交本月综测情况成功",
+      message: "确认本月综测情况成功",
       type: "success",
     });
   });

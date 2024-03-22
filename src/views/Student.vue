@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-19 13:50:25
+ * @LastEditTime: 2024-03-21 14:58:34
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -22,7 +22,7 @@
       </div>
       <div>
         <el-card shadow="hover" class="item"
-          >👧 评测成员人数： {{ data.evaluationData.length }} 人
+          >⚙ 综测小组账号管理
           <el-button
             type="warning"
             size="small"
@@ -33,7 +33,7 @@
           >
         </el-card>
       </div>
-      <div>
+      <!-- <div>
         <el-card shadow="hover" class="item"
           >⚙ 综测流程管理
           <el-button
@@ -45,7 +45,7 @@
             >管理</el-button
           >
         </el-card>
-      </div>
+      </div> -->
       <div>
         <el-card shadow="hover" class="item">
           💬 待处理申述
@@ -59,19 +59,6 @@
           ></el-card
         >
       </div>
-      <!-- <div>
-        <el-card shadow="hover" class="item">
-          📮 回收站
-          <el-button
-            type="warning"
-            size="small"
-            plain
-            style="float: right"
-            @click="data.dialogVisible2 = true"
-            >查看</el-button
-          ></el-card
-        >
-      </div> -->
     </div>
     <br />
     <!-- 处理行 -->
@@ -96,20 +83,19 @@
         v-loading.lock="data.studentTableLoading"
         ref="multipleTableRef"
         :data="data.studentsData"
-        :default-sort="{ prop: 'date', order: 'descending' }"
         @selection-change="handleSelectionChange"
         style="width: 100%"
       >
         <el-table-column type="selection" width="55" />
         <el-table-column label="学生学号" prop="userNumber" />
         <el-table-column label="学生姓名" prop="username" />
-        <el-table-column label="班级职位">
+        <!-- <el-table-column label="班级职位">
           <template #default="scope">
             <span v-if="scope.row.identity == 1">班级成员</span>
             <span v-if="scope.row.identity == 2">测评小组成员</span>
           </template>
-        </el-table-column>
-        <el-table-column label="本月综测分数" sortable prop="score" />
+        </el-table-column> -->
+        <el-table-column label="本月综测分数" prop="appraisalScore" />
         <el-table-column label="操作" align="right">
           <template #header>
             <div>
@@ -117,11 +103,6 @@
                 ><Refresh
               /></el-icon>
             </div>
-            <!-- <el-input
-              v-model="search"
-              size="small"
-              placeholder="输入学生姓名或学号关键字"
-            /> -->
           </template>
           <template #default="scope">
             <el-button
@@ -144,9 +125,9 @@
         >批量重置密码</el-button
       >
       <!-- <el-button type="primary" @click="handleDeletePosts">撤销职位</el-button> -->
-      <el-button type="primary" @click="handleSetPosts"
+      <!-- <el-button type="primary" @click="handleSetPosts"
         >设为评测小组人员</el-button
-      >
+      > -->
       <br />
       <!-- 分页 -->
       <el-pagination
@@ -224,7 +205,7 @@
     </div>
   </el-dialog>
   <!-- 对话框2 -->
-  <el-dialog v-model="data.dialogVisible2" title="⚙ 综测流程管理" width="40%">
+  <!-- <el-dialog v-model="data.dialogVisible2" title="⚙ 综测流程管理" width="40%">
     <div>
       <el-select
         v-model="data.curMonth"
@@ -256,16 +237,16 @@
         </el-button>
       </div>
     </template>
-  </el-dialog>
+  </el-dialog> -->
   <!-- 对话框3 -->
-  <el-dialog v-model="data.dialogVisible3" title="评测小组成员管理" width="50%">
+  <el-dialog v-model="data.dialogVisible3" title="评测小组账号管理" width="50%">
     <div>
       <el-table
         v-loading.lock="data.evaluationTableLoading"
         :data="data.evaluationData"
         style="width: 100%"
       >
-        <el-table-column type="expand">
+        <!-- <el-table-column type="expand">
           <template #default="props">
             <div style="margin-left: 6rem">
               <h3>
@@ -279,7 +260,7 @@
               >
                 <el-table-column label="班级成员" prop="username" />
                 <el-table-column label="学号" prop="userNumber" />
-                <!-- <el-table-column label="操作">
+                <el-table-column label="操作">
                   <template #default="scope">
                     <el-button
                       size="small"
@@ -287,31 +268,32 @@
                       >切换综测小组负责人</el-button
                     >
                   </template>
-                </el-table-column> -->
+                </el-table-column>
               </el-table>
             </div>
           </template>
-        </el-table-column>
-        <el-table-column type="index" />
+        </el-table-column> -->
+        <!-- <el-table-column type="index" /> -->
         <el-table-column
           label="测评小组账号"
           prop="userNumber"
           min-width="100"
         />
-        <el-table-column label="学生姓名" prop="username" min-width="120" />
+        <el-table-column label="账号名" prop="username" min-width="120" />
         <el-table-column label="操作">
           <template #default="scope">
             <el-button
               size="small"
+              type="danger"
               @click="handleRecover2(scope.$index, scope.row)"
               >重置密码</el-button
             >
-            <el-button
+            <!-- <el-button
               size="small"
               type="danger"
               @click="handleFired(scope.$index, scope.row)"
               >撤销职位</el-button
-            >
+            > -->
           </template>
         </el-table-column>
       </el-table>
@@ -319,7 +301,7 @@
       <span style="color: gray"
         >【这里的重置密码指的是重置测评小组账号的密码为学生学号后6位】</span
       >
-      <div style="float: right">
+      <!-- <div style="float: right">
         <el-button type="primary" @click="allocat">一键分配班级成员</el-button>
         <el-button
           type="danger"
@@ -327,7 +309,7 @@
           style="margin-right: 2rem"
           >一键撤销成员分配</el-button
         >
-      </div>
+      </div> -->
     </div>
   </el-dialog>
   <!-- 学生信息抽屉 -->
@@ -530,7 +512,7 @@ const data = reactive({
   myclass: "2021级预科4班",
   search: "",
   dialogVisible: false,
-  dialogVisible2: false,
+  // dialogVisible2: false,
   dialogVisible3: false,
   drawer: false,
   drawer2: false,
@@ -584,11 +566,11 @@ const multipleTableRef = ref();
 const multipleSelection = ref([]);
 //获取数据
 function init() {
-  getComplaintsDeatils();
-  getStudentDeatils();
-  getAssessmentStudent();
-  getAssessmentMonth();
-  getClass();
+  getStudentDeatils(); //获取学生列表数据
+  getAssessmentStudent(); //获取测评小组成员列表数据
+  getAssessmentMonth(); //获取可选月份方法
+  getClass(); //获取班级
+  getComplaintsDeatils(); //获取申诉列表数据
 }
 //获取申诉列表数据
 function getComplaintsDeatils() {
@@ -623,7 +605,7 @@ function getAssessmentStudent() {
   data.evaluationTableLoading = true;
   teacherFun.assessment.getAssessmentStudent().then((res) => {
     console.log("获取测评小组成员列表数据", res);
-    data.evaluationData = res;
+    data.evaluationData = [res];
     data.evaluationTableLoading = false;
   });
 }
@@ -657,11 +639,9 @@ const handleCurrentChange = (val) => {
 function getAssessmentMonth() {
   apiFun.user.getAssessmentsMonth().then((res) => {
     res.reverse();
-    console.log("获取可选月份方法:", res);
-    data.curMonth=res[0];
-    getAssessmentDetails();
+    data.curMonth = res[0];
+    // getAssessmentDetails();
     res.forEach((item) => {
-      console.log(item);
       data.monthes.push({
         value: item,
         label: getMonthName(item),
@@ -742,6 +722,7 @@ const handleSetPosts = () => {
 };
 //刷新按钮
 function onReSearch() {
+  data.search = "";
   getStudentDeatils();
 }
 //详细信息

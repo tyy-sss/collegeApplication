@@ -110,6 +110,11 @@ const routes = [
         component: () => import("@/views/ComprehensiveAssessmentCheck.vue"),
       },
       {
+        path: "comprehensive-assessment-check2",
+        name: "comprehensive-assessment-check2",
+        component: () => import("@/views/ComprehensiveAssessmentCheck2.vue"),
+      },
+      {
         path: "comprehensive-assessment",
         name: "comprehensive-assessment",
         component: () => import("@/views/ComprehensiveAssessment.vue"),

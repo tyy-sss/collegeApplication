@@ -24,12 +24,11 @@
           v-on:change="handleFileSelect($event)"
         />
         <div class="imgBox">
-          <img
-            v-if="data.avatar"
-            :src="data.avatar"
-            class="passport"
-            alt="未上传证件照或图片加载有误，请刷新"
-          />
+          <el-image class="passport" :src="data.avatar" fit="fill">
+            <template #placeholder>
+              <div class="image-slot">请上传证件照</div>
+            </template></el-image
+          >
         </div>
 
         <br />
@@ -145,7 +144,7 @@
       </div>
     </div>
     <!-- 老师信息 -->
-    <div v-if="identity == 1 || identity == 3" class="teacher">
+    <div v-if="identity == 3" class="teacher">
       <!-- 信息区 -->
       <div>
         <div class="box">
@@ -211,7 +210,7 @@
           <div class="littleTitle">基本信息</div>
           <div class="grid-item">
             <div>
-              <span class="tag">测评员姓名 :</span
+              <span class="tag">测评账号名 :</span
               ><span>{{ data.student.username || "-" }}</span>
             </div>
             <div>
@@ -219,7 +218,7 @@
               ><span>{{ data.student.userNumber || "-" }}</span>
             </div>
             <div>
-              <span class="tag">所在班级 :</span
+              <span class="tag">管理班级 :</span
               ><span>{{ data.student.className || "-" }}</span>
             </div>
           </div>
@@ -228,7 +227,11 @@
       </div>
       <!-- 按钮区 -->
       <div class="btnBox">
-        <el-button v-if="identity != 2" type="primary" class="changeInfo" @click="data.drawer = true"
+        <el-button
+          v-if="identity != 2"
+          type="primary"
+          class="changeInfo"
+          @click="data.drawer = true"
           >修改资料</el-button
         >
         <el-button class="changeInfo" @click="data.drawer2 = true"
@@ -378,10 +381,10 @@ const init = function () {
       console.log("学生信息", res);
       data.student = res;
       data.consignee = res.consignee;
-      data.avatar = "http://192.168.50.36:8081" + res.headshot;
+      data.avatar = res.headshot;
       data.loading2 = false;
     });
-  } else if (identity.value == 1 || identity.value == 3) {
+  } else if (identity.value == 3) {
     //获取老师信息
     teacherFun.user.getInformation().then((res) => {
       console.log(res);
@@ -393,7 +396,7 @@ const init = function () {
       console.log("测评小组基本信息", res);
       data.student.userNumber = res.userNumber;
       data.student.username = res.username;
-      data.student.className=res.className;
+      data.student.className = res.className;
       data.loading2 = false;
     });
   }
@@ -413,8 +416,8 @@ function handleFileSelect(e) {
     const formData = new FormData();
     formData.append("file", file);
     studentFun.user.setIDPhoto(formData).then((res) => {
-      data.avatar = "http://192.168.50.36:8081" + res;
-      console.log(data.avatar)
+      data.avatar = res;
+      console.log(data.avatar);
       data.loading = false;
       ElMessage.success("证件照上传成功");
       console.log(data.avatar);
@@ -428,11 +431,11 @@ function confirmClick() {
       data.drawer = false;
       //修改资料接口
       if (identity.value == 0) {
-        console.log("AAA",updataData)
+        console.log("AAA", updataData);
         studentFun.user.updateInformation(updataData).then((res) => {
           ElMessage.success(res);
         });
-      } else if (identity.value == 1 || identity.value == 3) {
+      } else if (identity.value == 3) {
         teacherFun.user.updatePhone(updataData.phone).then((res) => {
           ElMessage.success(res);
         });
@@ -450,13 +453,13 @@ function updatePassword() {
     if (updatePasswords.password !== updatePasswords.password2) {
       ElMessage.error("两次密码输入不一致");
     } else {
-      if (identity.value == 0 ||identity.value == 2 ) {
+      if (identity.value == 0 || identity.value == 2) {
         //学生修改密码
         studentFun.user.updatePassword(updatePasswords.password).then((res) => {
           ElMessage.success(res);
           data.drawer2 = false;
         });
-      } else if (identity.value == 1 ||identity.value == 3) {
+      } else if (identity.value == 3) {
         //老师修改密码
         teacherFun.user.updatePassword(updatePasswords.password).then((res) => {
           ElMessage.success(res);
@@ -631,5 +634,14 @@ function updatePassword() {
   .right {
     width: 88%; /* 右侧宽度固定为90% */
   }
+}
+.image-slot {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+  background: rgba(161, 159, 159, 0.267);
+  font-size: 13px;
 }
 </style>

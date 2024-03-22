@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-19 13:54:57
+ * @LastEditTime: 2024-03-22 15:28:20
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -16,8 +16,9 @@
     <div class="checkMonth">
       <el-select
         v-model="data.curMonth"
+        :disabled="data.loadOk"
         placeholder="请选择要查询的综测月份"
-        style="width: 200px"
+        style="width: 100px; margin-top: -10px"
         @change="getAssessmentDetails"
       >
         <el-option
@@ -364,12 +365,51 @@
           sortable
           min-width="50"
         />
+        <el-table-column label="签名" min-width="60">
+          <template #default="scope">
+            <span v-show="!scope.row.signature">未签</span>
+            <div v-if="scope.row.signature">
+              <el-popover :width="400" placement="left" trigger="click">
+                <template #reference>
+                  <span class="checked">已签</span>
+                </template>
+                <div>
+                  <h4>{{ scope.row.username }}签名详细</h4>
+                  <div
+                    style="width: 330px; height: 100px; border: 1px solid black"
+                  >
+                    <el-image
+                      style="width: 100%; height: 100%"
+                      :src="scope.row.signature"
+                      fit="contain"
+                    />
+                  </div>
+                  <br />
+                  <el-button
+                    type="danger"
+                    @click="deleteStudentSign(scope.$index, scope.row)"
+                    >抹除签名</el-button
+                  ><br />
+                  <span
+                    >抹除签名后，您可以对改成员综测进行修改，改学生需要重新签名确认</span
+                  >
+                </div>
+              </el-popover>
+            </div>
+          </template>
+        </el-table-column>
       </el-table-column>
-      <el-table-column label="操作" fixed="right" v-if="(data.isEnd == null || data.isEnd == true)">
+      <!-- 如果老师已签字说明本月综测已归档，不能再编辑 -->
+      <el-table-column
+        label="操作"
+        fixed="right"
+        v-if="data.teacherSignature == null"
+      >
         <template #default="scope">
           <el-button
             size="small"
             type="primary"
+            :disabled="scope.row.signature"
             @click="handleEdit(scope.$index, scope.row)"
             >编辑</el-button
           >
@@ -391,28 +431,56 @@
       />
     </div>
     <!-- 提交按钮 -->
-    <el-form-item label="本月确认情况 ：">
-      <span v-show="data.isEnd == null || data.isEnd == true">未到确认时间</span>
-        <span v-show="data.isEnd == false && data.signature">已确认</span>
-        <span v-show="data.isEnd == false && data.signature == null"
-          >待确认</span
-        >
-        <span style="color: rgb(167, 167, 167); margin-left: 15px">
-          (已确认/待确认/未到确认时间)</span
-        >
-      <el-button
-        type="primary"
-        style="margin-left: 1rem"
-        @click="data.dialogVisible = true"
-        :disabled="!(data.isEnd == false && data.signature == null)"
-        >前往电子签名</el-button
-      >
-    </el-form-item>
+    <hr />
+    <div class="process">
+      <div>
+        <span>综测进度 ：</span>
+        <span v-show="!data.signature">🟢进行中</span>
+        <span v-show="data.signature">⚫已归档</span>
+      </div>
+      <br />
+      <div>
+        <div class="stack-line">
+          <div>
+            <div class="gk-rank">
+              <div class="item">
+                <span>本月确认情况 ：</span>
+                <el-popover trigger="hover" placement="right" :width="400">
+                  <template #reference>
+                    <span v-show="data.signature">已确认</span>
+                  </template>
+                  <h4>综测小组签字</h4>
+                  <div
+                    style="width: 380px; height: 100px; border: 1px solid black"
+                  >
+                    <el-image
+                      style="width: 100%; height: 100%"
+                      :src="data.signature"
+                      fit="contain"
+                    />
+                  </div>
+                </el-popover>
+                <span v-show="!data.signature">待确认</span>
+                <span style="color: rgb(167, 167, 167); margin-left: 15px">
+                  (已确认/待确认)</span
+                ><el-button
+                  type="primary"
+                  style="margin-left: 1rem"
+                  @click="signConfirmAssessment"
+                  :disabled="data.signature"
+                  >前往电子签名</el-button
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
   <!-- 电子签名对话框 -->
   <el-dialog v-model="data.dialogVisible" title="电子签名" width="50%">
     <div style="margin-left: 2rem">
-      当班主任开放本月确认入口时，您可以在本页进行签字确认负责综测内容已编辑核对完成，签字之后无法修改综测内容，请仔细核对后签字。
+      当全班成员进行电子签名后，您可以在本页进行签字确认班级综测已编辑核对完成，签字之后无法修改综测内容，请仔细核对后签字。
     </div>
     <br />
     <div>
@@ -707,245 +775,16 @@ import { getMonthName } from "@/assets/js/utils/month";
 import studentFun from "@/api/student";
 
 const data = reactive({
-  myclass: "2023级1班", //班级
+  myclass: "-级-班", //班级
   state: null,
   curMonth: 0,
+  loadOk: true,
   monthes: [], //可选月份
-  isEnd: null, //当前综测签名流程是否开放
-  signature: null, //是否签名
+  // isEnd: null, //当前综测签名流程是否开放
+  signature: "xx", //自己是否签名
+  teacherSignature: "xx", //老师是否签名
   loading: false, //列表加载动画
-  assessments: [
-    {
-      userNumber: "20222113001",
-      username: "吾尔肯·塞里克",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-    {
-      userNumber: "20222113002",
-      username: "玉苏普·吐荪江",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-    {
-      userNumber: "20222113003",
-      username: "沙亚拉·江阿努尔",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-    {
-      userNumber: "20222113004",
-      username: "吐尔逊娜衣·托呼提",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-    {
-      userNumber: "20222112006",
-      username: "阿合叶尔克·胡瓦提",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-    {
-      userNumber: "20222112005",
-      username: "米热古丽·吾斯曼",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-    {
-      userNumber: "20222112004",
-      username: "地娜拉·居帕尔",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-    {
-      userNumber: "20222112003",
-      username: "沙尔恩高阿·吾日克塔",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-    {
-      userNumber: "20222113001",
-      username: "吾尔肯·塞里克",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-    {
-      userNumber: "20222113002",
-      username: "玉苏普·吐荪江",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-  ],
+  assessments: [], //综测信息
   dialogVisible: false, //电子签名对话框
   dialogVisible2: false, //申诉对话框
   dialogVisible3: false, //编辑综测
@@ -1049,6 +888,9 @@ function getClassDetials() {
 //获取综测信息
 function getAssessmentDetails() {
   data.loading = true;
+  data.loadOk = true;
+  data.signature = "xx";
+  data.teacherSignature = "xx";
   studentFun.assess
     .getAssessmentsByMonth({
       keyword: data.search,
@@ -1059,20 +901,22 @@ function getAssessmentDetails() {
     })
     .then((res) => {
       console.log("获取综测信息结果：", res);
-      console.log("综测流程", res.isEnd);
-      data.assessments = [];
+      // console.log("综测流程", res.isEnd);
       data.page.currentPage = res.current;
       data.page.pageSize = res.size;
       data.page.total = res.total;
+      data.assessments = [];
       res.records.forEach((item) => {
-        data.assessments.push(item.content);
+        data.assessments.push({ ...item.content, signature: item.signature });
       });
       if (data.curMonth == 0) {
         data.curMonth = res.records[0].month;
       }
-      data.isEnd = res.isEnd;
+      // data.isEnd = res.isEnd;
+      data.teacherSignature = res.teacherSignature;
       data.signature = res.signature;
       data.loading = false;
+      data.loadOk = false;
     });
 }
 //获取综测小组选择月签名情况
@@ -1118,7 +962,7 @@ const handleEdit = (index, row) => {
     for (let key in row) {
       if (row.hasOwnProperty(key)) {
         // 根据属性名给form对象赋值
-        if (key !== "point_total") {
+        if (key !== "point_total" && key !== "signature") {
           data.form[key] = row[key];
         }
       }
@@ -1141,6 +985,23 @@ function confirmEdit() {
     ElMessage.error("请确保分数计算正确");
   }
 }
+//点击电子签名
+function signConfirmAssessment() {
+  //查询班级某月份已签名人数
+  studentFun.sign
+    .assessGetSignCnt({
+      month: data.curMonth,
+    })
+    .then((res) => {
+      console.log("查询班级某月份已签名人数", res);
+      if (res == data.page.total) {
+        data.dialogVisible = true;
+      } else {
+        ElMessage.error("综测小组请确保全班都已完成签名确认再进行签名");
+      }
+    });
+}
+
 //签名后提交数据和电子签名
 function finish(file) {
   console.log("签名img的base64转为file的结果", file);
@@ -1163,6 +1024,20 @@ function finish(file) {
   //     type: "success",
   //   });
   // }, 60);
+}
+//移除学生签名
+function deleteStudentSign(index, row) {
+  studentFun.sign
+    .deleteStudentSign({
+      month: data.curMonth,
+      userNumber: row.userNumber,
+    })
+    .then((res) => {
+      row.signature = null;
+      data.signature = null;
+      console.log("移除学生签名", res);
+      ElMessage.success(res);
+    });
 }
 //删除申诉项
 const handleDelete = (index, row) => {
@@ -1271,6 +1146,236 @@ const handleExcelExport = () => {
 //       content: "个人信息目标学校错误，需要修改为‘长沙学院’",
 //     },
 //   ]
+// data.assessments=[    {
+//       userNumber: "20222113001",
+//       username: "吾尔肯·塞里克",
+//       add1: "帮助老师批改作业2分",
+//       sub1: "旷课1分",
+//       point1: 1,
+//       add2: "绩点8分",
+//       sub2: "挂科1门2分",
+//       point2: 6,
+//       add3: "铅球比赛一等奖5分1km二等奖4分",
+//       sub3: "无",
+//       point3: 9,
+//       add4: "捐献书法画1分",
+//       sub4: "破环草坪1分",
+//       point4: 0,
+//       add5: "值日2次4分",
+//       sub5: "无",
+//       point5: 4,
+//       add_total: 24,
+//       sub_total: 4,
+//       pre_total: 18,
+//       point_total: 20,
+//     },
+//     {
+//       userNumber: "20222113002",
+//       username: "玉苏普·吐荪江",
+//       add1: "帮助老师批改作业2分",
+//       sub1: "旷课1分",
+//       point1: 1,
+//       add2: "绩点8分",
+//       sub2: "挂科1门2分",
+//       point2: 6,
+//       add3: "铅球比赛一等奖5分1km二等奖4分",
+//       sub3: "无",
+//       point3: 9,
+//       add4: "捐献书法画1分",
+//       sub4: "破环草坪1分",
+//       point4: 0,
+//       add5: "值日2次4分",
+//       sub5: "无",
+//       point5: 4,
+//       add_total: 24,
+//       sub_total: 4,
+//       pre_total: 18,
+//       point_total: 20,
+//     },
+//     {
+//       userNumber: "20222113003",
+//       username: "沙亚拉·江阿努尔",
+//       add1: "帮助老师批改作业2分",
+//       sub1: "旷课1分",
+//       point1: 1,
+//       add2: "绩点8分",
+//       sub2: "挂科1门2分",
+//       point2: 6,
+//       add3: "铅球比赛一等奖5分1km二等奖4分",
+//       sub3: "无",
+//       point3: 9,
+//       add4: "捐献书法画1分",
+//       sub4: "破环草坪1分",
+//       point4: 0,
+//       add5: "值日2次4分",
+//       sub5: "无",
+//       point5: 4,
+//       add_total: 24,
+//       sub_total: 4,
+//       pre_total: 18,
+//       point_total: 20,
+//     },
+//     {
+//       userNumber: "20222113004",
+//       username: "吐尔逊娜衣·托呼提",
+//       add1: "帮助老师批改作业2分",
+//       sub1: "旷课1分",
+//       point1: 1,
+//       add2: "绩点8分",
+//       sub2: "挂科1门2分",
+//       point2: 6,
+//       add3: "铅球比赛一等奖5分1km二等奖4分",
+//       sub3: "无",
+//       point3: 9,
+//       add4: "捐献书法画1分",
+//       sub4: "破环草坪1分",
+//       point4: 0,
+//       add5: "值日2次4分",
+//       sub5: "无",
+//       point5: 4,
+//       add_total: 24,
+//       sub_total: 4,
+//       pre_total: 18,
+//       point_total: 20,
+//     },
+//     {
+//       userNumber: "20222112006",
+//       username: "阿合叶尔克·胡瓦提",
+//       add1: "帮助老师批改作业2分",
+//       sub1: "旷课1分",
+//       point1: 1,
+//       add2: "绩点8分",
+//       sub2: "挂科1门2分",
+//       point2: 6,
+//       add3: "铅球比赛一等奖5分1km二等奖4分",
+//       sub3: "无",
+//       point3: 9,
+//       add4: "捐献书法画1分",
+//       sub4: "破环草坪1分",
+//       point4: 0,
+//       add5: "值日2次4分",
+//       sub5: "无",
+//       point5: 4,
+//       add_total: 24,
+//       sub_total: 4,
+//       pre_total: 18,
+//       point_total: 20,
+//     },
+//     {
+//       userNumber: "20222112005",
+//       username: "米热古丽·吾斯曼",
+//       add1: "帮助老师批改作业2分",
+//       sub1: "旷课1分",
+//       point1: 1,
+//       add2: "绩点8分",
+//       sub2: "挂科1门2分",
+//       point2: 6,
+//       add3: "铅球比赛一等奖5分1km二等奖4分",
+//       sub3: "无",
+//       point3: 9,
+//       add4: "捐献书法画1分",
+//       sub4: "破环草坪1分",
+//       point4: 0,
+//       add5: "值日2次4分",
+//       sub5: "无",
+//       point5: 4,
+//       add_total: 24,
+//       sub_total: 4,
+//       pre_total: 18,
+//       point_total: 20,
+//     },
+//     {
+//       userNumber: "20222112004",
+//       username: "地娜拉·居帕尔",
+//       add1: "帮助老师批改作业2分",
+//       sub1: "旷课1分",
+//       point1: 1,
+//       add2: "绩点8分",
+//       sub2: "挂科1门2分",
+//       point2: 6,
+//       add3: "铅球比赛一等奖5分1km二等奖4分",
+//       sub3: "无",
+//       point3: 9,
+//       add4: "捐献书法画1分",
+//       sub4: "破环草坪1分",
+//       point4: 0,
+//       add5: "值日2次4分",
+//       sub5: "无",
+//       point5: 4,
+//       add_total: 24,
+//       sub_total: 4,
+//       pre_total: 18,
+//       point_total: 20,
+//     },
+//     {
+//       userNumber: "20222112003",
+//       username: "沙尔恩高阿·吾日克塔",
+//       add1: "帮助老师批改作业2分",
+//       sub1: "旷课1分",
+//       point1: 1,
+//       add2: "绩点8分",
+//       sub2: "挂科1门2分",
+//       point2: 6,
+//       add3: "铅球比赛一等奖5分1km二等奖4分",
+//       sub3: "无",
+//       point3: 9,
+//       add4: "捐献书法画1分",
+//       sub4: "破环草坪1分",
+//       point4: 0,
+//       add5: "值日2次4分",
+//       sub5: "无",
+//       point5: 4,
+//       add_total: 24,
+//       sub_total: 4,
+//       pre_total: 18,
+//       point_total: 20,
+//     },
+//     {
+//       userNumber: "20222113001",
+//       username: "吾尔肯·塞里克",
+//       add1: "帮助老师批改作业2分",
+//       sub1: "旷课1分",
+//       point1: 1,
+//       add2: "绩点8分",
+//       sub2: "挂科1门2分",
+//       point2: 6,
+//       add3: "铅球比赛一等奖5分1km二等奖4分",
+//       sub3: "无",
+//       point3: 9,
+//       add4: "捐献书法画1分",
+//       sub4: "破环草坪1分",
+//       point4: 0,
+//       add5: "值日2次4分",
+//       sub5: "无",
+//       point5: 4,
+//       add_total: 24,
+//       sub_total: 4,
+//       pre_total: 18,
+//       point_total: 20,
+//     },
+//     {
+//       userNumber: "20222113002",
+//       username: "玉苏普·吐荪江",
+//       add1: "帮助老师批改作业2分",
+//       sub1: "旷课1分",
+//       point1: 1,
+//       add2: "绩点8分",
+//       sub2: "挂科1门2分",
+//       point2: 6,
+//       add3: "铅球比赛一等奖5分1km二等奖4分",
+//       sub3: "无",
+//       point3: 9,
+//       add4: "捐献书法画1分",
+//       sub4: "破环草坪1分",
+//       point4: 0,
+//       add5: "值日2次4分",
+//       sub5: "无",
+//       point5: 4,
+//       add_total: 24,
+//       sub_total: 4,
+//       pre_total: 18,
+//       point_total: 20,
+//     },]
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style lang="scss" scoped>
@@ -1308,6 +1413,37 @@ h1 {
     margin-left: 1rem;
     display: inline-block;
   }
+}
+.checked {
+  color: rgb(148, 178, 243);
+  border-bottom: 1px solid;
+}
+.stack-line {
+  background: #f2f7ff;
+  padding: 1.2rem;
+  line-height: 1.2rem;
+  margin-bottom: 1rem;
+  span {
+    font-size: 17px;
+    color: rgb(98, 97, 97);
+    margin-right: 10px;
+  }
+  .gk-score {
+    margin-bottom: 1rem;
+  }
+  .gk-rank {
+    margin: 1rem 0;
+  }
+  .item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
+}
+.process {
+  width: 100%;
+  padding: 2rem;
 }
 </style>
   

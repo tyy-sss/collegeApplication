@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-06 20:57:50
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-19 22:01:01
+ * @LastEditTime: 2024-03-22 14:34:53
  * @FilePath: \collegeApplication\src\api\student.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -71,6 +71,20 @@ studentFun.complaint.revokeComplaint = (params) => {
 };
 
 /**
+ * 学生获取可查询综测月份
+ */
+ studentFun.assess.studentGetMonthes = () => {
+  return http.get(`/student/appraisal/month`);
+};
+
+/**
+ * 学生获取班级综测情况按月份
+*/
+studentFun.assess.getAssessmentClass = (params) => {
+  return http.get(`/student/appraisal?keyword=${params.keyword}&month=${params.month}&rank=${params.rank}&current=${params.current}&size=${params.size}`);
+};
+
+/**
  * 获取本月学生个人的综测情况
 */
 studentFun.assess.getAssessmentThisMonth = () => {
@@ -92,6 +106,13 @@ studentFun.sign.studentConfirmSign = (month, formData) => {
 };
 
 /**
+ * 综测小组获取某月班级签名人数
+ */
+ studentFun.sign.assessGetSignCnt = (params) => {
+  return http.get(`/appraisal-team/appraisal/signature/count?month=${params.month}`);
+};
+
+/**
  * 综测小组获取综测签名
  */
  studentFun.sign.assessGetMonthSign = (params) => {
@@ -103,6 +124,12 @@ studentFun.sign.studentConfirmSign = (month, formData) => {
  */
  studentFun.sign.assessConfirmSign = (month, formData) => {
   return http.upload(`/appraisal-team/appraisal/signature?month=${month}`, formData);
+};
+/**
+ * 综测小组移除学生签名
+ */
+ studentFun.sign.deleteStudentSign = (params) => {
+  return http.put(`/appraisal-team/appraisal/signature`, params);
 };
 
 /**
@@ -168,9 +195,7 @@ studentFun.assess.dealComplaint = (params) => {
   return http.get(`/appraisal-team/appraisal/state?month=${params.month}`);
 };
 
-/**
- * 综测小组获取班级综测可选月份
- */
+//综测小组获取班级综测可选月份
  studentFun.assess.getMonthes = () => {
   return http.get(`/appraisal-team/appraisal/month`);
 };

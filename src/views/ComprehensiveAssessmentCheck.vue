@@ -2,19 +2,20 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-19 13:57:55
+ * @LastEditTime: 2024-03-22 15:21:37
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
- * @Description:综合测评表公示页面
+ * @Description:班主任查看综合测评情况页
 -->
 <template>
   <div class="show-container">
-    <div class="title"><div class="text">综合测评表公示</div></div>
+    <div class="title"><div class="text">综合测评表情况</div></div>
     <hr />
     <div class="checkMonth">
       <el-select
         v-model="data.curMonth"
+        :disabled="data.loadOk"
         placeholder="请选择要查询的综测月份"
-        style="width: 200px"
+        style="width: 100px; margin-top: -10px"
         @change="getAssessmentDetails"
       >
         <el-option
@@ -29,15 +30,58 @@
 
     <br />
     <div>
+      <!-- <el-form :inline="true" class="demo-form-inline">
+        <el-form-item label="学号/姓名：">
+          <el-input
+            v-model="data.search"
+            placeholder="请输入查询关键字"
+            clearable
+          />
+        </el-form-item>
+        <el-form-item label="签名状态">
+          <el-select
+            v-model="data.isSign"
+            placeholder="请选择签名状态"
+            clearable
+          >
+            <el-option label="已签" value="1" />
+            <el-option label="未签" value="0" />
+          </el-select>
+        </el-form-item>
+        <el-form-item label="综测成绩">
+          <el-select
+            v-model="data.rankType"
+            placeholder="请选择排序状态"
+            clearable
+          >
+            <el-option label="不排序" value="0" />
+            <el-option label="从小到大" value="1" />
+            <el-option label="从大到小" value="2" />
+          </el-select>
+        </el-form-item>
+        <el-form-item>
+          <el-button type="primary" @click="getAssessmentDetails"
+            >查询</el-button
+          >
+          <el-button  @click="getAssessmentDetails"
+            >重置</el-button
+          >
+          <el-button style="float: right" @click="handleExcelExport"
+            ><el-icon><Download /></el-icon>&nbsp; 导出</el-button
+          >
+        </el-form-item>
+      </el-form> -->
       <div class="mt-4">
         <el-input
           v-model="data.search"
-          style="max-width: 300px;margin-bottom: -50px;"
+          style="max-width: 300px; margin-bottom: -50px; margin-right: 1rem"
           placeholder="请输入查询关键字"
           class="input-with-select"
         >
           <template #append>
-            <el-button @click="getAssessmentDetails"><el-icon><Search /></el-icon></el-button>
+            <el-button @click="getAssessmentDetails"
+              ><el-icon><Search /></el-icon
+            ></el-button>
           </template>
         </el-input>
       </div>
@@ -84,12 +128,25 @@
         <el-table-column prop="add_total" label="月加分" min-width="50" />
         <el-table-column prop="sub_total" label="月减分" min-width="50" />
         <el-table-column prop="pre_total" label="上月得分" min-width="50" />
-        <el-table-column
-          prop="point_total"
-          label="当月总分"
-          sortable
-          min-width="50"
-        />
+        <el-table-column prop="point_total" label="当月总分" min-width="50" />
+        <el-table-column label="签名" min-width="60">
+          <template #default="scope">
+            <span v-show="!scope.row.signature">未签</span>
+            <el-popover trigger="click" placement="left" :width="400">
+              <template #reference>
+                <span v-show="scope.row.signature" class="checked">已签</span>
+              </template>
+              <h4>{{ scope.row.username }}签名详细</h4>
+              <div style="width: 330px; height: 100px; border: 1px solid black">
+                <el-image
+                  style="width: 100%; height: 100%"
+                  :src="scope.row.signature"
+                  fit="contain"
+                />
+              </div>
+            </el-popover>
+          </template>
+        </el-table-column>
       </el-table-column>
     </el-table>
 
@@ -106,13 +163,92 @@
         style="margin-left: auto"
       />
     </div>
+
+    <hr />
+    <div class="process">
+      <div>
+        <span>综测进度 ：</span>
+        <span v-show="!data.signature">🟢进行中</span>
+        <span v-show="data.signature">⚫已归档</span>
+      </div>
+      <br />
+      <div>
+        <div class="stack-line">
+          <div>
+            <div class="gk-rank">
+              <div class="item">
+                <span>综测小组确认情况 ：</span>
+                <el-popover trigger="hover" placement="right" :width="400">
+                  <template #reference>
+                    <span v-show="data.assessSignature">已确认</span>
+                  </template>
+                  <h4>综测小组签字</h4>
+                  <div
+                    style="width: 380px; height: 100px; border: 1px solid black"
+                  >
+                    <el-image
+                      style="width: 100%; height: 100%"
+                      :src="data.assessSignature"
+                      fit="contain"
+                    />
+                  </div>
+                </el-popover>
+                <span v-show="!data.assessSignature">待确认</span>
+                <span style="color: rgb(167, 167, 167); margin-left: 15px">
+                  (综测小组确认后班主任方可签名归档本月综测情况)</span
+                >
+              </div>
+              <div class="item">
+                <span>班主任签名 ：</span>
+                <el-popover trigger="hover" placement="right" :width="400">
+                  <template #reference>
+                    <span v-show="data.signature">已确认</span>
+                  </template>
+                  <h4>班主任签字</h4>
+                  <div
+                    style="width: 380px; height: 100px; border: 1px solid black"
+                  >
+                    <el-image
+                      style="width: 100%; height: 100%"
+                      :src="data.signature"
+                      fit="contain"
+                    />
+                  </div>
+                </el-popover>
+                <span v-show="data.signature == null">待确认</span>
+                <el-button
+                  type="primary"
+                  style="margin-left: 1rem"
+                  @click="data.dialogVisible = true"
+                  :disabled="
+                    data.assessSignature == null || data.signature !== null
+                  "
+                  >前往电子签名</el-button
+                >
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
+  <!-- 电子签名对话框 -->
+  <el-dialog v-model="data.dialogVisible" title="电子签名" width="50%">
+    <div style="margin-left: 2rem">
+      当全班成员进行电子签名后，您可以在本页进行签字确认班级综测已编辑核对完成，签字之后无法修改综测内容，请仔细核对后签字。
+    </div>
+    <br />
+    <div>
+      <signatures @finish="finish"></signatures>
+    </div>
+  </el-dialog>
 </template>
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
 import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment-style";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
+import { ElMessageBox, ElMessage } from "element-plus";
 import { getMonthName } from "@/assets/js/utils/month";
 import teacherFun from "@/api/teacher";
 import apiFun from "@/api/user";
@@ -120,6 +256,7 @@ import Signatures from "@/components/utils/Signatures.vue";
 const data = reactive({
   myclass: "2023级1班",
   search: "",
+  dialogVisible: false,
   assessments: [
     {
       userNumber: "20222113001",
@@ -308,8 +445,12 @@ const data = reactive({
     // },
   ],
   loading: false,
+  loadOk: true,
+  // isSign: "0",//是否签名
+  // rankType:null,
+  signature: "xx", //班主任签名
+  assessSignature: "xx", //测评小组签名
 });
-
 onMounted(() => {
   init();
 });
@@ -333,12 +474,13 @@ function getAssessmentMonth() {
 //获取综测信息
 function getAssessmentDetails() {
   data.loading = true;
+  data.loadOk = true;
   //这里是老师身份请求本月学生综测信息
   teacherFun.assessment
     .getAssessments({
       keyword: data.search,
       month: data.curMonth,
-      identity: 1,
+      rank: 0,
       current: data.page.currentPage,
       size: data.page.pageSize,
     })
@@ -349,16 +491,53 @@ function getAssessmentDetails() {
       data.page.pageSize = res.size;
       data.page.total = res.total;
       res.records.forEach((item) => {
-        data.assessments.push(item.content);
+        data.assessments.push({ ...item.content, signature: item.signature });
       });
       if (data.curMonth == 0) {
         data.curMonth = res.records[0].month;
       }
-      console.log(data.assessments);
+      console.log("综测列表", data.assessments);
+      data.signature = res.teacherSignature;
+      data.assessSignature = res.signature;
       data.loading = false;
+      data.loadOk = false;
     });
 }
+//班主任获取自己本月的签名
+function getSign() {
+  teacherFun.sign
+    .getMonthSign({
+      month: data.curMonth,
+    })
+    .then((res) => {
+      console.log("班主任获取自己本月的签名", res);
+      data.signature = res;
+    });
+}
+//班主任电子签名
+function finish(file) {
+  const formData = new FormData();
+  formData.append("file", file);
 
+  teacherFun.sign.confirmSign(data.curMonth, formData).then((res) => {
+    console.log(res);
+    data.teacherSignature = "xx"; //不为空即可
+    data.dialogVisible = false;
+    ElMessage({
+      message: "确认本月综测情况成功",
+      type: "success",
+    });
+  });
+
+  //模拟提交
+  // setTimeout(() => {
+  //   data.dialogVisible = false;
+  //   ElMessage({
+  //     message: "提交本月综测情况成功",
+  //     type: "success",
+  //   });
+  // }, 60);
+}
 //改变分页页数
 const handleCurrentChange = (val) => {
   console.log(`current page: ${val}`);
@@ -395,6 +574,37 @@ h1 {
 .pagination {
   margin-top: 1rem;
   display: flex;
+}
+.checked {
+  color: rgb(148, 178, 243);
+  border-bottom: 1px solid;
+}
+.process {
+  width: 100%;
+  padding: 2rem;
+}
+.stack-line {
+  background: #f2f7ff;
+  padding: 1.2rem;
+  line-height: 1.2rem;
+  margin-bottom: 1rem;
+  span {
+    font-size: 17px;
+    color: rgb(98, 97, 97);
+    margin-right: 10px;
+  }
+  .gk-score {
+    margin-bottom: 1rem;
+  }
+  .gk-rank {
+    margin: 1rem 0;
+  }
+  .item {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    margin-bottom: 1rem;
+  }
 }
 </style>
   

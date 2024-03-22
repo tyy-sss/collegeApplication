@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-05 21:22:27
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-18 22:30:58
+ * @LastEditTime: 2024-03-21 15:39:53
  * @FilePath: \collegeApplication\src\api\teacher.js
  * @Description: 介绍文件的作用
  */
@@ -16,6 +16,7 @@ let teacherFun = {
   complaint: {},
   post: {},
   wish: {},
+  sign: {},
 };
 /**
  * 老师获取个人信息
@@ -68,7 +69,7 @@ teacherFun.class.updateStudentPassword = (params) => {
 };
 
 /**
- * 班主任按月份获取综测签名确认进度
+ * 班主任按月份获取综测状态
  */
 teacherFun.assessment.getAssessmentsProcess = (params) => {
   return http.get(`/adviser/appraisal/state?month=${params.month}`);
@@ -79,14 +80,14 @@ teacherFun.assessment.getAssessmentsProcess = (params) => {
  */
 teacherFun.assessment.getAssessments = (params) => {
   return http.get(
-    `/adviser/appraisal?keyword=${params.keyword}&month=${params.month}&identity=${params.identity}&current=${params.current}&size=${params.size}`
+    `/adviser/appraisal?keyword=${params.keyword}&month=${params.month}&rank=${params.rank}&current=${params.current}&size=${params.size}`
   );
 };
 
 /**
  * 班主任修改某月综测进度
  */
- teacherFun.assessment.updateAssessmentState = (params) => {
+teacherFun.assessment.updateAssessmentState = (params) => {
   return http.put(`/adviser/end?month=${params.month}&end=${params.end}`);
 };
 // /**
@@ -166,4 +167,19 @@ teacherFun.wish.getClassWish = (params) => {
     `/wish/selectClassWish?timeId=${params.timeId}&current=${params.current}&size=${params.size}`
   );
 };
+
+/**
+ * 班主任确认综测上传电子签名按月份
+ */
+teacherFun.sign.confirmSign = (month, formData) => {
+  return http.upload(`/adviser/appraisal/signature?month=${month}`, formData);
+};
+
+/**
+ * 班主任获取综测签名按月份
+ */
+ teacherFun.sign.getMonthSign = (params) => {
+  return http.get(`/adviser/appraisal/signature?month=${params.month}`);
+};
+
 export default teacherFun;
