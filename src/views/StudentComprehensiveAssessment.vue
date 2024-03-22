@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-22 15:29:11
+ * @LastEditTime: 2024-03-22 15:51:24
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -111,8 +111,8 @@
         >⊙综合素质测评成绩 = 德育 x 20% + 智育 x 20% + 体育 x 20% + 美育　x 20%
         +劳动 x 20%</span
       > -->
-      <br /><br />
-      <div>
+      <!-- <br /><br /> -->
+      <!-- <div>
         <h4>截止该月本学期总体综测情况</h4>
         <br />
         <el-table :data="data.total" v-loading.lock="data.loading">
@@ -144,7 +144,7 @@
           </el-table-column>
         </el-table>
         <br />
-      </div>
+      </div> -->
     </div>
   </div>
   <!-- 电子签名对话框 -->
@@ -284,18 +284,18 @@ const data = reactive({
     // },
   ],
   //目前综测合计
-  total: [
-    {
-      class1: 0,
-      class2: 0,
-      class3: 0,
-      class4: 0,
-      class5: 0,
-      add: 0,
-      sup: 0,
-      all: 0,
-    },
-  ],
+  // total: [
+  //   {
+  //     class1: 0,
+  //     class2: 0,
+  //     class3: 0,
+  //     class4: 0,
+  //     class5: 0,
+  //     add: 0,
+  //     sup: 0,
+  //     all: 0,
+  //   },
+  // ],
   state: null,
   month: null, //当前确认综测的月份
   score: null, //目前总分
@@ -364,7 +364,7 @@ function getAssessmentThisMonth() {
     data.score = res.score;
     data.signature = res.signature;
     data.assessment = [res.content];
-    data.total = [res.total];
+    // data.total = [res.total];
     data.loading = false;
     data.loadOk=false;
   });
@@ -383,7 +383,7 @@ function getAssessmentDetails() {
       data.score = res.score;
       data.signature = res.signature;
       data.assessment = [res.content];
-      data.total = [res.total];
+      // data.total = [res.total];
       data.loading = false;
     });
 }
