@@ -65,4 +65,11 @@ const professionHeader = reactive({
     "M1:N1",
   ], //合并单元格规则
 });
-export { professionHeader };
+
+// 导出剩余专业的信息
+const professionMajor = reactive({
+  college: "学院",
+  name: "专业",
+  enrollmentNumber: "剩余可填报人数",
+});
+export { professionHeader, professionMajor };

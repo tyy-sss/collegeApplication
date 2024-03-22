@@ -7,7 +7,7 @@
           v-model="data.searchData.year"
           type="year"
           placeholder="请选择年份"
-          @change="onSearch"
+          @change="onSearchYear"
         />
       </div>
     </div>
@@ -121,6 +121,22 @@ const data = reactive({
     total: 1000,
   },
 });
+// 搜索年份获得当年的班级信息
+const onSearchYear = (val) => {
+  data.searchData.year = formatDate(val).slice(0, 4);
+  data.searchData.class = "";
+  data.searchData.student = "";
+  console.log(data.searchData.year);
+  managerFun.class.getAllClass(data.searchData.year).then((res) => {
+    console.log(res);
+    res.forEach((element) => {
+      data.searchData.list.push({
+        className: element.className,
+        classId: element.classId,
+      });
+    });
+  });
+};
 // 搜索
 const onSearch = () => {
   console.log(formatDate(data.searchData.year).slice(0, 4));
@@ -138,9 +154,7 @@ const handleExcelExport = () => {
   //   );
 };
 // 获取班级的信息
-const getClassList = () => {
-    
-};
+const getClassList = () => {};
 // 获取综测的信息
 const getComprehensiveNews = () => {};
 onMounted(() => {});

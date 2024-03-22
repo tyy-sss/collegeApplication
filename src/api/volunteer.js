@@ -93,6 +93,18 @@ volunteerFun.manager.exportVolunteerDiversion = (
   });
 };
 /**
+ * 获取没有匹配完的专业信息
+ * @param {*} type
+ * @param {*} timeId
+ * @returns
+ */
+volunteerFun.manager.getRemainMajor = (type, timeId) => {
+  return http.get("/volunteerDiversion/getAdmissionsMajor", {
+    type,
+    timeId,
+  });
+};
+/**
  * 分页查看志愿匹配数据
  * @param {*} schoolId
  * @param {*} timeId

@@ -417,7 +417,7 @@ function handleFileSelect(e) {
     formData.append("file", file);
     studentFun.user.setIDPhoto(formData).then((res) => {
       data.avatar = res;
-      console.log(data.avatar);
+      console.log(data.avatar)
       data.loading = false;
       ElMessage.success("证件照上传成功");
       console.log(data.avatar);
