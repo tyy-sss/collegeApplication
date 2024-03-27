@@ -165,6 +165,7 @@ const router = createRouter({
 });
 
 router.beforeEach((to, form, next) => {
+  console.log(to);
   // 判断是否有token
   var token = getAccessToken();
   if (!token) {

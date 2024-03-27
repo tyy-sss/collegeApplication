@@ -53,6 +53,9 @@ requests.interceptors.response.use(
     });
   },
   (error) => {
+    router.push({
+      path: "/error",
+    });
     return Promise.reject(error);
   }
 );
