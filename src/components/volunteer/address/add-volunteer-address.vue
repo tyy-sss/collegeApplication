@@ -84,13 +84,13 @@
     </el-drawer>
   </div>
 </template>
-  <script setup>
+<script setup>
 // 添加地址组合,组合姓名查重
 import { onMounted, reactive, ref, watch } from "vue";
 // 接口
 import managerFun from "@/api/manager";
 // 省份数据
-import { cities } from "@/assets/js/utils/province-name.js";
+import { cities } from "@/assets/js/data/province-name.js";
 import { ElMessage } from "element-plus";
 const props = defineProps({ addressVal: Object });
 const form = reactive({
@@ -175,7 +175,7 @@ const getAllSubject = () => {
     form.subjectList = res;
   });
 };
-onMounted(() => {form
+onMounted(() => {
   getAllSubject();
   if (form.isChange == false) {
     form.ruleForm.subjectNumber = 3;
@@ -185,8 +185,7 @@ defineExpose({
   form,
 });
 </script>
-  <style src="@/assets/css/role/role-drawer.css" scoped>
-</style>
+<style src="@/assets/css/role/role-drawer-footer.css" scoped></style>
 <style scoped>
 /* 省份选择展示框 */
 .choose-group {
@@ -207,4 +206,4 @@ defineExpose({
   text-align: center;
 }
 </style>
-  
+@/assets/js/data/province-name.js

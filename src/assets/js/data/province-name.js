@@ -1,4 +1,5 @@
 import { reactive } from "vue";
+// 所有地区名字
 const cities = reactive([
   {
     text: "普通省份",

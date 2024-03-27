@@ -44,13 +44,13 @@
 </template>
 <script setup>
 import { onMounted, reactive, ref } from "vue";
-import { formatDate } from "@/assets/js/utils/format-date";
+import { NOW_YEAR,getAllTimeNews } from "@/constants/date";
 // 接口
 import managerFun from "@/api/manager";
 const data = reactive({
   volunteerTime: {},
   preVolunteerTime: {},
-  nowYear: Number(formatDate(new Date()).substring(0, 4)),
+  nowYear: Number(NOW_YEAR),
 });
 import { useRoute } from "vue-router";
 // 获得路由显示的学校id
@@ -58,8 +58,8 @@ const route = new useRoute();
 const schoolId = Number(ref(route.query.schoolId).value);
 // 设置预填报志愿的时间
 const handleSetPreVolunteerTime = () => {
-  const startTime = formatDate(data.preVolunteerTime.time[0]);
-  const endTime = formatDate(data.preVolunteerTime.time[1]);
+  const startTime = getAllTimeNews(data.preVolunteerTime.time[0]);
+  const endTime = getAllTimeNews(data.preVolunteerTime.time[1]);
   if (!data.preVolunteerTime.id) {
     addWishTime(false, startTime, endTime);
   } else {
@@ -68,8 +68,8 @@ const handleSetPreVolunteerTime = () => {
 };
 // 设置正式志愿填报时间
 const handleSetVolunteerTime = () => {
-  const startTime = formatDate(data.volunteerTime.time[0]);
-  const endTime = formatDate(data.volunteerTime.time[1]);
+  const startTime = getAllTimeNews(data.volunteerTime.time[0]);
+  const endTime = getAllTimeNews(data.volunteerTime.time[1]);
   if (!data.volunteerTime.id) {
     addWishTime(true, startTime, endTime);
   } else {

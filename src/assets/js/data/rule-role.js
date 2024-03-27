@@ -1,6 +1,7 @@
 // 角色权限的信息
 import { reactive } from "vue";
 
+// 学生权限
 const studentTableData = reactive([
   {
     name: "个人信息",
@@ -38,6 +39,8 @@ const studentTableData = reactive([
     },
   },
 ]);
+
+// 老师权限
 const teacherTableData = reactive([
   {
     name: "个人信息",
@@ -54,6 +57,8 @@ const teacherTableData = reactive([
     },
   },
 ]);
+
+// 测评小组权限 
 const comprehensiveTableData = reactive([
   {
     name: "个人信息",
@@ -77,6 +82,8 @@ const comprehensiveTableData = reactive([
     },
   },
 ]);
+
+// 班主任权限
 const headerTeacherTableData = reactive([
   {
     name: "个人信息",
@@ -114,8 +121,9 @@ const headerTeacherTableData = reactive([
     },
   },
 ]);
+
+// 获得权限显示数据
 export const getTableDataByRole = (role) => {
-  console.log(role);
   switch (role) {
     case "学生":
       return studentTableData;

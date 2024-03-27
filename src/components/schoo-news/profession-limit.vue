@@ -73,7 +73,12 @@
           >
         </div>
         <div class="add-item">
-          <el-button type="primary" :icon="Download" @click="handleExportAllProfeesion">导出所有信息</el-button>
+          <el-button
+            type="primary"
+            :icon="Download"
+            @click="handleExportAllProfeesion"
+            >导出所有信息</el-button
+          >
         </div>
       </div>
       <div class="middle">
@@ -141,7 +146,7 @@
     </div>
   </div>
 </template>
-  <script setup>
+<script setup>
 import { onMounted, reactive, ref, watch } from "vue";
 import { useRoute } from "vue-router";
 import professionInformation from "@/components/schoo-news/limit/profession-information.vue";
@@ -153,13 +158,18 @@ import managerFun from "@/api/manager";
 const route = new useRoute();
 const schoolId = ref(route.query.schoolId).value;
 // 下拉框数据
-import { optionsChoose } from "@/assets/js/profession/address-cascader";
+import {
+  optionsChoose,
+} from "@/assets/js/profession/address-cascader";
 // 数据处理
 import {
   handleCascaderData,
   handleCascaderDataForEnrollmentNumber,
 } from "@/assets/js/profession/profession-send-data";
-import { handleProfessionExportData,handleAllProfessionExportData } from "@/assets/js/excel/profession/profession-export";
+import {
+  handleProfessionExportData,
+  handleAllProfessionExportData,
+} from "@/assets/js/excel/profession/profession-export";
 import {
   handleTableData,
   handleTableDataForSingle,
@@ -202,17 +212,15 @@ const handleSearchProfession = () => {
 };
 // 导出信息
 const handleExportProfession = () => {
-  console.log(data.tableData);
   handleProfessionExportData(data.tableHeader, data.tableData);
 };
 // 导出所有的专业限制信息
-const handleExportAllProfeesion = () =>{
+const handleExportAllProfeesion = () => {
   // managerFun.major.allMajor(schoolId).then((res)=>{
   //   handleAllProfessionExportData(data.tableHeader,res)
   // }).catch((err)=>{
-
   // })
-}
+};
 // 删除专业
 const handleDeleteProfession = (val) => {
   ElMessageBox.confirm("确定删除所选地址组合", {
@@ -245,11 +253,10 @@ const handleChangeEnrollmentNumber = debounce((val) => {
 const cascaderRef = ref(null);
 // 修改限制专业地区的值
 const handleChangeChooseValue = (chooseVal, rowVal) => {
-  changeMajor(handleCascaderData(chooseVal, rowVal),rowVal);
+  changeMajor(handleCascaderData(chooseVal, rowVal), rowVal);
 };
 // 修改单个专业限制信息
-const changeMajor = (val,rowVal) => {
-  // 
+const changeMajor = (val, rowVal) => {
   managerFun.major
     .modifyMajor(val)
     .then((res) => {
@@ -257,7 +264,7 @@ const changeMajor = (val,rowVal) => {
       data.tableData = handleTableDataForSingle(res, data.tableData);
     })
     .catch(() => {
-     getShcoolMajor();
+      getShcoolMajor();
     })
     .finally(() => {});
 };
@@ -265,17 +272,19 @@ const changeMajor = (val,rowVal) => {
 const getAreaList = () => {
   managerFun.area.selectArea("").then((res) => {
     data.tableHeader = [];
-    res.forEach((item) => {
-      data.tableHeader.push({
-        areaId: String(item.areaId),
-        name: item.name,
-        options: optionsChoose(
-          item.subjectScope,
-          item.areaId,
-          item.subjectNumber
-        ),
+    if (res.length != 0) {
+      res.forEach((item) => {
+        data.tableHeader.push({
+          areaId: String(item.areaId),
+          name: item.name,
+          options: optionsChoose(
+            JSON.parse(item.subjectScope),
+            item.areaId,
+            item.subjectNumber
+          ),
+        });
       });
-    });
+    }
   });
 };
 // 通过学校id获取专业信息
@@ -293,7 +302,6 @@ const getShcoolMajor = () => {
       data.page.currentPage = res.current;
       data.page.total = res.total;
       data.page.nowPageSize = res.size;
-      console.log(res);
       // 表格数据处理 处理strings数组最后一个元素的strings属性
       data.tableData = handleTableData(res, data.tableHeader);
     })
@@ -331,10 +339,10 @@ onMounted(() => {
 //   professionAddressRef.value.data.dialogVisible = true;
 // };
 </script>
-<style src="@/assets/css/utils/table-center.css" scoped/>
-<style src="@/assets/css/show-container.css" scoped/>
-<style src="@/assets/css/search-top-left-right.css" scoped/>
-<style src="@/assets/css/pager.css" scoped/>
+<style src="@/assets/css/utils/table-center.css" scoped />
+<style src="@/assets/css/show-container.css" scoped />
+<style src="@/assets/css/search-top-left-right.css" scoped />
+<style src="@/assets/css/pager.css" scoped />
 <style scoped>
 .profession-limit {
   display: flex;
@@ -359,7 +367,7 @@ onMounted(() => {
   align-items: center;
   min-width: 5rem;
 }
-.top .search .right > div{
+.top .search .right > div {
   margin-right: 1rem;
 }
 .add {
@@ -369,5 +377,3 @@ onMounted(() => {
   margin-right: 1rem;
 }
 </style>
-  
-    

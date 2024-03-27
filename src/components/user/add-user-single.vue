@@ -140,14 +140,12 @@ import { onMounted, reactive, ref } from "vue";
 import {
   nationList,
   politicsStatusList,
-  subjectList,
 } from "@/assets/js/data/information-dropdown-data";
 import { NAME_TEST, ACCOUNT_TEST } from "@/constants/regular-expression";
 import { ElMessage } from "element-plus";
 
 // 验证信息
 const validateElectiveSubject = (rule, value, callback) => {
-  console.log(value);
   if (value.length !== 3) {
     callback(new Error("科目数应该为3个"));
   }
@@ -192,7 +190,7 @@ const form = reactive({
 const dropDownData = reactive({
   politicsStatusList: politicsStatusList,
   nationList: nationList,
-  subjectList: subjectList,
+  subjectList: [],
 });
 // 自动补全输入框
 const queryEthniGroupString = (nation, cb) => {
@@ -257,6 +255,7 @@ const adduerList = (val) => {
     .then((res) => {
       ElMessage.success(res);
     })
+    .catch(() => {})
     .finally(() => {
       handleClose();
     });
@@ -268,12 +267,21 @@ const addTeacherList = (val) => {
     .then((res) => {
       ElMessage.success(res);
     })
+    .catch(() => {})
     .finally(() => {
       handleClose();
     });
 };
+// 获取科目信息
+const getSubjectList = () => {
+  managerFun.subject.checkSubject().then((res) => {
+    res.forEach((element) => {
+      dropDownData.subjectList.push(element.subjectName);
+    });
+  });
+};
 onMounted(() => {
-  console.log(dropDownData);
+  getSubjectList();
 });
 defineExpose({ form });
 </script>

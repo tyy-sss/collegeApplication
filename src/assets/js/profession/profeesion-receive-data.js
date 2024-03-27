@@ -1,3 +1,4 @@
+// 处理stringsType的数据
 export const changeStringsType = (item) => {
   for (let i = 0, len = item.subjectRule.length; i < len; i++) {
     let n = item.subjectRule[i].strings.length - 1;

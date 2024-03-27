@@ -1,4 +1,5 @@
 <template>
+  <!-- 侧边栏手机端 -->
   <div class="common-aside">
     <div class="menu">
       <div class="middle">
@@ -63,6 +64,7 @@
 </template>
 <script setup>
 import { onMounted, reactive, ref } from "vue";
+import apiFun from "@/api/user.js";
 import store from "@/store";
 import { useRouter } from "vue-router";
 import {
@@ -70,6 +72,7 @@ import {
   removeRefreshToken,
   removeRole,
 } from "@/constants/token";
+import apiFun from "@/api/user";
 const router = useRouter();
 const menuDataForVue = reactive(store.state.menu.menuData);
 const imgWidth = ref(null);
@@ -93,17 +96,18 @@ const handleSelect = (key, keyPath) => {
   router.push({ path: key });
 };
 // 退出
-const handleExit = async () => {
-  // 清除用户信息
-  removeAccessToken();
-  removeRefreshToken();
-  removeRole();
-  // const data = await apiFun.user.loginOut();
-  // 跳转界面
-  const href = router.resolve({
-    path: "/login",
+const handleExit = () => {
+  apiFun.user.loginOut().then(() => {
+    // 清除用户信息
+    removeAccessToken();
+    removeRefreshToken();
+    removeRole();
+    // 跳转界面
+    const href = router.resolve({
+      path: "/login",
+    });
+    window.open(href.href, "_self");
   });
-  window.open(href.href, "_self");
 };
 onMounted(() => {
   setImgWidth();

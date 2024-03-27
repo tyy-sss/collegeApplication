@@ -53,7 +53,7 @@
     </el-dialog>
   </div>
 </template>
-  <script setup>
+<script setup>
 import { reactive } from "vue";
 import { excelExport } from "@/assets/js/excel/excel-export";
 import {
@@ -79,6 +79,7 @@ const data = reactive({
 });
 // 获得上传文件的数据
 const uploadAction = (option) => {};
+// 在上传之前
 const beforeUpload = (rawFile) => {
   data.upload.isProgress = true;
 };
@@ -95,7 +96,6 @@ const handleAddUser = async (ev) => {
     const excelData = getExcelData(data);
     console.log(excelData);
     let addData = [];
-    console.log(getGradesCharacter(props.gradesList));
     addData = excelLeadingIn(excelData, getGradesCharacter(props.gradesList));
     addData = handleGradesInformation(addData, props.gradesList);
     addGrades(addData);
@@ -112,7 +112,6 @@ const handleClose = () => {
     emit("getGradesList");
   });
 };
-
 // 导出成绩单模板表
 const handleExportGrades = () => {
   const gradesHeader = getGradesHeader(props.gradesList);
@@ -135,7 +134,7 @@ defineExpose({
   data,
 });
 </script>
-  <style scoped>
+<style scoped>
 ::v-deep .el-divider--horizontal {
   margin: 2px 0;
 }

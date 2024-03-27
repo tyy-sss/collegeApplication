@@ -1,4 +1,4 @@
-// 志愿说明数据
+// 志愿规则说明数据
 
 import { reactive } from "vue";
 

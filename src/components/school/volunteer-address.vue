@@ -66,7 +66,7 @@
               min-width="110"
             >
               <template #default="scope">{{
-                formatDate(scope.row.updateTime)
+                getAllTimeNews(scope.row.updateTime)
               }}</template></el-table-column
             >>
             <el-table-column label="操作">
@@ -105,7 +105,7 @@ import addVolunteerAddress from "@/components/volunteer/address/add-volunteer-ad
 // 接口
 import managerFun from "@/api/manager";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { formatDate } from "@/assets/js/utils/format-date";
+import { getAllTimeNews } from "@/constants/date";
 const data = reactive({
   // 搜索数据
   searchData: {

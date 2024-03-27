@@ -89,7 +89,7 @@
       <div class="pager">
         <el-pagination
           :page-size="data.pager.size"
-          :pager-count="9"
+          :current-page="data.pager.current"
           layout="prev, pager, next"
           :total="data.pager.total"
           @current-change="handleChangePage"
@@ -100,7 +100,7 @@
 </template>
 <script setup>
 import { reactive, ref, onMounted } from "vue";
-import { formatDate } from "@/assets/js/utils/format-date";
+import { NOW_YEAR } from "@/constants/date";
 import ruleExplain from "@/components/rule/rule-explain.vue";
 import { rangeVolunteer, firstVolunteer } from "@/assets/js/data/rule-explain";
 import { Download } from "@element-plus/icons-vue";
@@ -184,7 +184,7 @@ const handleExportVolunteerDiversion = () => {
       return element.type == data.volunteerRule;
     })[0].label;
     let headerTitle =
-      Number(formatDate(new Date()).substring(0, 4)) +
+      Number(NOW_YEAR) +
       "-" +
       schoolName +
       "-" +
@@ -240,6 +240,7 @@ const getCheckVounteerDiversion = () => {
 };
 // 根据志愿规则匹配志愿
 const getVounteerDiversion = (value) => {
+  data.pager.current = 1;
   data.volunteerRule = value;
   volunteerFun.manager
     .volunteerDiversion({
@@ -264,7 +265,7 @@ const getVounteerDiversion = (value) => {
 // 获得正式志愿填报时间Id
 const getWishTime = () => {
   managerFun.wishTime
-    .selectWishTime1(schoolId, Number(formatDate(new Date()).substring(0, 4)))
+    .selectWishTime1(schoolId, Number(NOW_YEAR))
     .then((res) => {
       res.records.forEach((element) => {
         if (element.type == true) {

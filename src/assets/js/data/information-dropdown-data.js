@@ -182,6 +182,5 @@ const nationList = reactive([
     value: "穿青人",
   },
 ]);
-// 考试科目
-const subjectList = ["物理", "化学", "生物", "历史", "地理", '政治'];
-export { nationList, politicsStatusList, subjectList };
+
+export { nationList, politicsStatusList };

@@ -101,7 +101,6 @@ const changeGrades = () =>{
 watch(
   () => data.ruleForm,
   (newVal, oldVal) => {
-    console.log(newVal);
     props.gradesList.forEach((element) => {
       let subject = data.ruleForm.gradeSubjectBos.find(
         (item) => item.gradeId == element.gradeId

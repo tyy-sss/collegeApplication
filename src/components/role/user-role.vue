@@ -88,7 +88,7 @@
     </el-drawer>
   </div>
 </template>
-  <script setup>
+<script setup>
 // 获得用户分页名单，搜索用户，给用户设置角色
 import managerFun from "@/api/manager";
 import { reactive, ref } from "vue";
@@ -121,6 +121,7 @@ const handleClose = () => {
 };
 // 搜索用户
 const onSearch = () => {
+  form.page.pageCount = 1;
   getUserList();
 };
 // 切换用户数据
@@ -129,12 +130,14 @@ const handleCurrentChange = (val) => {
   // 获得用户列表
   getUserList();
 };
+// 获得一个角色的所有身份
 const getAllUserByRole = (data) => {
   form.dialogVisible = true;
   form.ruleForm.name = data.strName;
   form.ruleForm.roleId = data.roleId;
   form.ruleForm.searchData = "";
-  (form.page.pageCount = 1), getUserList();
+  form.page.pageCount = 1;
+  getUserList();
 };
 // 获取用户列表
 const getUserList = () => {
@@ -161,8 +164,8 @@ defineExpose({
   getAllUserByRole,
 });
 </script>
-<style src="@/assets/css/role/role-drawer.css" scoped/>
-<style src="@/assets/css/utils/table-empty.css" scoped/>
+<style src="@/assets/css/role/role-drawer.css" scoped />
+<style src="@/assets/css/utils/table-empty.css" scoped />
 <style scoped>
 .warn {
   padding: 0.5rem;
