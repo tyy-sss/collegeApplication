@@ -40,23 +40,6 @@ const studentTableData = reactive([
   },
 ]);
 
-// 老师权限
-const teacherTableData = reactive([
-  {
-    name: "个人信息",
-    rule: {
-      allRule: ["查看", "修改", "申诉"],
-      ruleDetail: ["查看", "修改"],
-    },
-  },
-  {
-    name: "志愿信息",
-    rule: {
-      allRule: ["查看", "修改", "导出"],
-      ruleDetail: ["查看"],
-    },
-  },
-]);
 
 // 测评小组权限 
 const comprehensiveTableData = reactive([
@@ -92,13 +75,6 @@ const headerTeacherTableData = reactive([
       ruleDetail: ["查看", "修改"],
     },
   },
-  {
-    name: "志愿信息",
-    rule: {
-      allRule: ["查看", "修改", "导出"],
-      ruleDetail: ["查看"],
-    },
-  },
    {
     name: "学生个人综测",
     rule: {
@@ -116,8 +92,8 @@ const headerTeacherTableData = reactive([
   {
     name: "班级管理",
     rule: {
-      allRule: ["查看", "班级成员管理", "申诉处理", "测评小组分配"],
-      ruleDetail: ["查看", "班级成员管理", "申诉处理", "测评小组分配"],
+      allRule: ["查看", "班级成员管理", "申诉处理"],
+      ruleDetail: ["查看", "班级成员管理", "申诉处理"],
     },
   },
 ]);
@@ -127,8 +103,6 @@ export const getTableDataByRole = (role) => {
   switch (role) {
     case "学生":
       return studentTableData;
-    case "老师":
-      return teacherTableData;
     case "班主任":
       return headerTeacherTableData;
     case "综测成员":

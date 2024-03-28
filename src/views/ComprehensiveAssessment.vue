@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 13:45:27
+ * @LastEditTime: 2024-03-28 14:11:37
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -30,7 +30,6 @@
       </el-select>
       <h1>{{ data.myclass }}班级综合测评表</h1>
     </div>
-
     <!-- 顶部，查询按钮，导出按钮 -->
     <div>
       <div class="mt-4">
@@ -58,271 +57,7 @@
       >
     </div>
     <br />
-    <!-- 测评编辑表 -->
-    <!-- <el-table
-      :data="data.assessments"
-      style="width: 100%"
-      @cell-mouse-enter="handleCellEnter"
-      @cell-mouse-leave="handleCellLeave"
-    >
-      <el-table-column prop="id" label="学号" width="120" />
-      <el-table-column prop="name" fixed label="姓名" width="150" />
-      <el-table-column label="德育">
-        <el-table-column prop="add1" label="加分明细" width="200">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.add1"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.add1 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="sub1" label="减分明细" width="200">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.sub1"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.sub1 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="point1" label="得分" width="90">
-          <template #default="scope">
-            <div class="item">
-              <el-input-number
-                style="width: 70px"
-                class="item__input"
-                v-model="scope.row.point1"
-                :min="-100"
-                :max="100"
-                size="small"
-              />
-              <div class="item__txt">{{ scope.row.point1 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="智育">
-        <el-table-column prop="add2" label="加分明细" width="200">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.add2"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.add2 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="sub2" label="减分明细" width="200">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.sub2"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.sub2 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="point2" label="得分" width="90">
-          <template #default="scope">
-            <div class="item">
-              <el-input-number
-                style="width: 70px"
-                class="item__input"
-                v-model="scope.row.point2"
-                :min="-100"
-                :max="100"
-                size="small"
-              />
-              <div class="item__txt">{{ scope.row.point2 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="体育">
-        <el-table-column prop="add3" label="加分明细" width="200">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.add3"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.add3 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="sub3" label="减分明细" width="200">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.sub3"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.sub3 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="point3" label="得分" width="90">
-          <template #default="scope">
-            <div class="item">
-              <el-input-number
-                style="width: 70px"
-                class="item__input"
-                v-model="scope.row.point3"
-                :min="-100"
-                :max="100"
-                size="small"
-              />
-              <div class="item__txt">{{ scope.row.point3 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="美育">
-        <el-table-column prop="add4" label="加分明细" width="200">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.add4"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.add4 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="sub4" label="减分明细" width="200">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.sub4"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.sub4 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="point4" label="得分" width="90">
-          <template #default="scope">
-            <div class="item">
-              <el-input-number
-                style="width: 70px"
-                class="item__input"
-                v-model="scope.row.point4"
-                :min="-100"
-                :max="100"
-                size="small"
-              />
-              <div class="item__txt">{{ scope.row.point4 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="劳动">
-        <el-table-column prop="add5" label="加分明细" width="200">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.add5"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.add5 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="sub5" label="减分明细" width="200">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.sub5"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.sub5 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="point5" label="得分" width="90">
-          <template #default="scope">
-            <div class="item">
-              <el-input-number
-                style="width: 70px"
-                class="item__input"
-                v-model="scope.row.point5"
-                :min="-100"
-                :max="100"
-                size="small"
-              />
-              <div class="item__txt">{{ scope.row.point5 }}</div>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-      <el-table-column label="当月综合测评得分" fixed="right">
-        <el-table-column prop="add_total" label="月加分" width="50">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.add_total"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.add_total }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="sub_total" label="月减分" width="50">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.sub_total"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.sub_total }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="pre_total" label="上月得分" width="50">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.pre_total"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.pre_total }}</div>
-            </div>
-          </template>
-        </el-table-column>
-        <el-table-column prop="point_total" label="当月总分" width="50">
-          <template #default="scope">
-            <div class="item">
-              <el-input
-                class="item__input"
-                v-model="scope.row.point_total"
-                placeholder="请输入内容"
-              ></el-input>
-              <div class="item__txt">{{ scope.row.point_total }}</div>
-            </div>
-          </template>
-        </el-table-column>
-      </el-table-column>
-    </el-table> -->
+    <!-- 编辑测评表 -->
     <el-table
       v-loading.lock="data.loading"
       :data="data.assessments"
@@ -418,7 +153,6 @@
         </template>
       </el-table-column>
     </el-table>
-
     <!-- 分页 -->
     <div class="pagination">
       <el-pagination
@@ -768,8 +502,8 @@
   </el-dialog>
 </template>
 <script setup>
-import { ref, reactive, onMounted, computed } from "vue";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { reactive, onMounted, computed } from "vue";
+import { ElMessage } from "element-plus";
 import signatures from "@/components/utils/Signatures.vue";
 import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment-style";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
@@ -782,7 +516,6 @@ const data = reactive({
   curMonth: 0,
   loadOk: true,
   monthes: [], //可选月份
-  // isEnd: null, //当前综测签名流程是否开放
   signature: "xx", //自己是否签名
   teacherSignature: "xx", //老师是否签名
   loading: false, //列表加载动画
@@ -902,7 +635,6 @@ function getAssessmentDetails() {
       size: data.page.pageSize,
     })
     .then((res) => {
-      console.log("获取综测信息结果：", res);
       data.page.currentPage = res.current;
       data.page.pageSize = res.size;
       data.page.total = res.total;
@@ -919,17 +651,6 @@ function getAssessmentDetails() {
       data.loadOk = false;
     });
 }
-//获取综测小组选择月签名情况
-function getMonthSign() {
-  studentFun.sign
-    .assessGetMonthSign({
-      month: data.curMonth,
-    })
-    .then((res) => {
-      console.log("获取综测小组选择月签名情况", res);
-      data.signature = res;
-    });
-}
 //获取申诉列表数据
 function getComplaintsDeatils() {
   studentFun.assess
@@ -937,16 +658,13 @@ function getComplaintsDeatils() {
       state: "",
     })
     .then((res) => {
-      console.log("申诉列表", res);
       data.complaintData = res;
     });
 }
 //获取可选月份方法
 function getAssessmentMonth() {
   studentFun.assess.getMonthes().then((res) => {
-    console.log("获取可选月份方法:", res);
     res.forEach((item) => {
-      console.log(item);
       data.monthes.push({
         value: item,
         label: getMonthName(item),
@@ -967,17 +685,14 @@ const handleEdit = (index, row) => {
         }
       }
     }
-    console.log("编辑综测对象处理后", row);
     data.curType = "1"; //启动时默认先展示德育项
     data.dialogVisible3 = true;
   }
 };
 //确认修改综测
 function confirmEdit() {
-  console.log("确认修改综测负载内容", data.form);
   if (data.form.isTrue == false) {
     studentFun.assess.submitAssessments([data.form]).then((res) => {
-      console.log("确认修改综测结果", res);
       getAssessmentDetails(); //重新获取综测信息
     });
     data.dialogVisible3 = false;
@@ -993,7 +708,6 @@ function signConfirmAssessment() {
       month: data.curMonth,
     })
     .then((res) => {
-      console.log("查询班级某月份已签名人数", res);
       if (res == data.page.total) {
         data.dialogVisible = true;
       } else {
@@ -1001,14 +715,11 @@ function signConfirmAssessment() {
       }
     });
 }
-
 //签名后提交数据和电子签名
 function finish(file) {
-  console.log("签名img的base64转为file的结果", file);
   const formData = new FormData();
   formData.append("file", file);
   studentFun.sign.assessConfirmSign(data.curMonth, formData).then((res) => {
-    console.log(res);
     data.signature = "ABC"; //不为空即可
     data.dialogVisible = false;
     ElMessage({
@@ -1035,7 +746,6 @@ function deleteStudentSign(index, row) {
     .then((res) => {
       row.signature = null;
       data.signature = null;
-      console.log("移除学生签名", res);
       ElMessage.success(res);
     });
 }
@@ -1059,323 +769,22 @@ const filterTag = (value, row) => {
 };
 //改变分页页数
 const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`);
   data.page.currentPage = val;
   getAssessmentDetails();
 };
 //改变单页数
 const handleSizeChange = (val) => {
-  console.log(`${val} items per page`);
   data.page.pageSize = val;
   getAssessmentDetails();
 };
-//导出数据对接
-const editProp = [
-  "username",
-  "userNumber",
-  "add1",
-  "sub1",
-  "point1",
-  "add2",
-  "sub2",
-  "point2",
-  "add3",
-  "sub3",
-  "point3",
-  "add4",
-  "sub4",
-  "point4",
-  "add5",
-  "sub5",
-  "point5",
-  "add_total",
-  "sub_total",
-  "pre_total",
-  "point_total",
-];
 // 数据excel导出
 const handleExcelExport = () => {
-  console.log(comprehensiveAssessmentHeader);
   export_json_to_excel(
     comprehensiveAssessmentHeader,
     data.assessments,
     `${data.myclass}班级综合测评表`
   );
 };
-//获取综测流程状态
-// function updateState() {
-//   if (data.isOpen === null) {
-//     data.state = "未到确认时间";
-//   } else if (data.isOpen == false) {
-//     data.state = "已结束";
-//   } else if (data.signature) {
-//     data.state = "已确认";
-//   } else if (data.signature == null) {
-//     data.state = "待确认";
-//   }
-// }
-// const complaintData=[
-//     {
-//       date: "2023-05-07",
-//       id: "2022100030",
-//       name: "杨世博",
-//       content: "个人信息性别错误，需要更改为男",
-//     },
-//     {
-//       date: "2023-05-11",
-//       name: "李珊",
-//       id: "2022100030",
-//       content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
-//     },
-//     {
-//       date: "2023-05-24",
-//       name: "涂圆元",
-//       id: "2022100031",
-//       content: "个人信息民族错误，需要更改为土家族",
-//     },
-//     {
-//       date: "2023-05-11",
-//       name: "陈翔",
-//       id: "2022100032",
-//       content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
-//     },
-//     {
-//       date: "2023-05-12",
-//       name: "刘橙晨",
-//       id: "2022100040",
-//       content: "个人信息目标学校错误，需要修改为‘长沙学院’",
-//     },
-//   ]
-// data.assessments=[    {
-//       userNumber: "20222113001",
-//       username: "吾尔肯·塞里克",
-//       add1: "帮助老师批改作业2分",
-//       sub1: "旷课1分",
-//       point1: 1,
-//       add2: "绩点8分",
-//       sub2: "挂科1门2分",
-//       point2: 6,
-//       add3: "铅球比赛一等奖5分1km二等奖4分",
-//       sub3: "无",
-//       point3: 9,
-//       add4: "捐献书法画1分",
-//       sub4: "破环草坪1分",
-//       point4: 0,
-//       add5: "值日2次4分",
-//       sub5: "无",
-//       point5: 4,
-//       add_total: 24,
-//       sub_total: 4,
-//       pre_total: 18,
-//       point_total: 20,
-//     },
-//     {
-//       userNumber: "20222113002",
-//       username: "玉苏普·吐荪江",
-//       add1: "帮助老师批改作业2分",
-//       sub1: "旷课1分",
-//       point1: 1,
-//       add2: "绩点8分",
-//       sub2: "挂科1门2分",
-//       point2: 6,
-//       add3: "铅球比赛一等奖5分1km二等奖4分",
-//       sub3: "无",
-//       point3: 9,
-//       add4: "捐献书法画1分",
-//       sub4: "破环草坪1分",
-//       point4: 0,
-//       add5: "值日2次4分",
-//       sub5: "无",
-//       point5: 4,
-//       add_total: 24,
-//       sub_total: 4,
-//       pre_total: 18,
-//       point_total: 20,
-//     },
-//     {
-//       userNumber: "20222113003",
-//       username: "沙亚拉·江阿努尔",
-//       add1: "帮助老师批改作业2分",
-//       sub1: "旷课1分",
-//       point1: 1,
-//       add2: "绩点8分",
-//       sub2: "挂科1门2分",
-//       point2: 6,
-//       add3: "铅球比赛一等奖5分1km二等奖4分",
-//       sub3: "无",
-//       point3: 9,
-//       add4: "捐献书法画1分",
-//       sub4: "破环草坪1分",
-//       point4: 0,
-//       add5: "值日2次4分",
-//       sub5: "无",
-//       point5: 4,
-//       add_total: 24,
-//       sub_total: 4,
-//       pre_total: 18,
-//       point_total: 20,
-//     },
-//     {
-//       userNumber: "20222113004",
-//       username: "吐尔逊娜衣·托呼提",
-//       add1: "帮助老师批改作业2分",
-//       sub1: "旷课1分",
-//       point1: 1,
-//       add2: "绩点8分",
-//       sub2: "挂科1门2分",
-//       point2: 6,
-//       add3: "铅球比赛一等奖5分1km二等奖4分",
-//       sub3: "无",
-//       point3: 9,
-//       add4: "捐献书法画1分",
-//       sub4: "破环草坪1分",
-//       point4: 0,
-//       add5: "值日2次4分",
-//       sub5: "无",
-//       point5: 4,
-//       add_total: 24,
-//       sub_total: 4,
-//       pre_total: 18,
-//       point_total: 20,
-//     },
-//     {
-//       userNumber: "20222112006",
-//       username: "阿合叶尔克·胡瓦提",
-//       add1: "帮助老师批改作业2分",
-//       sub1: "旷课1分",
-//       point1: 1,
-//       add2: "绩点8分",
-//       sub2: "挂科1门2分",
-//       point2: 6,
-//       add3: "铅球比赛一等奖5分1km二等奖4分",
-//       sub3: "无",
-//       point3: 9,
-//       add4: "捐献书法画1分",
-//       sub4: "破环草坪1分",
-//       point4: 0,
-//       add5: "值日2次4分",
-//       sub5: "无",
-//       point5: 4,
-//       add_total: 24,
-//       sub_total: 4,
-//       pre_total: 18,
-//       point_total: 20,
-//     },
-//     {
-//       userNumber: "20222112005",
-//       username: "米热古丽·吾斯曼",
-//       add1: "帮助老师批改作业2分",
-//       sub1: "旷课1分",
-//       point1: 1,
-//       add2: "绩点8分",
-//       sub2: "挂科1门2分",
-//       point2: 6,
-//       add3: "铅球比赛一等奖5分1km二等奖4分",
-//       sub3: "无",
-//       point3: 9,
-//       add4: "捐献书法画1分",
-//       sub4: "破环草坪1分",
-//       point4: 0,
-//       add5: "值日2次4分",
-//       sub5: "无",
-//       point5: 4,
-//       add_total: 24,
-//       sub_total: 4,
-//       pre_total: 18,
-//       point_total: 20,
-//     },
-//     {
-//       userNumber: "20222112004",
-//       username: "地娜拉·居帕尔",
-//       add1: "帮助老师批改作业2分",
-//       sub1: "旷课1分",
-//       point1: 1,
-//       add2: "绩点8分",
-//       sub2: "挂科1门2分",
-//       point2: 6,
-//       add3: "铅球比赛一等奖5分1km二等奖4分",
-//       sub3: "无",
-//       point3: 9,
-//       add4: "捐献书法画1分",
-//       sub4: "破环草坪1分",
-//       point4: 0,
-//       add5: "值日2次4分",
-//       sub5: "无",
-//       point5: 4,
-//       add_total: 24,
-//       sub_total: 4,
-//       pre_total: 18,
-//       point_total: 20,
-//     },
-//     {
-//       userNumber: "20222112003",
-//       username: "沙尔恩高阿·吾日克塔",
-//       add1: "帮助老师批改作业2分",
-//       sub1: "旷课1分",
-//       point1: 1,
-//       add2: "绩点8分",
-//       sub2: "挂科1门2分",
-//       point2: 6,
-//       add3: "铅球比赛一等奖5分1km二等奖4分",
-//       sub3: "无",
-//       point3: 9,
-//       add4: "捐献书法画1分",
-//       sub4: "破环草坪1分",
-//       point4: 0,
-//       add5: "值日2次4分",
-//       sub5: "无",
-//       point5: 4,
-//       add_total: 24,
-//       sub_total: 4,
-//       pre_total: 18,
-//       point_total: 20,
-//     },
-//     {
-//       userNumber: "20222113001",
-//       username: "吾尔肯·塞里克",
-//       add1: "帮助老师批改作业2分",
-//       sub1: "旷课1分",
-//       point1: 1,
-//       add2: "绩点8分",
-//       sub2: "挂科1门2分",
-//       point2: 6,
-//       add3: "铅球比赛一等奖5分1km二等奖4分",
-//       sub3: "无",
-//       point3: 9,
-//       add4: "捐献书法画1分",
-//       sub4: "破环草坪1分",
-//       point4: 0,
-//       add5: "值日2次4分",
-//       sub5: "无",
-//       point5: 4,
-//       add_total: 24,
-//       sub_total: 4,
-//       pre_total: 18,
-//       point_total: 20,
-//     },
-//     {
-//       userNumber: "20222113002",
-//       username: "玉苏普·吐荪江",
-//       add1: "帮助老师批改作业2分",
-//       sub1: "旷课1分",
-//       point1: 1,
-//       add2: "绩点8分",
-//       sub2: "挂科1门2分",
-//       point2: 6,
-//       add3: "铅球比赛一等奖5分1km二等奖4分",
-//       sub3: "无",
-//       point3: 9,
-//       add4: "捐献书法画1分",
-//       sub4: "破环草坪1分",
-//       point4: 0,
-//       add5: "值日2次4分",
-//       sub5: "无",
-//       point5: 4,
-//       add_total: 24,
-//       sub_total: 4,
-//       pre_total: 18,
-//       point_total: 20,
-//     },]
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style lang="scss" scoped>
@@ -1392,18 +801,9 @@ h1 {
     display: none;
     width: 100%;
   }
-  .item__txt {
-    box-sizing: border-box;
-    line-height: 24px;
-    padding: 0 9px;
-  }
 }
 .pagination {
   display: flex;
-}
-.submitBtn {
-  text-align: center;
-  height: 40px;
 }
 .checkMonth {
   margin-top: 30px;
@@ -1427,9 +827,6 @@ h1 {
     font-size: 17px;
     color: rgb(98, 97, 97);
     margin-right: 10px;
-  }
-  .gk-score {
-    margin-bottom: 1rem;
   }
   .gk-rank {
     margin: 1rem 0;

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-21 21:30:30
+ * @LastEditTime: 2024-03-28 14:18:25
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -139,11 +139,10 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive, onMounted } from "vue";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { reactive, onMounted } from "vue";
+import { ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import volunteerFun from "@/api/volunteer";
-import { Search } from "@element-plus/icons-vue";
 //数据
 const data = reactive({
   loading: false,
@@ -347,39 +346,6 @@ let selectMajor = (item) => {
   data.curMajor = item.name;
   data.curMajorId = item.majorId;
 };
-
-// 模拟数据
-// const schools = reactive([
-//   { name: "吉首大学" },
-//   { name: "湘南学院" },
-//   { name: "湖南文理学院" },
-//   { name: "湖南工业大学" },
-//   { name: "长沙学院" },
-//   { name: "湘潭大学" },
-//   { name: "中南大学" },
-//   { name: "湖南师范大学" },
-//   { name: "湖南中医药大学" },
-//   { name: "长沙理工大学" },
-//   { name: "湖南农业大学" },
-//   { name: "湖南大学" },
-// ]);
-// const majors = reactive([
-//   { name: "金融学" },
-//   { name: "财政学" },
-//   { name: "国际经济与贸易" },
-//   { name: "法学" },
-//   { name: "政治学与行政学" },
-//   { name: "运动训练" },
-//   { name: "汉语言文学" },
-//   { name: "英语" },
-//   { name: "数学与应用数学" },
-//   { name: "历史学" },
-//   { name: "信息与计算科学" },
-//   { name: "化学" },
-//   { name: "工程力学" },
-//   { name: "机械设计制造及其自动化" },
-//   { name: "车辆工程" },
-// ]);
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style  lang="scss" scoped>
@@ -437,15 +403,6 @@ let selectMajor = (item) => {
   background-color: #77adfe;
   color: #fff;
   margin-bottom: 1rem;
-}
-.history {
-  margin-left: 1rem;
-  width: 6rem;
-  height: 2.5rem;
-  border-radius: 5px;
-  border-color: #77adfe;
-  color: #77adfe;
-  overflow: hidden;
 }
 .stack-line {
   background: #f2f7ff;

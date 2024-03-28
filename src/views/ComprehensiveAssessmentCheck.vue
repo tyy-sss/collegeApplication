@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-22 15:21:37
+ * @LastEditTime: 2024-03-28 14:14:21
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:班主任查看综合测评情况页
 -->
@@ -27,50 +27,8 @@
       </el-select>
       <h1>{{ data.myclass }}班级综合测评表</h1>
     </div>
-
     <br />
     <div>
-      <!-- <el-form :inline="true" class="demo-form-inline">
-        <el-form-item label="学号/姓名：">
-          <el-input
-            v-model="data.search"
-            placeholder="请输入查询关键字"
-            clearable
-          />
-        </el-form-item>
-        <el-form-item label="签名状态">
-          <el-select
-            v-model="data.isSign"
-            placeholder="请选择签名状态"
-            clearable
-          >
-            <el-option label="已签" value="1" />
-            <el-option label="未签" value="0" />
-          </el-select>
-        </el-form-item>
-        <el-form-item label="综测成绩">
-          <el-select
-            v-model="data.rankType"
-            placeholder="请选择排序状态"
-            clearable
-          >
-            <el-option label="不排序" value="0" />
-            <el-option label="从小到大" value="1" />
-            <el-option label="从大到小" value="2" />
-          </el-select>
-        </el-form-item>
-        <el-form-item>
-          <el-button type="primary" @click="getAssessmentDetails"
-            >查询</el-button
-          >
-          <el-button  @click="getAssessmentDetails"
-            >重置</el-button
-          >
-          <el-button style="float: right" @click="handleExcelExport"
-            ><el-icon><Download /></el-icon>&nbsp; 导出</el-button
-          >
-        </el-form-item>
-      </el-form> -->
       <div class="mt-4">
         <el-input
           v-model="data.search"
@@ -149,7 +107,6 @@
         </el-table-column>
       </el-table-column>
     </el-table>
-
     <!-- 分页 -->
     <div class="pagination">
       <el-pagination
@@ -163,7 +120,6 @@
         style="margin-left: auto"
       />
     </div>
-
     <hr />
     <div class="process">
       <div>
@@ -244,11 +200,10 @@
   </el-dialog>
 </template>
 <script setup>
-import { ref, reactive, computed, onMounted } from "vue";
+import { reactive, onMounted } from "vue";
 import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment-style";
-import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 import { getMonthName } from "@/assets/js/utils/month";
 import teacherFun from "@/api/teacher";
 import apiFun from "@/api/user";
@@ -446,8 +401,6 @@ const data = reactive({
   ],
   loading: false,
   loadOk: true,
-  // isSign: "0",//是否签名
-  // rankType:null,
   signature: "xx", //班主任签名
   assessSignature: "xx", //测评小组签名
 });
@@ -485,7 +438,6 @@ function getAssessmentDetails() {
       size: data.page.pageSize,
     })
     .then((res) => {
-      console.log("获取综测信息结果：", res);
       data.assessments = [];
       data.page.currentPage = res.current;
       data.page.pageSize = res.size;
@@ -496,31 +448,17 @@ function getAssessmentDetails() {
       if (data.curMonth == 0) {
         data.curMonth = res.records[0].month;
       }
-      console.log("综测列表", data.assessments);
       data.signature = res.teacherSignature;
       data.assessSignature = res.signature;
       data.loading = false;
       data.loadOk = false;
     });
 }
-//班主任获取自己本月的签名
-function getSign() {
-  teacherFun.sign
-    .getMonthSign({
-      month: data.curMonth,
-    })
-    .then((res) => {
-      console.log("班主任获取自己本月的签名", res);
-      data.signature = res;
-    });
-}
 //班主任电子签名
 function finish(file) {
   const formData = new FormData();
   formData.append("file", file);
-
   teacherFun.sign.confirmSign(data.curMonth, formData).then((res) => {
-    console.log(res);
     data.teacherSignature = "xx"; //不为空即可
     data.dialogVisible = false;
     ElMessage({
@@ -528,25 +466,14 @@ function finish(file) {
       type: "success",
     });
   });
-
-  //模拟提交
-  // setTimeout(() => {
-  //   data.dialogVisible = false;
-  //   ElMessage({
-  //     message: "提交本月综测情况成功",
-  //     type: "success",
-  //   });
-  // }, 60);
 }
 //改变分页页数
 const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`);
   data.page.currentPage = val;
   getAssessmentDetails();
 };
 //改变单页数
 const handleSizeChange = (val) => {
-  console.log(`${val} items per page`);
   data.page.pageSize = val;
   getAssessmentDetails();
 };
@@ -558,7 +485,6 @@ const handleExcelExport = () => {
     `${data.myclass}班级综合测评表`
   );
 };
-const { getColumnWidth } = adaptiveColumnWidthFun(data.assessments);
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style lang="scss" scoped>

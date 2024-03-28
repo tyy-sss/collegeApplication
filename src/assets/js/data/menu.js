@@ -41,7 +41,6 @@ const managerMenuData = reactive([
   },
 ]);
 const studentMenuData = reactive([
-  //以下页面需要做手机自适应
   {
     menuName: "个人信息",
     path: "/personal-information",
@@ -79,11 +78,6 @@ const headteacherMenuData = reactive([
     path: "/student",
     icon: "location",
   },
-  // {
-  //   menuName: "志愿填报情况",
-  //   path: "/volunteer",
-  //   icon: "location",
-  // },
   {
     menuName: "综合测评情况",
     path: "/comprehensive-assessment-check",

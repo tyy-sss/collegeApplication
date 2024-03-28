@@ -109,7 +109,7 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive, computed, onMounted } from "vue";
+import { reactive, onMounted } from "vue";
 import { getMonthName } from "@/assets/js/utils/month";
 import studentFun from "@/api/student";
 const data = reactive({
@@ -125,7 +125,6 @@ const data = reactive({
   loading: false,
   loadOk: true,
 });
-
 onMounted(() => {
   init();
 });
@@ -136,9 +135,7 @@ function init() {
 //获取可选月份方法
 function getAssessmentMonth() {
   studentFun.assess.studentGetMonthes().then((res) => {
-    console.log("获取可选月份方法:", res);
     res.forEach((item) => {
-      console.log(item);
       data.monthes.push({
         value: item,
         label: getMonthName(item),
@@ -150,7 +147,6 @@ function getAssessmentMonth() {
 function getAssessmentDetails() {
   data.loading = true;
   data.loadOk = true;
-  //这里是学生身份请求本月学生综测信息
   studentFun.assess
     .getAssessmentClass({
       keyword: data.search,
@@ -160,7 +156,6 @@ function getAssessmentDetails() {
       size: data.page.pageSize,
     })
     .then((res) => {
-      console.log("获取综测信息结果：", res);
       data.assessments = [];
       data.page.currentPage = res.current;
       data.page.pageSize = res.size;
@@ -171,21 +166,17 @@ function getAssessmentDetails() {
       if (data.curMonth == 0) {
         data.curMonth = res.records[0].month;
       }
-      console.log(data.assessments);
       data.loading = false;
       data.loadOk = false;
     });
 }
-
 //改变分页页数
 const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`);
   data.page.currentPage = val;
   getAssessmentDetails();
 };
 //改变单页数
 const handleSizeChange = (val) => {
-  console.log(`${val} items per page`);
   data.page.pageSize = val;
   getAssessmentDetails();
 };

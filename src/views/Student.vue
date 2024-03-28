@@ -14,7 +14,6 @@
     <hr />
     <br />
     <div class="card">
-      <!-- 处理盒子 -->
       <div>
         <el-card shadow="hover" class="item">
           🧑 学生总人数： {{ data.page.total }} 人
@@ -33,19 +32,6 @@
           >
         </el-card>
       </div>
-      <!-- <div>
-        <el-card shadow="hover" class="item"
-          >⚙ 综测流程管理
-          <el-button
-            type="warning"
-            size="small"
-            plain
-            style="float: right"
-            @click="data.dialogVisible2 = true"
-            >管理</el-button
-          >
-        </el-card>
-      </div> -->
       <div>
         <el-card shadow="hover" class="item">
           💬 待处理申述
@@ -89,12 +75,6 @@
         <el-table-column type="selection" width="55" />
         <el-table-column label="学生学号" prop="userNumber" />
         <el-table-column label="学生姓名" prop="username" />
-        <!-- <el-table-column label="班级职位">
-          <template #default="scope">
-            <span v-if="scope.row.identity == 1">班级成员</span>
-            <span v-if="scope.row.identity == 2">测评小组成员</span>
-          </template>
-        </el-table-column> -->
         <el-table-column label="本月综测分数" prop="appraisalScore" />
         <el-table-column label="操作" align="right">
           <template #header>
@@ -124,10 +104,6 @@
       <el-button type="primary" @click="handleRepasswds"
         >批量重置密码</el-button
       >
-      <!-- <el-button type="primary" @click="handleDeletePosts">撤销职位</el-button> -->
-      <!-- <el-button type="primary" @click="handleSetPosts"
-        >设为评测小组人员</el-button
-      > -->
       <br />
       <!-- 分页 -->
       <el-pagination
@@ -204,40 +180,6 @@
       </el-table>
     </div>
   </el-dialog>
-  <!-- 对话框2 -->
-  <!-- <el-dialog v-model="data.dialogVisible2" title="⚙ 综测流程管理" width="40%">
-    <div>
-      <el-select
-        v-model="data.curMonth"
-        placeholder="请选择要查询的综测月份"
-        style="width: 100px; margin-right: 1rem"
-        @change="getAssessmentDetails"
-      >
-        <el-option
-          v-for="item in data.monthes"
-          :key="item.value"
-          :label="item.label"
-          :value="item.value"
-        />
-      </el-select>
-      综测编辑权限:
-      <el-switch v-model="data.isEnd" :disabled="data.isEnd == null" />
-      <br /><br />
-      <div style="color: rgba(14, 13, 13, 0.493)">
-        当月进行时按钮默认为开启；<br>
-        当按钮开启时，综测小组可以对学生综测进行编辑，不可以进行电子签名;<br>
-        当按钮关闭后，综测小组不可以再对学生综测进行编辑，学生和测评小组端将会开放电子签名确认综测入口.
-      </div>
-    </div>
-    <template #footer>
-      <div class="dialog-footer">
-        <el-button @click="data.dialogVisible2 = false">取消</el-button>
-        <el-button type="primary" @click="changeAssessState">
-          确认修改
-        </el-button>
-      </div>
-    </template>
-  </el-dialog> -->
   <!-- 对话框3 -->
   <el-dialog v-model="data.dialogVisible3" title="评测小组账号管理" width="50%">
     <div>
@@ -246,34 +188,6 @@
         :data="data.evaluationData"
         style="width: 100%"
       >
-        <!-- <el-table-column type="expand">
-          <template #default="props">
-            <div style="margin-left: 6rem">
-              <h3>
-                【{{ props.row.username }}】所负责班级成员列表（{{
-                  props.row.appraisalTeamMemberVos.length
-                }}人）
-              </h3>
-              <el-table
-                :data="props.row.appraisalTeamMemberVos"
-                :border="childBorder"
-              >
-                <el-table-column label="班级成员" prop="username" />
-                <el-table-column label="学号" prop="userNumber" />
-                <el-table-column label="操作">
-                  <template #default="scope">
-                    <el-button
-                      size="small"
-                      @click="handleRecover2(scope.$index, scope.row)"
-                      >切换综测小组负责人</el-button
-                    >
-                  </template>
-                </el-table-column>
-              </el-table>
-            </div>
-          </template>
-        </el-table-column> -->
-        <!-- <el-table-column type="index" /> -->
         <el-table-column
           label="测评小组账号"
           prop="userNumber"
@@ -288,12 +202,6 @@
               @click="handleRecover2(scope.$index, scope.row)"
               >重置密码</el-button
             >
-            <!-- <el-button
-              size="small"
-              type="danger"
-              @click="handleFired(scope.$index, scope.row)"
-              >撤销职位</el-button
-            > -->
           </template>
         </el-table-column>
       </el-table>
@@ -301,15 +209,6 @@
       <span style="color: gray"
         >【这里的重置密码指的是重置测评小组账号的密码为学生学号后6位】</span
       >
-      <!-- <div style="float: right">
-        <el-button type="primary" @click="allocat">一键分配班级成员</el-button>
-        <el-button
-          type="danger"
-          @click="revokeAllocat"
-          style="margin-right: 2rem"
-          >一键撤销成员分配</el-button
-        >
-      </div> -->
     </div>
   </el-dialog>
   <!-- 学生信息抽屉 -->
@@ -500,7 +399,7 @@
   </el-drawer>
 </template>
 <script setup>
-import { ref, reactive, onMounted, computed } from "vue";
+import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { getMonthName } from "@/assets/js/utils/month";
 import teacherFun from "@/api/teacher";
@@ -509,22 +408,19 @@ onMounted(() => {
   init();
 });
 const data = reactive({
-  myclass: "2021级预科4班",
+  myclass: "- 级- 班",
   search: "",
   dialogVisible: false,
-  // dialogVisible2: false,
   dialogVisible3: false,
   drawer: false,
   drawer2: false,
-  // multipleSelection: [],
   studentsData: [], //学生列表
   evaluationData: [], //测评小组列表
-  //申诉列表
-  complaintData: [],
+  complaintData: [], //申诉列表
   page: {
-    total: 200, // 总条数
-    currentPage: 1, // 当前页
-    pageSize: 8, //一页的数据量
+    total: 200,
+    currentPage: 1,
+    pageSize: 8,
   },
   student: {}, //学生信息
   consignee: {}, //学生收件信息
@@ -575,14 +471,12 @@ function init() {
 //获取申诉列表数据
 function getComplaintsDeatils() {
   teacherFun.complaint.getAssessments().then((res) => {
-    console.log("申诉列表", res);
     data.complaintData = res;
   });
 }
 //获取学生列表数据
 function getStudentDeatils() {
   data.studentTableLoading = true;
-  console.log("SDF");
   teacherFun.class
     .updateInformation({
       keyword: data.search,
@@ -592,7 +486,6 @@ function getStudentDeatils() {
       size: 12,
     })
     .then((res) => {
-      console.log("学生信息：", res);
       data.studentsData = res.records;
       data.page.currentPage = res.current;
       data.page.pageSize = res.size;
@@ -604,7 +497,6 @@ function getStudentDeatils() {
 function getAssessmentStudent() {
   data.evaluationTableLoading = true;
   teacherFun.assessment.getAssessmentStudent().then((res) => {
-    console.log("获取测评小组成员列表数据", res);
     data.evaluationData = [res];
     data.evaluationTableLoading = false;
   });
@@ -631,7 +523,6 @@ const toggleSelection = (rows) => {
 };
 //改变分页页数
 const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`);
   data.page.currentPage = val;
   getStudentDeatils();
 };
@@ -648,30 +539,6 @@ function getAssessmentMonth() {
       });
     });
   });
-}
-//获取当月情况
-function getAssessmentDetails() {
-  teacherFun.assessment
-    .getAssessmentsProcess({
-      month: data.curMonth,
-    })
-    .then((res) => {
-      console.log(res);
-      data.isEnd = res;
-    });
-}
-//修改选择月综测情况
-function changeAssessState() {
-  console.log("修改选择月情况,月：", data.curMonth, ",状态：", data.isEnd);
-  teacherFun.assessment
-    .updateAssessmentState({
-      month: data.curMonth,
-      end: data.isEnd,
-    })
-    .then((res) => {
-      data.dialogVisible2 = false;
-      ElMessage.success(res);
-    });
 }
 //重置密码
 const handleRepasswd = (index, row) => {
@@ -691,35 +558,6 @@ const handleRepasswds = () => {
       toggleSelection();
     });
   }
-};
-//批量撤销测评小组职位
-const handleDeletePosts = () => {
-  const dealArray = [];
-  multipleSelection.value.forEach((item) => {
-    dealArray.push(item.userNumber);
-  });
-  teacherFun.class.deleteAssessPost(dealArray).then((res) => {
-    ElMessage.success(res);
-    multipleSelection.value.forEach((item) => {
-      item.identity = 1;
-    });
-    toggleSelection();
-  });
-};
-//批量设置测评小组职位
-const handleSetPosts = () => {
-  const dealArray = [];
-  multipleSelection.value.forEach((item) => {
-    dealArray.push(item.userNumber);
-  });
-  teacherFun.class.setAssessPost(dealArray).then((res) => {
-    ElMessage.success(res);
-    multipleSelection.value.forEach((item) => {
-      item.identity = 2;
-    });
-    getAssessmentStudent();
-    toggleSelection();
-  });
 };
 //刷新按钮
 function onReSearch() {
@@ -745,13 +583,11 @@ function confirmClick() {
       data.drawer2 = false;
       data.updataData.userNumber = data.student.userNumber; //必须传回去被修改用户的学号，否则无法确定修改的是哪个学生的信息
       //修改资料接口
-      console.log("AFSDF", data.updataData.idCard);
       teacherFun.class.updateStudentInformation(data.updataData).then((res) => {
         ElMessage.success(res);
         Object.keys(data.updataData).forEach(
           (key) => (data.updataData[key] = null)
         ); //快速清空内容
-        console.log("ssssss", data.updataData);
       });
     })
     .catch(() => {});
@@ -784,212 +620,11 @@ const handleRecover2 = (index, row) => {
     })
     .catch(() => {});
 };
-//撤销评测小组人员账号
-const handleFired = (index, row) => {
-  ElMessageBox.confirm(
-    `确定要撤销【${row.username}】的测评小组账号吗？
-    提示：该操作一旦执行将无法撤销以及恢复数据，且分配给【${row.username}】的学生将暂时处于无测评人员负责状态。`
-  )
-    .then(() => {
-      // console.log(row.userNumber)
-      teacherFun.class.deleteAssessPost([row.userNumber]).then((res) => {
-        ElMessage.success("撤销成功");
-        data.evaluationData.splice(index, 1);
-      });
-    })
-    .catch(() => {});
-};
-//一键分配成员给测评小组成员
-function allocat() {
-  teacherFun.class.averageAllocated().then((res) => {
-    ElMessage.success(res);
-    getAssessmentStudent();
-  });
-}
-//一键撤销成员分配
-function revokeAllocat() {
-  teacherFun.class.revokeAllocated().then((res) => {
-    ElMessage.success(res);
-    getAssessmentStudent();
-  });
-}
 //筛选器
 const filterTag = (value, row) => {
   // console.log(row.state, value, row);
   return row.state == value;
 };
-// //申诉列表
-// complaintData: [
-//   {
-//     appealId: "111",
-//     created: "2023-05-07",
-//     userNumber: "2022100030",
-//     username: "杨世博",
-//     content: "个人信息性别错误，需要更改为男",
-//     state: 1,
-//     type: true,
-//   },
-// ],
-// //恢复回收站项
-// const handleRecover = (index, row) => {
-//   console.log("恢复回收站项", index, row);
-// };
-//学生列表
-// const studentsData = ref([
-//   {
-//     username: "杨世博",
-//     userNumber: "2022100029",
-//     identity: 1,
-//     score: 110,
-//   },
-//   {
-//     username: "李珊",
-//     userNumber: "2022100030",
-//     identity: 1,
-//     score: 80,
-//   },
-//   {
-//     username: "涂圆元",
-//     userNumber: "2022100031",
-//     identity: 1,
-//     score: 40,
-//   },
-//   {
-//     username: "陈翔",
-//     userNumber: "2022100032",
-//     identity: 1,
-//     score: 110,
-//   },
-//   {
-//     username: "周威宇",
-//     userNumber: "2022100033",
-//     identity: 2,
-//     score: 64,
-//   },
-//   {
-//     username: "王君月",
-//     userNumber: "2022100034",
-//     identity: 2,
-//     score: 77,
-//   },
-//   {
-//     username: "彭政",
-//     userNumber: "2022100035",
-//     identity: 2,
-//     score: 88,
-//   },
-//   {
-//     username: "罗义恒",
-//     userNumber: "2022100036",
-//     identity: 2,
-//     score: 77,
-//   },
-//   {
-//     username: "文凯",
-//     userNumber: "2022100037",
-//     identity: 2,
-//     score: 67,
-//   },
-//   {
-//     username: "周建政",
-//     userNumber: "2022100038",
-//     identity: 2,
-//     score: 98,
-//   },
-// ]);
-// 申诉列表
-// const complaintData = [
-//   {
-//     date: "2023-05-07",
-//     id: "2022100030",
-//     name: "杨世博",
-//     content: "个人信息性别错误，需要更改为男",
-//   },
-//   {
-//     date: "2023-05-11",
-//     name: "李珊",
-//     id: "2022100030",
-//     content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
-//   },
-//   {
-//     date: "2023-05-24",
-//     name: "涂圆元",
-//     id: "2022100031",
-//     content: "个人信息民族错误，需要更改为土家族",
-//   },
-//   {
-//     date: "2023-05-11",
-//     name: "陈翔",
-//     id: "2022100032",
-//     content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
-//   },
-//   {
-//     date: "2023-05-12",
-//     name: "刘橙晨",
-//     id: "2022100040",
-//     content: "个人信息目标学校错误，需要修改为‘长沙学院’",
-//   },
-// ];
-//测评小组成员列表
-// const evaluationData = [
-//   {
-//     username: "杨世博",
-//     userNumber: "2022100029",
-//   },
-//   {
-//     username: "李珊",
-//     userNumber: "2022100030",
-//   },
-//   {
-//     username: "涂圆元",
-//     userNumber: "2022100031",
-//   },
-//   {
-//     username: "陈翔",
-//     userNumber: "2022100032",
-//   },
-//   {
-//     username: "周威宇",
-//     userNumber: "2022100033",
-//   },
-//   {
-//     username: "王君月",
-//     userNumber: "2022100034",
-//   },
-// ];
-// 垃圾箱列表
-// const dustbinData = [
-//   {
-//     date: "2023-05-07",
-//     id: "2022100030",
-//     name: "杨世博",
-//     content: "个人信息性别错误，需要更改为男",
-//   },
-//   {
-//     date: "2023-05-11",
-//     name: "李珊",
-//     id: "2022100030",
-//     content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
-//   },
-//   {
-//     date: "2023-05-24",
-//     name: "涂圆元",
-//     id: "2022100031",
-//     content: "个人信息民族错误，需要更改为土家族",
-//   },
-//   {
-//     date: "2023-05-11",
-//     name: "陈翔",
-//     id: "2022100032",
-//     content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
-//   },
-//   {
-//     date: "2023-05-12",
-//     name: "刘橙晨",
-//     id: "2022100040",
-//     content: "个人信息目标学校错误，需要修改为‘长沙学院’",
-//   },
-// ];
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style src="@/assets/css/search-top-left-right.css" scoped/>
@@ -1008,7 +643,6 @@ const filterTag = (value, row) => {
 .item {
   text-align: left;
 }
-
 .mybox {
   padding: 0 0 1rem 0;
 }

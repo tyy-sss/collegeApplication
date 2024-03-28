@@ -342,7 +342,6 @@ onMounted(() => {
   init();
 });
 let identity = ref(getRole()); //获取当前用户身份
-console.log("获取当前用户身份", identity.value);
 const data = reactive({
   loading: false,
   loading2: false,
@@ -374,7 +373,6 @@ const init = function () {
   if (identity.value == 0) {
     //获取学生/测评小组信息
     studentFun.user.getInformation().then((res) => {
-      console.log("学生信息", res);
       data.student = res;
       data.consignee = res.consignee;
       data.avatar = res.headshot;
@@ -383,13 +381,11 @@ const init = function () {
   } else if (identity.value == 3) {
     //获取老师信息
     teacherFun.user.getInformation().then((res) => {
-      console.log(res);
       data.teacher = res;
       data.loading2 = false;
     });
   } else if (identity.value == 2) {
     studentFun.assess.getInformation().then((res) => {
-      console.log("测评小组基本信息", res);
       data.student.userNumber = res.userNumber;
       data.student.username = res.username;
       data.student.className = res.className;
@@ -413,10 +409,8 @@ function handleFileSelect(e) {
     formData.append("file", file);
     studentFun.user.setIDPhoto(formData).then((res) => {
       data.avatar = res;
-      console.log(data.avatar)
       data.loading = false;
       ElMessage.success("证件照上传成功");
-      console.log(data.avatar);
     });
   }
 }
@@ -427,7 +421,6 @@ function confirmClick() {
       data.drawer = false;
       //修改资料接口
       if (identity.value == 0) {
-        console.log("AAA", updataData);
         studentFun.user.updateInformation(updataData).then((res) => {
           ElMessage.success(res);
         });
@@ -469,62 +462,6 @@ function updatePassword() {
     }
   }
 }
-//模拟数据
-// let student = ref({
-//   username: "",
-//   userNumber: "",
-//   idCard: "",
-//   phone: "",
-//   parentPhone: "",
-//   sex: "",
-//   className: "",
-//   politicsStatus: "",
-//   school: "",
-//   nation: "",
-//   province: "",
-//   plan: "",
-//   subjects: {},
-//   consignee: {
-//     username: "",
-//     phone: "",
-//     address: "",
-//   },
-//   address: "",
-// });
-// let studentData = {
-//   avatar:
-//     "https://th.bing.com/th/id/OIP.-yzce0XE8eHoGLr9Dqaw5wHaJ4?w=480&h=640&rs=1&pid=ImgDetMain",
-//   username: "付小小",
-//   userNumber: "415567569789",
-//   idCard: "365124200103052214",
-//   phone: "1385 2222 222",
-//   parentPhone:"1481 2222 222",
-//   sex: "女",
-//   className: "2023级预科1班",
-//   politicsStatus: "共青团员",
-//   school: "湘南学院",
-//   nation: "土家族",
-//   province: "湖南省",
-//   category: "普通类（首选物理）",
-//   plan: "国家计划",
-//   subjects: "化学+地理",
-//   consignee:{
-//     username:"小付",
-//     phone:"128 0000 000",
-//     address:"湖南省长沙市芙蓉区泉升大酒店",
-//   },
-//   address: "湖南省张家界市永定区大庸桥街道吉首大学张家界校区",
-// };
-// let teacherData = ref({
-//   username: "杨世博",
-//   userNumber: "43251648512",
-//   sex: "男",
-//   nation: "汉族",
-//   politicsStatus: "党员",
-//   phone: "1810 0000 000",
-//   manageClass: "2022级预科1班",
-//   teachClass: "2022级预科1班、2022级预科4班",
-// });
 </script>
 
 <style src="@/assets/css/show-container.css" scoped></style>

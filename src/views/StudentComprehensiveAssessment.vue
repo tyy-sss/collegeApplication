@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-22 15:51:24
+ * @LastEditTime: 2024-03-28 14:26:19
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -107,44 +107,6 @@
         >前往电子签名</el-button
       >
       <br />
-      <!-- <span style="color: rgb(167, 167, 167)"
-        >⊙综合素质测评成绩 = 德育 x 20% + 智育 x 20% + 体育 x 20% + 美育　x 20%
-        +劳动 x 20%</span
-      > -->
-      <!-- <br /><br /> -->
-      <!-- <div>
-        <h4>截止该月本学期总体综测情况</h4>
-        <br />
-        <el-table :data="data.total" v-loading.lock="data.loading">
-          <el-table-column label="德育得分">
-            {{ data.total.class1 || 0 }}</el-table-column
-          >
-          <el-table-column label="智育得分">{{
-            data.total.class2 || 0
-          }}</el-table-column>
-          <el-table-column label="体育得分">{{
-            data.total.class3 || 0
-          }}</el-table-column>
-          <el-table-column label="美育得分">{{
-            data.total.class4 || 0
-          }}</el-table-column>
-          <el-table-column label="劳动得分">{{
-            data.total.class5 || 0
-          }}</el-table-column>
-          <el-table-column label="综合测评得分" fixed="right">
-            <el-table-column label="加分">{{
-              data.total.add || 0
-            }}</el-table-column>
-            <el-table-column label="减分">{{
-              data.total.sub || 0
-            }}</el-table-column>
-            <el-table-column label="综测总分">{{
-              data.total.all || 0
-            }}</el-table-column>
-          </el-table-column>
-        </el-table>
-        <br />
-      </div> -->
     </div>
   </div>
   <!-- 电子签名对话框 -->
@@ -252,11 +214,10 @@
 </template>
 <script setup>
 import signatures from "@/components/utils/Signatures.vue";
-import { ref, reactive, onMounted } from "vue";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { reactive, onMounted } from "vue";
+import { ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { getMonthName } from "@/assets/js/utils/month";
-import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 const data = reactive({
   assessment: [
     // {
@@ -358,13 +319,11 @@ function getAssessmentThisMonth() {
   data.loading = true;
   data.loadOk=true;
   studentFun.assess.getAssessmentThisMonth().then((res) => {
-    console.log("个人综测", res);
     data.isEnd = res.isEnd;
     data.month = res.month;
     data.score = res.score;
     data.signature = res.signature;
     data.assessment = [res.content];
-    // data.total = [res.total];
     data.loading = false;
     data.loadOk=false;
   });
@@ -377,22 +336,18 @@ function getAssessmentDetails() {
       month: data.month,
     })
     .then((res) => {
-      console.log("个人综测", res);
       data.isEnd = res.isEnd;
       data.month = res.month;
       data.score = res.score;
       data.signature = res.signature;
       data.assessment = [res.content];
-      // data.total = [res.total];
       data.loading = false;
     });
 }
 //获取可选月份方法
 function getAssessmentMonth() {
   studentFun.assess.studentGetMonthes().then((res) => {
-    console.log("获取可选月份方法:", res);
     res.forEach((item) => {
-      console.log(item);
       data.monthes.push({
         value: item,
         label: getMonthName(item),
@@ -409,13 +364,11 @@ function getComplaintHistory() {
       size: 1000,
     })
     .then((res) => {
-      console.log(res);
       data.complaintData = res.reverse();
     });
 }
 //提交申报
 function commit() {
-  console.log(data.type, data.content);
   if (data.type === "" || data.content === "") {
     ElMessage({
       message: "请选择申诉类型或填写申诉内容",
@@ -428,7 +381,6 @@ function commit() {
         type: data.type,
       })
       .then((res) => {
-        // console.log("申诉结果：",res)
         data.dialogVisible2 = false;
         getComplaintHistory();
         data.content = "";
@@ -442,35 +394,27 @@ function commit() {
 }
 //筛选器
 const filterTag = (value, row) => {
-  console.log(row.state, value, row);
   return row.state == value;
 };
 //删除（处理中/已取消）申诉项
 const handleDelete = (index, row) => {
-  // console.log("删除申诉项", index, row);
-  console.log("appealId:", row.appealId);
   studentFun.complaint.deleteComplaint([row.appealId]).then((res) => {
     data.complaintData.splice(index, 1);
     ElMessage.success(res);
   });
 };
-
 //撤销处理中的申诉项
 const handleRevoke = (index, row) => {
-  // console.log("撤销申诉项", index, row);
   studentFun.complaint.revokeComplaint(row.appealId).then((res) => {
     row.state = 2;
     ElMessage.success(res);
   });
 };
-
 //签名后提交数据和电子签名
 function finish(file) {
-  console.log("签名img的base64转为file的结果", file);
   const formData = new FormData();
   formData.append("file", file);
   studentFun.sign.studentConfirmSign(data.month, formData).then((res) => {
-    console.log(res);
     data.signature = "ABC"; //不为空即可
     data.dialogVisible = false;
     ElMessage({
@@ -478,17 +422,7 @@ function finish(file) {
       type: "success",
     });
   });
-  //模拟提交
-  // setTimeout(() => {
-  //   data.state = "已确认";
-  //   data.dialogVisible = false;
-  //   ElMessage({
-  //     message: "提交本月综测情况成功",
-  //     type: "success",
-  //   });
-  // }, 60);
 }
-const { getColumnWidth } = adaptiveColumnWidthFun(data.assessment);
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style scoped>
@@ -499,9 +433,6 @@ el-table el-table-column th {
 
 el-table el-table-column td {
   font-size: 1rem; /* 1rem相当于根元素的字体大小 */
-}
-.cell {
-  font-size: 4rem !important;
 }
 </style>
   

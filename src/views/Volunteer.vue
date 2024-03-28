@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-28 21:00:57
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-26 23:26:26
+ * @LastEditTime: 2024-03-28 14:26:28
  * @FilePath: \collegeApplication\src\views\Volunteer.vue
  * @Description: 志愿填报情况页面
 -->
@@ -100,7 +100,7 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive, computed, onMounted } from "vue";
+import { reactive, computed, onMounted } from "vue";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 import teacherFun from "@/api/teacher";
 
@@ -150,7 +150,6 @@ function getClassWish(currentPage) {
       size: 5,
     })
     .then((res) => {
-      console.log("获取班级学生志愿情况：", res);
       data.assessments = res.records;
       data.page.currentPage = res.current;
       data.page.pageSize = res.size;
@@ -160,14 +159,12 @@ function getClassWish(currentPage) {
 
 //改变单页数
 const handleSizeChange = (val) => {
-  console.log(`${val} items per page`);
   data.page.pageSize = val;
   getClassWish();
 };
 
 //改变分页页数
 const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`);
   data.page.currentPage = val;
   getClassWish(val);
 };
