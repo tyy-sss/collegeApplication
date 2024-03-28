@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 17:06:52
+ * @LastEditTime: 2024-03-28 20:21:26
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:班主任查看综合测评情况页
 -->
@@ -16,7 +16,7 @@
         :disabled="data.loadOk"
         placeholder="请选择要查询的综测月份"
         style="width: 100px; margin-top: -10px"
-        @change="getAssessmentDetails"
+        @change="reSearch"
       >
         <el-option
           v-for="item in data.monthes"
@@ -37,7 +37,7 @@
           class="input-with-select"
         >
           <template #append>
-            <el-button @click="getAssessmentDetails" :disabled="data.loadOk"
+            <el-button @click="reSearch" :disabled="data.loadOk"
               ><el-icon><Search /></el-icon
             ></el-button>
           </template>
@@ -453,6 +453,11 @@ function getAssessmentDetails() {
       data.loading = false;
       data.loadOk = false;
     });
+}
+//重新查询
+function reSearch() {
+  data.page.currentPage = 1;
+  getAssessmentDetails();
 }
 //班主任电子签名
 function finish(file) {

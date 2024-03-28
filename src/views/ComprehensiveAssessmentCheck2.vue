@@ -16,7 +16,7 @@
         :disabled="data.loadOk"
         placeholder="请选择要查询的综测月份"
         style="width: 100px; margin-top: -10px"
-        @change="getAssessmentDetails"
+        @change="reSearch"
       >
         <el-option
           v-for="item in data.monthes"
@@ -38,7 +38,7 @@
           class="input-with-select"
         >
           <template #append>
-            <el-button @click="getAssessmentDetails" :disabled="data.loadOk"
+            <el-button @click="reSearch" :disabled="data.loadOk"
               ><el-icon><Search /></el-icon
             ></el-button>
           </template>
@@ -169,6 +169,11 @@ function getAssessmentDetails() {
       data.loading = false;
       data.loadOk = false;
     });
+}
+//重新查询
+function reSearch() {
+  data.page.currentPage = 1;
+  getAssessmentDetails();
 }
 //改变分页页数
 const handleCurrentChange = (val) => {

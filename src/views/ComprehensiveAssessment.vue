@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 17:58:48
+ * @LastEditTime: 2024-03-28 20:21:16
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -19,7 +19,7 @@
         :disabled="data.loadOk"
         placeholder="请选择要查询的综测月份"
         style="width: 100px; margin-top: -10px"
-        @change="getAssessmentDetails"
+        @change="reSearch"
       >
         <el-option
           v-for="item in data.monthes"
@@ -40,7 +40,7 @@
           class="input-with-select"
         >
           <template #append>
-            <el-button @click="getAssessmentDetails" :disabled="data.loadOk"
+            <el-button @click="reSearch" :disabled="data.loadOk"
               ><el-icon><Search /></el-icon
             ></el-button>
           </template>
@@ -224,7 +224,11 @@
     </div>
   </el-dialog>
   <!-- 申诉列表对话框 -->
-  <el-dialog v-model="data.dialogVisible2" title="💬 待申述处理" :width="data.width3">
+  <el-dialog
+    v-model="data.dialogVisible2"
+    title="💬 待申述处理"
+    :width="data.width3"
+  >
     <div>
       <el-table :data="data.complaintData">
         <el-table-column type="index" />
@@ -669,6 +673,11 @@ function getAssessmentDetails() {
       data.loading = false;
       data.loadOk = false;
     });
+}
+//重新查询
+function reSearch() {
+  data.page.currentPage = 1;
+  getAssessmentDetails();
 }
 //获取申诉列表数据
 function getComplaintsDeatils() {
