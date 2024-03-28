@@ -78,7 +78,7 @@ function getVolunteerTable() {
   });
 }
 const handleClick = (row) => {
-  router.push({ name: "volunteer-check", query: { id: row.id } });
+  router.replace({ name: "volunteer-check", query: { id: row.id } });
 };
 </script>
 

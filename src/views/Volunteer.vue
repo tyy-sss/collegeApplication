@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-28 21:00:57
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-01-25 09:27:19
+ * @LastEditTime: 2024-03-26 23:26:26
  * @FilePath: \collegeApplication\src\views\Volunteer.vue
  * @Description: 志愿填报情况页面
 -->
@@ -12,17 +12,14 @@
     <hr />
     <h1>{{ data.myclass }}班级志愿填报情况</h1>
     <br />
-    <div class="searchBox">
+    <!-- <div class="searchBox">
       <span>学生姓名: &nbsp;</span>
       <el-input
         v-model="data.search"
         size="small"
         placeholder="输入学生姓名关键字"
       />
-      <!-- <el-button @click="handleExcelExport"
-        ><el-icon><Download /></el-icon>&nbsp; 导出</el-button
-      > -->
-    </div>
+    </div> -->
     <!-- 志愿情况列表 -->
     <el-table
       :data="filterTableData"
@@ -88,13 +85,14 @@
         />
       </el-table-column>
     </el-table>
-    <!-- 分页 -->
     <div class="pagination">
       <el-pagination
-        :page-size=data.page.pageSize
-        :pager-count=10
-        layout="prev, pager, next"
-        :total=data.page.total
+        layout="total,sizes,prev,pager,next"
+        :page-size="data.page.pageSize"
+        :page-sizes="[15, 20, 40, 100]"
+        :pager-count="10"
+        :total="data.page.total"
+        @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
         style="margin-left: auto"
       />
@@ -103,13 +101,11 @@
 </template>
 <script setup>
 import { ref, reactive, computed, onMounted } from "vue";
-import { volunteerHeader } from "@/assets/js/excel/format/volunteer-style";
-import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import { adaptiveColumnWidthFun } from "@/assets/js/utils/adaptive-column-width";
 import teacherFun from "@/api/teacher";
 
 const data = reactive({
-  myclass: "2023级1班",
+  myclass: "-级-班",
   search: "",
   assessments: [
     {
@@ -136,44 +132,51 @@ onMounted(() => {
   init();
 });
 function init() {
-  getClassWish(1);
+  // getClass();
+  // getClassWish(1);
+}
+//获取班级
+function getClass() {
+  teacherFun.user.getInformation().then((res) => {
+    data.myclass = res.className;
+  });
 }
 //获取班级学生志愿情况（这里的timeId还没处理）
 function getClassWish(currentPage) {
   teacherFun.wish
     .getClassWish({
       timeId: 20,
-      current:currentPage,
-      size:5,
+      current: currentPage,
+      size: 5,
     })
     .then((res) => {
       console.log("获取班级学生志愿情况：", res);
       data.assessments = res.records;
-      data.page.currentPage=res.current;
-      data.page.pageSize=res.size;
+      data.page.currentPage = res.current;
+      data.page.pageSize = res.size;
       data.page.total = res.total;
     });
 }
+
+//改变单页数
+const handleSizeChange = (val) => {
+  console.log(`${val} items per page`);
+  data.page.pageSize = val;
+  getClassWish();
+};
+
 //改变分页页数
 const handleCurrentChange = (val) => {
-  console.log(`current page: ${val}`)
+  console.log(`current page: ${val}`);
+  data.page.currentPage = val;
   getClassWish(val);
-}
+};
 const filterTableData = computed(() =>
   data.assessments.filter(
     (data) => !data.search || data.name.includes(data.search)
   )
 );
 const { getColumnWidth } = adaptiveColumnWidthFun(data.assessments);
-
-// 数据excel导出
-// const handleExcelExport = () => {
-//   export_json_to_excel(
-//     volunteerHeader,
-//     assessments,
-//     `${data.myclass}班级志愿填报情况表`
-//   );
-// };
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style lang="scss" scoped>

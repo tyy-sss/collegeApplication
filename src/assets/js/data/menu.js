@@ -79,11 +79,11 @@ const headteacherMenuData = reactive([
     path: "/student",
     icon: "location",
   },
-  {
-    menuName: "志愿填报情况",
-    path: "/volunteer",
-    icon: "location",
-  },
+  // {
+  //   menuName: "志愿填报情况",
+  //   path: "/volunteer",
+  //   icon: "location",
+  // },
   {
     menuName: "综合测评情况",
     path: "/comprehensive-assessment-check",

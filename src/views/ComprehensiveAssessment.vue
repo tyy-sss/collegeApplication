@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-22 15:28:20
+ * @LastEditTime: 2024-03-28 13:45:27
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -41,7 +41,7 @@
           class="input-with-select"
         >
           <template #append>
-            <el-button @click="getAssessmentDetails"
+            <el-button @click="getAssessmentDetails" :disabled="data.loadOk"
               ><el-icon><Search /></el-icon
             ></el-button>
           </template>
@@ -384,15 +384,17 @@
                       fit="contain"
                     />
                   </div>
-                  <br />
-                  <el-button
-                    type="danger"
-                    @click="deleteStudentSign(scope.$index, scope.row)"
-                    >抹除签名</el-button
-                  ><br />
-                  <span
-                    >抹除签名后，您可以对改成员综测进行修改，改学生需要重新签名确认</span
-                  >
+                  <div v-if="data.teacherSignature == null">
+                    <br />
+                    <el-button
+                      type="danger"
+                      @click="deleteStudentSign(scope.$index, scope.row)"
+                      >抹除签名</el-button
+                    ><br />
+                    <span
+                      >抹除签名后，您可以对改成员综测进行修改，改学生需要重新签名确认</span
+                    >
+                  </div>
                 </div>
               </el-popover>
             </div>
@@ -435,8 +437,8 @@
     <div class="process">
       <div>
         <span>综测进度 ：</span>
-        <span v-show="!data.signature">🟢进行中</span>
-        <span v-show="data.signature">⚫已归档</span>
+        <span v-show="!data.teacherSignature">🟢进行中</span>
+        <span v-show="data.teacherSignature">⚫已归档</span>
       </div>
       <br />
       <div>
@@ -901,7 +903,6 @@ function getAssessmentDetails() {
     })
     .then((res) => {
       console.log("获取综测信息结果：", res);
-      // console.log("综测流程", res.isEnd);
       data.page.currentPage = res.current;
       data.page.pageSize = res.size;
       data.page.total = res.total;
@@ -912,7 +913,6 @@ function getAssessmentDetails() {
       if (data.curMonth == 0) {
         data.curMonth = res.records[0].month;
       }
-      // data.isEnd = res.isEnd;
       data.teacherSignature = res.teacherSignature;
       data.signature = res.signature;
       data.loading = false;

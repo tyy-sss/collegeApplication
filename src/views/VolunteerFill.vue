@@ -305,7 +305,7 @@ function finish(sign) {
     })
     .then((res) => {
       console.log("提交志愿结果", res);
-      router.push({ name: "volunteer-table" });
+      router.replace({ name: "volunteer-table" });
       ElMessage({
         type: "success",
         message: "提交志愿成功",

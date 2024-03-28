@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-21 14:58:34
+ * @LastEditTime: 2024-03-28 13:55:01
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -685,11 +685,12 @@ const handleRepasswds = () => {
   multipleSelection.value.forEach((item) => {
     dealArray.push(item.userNumber);
   });
-  // console.log("重置密码列表：",dealArray)
-  teacherFun.class.updateStudentPassword(dealArray).then((res) => {
-    ElMessage.success(res);
-    toggleSelection();
-  });
+  if (dealArray.length !== 0) {
+    teacherFun.class.updateStudentPassword(dealArray).then((res) => {
+      ElMessage.success(res);
+      toggleSelection();
+    });
+  }
 };
 //批量撤销测评小组职位
 const handleDeletePosts = () => {

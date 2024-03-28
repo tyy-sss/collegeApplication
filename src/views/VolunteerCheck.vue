@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-11 21:54:20
+ * @LastEditTime: 2024-03-26 22:59:23
  * @FilePath: \collegeApplication\src\views\VolunteerCheck.vue
  * @Description: 查看志愿页面
 -->
@@ -119,7 +119,7 @@ function getVolunteer() {
 // 跳转至志愿填报页面
 function changeVolunteer() {
   if (data.volunteers.frequency > 0) {
-    router.push({
+    router.replace({
       name: "volunteer-fill",
       query: { originVolunteers: data.volunteers,id:data.volunteerId },
     });

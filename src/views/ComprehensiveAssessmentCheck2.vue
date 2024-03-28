@@ -38,7 +38,7 @@
           class="input-with-select"
         >
           <template #append>
-            <el-button @click="getAssessmentDetails"
+            <el-button @click="getAssessmentDetails" :disabled="data.loadOk"
               ><el-icon><Search /></el-icon
             ></el-button>
           </template>

@@ -256,7 +256,6 @@
           <el-input
             v-model="updataData.phone"
             style="width: 30%"
-            autocomplete="off"
             :placeholder="data.student.phone || '-'"
           />
         </el-form-item>
@@ -267,7 +266,6 @@
             <el-input
               v-model="updataData.consigneeBo.username"
               style="width: 30%"
-              autocomplete="off"
               :placeholder="data.consignee.username || '-'"
             />
           </el-form-item>
@@ -275,7 +273,6 @@
             <el-input
               v-model="updataData.consigneeBo.phone"
               style="width: 30%"
-              autocomplete="off"
               :placeholder="data.consignee.phone || '-'"
             />
           </el-form-item>
@@ -283,7 +280,6 @@
             <el-input
               v-model="updataData.consigneeBo.address"
               style="width: 30%"
-              autocomplete="off"
               :placeholder="data.consignee.address || '-'"
           /></el-form-item>
         </div>
@@ -440,7 +436,8 @@ function confirmClick() {
           ElMessage.success(res);
         });
       }
-      Object.keys(updataData).forEach((key) => (updataData[key] = "")); //快速清空内容
+      updataData.phone="";
+      Object.keys(updataData.consigneeBo).forEach((key) => (updataData.consigneeBo[key] = "")); //快速清空内容
       init();
     })
     .catch(() => {});
