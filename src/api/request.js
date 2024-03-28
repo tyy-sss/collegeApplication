@@ -1,5 +1,4 @@
 import axios from "axios";
-import qs from "qs"; //转json数据工具包
 import router from "@/router";
 import { ElMessage } from "element-plus";
 import { addRequest, refreshToken } from "./two-token";

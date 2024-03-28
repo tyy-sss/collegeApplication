@@ -1,8 +1,33 @@
 el-table el-table-column th {
-  font-size: 1.2rem; /* 1.2rem相当于根元素的字体大小 */
+  font-size: 1.2rem;
+  /* 1.2rem相当于根元素的字体大小 */
   color: red !important;
 }
 
 el-table el-table-column td {
-  font-size: 1rem; /* 1rem相当于根元素的字体大小 */
+  font-size: 1rem;
+  /* 1rem相当于根元素的字体大小 */
+}
+
+.detail {
+  background-color: #f2f7ff;
+}
+@media (max-width: 1100px) {
+  .pc {
+    display: none;
+  }
+
+  .phone {
+    display: block;
+  }
+}
+
+@media (min-width: 1100px) {
+  .pc {
+    display: block;
+  }
+
+  .phone {
+    display: none;
+  }
 }

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 16:53:37
+ * @LastEditTime: 2024-03-28 17:58:48
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -214,7 +214,7 @@
     </div>
   </div>
   <!-- 电子签名对话框 -->
-  <el-dialog v-model="data.dialogVisible" title="电子签名" width="50%">
+  <el-dialog v-model="data.dialogVisible" title="电子签名" :width="data.width1">
     <div style="margin-left: 2rem">
       当全班成员进行电子签名后，您可以在本页进行签字确认班级综测已编辑核对完成，签字之后无法修改综测内容，请仔细核对后签字。
     </div>
@@ -224,17 +224,17 @@
     </div>
   </el-dialog>
   <!-- 申诉列表对话框 -->
-  <el-dialog v-model="data.dialogVisible2" title="💬 待申述处理" width="60%">
+  <el-dialog v-model="data.dialogVisible2" title="💬 待申述处理" :width="data.width3">
     <div>
       <el-table :data="data.complaintData">
         <el-table-column type="index" />
         <el-table-column label="申诉学生姓名" prop="username" min-width="120" />
-        <el-table-column label="学号" prop="userNumber" min-width="100" />
+        <el-table-column label="学号" prop="userNumber" min-width="110" />
         <el-table-column label="申诉内容" prop="content" min-width="300" />
         <el-table-column
           label="申诉时间"
           prop="created"
-          min-width="200"
+          min-width="180"
           sortable
         />
         <el-table-column
@@ -291,7 +291,7 @@
     v-loading.lock="data.loading"
     v-model="data.dialogVisible3"
     :title="data.curTitle"
-    width="500"
+    :width="data.width2"
     lock-scroll
   >
     <el-form :model="data.form">
@@ -511,6 +511,9 @@ import { getMonthName } from "@/assets/js/utils/month";
 import studentFun from "@/api/student";
 
 const data = reactive({
+  width1: "80%",
+  width2: "80%",
+  width3: "60%",
   myclass: "-级-班", //班级
   state: null,
   curMonth: 0,
@@ -609,10 +612,26 @@ onMounted(() => {
 });
 //初始化
 function init() {
+  // 添加 resize 事件监听器
+  window.addEventListener("resize", watchWidth);
+  watchWidth();
   getClassDetials(); //获取班级信息
   getAssessmentMonth(); //获取可选月份
   getAssessmentDetails(); //获取综测信息
   getComplaintsDeatils(); //获取申诉列表数据
+}
+//监听宽度
+function watchWidth() {
+  if (document.documentElement.clientWidth <= 1100) {
+    data.width1 = "80%";
+    data.width2 = "60%";
+    data.width3 = "99%";
+  } else {
+    data.width1 = "50%";
+    data.width2 = "30%";
+    data.width3 = "60%";
+  }
+  console.log(data.width2);
 }
 //获取班级信息
 function getClassDetials() {

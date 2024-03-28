@@ -24,7 +24,7 @@
           v-on:change="handleFileSelect($event)"
         />
         <div class="imgBox">
-          <el-image class="passport" :src="data.avatar" fit="fill">
+          <el-image class="passport" :src="data.avatar" fit="scale-down">
             <template #placeholder>
               <div class="image-slot">请上传证件照</div>
             </template></el-image
@@ -100,10 +100,6 @@
               <span class="tag">来源省份 :</span
               ><span>{{ data.student.province || "-" }}</span>
             </div>
-            <!-- <div>
-              <span class="tag">科类 :</span>
-              <span>{{ data.student.category || "-" }}</span>
-            </div> -->
             <div>
               <span class="tag">性质计划 :</span
               ><span>{{ data.student.plan || "-" }}</span>

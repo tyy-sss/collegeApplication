@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 17:09:13
+ * @LastEditTime: 2024-03-28 19:48:37
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -58,10 +58,105 @@
       <div>
         <h4>该月综测情况确认</h4>
         <br />
+        <div class="phone">
+          <el-form>
+            <div>
+              <el-form-item label="姓名:" label-width="80px">{{
+                data.myAssessment.username || "暂无数据"
+              }}</el-form-item>
+              <el-form-item label="学号:" label-width="80px">{{
+                data.myAssessment.userNumber || "暂无数据"
+              }}</el-form-item>
+              <el-form-item label="德育明细:" label-width="80px"></el-form-item>
+              <div class="detail">
+                <el-form-item label="加分明细" label-width="140px">
+                  {{ data.myAssessment.add1 || "暂无数据" }}
+                </el-form-item>
+                <el-form-item label="减分明细" label-width="140px">
+                  {{ data.myAssessment.sub1 || "暂无数据" }}
+                </el-form-item>
+                <el-form-item label="德育得分" label-width="140px">
+                  {{ data.myAssessment.point1 || "暂无数据" }}
+                </el-form-item>
+              </div>
+            </div>
+            <div>
+              <el-form-item label="智育明细:" label-width="80px"></el-form-item>
+              <div class="detail">
+                <el-form-item label="加分明细" label-width="140px">
+                  {{ data.myAssessment.add2 || "暂无数据" }}
+                </el-form-item>
+                <el-form-item label="减分明细" label-width="140px">
+                  {{ data.myAssessment.sub2 || "暂无数据" }}
+                </el-form-item>
+                <el-form-item label="智育得分" label-width="140px">
+                  {{ data.myAssessment.point2 || "暂无数据" }}
+                </el-form-item>
+              </div>
+            </div>
+            <div>
+              <el-form-item label="体育明细:" label-width="80px"></el-form-item>
+              <div class="detail">
+                <el-form-item label="加分明细" label-width="140px">
+                  {{ data.myAssessment.add3 || "暂无数据" }}
+                </el-form-item>
+                <el-form-item label="减分明细" label-width="140px">
+                  {{ data.myAssessment.sub3 || "暂无数据" }}
+                </el-form-item>
+                <el-form-item label="智育得分" label-width="140px">
+                  {{ data.myAssessment.point3 || "暂无数据" }}
+                </el-form-item>
+              </div>
+            </div>
+            <div>
+              <el-form-item label="美育明细:" label-width="80px"></el-form-item>
+              <div class="detail">
+                <el-form-item label="加分明细" label-width="140px">
+                  {{ data.myAssessment.add4 || "暂无数据" }}
+                </el-form-item>
+                <el-form-item label="减分明细" label-width="140px">
+                  {{ data.myAssessment.sub4 || "暂无数据" }}
+                </el-form-item>
+                <el-form-item label="智育得分" label-width="140px">
+                  {{ data.myAssessment.point4 || "暂无数据" }}
+                </el-form-item>
+              </div>
+            </div>
+            <div>
+              <el-form-item label="劳动明细:" label-width="80px"></el-form-item>
+              <div class="detail">
+                <el-form-item label="加分明细" label-width="140px">
+                  {{ data.myAssessment.add5 || "暂无数据" }}
+                </el-form-item>
+                <el-form-item label="减分明细" label-width="140px">
+                  {{ data.myAssessment.sub5 || "暂无数据" }}
+                </el-form-item>
+                <el-form-item label="智育得分" label-width="140px">
+                  {{ data.myAssessment.point5 || "暂无数据" }}
+                </el-form-item>
+              </div>
+            </div>
+            <br />
+            <el-form-item label="总体情况" label-width="80px"> </el-form-item>
+            <div class="detail">
+              <el-form-item label="总加分" label-width="140px">
+                {{ data.myAssessment.add_total || "暂无数据" }}
+              </el-form-item>
+              <el-form-item label="总减分" label-width="140px">
+                {{ data.myAssessment.sub_total || "暂无数据" }}
+              </el-form-item>
+              <el-form-item label="总得分" label-width="140px">
+                {{ data.myAssessment.point_total || "暂无数据" }}
+              </el-form-item>
+            </div>
+          </el-form>
+        </div>
+
         <el-table
           :data="data.assessment"
           v-loading.lock="data.loading"
           style="width: 100%"
+          class="pc"
           default="暂无数据"
         >
           <el-table-column prop="userNumber" label="学号" width="120" />
@@ -110,7 +205,7 @@
     </div>
   </div>
   <!-- 电子签名对话框 -->
-  <el-dialog v-model="data.dialogVisible" title="电子签名" width="50%">
+  <el-dialog v-model="data.dialogVisible" title="电子签名" :width="data.width1">
     <div>
       <div style="margin-left: 1rem; margin-bottom: 1rem">
         该电子签名为确保综测信息经过本人确认后无误
@@ -119,7 +214,11 @@
     </div>
   </el-dialog>
   <!-- 申报错误对话框 -->
-  <el-dialog v-model="data.dialogVisible2" title="申报错误" width="30%">
+  <el-dialog
+    v-model="data.dialogVisible2"
+    title="申报错误"
+    :width="data.width2"
+  >
     <div>
       <el-form-item label="申诉问题类型：">
         <el-select
@@ -151,7 +250,11 @@
     </template>
   </el-dialog>
   <!-- 申诉历史对话框 -->
-  <el-dialog v-model="data.dialogVisible3" title="💬 待申述处理" width="60%">
+  <el-dialog
+    v-model="data.dialogVisible3"
+    title="💬 待申述处理"
+    :width="data.width3"
+  >
     <div>
       <el-table :data="data.complaintData" style="width: 100%">
         <el-table-column type="index" />
@@ -219,6 +322,32 @@ import { ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import { getMonthName } from "@/assets/js/utils/month";
 const data = reactive({
+  width1: "80%",
+  width2: "50%",
+  width3: "60%",
+  myAssessment: {
+    userNumber: "",
+    username: "",
+    add1: "",
+    sub1: "",
+    point1: 0,
+    add2: "",
+    sub2: "",
+    point2: 0,
+    add3: "",
+    sub3: "无",
+    point3: 0,
+    add4: "",
+    sub4: "",
+    point4: 0,
+    add5: "",
+    sub5: "",
+    point5: 0,
+    add_total: 0,
+    sub_total: 0,
+    pre_total: 0,
+    point_total: 0,
+  },
   assessment: [
     // {
     //   userNumber: "2021401449",
@@ -300,32 +429,51 @@ const data = reactive({
   ],
   monthes: [],
   loading: false,
-  loadOk:true,
+  loadOk: true,
   dialogVisible: false,
   dialogVisible2: false,
   dialogVisible3: false,
 });
+const formLabelWidth = "140px";
 onMounted(() => {
   init();
 });
 //初始化
 function init() {
+  // 添加 resize 事件监听器
+  window.addEventListener("resize", watchWidth);
+  watchWidth();
   getAssessmentThisMonth();
   getAssessmentMonth();
   getComplaintHistory();
 }
+//监听宽度
+function watchWidth() {
+  // console.log("视口宽度", document.documentElement.clientWidth);
+  if (document.documentElement.clientWidth <= 1100) {
+    data.width1 = "80%";
+    data.width2 = "60%";
+    data.width3 = "90%";
+  } else {
+    data.width1 = "50%";
+    data.width2 = "30%";
+    data.width3 = "60%";
+  }
+}
 //获取本月综测情况
 function getAssessmentThisMonth() {
   data.loading = true;
-  data.loadOk=true;
+  data.loadOk = true;
   studentFun.assess.getAssessmentThisMonth().then((res) => {
     data.isEnd = res.isEnd;
     data.month = res.month;
     data.score = res.score;
     data.signature = res.signature;
     data.assessment = [res.content];
+    data.myAssessment = res.content;
     data.loading = false;
-    data.loadOk=false;
+    data.loadOk = false;
+    console.log(data.myAssessment);
   });
 }
 //按月份获取综测情况
@@ -341,6 +489,7 @@ function getAssessmentDetails() {
       data.score = res.score;
       data.signature = res.signature;
       data.assessment = [res.content];
+      data.myAssessment = res.content;
       data.loading = false;
     });
 }
