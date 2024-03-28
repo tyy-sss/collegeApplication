@@ -25,4 +25,5 @@ const formatDate = (value) => {
   let t = y + "-" + m + "-" + d + " " + h + ":" + i + ":" + s;
   return t;
 };
+
 export { formatDate };

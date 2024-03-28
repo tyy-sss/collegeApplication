@@ -1,6 +1,6 @@
 // 文件导入
 import XLSX from "xlsx";
-import { subjectList } from "@/assets/js/data/information-dropdown-data";
+import managerFun from "@/api/manager";
 
 // 按照二进制读取文件
 export const readFile = (file) => {
@@ -31,7 +31,7 @@ export const excelLeadingIn = (data, character) => {
       let v = character[key];
       const text = v.text;
       const type = v.type;
-      v = item[text] || ""; 
+      v = item[text] || "";
       type === "string" ? (v = String(v)) : null;
       type === "number" ? (v = Number(v)) : null;
       obj[key] = v;
@@ -39,72 +39,88 @@ export const excelLeadingIn = (data, character) => {
     list.push(obj);
   });
   //得要预处理的数据，把数据处理后传入后端。
-  console.log(list, "得到要处理的数据");
+  console.log(list, "初步处理的数据");
   return list;
 };
-// 把前端获取的数据 进行正则判断，或者处理筛选后处理成上传给后端的数据
 // 对学生信息进行处理
 export const handleStudentInformation = (data) => {
   const handleData = [];
-  data.forEach((item) => {
-    // 学生的姓名，学号，班级,目标学校不能为空
-    if (!item.username || !item.userNumber || !item.className || !item.school)
-      return;
-    // 对选考科目进行处理
-    let electiveSubjectList = [];
-    if (item.subjects.length === 0) {
-      if (item.object.indexOf("文史") != -1) {
-        electiveSubjectList = ["历史", "政治", "地理"];
-      } else if (item.object.indexOf("理工") != -1) {
-        electiveSubjectList = ["物理", "生物", "化学"];
-      }
-    } else if (item.subjects.length !== 0) {
-      for (let i = 0; i < item.subjects.length; i++) {
+  let subjectList = [];
+  // 获取科目数组
+  managerFun.subject
+    .checkSubject()
+    .then((res) => {
+      res.forEach((element) => {
+        subjectList.push(element.subjectName);
+      });
+      data.forEach((item) => {
+        // 学生的姓名，学号，班级,目标学校不能为空
         if (
-          item.subjects[i] === "," ||
-          item.subjects[i] === "+" ||
-          item.subjects[i] === "，" ||
-          item.subjects[i] === "." ||
-          item.subjects[i] === "&" ||
-          item.subjects[i] === "/" ||
-          item.subjects[i] === "*"
+          !item.username ||
+          !item.userNumber ||
+          !item.className ||
+          !item.school
         )
-          continue;
-        let subject = "";
-        while (
-          item.subjects[i] !== "*" &&
-          item.subjects[i] !== "," &&
-          item.subjects[i] !== "+" &&
-          item.subjects[i] !== "，" &&
-          item.subjects[i] !== "." &&
-          item.subjects[i] !== "&" &&
-          item.subjects[i] !== "/" &&
-          item.subjects[i] !== "*"
-        ) {
-          subject = subject.concat(item.subjects[i]);
-          i++;
-          if (i >= item.subjects.length) {
-            break;
+          return;
+        // 对选考科目进行处理
+        let electiveSubjectList = [];
+        if (item.subjects.length === 0) {
+          if (item.object.indexOf("文史") != -1) {
+            electiveSubjectList = ["历史", "政治", "地理"];
+          } else if (item.object.indexOf("理工") != -1) {
+            electiveSubjectList = ["物理", "生物", "化学"];
+          }
+        } else if (item.subjects.length !== 0) {
+          for (let i = 0; i < item.subjects.length; i++) {
+            if (
+              item.subjects[i] === "," ||
+              item.subjects[i] === "+" ||
+              item.subjects[i] === "，" ||
+              item.subjects[i] === "." ||
+              item.subjects[i] === "&" ||
+              item.subjects[i] === "/" ||
+              item.subjects[i] === "*"
+            )
+              continue;
+            let subject = "";
+            while (
+              item.subjects[i] !== "*" &&
+              item.subjects[i] !== "," &&
+              item.subjects[i] !== "+" &&
+              item.subjects[i] !== "，" &&
+              item.subjects[i] !== "." &&
+              item.subjects[i] !== "&" &&
+              item.subjects[i] !== "/" &&
+              item.subjects[i] !== "*"
+            ) {
+              subject = subject.concat(item.subjects[i]);
+              i++;
+              if (i >= item.subjects.length) {
+                break;
+              }
+            }
+            // 判断是不是在科目数组中
+            if (subjectList.includes(subject)) {
+              electiveSubjectList.push(subject);
+            }
           }
         }
-        // 判断是不是在科目数组中
-        if (subjectList.includes(subject)) {
-          electiveSubjectList.push(subject);
+        // 去除重复科目
+        electiveSubjectList = new Set(electiveSubjectList);
+        if (electiveSubjectList.size !== 3) {
+          return;
         }
-      }
-    }
-    // 去除重复科目
-    electiveSubjectList = new Set(electiveSubjectList);
-    if (electiveSubjectList.size !== 3) {
-      return;
-    }
-    item.subjects = Array.from(electiveSubjectList);
-    // 删除Object属性
-    delete item.object;
-    handleData.push(item);
-  });
-  console.log(handleData, "最后的数据");
-  return handleData;
+        item.subjects = Array.from(electiveSubjectList);
+        // 删除Object属性
+        delete item.object;
+        handleData.push(item);
+      });
+    })
+    .catch(() => {})
+    .finally(() => {
+      console.log(handleData, "处理后的学生导入信息");
+      return handleData;
+    });
 };
 // 对老师信息进行处理
 export const handleTeacherInformation = (data) => {
@@ -113,14 +129,8 @@ export const handleTeacherInformation = (data) => {
     if (!item.userNumber || !item.username) {
       return;
     }
-    // 对手机号进行正则验证
-    let p = /^[1][0-9]{10}$/;
-    let phone = p.test(item.phone);
-    if (!phone) {
-      return;
-    }
     handleData.push(item);
   });
-  console.log(handleData);
+  console.log(handleData, "处理后的老师导入信息");
   return handleData;
 };

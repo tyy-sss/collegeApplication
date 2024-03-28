@@ -119,6 +119,7 @@
               :page-sizes="data.page.pageSize"
               :pager-count="data.page.pageCount"
               layout="prev, pager, next,sizes,jumper"
+              :current-page="data.page.currentPage"
               :total="data.page.total"
               @size-change="getGradesList"
               @current-change="getGradesList"
@@ -129,7 +130,7 @@
     </div>
   </div>
 </template>
-    <script setup>
+<script setup>
 import { onMounted, reactive, ref } from "vue";
 import { Plus, Download } from "@element-plus/icons-vue";
 import { formatDate } from "@/assets/js/utils/format-date";
@@ -186,6 +187,7 @@ const handleExportGrades = () => {
 };
 // 按年份搜索成绩单
 const onSearch = debounceRight(() => {
+  data.page.currentPage = 1;
   if (data.searchData.date) {
     data.searchData.date = formatDate(data.searchData.date).slice(0, 4);
   }
@@ -193,6 +195,7 @@ const onSearch = debounceRight(() => {
 }, 50);
 // 重置搜索
 const onReSearch = () => {
+  data.page.currentPage = 1;
   data.searchData = {
     date: "",
     descript: "",
@@ -278,11 +281,11 @@ onMounted(() => {
   getExamSubjectList();
 });
 </script>
-<style src="@/assets/css/utils/table-center.css" scoped/>
-<style src="@/assets/css/show-container.css" scoped/>
-<style src="@/assets/css/search-top-left-right.css" scoped/>
-<style src="@/assets/css/pager.css" scoped/>
-<style src="@/assets/css/utils/table-empty.css" scoped/>
+<style src="@/assets/css/utils/table-center.css" scoped />
+<style src="@/assets/css/show-container.css" scoped />
+<style src="@/assets/css/search-top-left-right.css" scoped />
+<style src="@/assets/css/pager.css" scoped />
+<style src="@/assets/css/utils/table-empty.css" scoped />
 <style scoped>
 /* 头部样式设置 */
 .top > div,
@@ -296,5 +299,3 @@ onMounted(() => {
   margin-right: 1rem;
 }
 </style>
-
-  

@@ -97,7 +97,7 @@
       <div class="pager">
         <el-pagination
           :page-size="data.pager.size"
-          :pager-count="9"
+          :current-page="data.pager.current"
           layout="prev, pager, next"
           :total="data.pager.total"
           @current-change="handleChangePage"
@@ -107,11 +107,11 @@
   </div>
 </template>
 <script setup>
-import { reactive, onMounted } from "vue";
+import { reactive } from "vue";
 // 导出数据
 import { historyStudentHeader } from "@/assets/js/excel/history/student";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
-import { formatDate } from "@/assets/js/utils/format-date";
+import { getYearNews } from "@/constants/date";
 import managerFun from "@/api/manager";
 import historyFun from "@/api/history";
 import { throttle } from "@/assets/js/utils/throttle";
@@ -132,9 +132,10 @@ const data = reactive({
 });
 // 搜索年份获得当年的班级信息
 const onSearchYear = (val) => {
-  data.searchData.year = formatDate(val).slice(0, 4);
+  data.searchData.year = getYearNews(val);
   data.searchData.class = "";
   data.searchData.student = "";
+  data.searchData.list = [];
   managerFun.class.getAllClass(data.searchData.year).then((res) => {
     res.forEach((element) => {
       data.searchData.list.push({
@@ -146,10 +147,16 @@ const onSearchYear = (val) => {
 };
 // 搜索学生信息
 const onSearchStudent = () => {
-  getStudentNews();
+  if (data.searchData.class == "") {
+    ElMessage.error("请选择时间和班级");
+  } else {
+    data.pager.current = 1;
+    getStudentNews();
+  }
 };
 // 搜索
 const onSearch = () => {
+  data.pager.current = 1;
   data.searchData.student = "";
   getStudentNews();
 };

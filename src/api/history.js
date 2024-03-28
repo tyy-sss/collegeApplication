@@ -11,11 +11,23 @@ let historyFun = {
 historyFun.manager.appraisal = (data) => {
   return http.get("/appraisal/history", {
     year: data.year,
-    month: year.month,
-    className: data.className,
+    month: data.month,
+    classId: data.classId,
     keyword: data.keyword,
     current: data.current,
     size: data.size,
+  });
+};
+/**
+ * 获取一个班一个月的综测成绩
+ * @param {*} data
+ * @returns
+ */
+historyFun.manager.appraisalByClass = (data) => {
+  return http.get("/appraisal/class", {
+    classId: data.classId,
+    month: data.month,
+    year: data.year,
   });
 };
 /**
@@ -38,6 +50,6 @@ historyFun.manager.student = (data) => {
  * @returns
  */
 historyFun.manager.getStudentByClass = (classId) => {
-  return http.get("/class/student?classId="+classId);
+  return http.get("/class/student?classId=" + classId);
 };
 export default historyFun;

@@ -1,5 +1,4 @@
 // 科目数组
-// import { subjectList } from "@/assets/js/data/information-dropdown-data";
 let subjectList = [];
 let labelList = [];
 let vis = [];
@@ -147,7 +146,8 @@ const getLabel = (n) => {
 };
 // 得到总的联级选择框
 export const optionsChoose = (subjectScope, areaIdVal, subjectNumber) => {
-  subjectList =  ["物理", "化学", "生物", "历史", "地理", "政治"];
+  console.log(subjectScope);
+  subjectList = subjectScope;
   areaId = areaIdVal;
   let firstChildren = [];
   let allList = [

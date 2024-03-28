@@ -5,7 +5,7 @@ export default {
     // 动态菜单
     menuData: [],
     // 是否收缩
-    isCollapse:false
+    isCollapse: false,
   },
   getters: {},
   //修改字段
@@ -14,13 +14,13 @@ export default {
     setMenu(state, val) {
       state.menuData = val;
     },
-    addMenu(state){
+    addMenu(state) {
       addMenu(state.menuData);
     },
     // 修改菜单收缩
-    setIsCollapse(state){
+    setIsCollapse(state) {
       state.isCollapse = !state.isCollapse;
-    }
+    },
   },
   actions: {},
   modules: {},

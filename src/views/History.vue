@@ -28,6 +28,9 @@
           <comprehensive-assessment
             v-else-if="searchData.class == 'comprehensive-assessment'"
           />
+          <professional-triage
+            v-else-if="searchData.class == 'professional-triage'"
+          />
         </div>
       </div>
     </div>
@@ -36,10 +39,11 @@
 <script setup>
 import studentNews from "@/components/history/student-news.vue";
 import comprehensiveAssessment from "@/components/history/comprehensive-assessment.vue";
+import professionalTriage from "@/components/history/professional-triage.vue";
 // 时间转换
 import { reactive } from "vue";
 const searchData = reactive({
-  class: "student-news",
+  class: "professional-triage",
   list: [
     {
       label: "学生信息",
@@ -51,7 +55,7 @@ const searchData = reactive({
     },
     {
       label: "专业分流信息",
-      value: "professional-triage-information",
+      value: "professional-triage",
     },
   ],
 });

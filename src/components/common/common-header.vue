@@ -23,6 +23,7 @@
 </template>
 <script setup>
 import { useRouter } from "vue-router";
+import apiFun from "@/api/user.js";
 const router = useRouter();
 import {
   removeAccessToken,
@@ -30,17 +31,18 @@ import {
   removeRole,
 } from "@/constants/token";
 // 退出
-const handleExit = async () => {
-  // 清除用户信息
-  removeAccessToken();
-  removeRefreshToken();
-  removeRole();
-  // const data = await apiFun.user.loginOut();
-  // 跳转界面
-  const href = router.resolve({
-    path: "/login",
+const handleExit = () => {
+  apiFun.user.loginOut().then(() => {
+    // 清除用户信息
+    removeAccessToken();
+    removeRefreshToken();
+    removeRole();
+    // 跳转界面
+    const href = router.resolve({
+      path: "/login",
+    });
+    window.open(href.href, "_self");
   });
-  window.open(href.href, "_self");
 };
 </script>
 <style scoped>

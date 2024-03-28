@@ -1,5 +1,3 @@
-import { inputNumberEmits } from "element-plus";
-
 // 成绩单导入表头数据
 const getGradesCharacter = (gradesList) => {
   const gradesCharacter = {
@@ -52,7 +50,7 @@ const handleGradesInformation = (addData, gradesList) => {
       handleData.push(item);
     }
   });
-  console.log(handleData);
+  console.info(handleData, "处理后的成绩导入数据");
   return handleData;
 };
 export { getGradesCharacter, handleGradesInformation };

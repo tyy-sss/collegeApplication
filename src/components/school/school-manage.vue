@@ -225,6 +225,7 @@ const checkSchoolNews = (val) => {
 const onSearch = () => {
   getSchoolList();
 };
+// 重置搜索
 const onReSearch = () => {
   form.searchData = "";
   getSchoolList();

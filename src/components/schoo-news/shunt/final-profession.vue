@@ -61,7 +61,7 @@
 </template>
 <script setup>
 import { onMounted, reactive, ref } from "vue";
-import { formatDate } from "@/assets/js/utils/format-date";
+import { NOW_YEAR } from "@/constants/date";
 import { Download, Plus } from "@element-plus/icons-vue";
 import addFinalProfession from "@/components/schoo-news/shunt/add-final-profession.vue";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
@@ -110,7 +110,7 @@ const handleChangePage = (val) => {
 // 获得正式志愿填报时间Id
 const getWishTime = () => {
   managerFun.wishTime
-    .selectWishTime1(schoolId, Number(formatDate(new Date()).substring(0, 4)))
+    .selectWishTime1(schoolId, Number(NOW_YEAR))
     .then((res) => {
       res.records.forEach((element) => {
         if (element.type == true) {
