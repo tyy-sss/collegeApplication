@@ -163,12 +163,12 @@ onMounted(() => {
   background-color: #fff;
 }
 .el-menu-item {
-  justify-content: center;
+  justify-content: flex-start;
   height: 5rem;
   font-size: 1.2rem;
 }
 .menu-icon {
-  margin-right: 0.5rem;
+  margin-right: 0.2rem;
 }
 /* 设置菜单触发和点击的样式 */
 .el-menu-item:hover,
