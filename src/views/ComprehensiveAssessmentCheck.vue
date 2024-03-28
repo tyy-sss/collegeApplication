@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 14:14:21
+ * @LastEditTime: 2024-03-28 17:06:52
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:班主任查看综合测评情况页
 -->
@@ -487,50 +487,4 @@ const handleExcelExport = () => {
 };
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
-<style lang="scss" scoped>
-.checkMonth {
-  margin-top: 30px;
-  text-align: center;
-  transform: translateX(-7%);
-}
-h1 {
-  margin-left: 1rem;
-  display: inline-block;
-}
-.pagination {
-  margin-top: 1rem;
-  display: flex;
-}
-.checked {
-  color: rgb(148, 178, 243);
-  border-bottom: 1px solid;
-}
-.process {
-  width: 100%;
-  padding: 2rem;
-}
-.stack-line {
-  background: #f2f7ff;
-  padding: 1.2rem;
-  line-height: 1.2rem;
-  margin-bottom: 1rem;
-  span {
-    font-size: 17px;
-    color: rgb(98, 97, 97);
-    margin-right: 10px;
-  }
-  .gk-score {
-    margin-bottom: 1rem;
-  }
-  .gk-rank {
-    margin: 1rem 0;
-  }
-  .item {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-}
-</style>
-  
+<style lang="scss" src="@/assets/css/assessment/comprehensiveAssessmentCheck.scss" scoped />

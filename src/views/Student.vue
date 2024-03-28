@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 13:55:01
+ * @LastEditTime: 2024-03-28 16:34:05
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -628,51 +628,4 @@ const filterTag = (value, row) => {
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
 <style src="@/assets/css/search-top-left-right.css" scoped/>
-<style lang="scss" scoped>
-.box {
-  margin: 10px 0 20px 0;
-}
-.card {
-  /* grid布局 */
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
-  grid-gap: 20px 20px;
-  grid-auto-rows: 50px;
-  grid-auto-flow: row dense;
-}
-.item {
-  text-align: left;
-}
-.mybox {
-  padding: 0 0 1rem 0;
-}
-.littleTitle {
-  margin-bottom: 2rem;
-  font-weight: 1000;
-}
-.tag {
-  display: inline-block;
-  margin-right: 1rem;
-  width: 5rem;
-  text-align: right;
-}
-.infoRow {
-  margin-bottom: 1rem;
-}
-.pickup_box {
-  width: 50%;
-  padding: 0.8rem;
-  background-color: rgba(224, 230, 230, 0.438);
-}
-.flex_box {
-  display: flex;
-  flex-direction: column;
-}
-.grid-item {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
-  gap: 1rem 1.2rem;
-  grid-auto-flow: row dense;
-}
-</style>
-  
+<style src="@/assets/css/teacher/studentManage.scss" lang="scss" scoped/>

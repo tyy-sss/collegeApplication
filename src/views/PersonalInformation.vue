@@ -429,8 +429,10 @@ function confirmClick() {
           ElMessage.success(res);
         });
       }
-      updataData.phone="";
-      Object.keys(updataData.consigneeBo).forEach((key) => (updataData.consigneeBo[key] = "")); //快速清空内容
+      updataData.phone = "";
+      Object.keys(updataData.consigneeBo).forEach(
+        (key) => (updataData.consigneeBo[key] = "")
+      ); //快速清空内容
       init();
     })
     .catch(() => {});
@@ -465,117 +467,4 @@ function updatePassword() {
 </script>
 
 <style src="@/assets/css/show-container.css" scoped></style>
-<style lang="scss" scoped>
-.left {
-  display: flex;
-  align-items: center;
-  flex-direction: column;
-  .fileInput {
-    display: none;
-  }
-  .imgBox {
-    width: 100%;
-    height: 13rem;
-    .passport {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-    }
-  }
-  .uploadPassport {
-    font-size: 0.8rem;
-    width: 5rem;
-  }
-}
-
-.box {
-  padding: 0 0 1rem 0;
-  .littleTitle {
-    margin-bottom: 2rem;
-    font-weight: 1000;
-  }
-}
-
-.tag {
-  display: inline-block;
-  margin-right: 1rem;
-  width: 6rem;
-  text-align: right;
-}
-.infoRow {
-  margin-bottom: 1rem;
-}
-.pickup_box {
-  width: 50%;
-  padding: 0.8rem;
-  background-color: rgba(224, 230, 230, 0.438);
-}
-.flex_box {
-  display: flex;
-  flex-direction: column;
-}
-
-.teacher {
-  overflow: auto; /* 清除浮动 */
-}
-.grid-item {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
-  gap: 1rem 1.2rem;
-  grid-auto-flow: row dense;
-}
-.btnBox {
-  width: 100%;
-  text-align: right;
-  .changeInfo {
-    width: 6rem;
-    margin-top: 2rem;
-    margin-bottom: 1rem;
-  }
-}
-.student {
-  display: flex;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 1000px) {
-  /* 当屏幕宽度小于等于800px时 */
-  .left,
-  .right {
-    width: 100%; /* 将宽度设置为100%以确保在小屏幕上上下摆放 */
-  }
-  .pickup_box {
-    width: 100%;
-  }
-}
-@media (min-width: 1000px) and (max-width: 1250px) {
-  .left {
-    margin-right: 1rem;
-    width: 25%; /* 左侧宽度固定为15% */
-  }
-  .right {
-    width: 73%; /* 右侧宽度固定为85% */
-  }
-  .pickup_box {
-    width: 100%;
-  }
-}
-@media (min-width: 1250px) {
-  .left {
-    margin-right: 1rem;
-    width: 10%; /* 左侧宽度固定为10% */
-  }
-  .right {
-    width: 88%; /* 右侧宽度固定为90% */
-  }
-}
-.image-slot {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-  height: 100%;
-  background: rgba(161, 159, 159, 0.267);
-  font-size: 13px;
-}
-</style>
+<style src="@/assets/css/user/personalInformation.scss"  lang="scss" scoped/>

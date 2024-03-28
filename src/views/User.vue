@@ -352,23 +352,4 @@ onMounted(() => {
 <style src="@/assets/css/search-top-left-right.css" scoped />
 <style src="@/assets/css/pager.css" scoped />
 <style src="@/assets/css/utils/table-empty.css" scoped />
-<style scoped>
-/* 头部样式设置 */
-.top > div,
-.middle {
-  margin-bottom: 1rem;
-}
-.top .search .right {
-  width: 8%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  min-width: 5rem;
-}
-.add {
-  display: flex;
-}
-.add-item {
-  margin-right: 1rem;
-}
-</style>
+<style src="@/assets/css/user/user.css" scoped />

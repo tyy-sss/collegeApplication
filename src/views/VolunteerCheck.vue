@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-26 22:59:23
+ * @LastEditTime: 2024-03-28 16:31:41
  * @FilePath: \collegeApplication\src\views\VolunteerCheck.vue
  * @Description: 查看志愿页面
 -->
@@ -16,7 +16,8 @@
           ><span>{{ data.student.username }}</span>
         </div>
         <div>
-          <span class="tag">学生学号 :</span><span>{{ data.student.userNumber }}</span>
+          <span class="tag">学生学号 :</span
+          ><span>{{ data.student.userNumber }}</span>
         </div>
         <div>
           <span class="tag">身份证号 :</span
@@ -71,57 +72,53 @@
   </div>
 </template>
 <script setup>
-import { ref, reactive, computed, onMounted } from "vue";
+import { reactive, onMounted } from "vue";
 import { ElMessage } from "element-plus";
 import studentFun from "@/api/student";
 import volunteerFun from "@/api/volunteer";
 import { useRouter } from "vue-router";
 const router = useRouter();
 const data = reactive({
-  volunteerId:null,
+  volunteerId: null,
+  state: null,
   student: {
-    username: "付小小",
-    userNumber: "415567569789",
-    idCard: "365124200103052214",
-    sex: "女",
-    class: "2023级预科1班",
-    className: "湘南学院",
+    username: "",
+    userNumber: "",
+    idCard: "",
+    sex: "",
+    class: "",
+    className: "",
   },
   volunteers: {
     firstName: "",
     secondName: "",
     thirdName: "",
-    endTime: "2023.11.09",
-    frequency: 3,
+    endTime: "",
+    frequency: 0,
   },
 });
-
 onMounted(() => {
-  data.volunteerId=router.currentRoute.value.query.id;
-  console.log("获取到的TimeID是:",data.volunteerId)
-  studentFun.user.getInformation().then((res) => {
-    console.log("学生信息", res);
-    data.student = res;
-  });
   init();
 });
 function init() {
+  data.volunteerId = router.currentRoute.value.query.id;
+  studentFun.user.getInformation().then((res) => {
+    data.student = res;
+  });
   getVolunteer();
 }
 //初始化志愿/剩余填写次数数据
 function getVolunteer() {
   volunteerFun.student.selectWish(data.volunteerId).then((res) => {
-    console.log("初始化志愿/剩余填写次数数据",res)
     data.volunteers = res;
   });
 }
-
 // 跳转至志愿填报页面
 function changeVolunteer() {
   if (data.volunteers.frequency > 0) {
     router.replace({
       name: "volunteer-fill",
-      query: { originVolunteers: data.volunteers,id:data.volunteerId },
+      query: { originVolunteers: data.volunteers, id: data.volunteerId },
     });
   } else {
     ElMessage({
@@ -132,51 +129,4 @@ function changeVolunteer() {
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
-<style lang="scss" scoped>
-$small-margin: 1rem;
-$big-margin: 3rem;
-.box {
-  width: 100%;
-}
-.info-box {
-  width: 80%;
-  margin: $big-margin 0 $big-margin 0;
-  .tag {
-    width: 7rem;
-    display: inline-block;
-    margin-right: $small-margin;
-    text-align: right;
-  }
-}
-.card {
-  margin: $big-margin 0;
-}
-.card:hover {
-  box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
-}
-.tip {
-  color: gray;
-  line-height: 1.5rem;
-  margin: $small-margin 0 $small-margin 0;
-  padding: 3rem;
-  border-top: 0.1rem solid rgba(87, 86, 86, 0.158);
-}
-.grid-item {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  gap: 1rem 1.2rem;
-  grid-auto-flow: row dense;
-}
-
-@media screen and (max-width: 1000px) {
-  .voluteer-box {
-    padding: 0;
-  }
-}
-@media screen and (min-width: 1000px) {
-  .voluteer-box {
-    padding: 2rem;
-  }
-}
-</style>
-  
+<style src="@/assets/css/student/volunteerCheck.scss" lang="scss" scoped/>

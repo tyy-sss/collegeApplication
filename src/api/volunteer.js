@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-05 21:22:27
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-11 20:29:11
+ * @LastEditTime: 2024-03-28 15:36:50
  * @FilePath: \collegeApplication\src\api\volunteer.js
  * @Description: 介绍文件的作用
  */
@@ -47,8 +47,8 @@ volunteerFun.student.addWish = (params) => {
 /**
  * 修改个人志愿
  */
-volunteerFun.basis.modifyWise = (params) => {
-  return http.put("/wish/modifyWish", params);
+volunteerFun.basis.modifyWise = (params,formData) => {
+  return http.upload2(`/wish/modifyWish?first=${params.first}&firstName=${params.firstName}&second=${params.second}&secondName=${params.secondName}&third=${params.third}&thirdName=${params.thirdName}&timeId=${params.timeId}`, formData);
 };
 
 /**

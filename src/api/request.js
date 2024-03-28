@@ -84,6 +84,23 @@ const http = {
         });
     });
   },
+  upload2(url = "", formData) {
+    return new Promise((resolve, reject) => {
+      requests({
+        url,
+        data: formData,
+        headers: header2,
+        method: "PUT",
+      })
+        .then((res) => {
+          resolve(res.data);
+          return res;
+        })
+        .catch((err) => {
+          reject(err);
+        });
+    });
+  },
   get(url = "", params = {}) {
     return new Promise((resolve, reject) => {
       requests({

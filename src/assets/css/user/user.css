@@ -1,0 +1,18 @@
+/* 头部样式设置 */
+.top > div,
+.middle {
+  margin-bottom: 1rem;
+}
+.top .search .right {
+  width: 8%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  min-width: 5rem;
+}
+.add {
+  display: flex;
+}
+.add-item {
+  margin-right: 1rem;
+}

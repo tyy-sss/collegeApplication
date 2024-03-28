@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 14:11:37
+ * @LastEditTime: 2024-03-28 16:53:37
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -787,60 +787,5 @@ const handleExcelExport = () => {
 };
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
-<style lang="scss" scoped>
-h1 {
-  margin-top: 40px;
-  text-align: center;
-}
-.tip {
-  color: rgba(128, 128, 128, 0.568);
-  margin: 1rem 0 1rem 4.5rem;
-}
-.item {
-  .item__input {
-    display: none;
-    width: 100%;
-  }
-}
-.pagination {
-  display: flex;
-}
-.checkMonth {
-  margin-top: 30px;
-  text-align: center;
-  transform: translateX(-7%);
-  h1 {
-    margin-left: 1rem;
-    display: inline-block;
-  }
-}
-.checked {
-  color: rgb(148, 178, 243);
-  border-bottom: 1px solid;
-}
-.stack-line {
-  background: #f2f7ff;
-  padding: 1.2rem;
-  line-height: 1.2rem;
-  margin-bottom: 1rem;
-  span {
-    font-size: 17px;
-    color: rgb(98, 97, 97);
-    margin-right: 10px;
-  }
-  .gk-rank {
-    margin: 1rem 0;
-  }
-  .item {
-    display: flex;
-    justify-content: flex-start;
-    align-items: center;
-    margin-bottom: 1rem;
-  }
-}
-.process {
-  width: 100%;
-  padding: 2rem;
-}
-</style>
+<style src="@/assets/css/assessment/comprehensiveAssessment.scss" lang="scss" scoped />
   

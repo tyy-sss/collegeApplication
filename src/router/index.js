@@ -72,15 +72,9 @@ const routes = [
         component: () => import("@/views/Grades.vue"),
       },
       {
-        path: "volunteer",
-        name: "volunteer",
-        component: () => import("@/views/Volunteer.vue"),
-      },
-      {
         path: "volunteer-basis",
         name: "volunteer-basis",
         component: () => import("@/views/VolunteerBasis.vue"),
-        // redirect: "/volunteer-check",
         children: [
           {
             path: "/volunteer-basis",

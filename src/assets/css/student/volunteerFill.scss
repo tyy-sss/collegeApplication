@@ -1,0 +1,33 @@
+$small-margin: 1rem;
+$big-margin: 3rem;
+.box {
+  width: 100%;
+}
+.tip {
+  color: gray;
+  line-height: 1.5rem;
+  margin: $small-margin 0 $small-margin 0;
+  padding: 3rem;
+}
+.top-border {
+  border-top: 0.1rem solid rgba(87, 86, 86, 0.158);
+}
+.info-box {
+  width: 80%;
+  margin: $small-margin 0 $small-margin 0;
+}
+.tag {
+  width: 7rem;
+  display: inline-block;
+  margin-right: $small-margin;
+  text-align: right;
+}
+.volunteers-box {
+  margin: $big-margin 0;
+}
+.grid-item {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
+  gap: 1rem 1.2rem;
+  grid-auto-flow: row dense;
+}

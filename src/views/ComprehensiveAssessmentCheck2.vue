@@ -182,19 +182,4 @@ const handleSizeChange = (val) => {
 };
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
-<style lang="scss" scoped>
-.checkMonth {
-  margin-top: 30px;
-  text-align: center;
-  transform: translateX(-7%);
-}
-h1 {
-  margin-left: 1rem;
-  display: inline-block;
-}
-.pagination {
-  margin-top: 1rem;
-  display: flex;
-}
-</style>
-  
+<style src="@/assets/css/assessment/comprehensiveAssessmentCheck2.scss" lang="scss" scoped />

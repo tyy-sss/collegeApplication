@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-15 22:17:01
+ * @LastEditTime: 2024-03-28 16:29:15
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -32,7 +32,8 @@
           ><span>{{ data.student.username }}</span>
         </div>
         <div>
-          <span class="tag">学生学号 :</span><span>{{ data.student.userNumber }}</span>
+          <span class="tag">学生学号 :</span
+          ><span>{{ data.student.userNumber }}</span>
         </div>
         <div>
           <span class="tag">身份证号 :</span
@@ -148,7 +149,7 @@
 <script setup>
 import signatures from "@/components/utils/Signatures.vue";
 import { ref, reactive, onMounted } from "vue";
-import { ElMessageBox, ElMessage } from "element-plus";
+import { ElMessage } from "element-plus";
 import volunteerFun from "@/api/volunteer";
 import studentFun from "@/api/student";
 import { useRouter } from "vue-router";
@@ -158,12 +159,12 @@ const props = {
 };
 const data = reactive({
   student: {
-    username: "付小小",
-    userNumber: "415567569789",
-    idCard: "365124200103052214",
-    sex: "女",
-    class: "2023级预科1班",
-    className: "湘南学院",
+    username: "",
+    userNumber: "",
+    idCard: "",
+    sex: "",
+    class: "",
+    className: "",
   },
   volunteers: {
     firstName: "",
@@ -171,58 +172,7 @@ const data = reactive({
     thirdName: "",
   },
   originVolunteers: {},
-  options: [
-    {
-      value: "学院1",
-      label: "学院1",
-      children: [
-        {
-          value: "汉语言文学（师范）",
-          label: "汉语言文学（师范）",
-        },
-        {
-          value: "旅游管理",
-          label: "旅游管理",
-        },
-      ],
-    },
-    {
-      value: "学院2",
-      label: "学院2",
-      children: [
-        {
-          value: "文化产业管理",
-          label: "文化产业管理",
-        },
-        {
-          value: "视觉传达设计",
-          label: "视觉传达设计",
-        },
-        {
-          value: "漫画设计",
-          label: "漫画设计",
-        },
-      ],
-    },
-    {
-      value: "学院3",
-      label: "学院3",
-      children: [
-        {
-          value: "药物科学",
-          label: "药物科学",
-        },
-        {
-          value: "动物医学",
-          label: "动物医学",
-        },
-        {
-          value: "法医",
-          label: "法医",
-        },
-      ],
-    },
-  ],
+  options: [],
   first: [],
   second: [],
   third: [],
@@ -231,20 +181,19 @@ const data = reactive({
 // 提交志愿
 let dialogVisible = ref(false);
 onMounted(() => {
+  init();
+});
+function init() {
   data.volunteerId = router.currentRoute.value.query.id;
   data.originVolunteers = router.currentRoute.value.query.originVolunteers;
-  console.log("志愿情况初始值data.originVolunteers:", data.originVolunteers);
   studentFun.user.getInformation().then((res) => {
-    console.log("学生信息", res);
     data.student = res;
   });
   selectStudentMajor();
-});
+}
 //获取可选专业选项
 function selectStudentMajor() {
   volunteerFun.options.selectStudentMajor().then((res) => {
-    console.log("获取可选专业选项:", res);
-    // 假设原始数据保存在变量data中
     let myOptions = [];
     for (let i = 0; i < res.length; i++) {
       let college = res[i].college;
@@ -262,21 +211,24 @@ function selectStudentMajor() {
         children: children,
       });
     }
-    console.log("我的可选专业选项是：", myOptions);
     data.options = myOptions;
   });
 }
 //提交志愿进行签名按钮
 function submitVolunteer() {
-  //测试代码
-  console.log("填写的志愿情况", data.volunteers.firstName[0]);
-  console.log("填写的志愿情况", data.volunteers);
   if (
     data.volunteers.firstName[0] == null ||
     data.volunteers.secondName[0] == null ||
-    data.volunteers.thirdName[0] == null
+    data.volunteers.thirdName[0] == null ||
+    checkDuplicate(
+      data.volunteers.firstName[0],
+      data.volunteers.secondName[0],
+      data.volunteers.thirdName[0]
+    )
   ) {
-    ElMessage.error("任何一项志愿不能为空，请认真完成志愿填报");
+    ElMessage.error(
+      "任何一项志愿不能为空，且不能选择相同志愿，请认真完成志愿填报"
+    );
   } else {
     data.first = splitString(data.volunteers.firstName);
     data.second = splitString(data.volunteers.secondName);
@@ -284,35 +236,38 @@ function submitVolunteer() {
     dialogVisible.value = true;
   }
 }
+//查重
+function checkDuplicate(str1, str2, str3) {
+  if (str1 === str2 || str1 === str3 || str2 === str3) {
+    return true;
+  } else {
+    return false;
+  }
+}
 //签名后提交数据和电子签名
-function finish(sign) {
-  // console.log("签名img的base64", sign);
-  //提交电子签名
-  // studentFun.sign.submitSignature(sign).then((res) => {
-  //   console.log(res);
-  //提交志愿接口(成功需要把志愿剩余次数减一)
-  console.log("SSDFESF", data.originVolunteers.timeId);
-
+function finish(file) {
+  const formData = new FormData();
+  formData.append("file", file);
   volunteerFun.basis
-    .modifyWise({
-      first: parseInt(data.first[1]), //第一志愿
-      firstName: data.first[0], //第一志愿
-      second: parseInt(data.second[1]), //第二志愿
-      secondName: data.second[0], //第二志愿
-      third: parseInt(data.third[1]), //第三志愿
-      thirdName: data.third[0], //第三志愿
-      timeId: data.originVolunteers.timeId, //时间段id
-    })
+    .modifyWise(
+      {
+        first: parseInt(data.first[1]), //第一志愿
+        firstName: data.first[0], //第一志愿
+        second: parseInt(data.second[1]), //第二志愿
+        secondName: data.second[0], //第二志愿
+        third: parseInt(data.third[1]), //第三志愿
+        thirdName: data.third[0], //第三志愿
+        timeId: data.originVolunteers.timeId, //时间段id
+      },
+      formData
+    )
     .then((res) => {
-      console.log("提交志愿结果", res);
       router.replace({ name: "volunteer-table" });
       ElMessage({
         type: "success",
         message: "提交志愿成功",
       });
     });
-
-  // });
 }
 //处理数据:"专业名称&专业编号"=>["专业名称",专业编号]
 function splitString(str) {
@@ -320,39 +275,4 @@ function splitString(str) {
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
-<style lang="scss" scoped>
-$small-margin: 1rem;
-$big-margin: 3rem;
-.box {
-  width: 100%;
-}
-.tip {
-  color: gray;
-  line-height: 1.5rem;
-  margin: $small-margin 0 $small-margin 0;
-  padding: 3rem;
-}
-.top-border {
-  border-top: 0.1rem solid rgba(87, 86, 86, 0.158);
-}
-.info-box {
-  width: 80%;
-  margin: $small-margin 0 $small-margin 0;
-}
-.tag {
-  width: 7rem;
-  display: inline-block;
-  margin-right: $small-margin;
-  text-align: right;
-}
-.volunteers-box {
-  margin: $big-margin 0;
-}
-.grid-item {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));
-  gap: 1rem 1.2rem;
-  grid-auto-flow: row dense;
-}
-</style>
-  
+<style src="@/assets/css/student/volunteerFill.scss" lang="scss" scoped/>

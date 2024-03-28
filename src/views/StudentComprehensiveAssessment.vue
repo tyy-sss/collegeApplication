@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 14:26:19
+ * @LastEditTime: 2024-03-28 17:09:13
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -425,14 +425,4 @@ function finish(file) {
 }
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
-<style scoped>
-el-table el-table-column th {
-  font-size: 1.2rem; /* 1.2rem相当于根元素的字体大小 */
-  color: red !important;
-}
-
-el-table el-table-column td {
-  font-size: 1rem; /* 1rem相当于根元素的字体大小 */
-}
-</style>
-  
+<style src="@/assets/css/student/studentComprehensiveAssessment.scss" lang="scss" scoped/>
