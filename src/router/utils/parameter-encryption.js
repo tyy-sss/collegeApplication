@@ -5,13 +5,10 @@ import { isArray, isNull, isUndefined } from "lodash-es";
 const aes = new AesEncryption();
 
 /**
- *
  * @description 解密:反序列化字符串参数
  */
 export const stringifyQuery = (obj) => {
-  console.log(obj, "传递的参数");
   if (!obj) return "";
-  // console.log(Object.keys(obj));
   const result = Object.keys(obj)
     .map((key) => {
       const value = obj[key];

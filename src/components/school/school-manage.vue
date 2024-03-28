@@ -210,7 +210,6 @@ const handleClose = () => {
 };
 // 查看学校的具体消息
 const checkSchoolNews = (val) => {
-  console.log(val);
   // 跳转界面
   const href = router.resolve({
     path: "/school-manager/school-news",

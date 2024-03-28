@@ -94,7 +94,6 @@ const handleAddUser = async (ev) => {
     //读取file中的数据
     let data = await readFile(file);
     const excelData = getExcelData(data);
-    console.log(excelData);
     let addData = [];
     addData = excelLeadingIn(excelData, getGradesCharacter(props.gradesList));
     addData = handleGradesInformation(addData, props.gradesList);

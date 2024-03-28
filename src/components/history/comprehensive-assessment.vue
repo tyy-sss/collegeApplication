@@ -205,7 +205,6 @@ const getComprehensiveNewsByClass = () => {
       month: data.searchData.month,
     })
     .then((res) => {
-      console.log(res);
       let allData = [];
       res.forEach((element) => {
         allData.push(element.content);

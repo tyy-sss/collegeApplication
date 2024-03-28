@@ -58,7 +58,6 @@ let combination = ref("");
 const multipleSelection = ref([]);
 const handleSelectionChange = (val) => {
   multipleSelection.value = val;
-  console.log(multipleSelection.value);
   combination.value = [];
   multipleSelection.value.forEach((item) => {
     combination.value.push(item.name);

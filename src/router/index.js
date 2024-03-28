@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-11 22:12:04
+ * @LastEditTime: 2024-03-28 14:42:26
  * @FilePath: \collegeApplication\src\router\index.js
  * @Description: 这是默认设置,请设置`customMade`, 打开koroFileHeader查看配置 进行设置: https://github.com/OBKoro1/koro1FileHeader/wiki/%E9%85%8D%E7%BD%AE
  */
@@ -139,21 +139,6 @@ const routes = [
       },
     ],
   },
-  {
-    path: "/test1",
-    name: "test1",
-    component: () => import("@/test/test1.vue"),
-  },
-  {
-    path: "/test2",
-    name: "test2",
-    component: () => import("@/test/test2.vue"),
-  },
-  {
-    path: "/test3",
-    name: "test3",
-    component: () => import("@/test/test3.vue"),
-  },
 ];
 
 const router = createRouter({
@@ -165,7 +150,6 @@ const router = createRouter({
 });
 
 router.beforeEach((to, form, next) => {
-  console.log(to);
   // 判断是否有token
   var token = getAccessToken();
   if (!token) {
