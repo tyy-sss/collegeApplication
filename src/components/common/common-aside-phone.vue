@@ -82,7 +82,7 @@ const setImgWidth = () => {
     // 收缩
     imgWidth.value = "48px";
   } else {
-    imgWidth.value = "70px";
+    imgWidth.value = "80px";
   }
 };
 // 手动收缩
@@ -121,7 +121,6 @@ onMounted(() => {
 }
 .menu {
   overflow: hidden;
-  /* height: 100vh; */
   background-color: #fff;
   border-radius: 2rem;
   display: flex;
@@ -139,7 +138,7 @@ onMounted(() => {
   width: 5rem;
 }
 .user-name {
-  font-size: 1.5rem;
+  font-size: 1.2rem;
   font-weight: bolder;
   font-family: "Times New Roman", Times, serif;
 }
@@ -156,7 +155,7 @@ onMounted(() => {
 }
 .description {
   font-family: "Times New Roman", Times, serif;
-  font-size: 1rem;
+  font-size: 0.95rem;
 }
 /* 菜单样式设置 */
 .el-menu {
