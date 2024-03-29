@@ -140,6 +140,7 @@ const data = reactive({
       type: 0,
     },
   ],
+  isExport: false,
   volunteerRule: "",
   activeName: "",
   tableData: [],
@@ -175,8 +176,8 @@ const handleGetCheckVounteerDiversion = (value) => {
 };
 // 导出最后的分流结果
 const handleExportVolunteerDiversion = () => {
-  if (data.volunteerRule == "") {
-    ElMessage.error("请先选择志愿规则");
+  if (!data.isExport) {
+    ElMessage.error("无法导出分流信息");
   } else {
     let endData = [];
     let schoolName = ref(route.query.schoolName).value;
@@ -208,6 +209,9 @@ const handleExportVolunteerDiversion = () => {
             });
             // 导出最后分流结果
             export_json_to_excel(professionHeader, endData, headerTitle);
+          })
+          .catch(() => {
+            ElMessage.error("没有分流结果");
           });
       });
     volunteerFun.manager
@@ -251,6 +255,7 @@ const getVounteerDiversion = (value) => {
     .then((res) => {
       ElMessage.success("志愿匹配成功，正在获取志愿结果");
       data.activeName = 1;
+      data.isExport = true;
       getCheckVounteerDiversion();
     })
     .catch((res) => {

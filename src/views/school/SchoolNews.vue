@@ -11,7 +11,7 @@
         <el-tab-pane label="志愿填报时间" name="second">
           <volunteer-time />
         </el-tab-pane>
-        <el-tab-pane label="专业分流" name="third" v-if="data.showShunt">
+        <el-tab-pane label="专业分流" name="third" v-if="!data.showShunt">
           <profession-shunt />
         </el-tab-pane>
       </el-tabs>
