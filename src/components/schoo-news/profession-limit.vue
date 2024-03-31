@@ -214,10 +214,12 @@ const handleExportProfession = () => {
 };
 // 导出所有的专业限制信息
 const handleExportAllProfeesion = () => {
-  // managerFun.major.allMajor(schoolId).then((res)=>{
-  //   handleAllProfessionExportData(data.tableHeader,res)
-  // }).catch((err)=>{
-  // })
+  managerFun.major
+    .allMajor(schoolId)
+    .then((res) => {
+      handleAllProfessionExportData(data.tableHeader, res);
+    })
+    .catch((err) => {});
 };
 // 删除专业
 const handleDeleteProfession = (val) => {
