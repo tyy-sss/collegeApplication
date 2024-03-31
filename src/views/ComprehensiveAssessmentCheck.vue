@@ -235,7 +235,6 @@ function init() {
 //获取可选月份方法
 function getAssessmentMonth() {
   apiFun.user.getAssessmentsMonth().then((res) => {
-    console.log("获取可选月份方法:", res);
     res.forEach((item) => {
       console.log(item);
       data.monthes.push({
@@ -292,7 +291,7 @@ function finish(file) {
   const formData = new FormData();
   formData.append("file", file);
   teacherFun.sign.confirmSign(data.curMonth, formData).then((res) => {
-    data.teacherSignature = "xx"; //不为空即可
+    data.signature = "xx"; //不为空即可
     data.dialogVisible = false;
     ElMessage({
       message: "确认本月综测情况成功",

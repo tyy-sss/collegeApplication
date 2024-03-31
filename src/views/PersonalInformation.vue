@@ -248,14 +248,23 @@
       <div class="content-box">
         <h4>基本信息</h4>
         <br />
-        <el-form-item label="电话号码 ：">
-          <el-input
-            v-model="updataData.phone"
-            class="input-width"
-            :placeholder="data.student.phone || '-'"
-          />
-        </el-form-item>
+        <div v-if="identity == 3">
+          <el-form-item label="电话号码 ：">
+            <el-input
+              v-model="updataData.phone"
+              class="input-width"
+              :placeholder="data.teacher.phone || '-'"
+            />
+          </el-form-item>
+        </div>
         <div v-if="identity == 0">
+          <el-form-item label="电话号码 ：">
+            <el-input
+              v-model="updataData.phone"
+              class="input-width"
+              :placeholder="data.student.phone || '-'"
+            />
+          </el-form-item>
           <h4>收件信息</h4>
           <br />
           <el-form-item label="收件名称 ：">
@@ -334,7 +343,6 @@ import studentFun from "@/api/student";
 import teacherFun from "@/api/teacher";
 onMounted(() => {
   identity.value = getRole();
-  data.teacherType = getRole();
   init();
 });
 let identity = ref(getRole()); //获取当前用户身份
@@ -347,7 +355,6 @@ const data = reactive({
   student: {},
   consignee: {},
   teacher: {},
-  teacherType: "",
 });
 //修改资料数据
 const updataData = reactive({

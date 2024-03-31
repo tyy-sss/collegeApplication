@@ -124,7 +124,7 @@
                       >抹除签名</el-button
                     ><br />
                     <span
-                      >抹除签名后，您可以对改成员综测进行修改，改学生需要重新签名确认</span
+                      >抹除签名后，您可以对改成员综测进行修改，该学生需要重新签名确认</span
                     >
                   </div>
                 </div>
@@ -706,14 +706,6 @@ function finish(file) {
       type: "success",
     });
   });
-  //模拟提交
-  // setTimeout(() => {
-  //   data.dialogVisible = false;
-  //   ElMessage({
-  //     message: "提交本月综测情况成功",
-  //     type: "success",
-  //   });
-  // }, 60);
 }
 //移除学生签名
 function deleteStudentSign(index, row) {
