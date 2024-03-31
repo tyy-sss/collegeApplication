@@ -158,9 +158,7 @@ import managerFun from "@/api/manager";
 const route = new useRoute();
 const schoolId = ref(route.query.schoolId).value;
 // 下拉框数据
-import {
-  optionsChoose,
-} from "@/assets/js/profession/address-cascader";
+import { optionsChoose } from "@/assets/js/profession/address-cascader";
 // 数据处理
 import {
   handleCascaderData,
@@ -223,7 +221,7 @@ const handleExportAllProfeesion = () => {
 };
 // 删除专业
 const handleDeleteProfession = (val) => {
-  ElMessageBox.confirm("确定删除所选地址组合", {
+  ElMessageBox.confirm("确定删除所选专业组合", {
     confirmButtonText: "确定",
     cancelButtonText: "取消",
     type: "warning",
