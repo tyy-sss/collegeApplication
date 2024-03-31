@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-3-20 21:58:13
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-22 14:35:12
+ * @LastEditTime: 2024-03-31 16:22:23
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck2.vue
  * @Description:学生综合测评表公示页面
 -->
@@ -15,7 +15,7 @@
         v-model="data.curMonth"
         :disabled="data.loadOk"
         placeholder="请选择要查询的综测月份"
-        style="width: 100px; margin-top: -10px"
+        class="select"
         @change="reSearch"
       >
         <el-option
@@ -33,9 +33,8 @@
       <div class="mt-4">
         <el-input
           v-model="data.search"
-          style="max-width: 300px; margin-bottom: -50px"
           placeholder="请输入查询关键字"
-          class="input-with-select"
+          class="input-with-select input-style"
         >
           <template #append>
             <el-button @click="reSearch" :disabled="data.loadOk"
@@ -94,7 +93,7 @@
     </el-table>
 
     <!-- 分页 -->
-    <div class="pagination">
+    <div class="pagination-box">
       <el-pagination
         layout="total,sizes,prev,pager,next"
         :page-size="data.page.pageSize"
@@ -103,7 +102,7 @@
         :total="data.page.total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        style="margin-left: auto"
+        class="pagination"
       />
     </div>
   </div>

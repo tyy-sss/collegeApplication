@@ -2,45 +2,114 @@ h1 {
   margin-top: 40px;
   text-align: center;
 }
+
 .tip {
   color: rgba(128, 128, 128, 0.568);
   margin: 1rem 0 1rem 4.5rem;
 }
+
 .item {
   .item__input {
     display: none;
     width: 100%;
   }
 }
-.pagination {
+
+.pagination-box {
   display: flex;
 }
+
+.pagination {
+  margin-left: auto
+}
+
 .checkMonth {
   margin-top: 30px;
   text-align: center;
   transform: translateX(-7%);
+
   h1 {
     margin-left: 1rem;
     display: inline-block;
   }
 }
+
+.sign-box {
+  width: 330px;
+  height: 100px;
+  border: 1px solid black;
+}
+
+.sign {
+  width: 100%;
+  height: 100%;
+}
+
+.sign-ditail {
+  color: rgb(167, 167, 167);
+  margin-left: 15px;
+}
+
+.sign-button {
+  margin-left: 1rem;
+}
+
+.tip1 {
+  margin-left: 2rem;
+}
+
+.myhr {
+  border-color: rgba(231, 229, 226, 0.459);
+}
+
+.input-width {
+  width: 80%;
+}
+
+.input-number-width {
+  width: 100px;
+}
+
+.select {
+  width: 100px;
+  margin-top: -10px;
+}
+
+.input-style {
+  max-width: 300px;
+  margin-bottom: -50px;
+}
+
+.button1 {
+  float: right;
+  margin-left: 1rem;
+}
+
+.button2 {
+  float: right;
+}
+
 .checked {
   color: rgb(148, 178, 243);
   border-bottom: 1px solid;
 }
+
 .stack-line {
   background: #f2f7ff;
   padding: 1.2rem;
   line-height: 1.2rem;
   margin-bottom: 1rem;
+
   span {
     font-size: 17px;
     color: rgb(98, 97, 97);
     margin-right: 10px;
   }
+
   .gk-rank {
     margin: 1rem 0;
   }
+
   .item {
     display: flex;
     justify-content: flex-start;
@@ -48,6 +117,7 @@ h1 {
     margin-bottom: 1rem;
   }
 }
+
 .process {
   width: 100%;
   padding: 2rem;

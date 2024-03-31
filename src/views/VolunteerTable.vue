@@ -1,3 +1,11 @@
+<!--
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2024-03-10 17:27:37
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2024-03-31 15:46:16
+ * @FilePath: \collegeApplication\src\views\VolunteerTable.vue
+ * @Description: 志愿填报批次列表
+-->
 <template>
   <div>
     <el-table
@@ -40,9 +48,7 @@
         </template>
       </el-table-column>
     </el-table>
-    <span style="font-size: 12px; color: rgb(161, 161, 161)"
-      >志愿填报分为预填报和正式填报</span
-    >
+    <span class="tip">志愿填报分为预填报和正式填报</span>
   </div>
   <el-dialog
     v-model="data.dialogVisible"
@@ -57,12 +63,8 @@
       <el-table-column prop="thirdName" label="第三志愿" width="180" />
       <el-table-column prop="signature" label="签名">
         <template #default="scope"
-          ><div style="width: 200px; height: 50px; border: 1px solid black">
-            <el-image
-              style="width: 100%; height: 100%"
-              :src="scope.row.signature"
-              fit="contain"
-            />
+          ><div class="sign-box">
+            <el-image class="sign" :src="scope.row.signature" fit="contain" />
           </div>
         </template>
       </el-table-column>
@@ -106,3 +108,4 @@ const handleClick2 = (row) => {
   data.dialogVisible = true;
 };
 </script>
+<style src="@/assets/css/student/volunteerTable.scss" lang="scss" scoped/>

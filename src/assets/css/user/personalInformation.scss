@@ -2,18 +2,22 @@
   display: flex;
   align-items: center;
   flex-direction: column;
+
   .fileInput {
     display: none;
   }
+
   .imgBox {
     width: 100%;
     height: 13rem;
+
     .passport {
       width: 100%;
       height: 100%;
       object-fit: contain;
     }
   }
+
   .uploadPassport {
     font-size: 0.8rem;
     width: 5rem;
@@ -22,10 +26,28 @@
 
 .box {
   padding: 0 0 1rem 0;
+
   .littleTitle {
     margin-bottom: 2rem;
     font-weight: 1000;
   }
+}
+
+.content-box {
+  display: flex;
+  flex-direction: column;
+}
+
+.input-width {
+  width: 30%;
+}
+
+.address {
+  margin-top: 1rem;
+}
+
+.footer-button {
+  flex: auto;
 }
 
 .tag {
@@ -34,73 +56,87 @@
   width: 6rem;
   text-align: right;
 }
+
 .infoRow {
   margin-bottom: 1rem;
 }
+
 .pickup_box {
-  width: 50%;
+  width: 70%;
   padding: 0.8rem;
   background-color: rgba(224, 230, 230, 0.438);
 }
+
 .flex_box {
   display: flex;
   flex-direction: column;
 }
 
 .teacher {
-  overflow: auto; /* 清除浮动 */
+  overflow: auto;
 }
+
 .grid-item {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
   gap: 1rem 1.2rem;
   grid-auto-flow: row dense;
 }
+
 .btnBox {
   width: 100%;
   text-align: right;
+
   .changeInfo {
     width: 6rem;
     margin-top: 2rem;
     margin-bottom: 1rem;
   }
 }
+
 .student {
   display: flex;
   flex-wrap: wrap;
 }
 
 @media (max-width: 1000px) {
-  /* 当屏幕宽度小于等于800px时 */
+
   .left,
   .right {
-    width: 100%; /* 将宽度设置为100%以确保在小屏幕上上下摆放 */
+    width: 100%;
   }
+
   .pickup_box {
     width: 100%;
   }
 }
+
 @media (min-width: 1000px) and (max-width: 1250px) {
   .left {
     margin-right: 1rem;
-    width: 25%; /* 左侧宽度固定为15% */
+    width: 25%;
   }
+
   .right {
-    width: 73%; /* 右侧宽度固定为85% */
+    width: 73%;
   }
+
   .pickup_box {
     width: 100%;
   }
 }
+
 @media (min-width: 1250px) {
   .left {
     margin-right: 1rem;
-    width: 10%; /* 左侧宽度固定为10% */
+    width: 10%;
   }
+
   .right {
-    width: 88%; /* 右侧宽度固定为90% */
+    width: 88%;
   }
 }
+
 .image-slot {
   display: flex;
   justify-content: center;

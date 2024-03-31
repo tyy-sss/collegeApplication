@@ -55,9 +55,9 @@
     <br />
     <!-- 修改截止日期，次数tip -->
     <div>
-      截止时间{{ data.volunteers.endTime }}前，您还有<strong
-        style="color: red"
-        >{{ data.volunteers.frequency }}</strong
+      截止时间{{ data.volunteers.endTime }}前，您还有<strong class="num-tip">{{
+        data.volunteers.frequency
+      }}</strong
       >次修改机会
     </div>
     <br />

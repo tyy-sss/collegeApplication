@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 20:21:16
+ * @LastEditTime: 2024-03-31 16:50:14
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -18,7 +18,7 @@
         v-model="data.curMonth"
         :disabled="data.loadOk"
         placeholder="请选择要查询的综测月份"
-        style="width: 100px; margin-top: -10px"
+        class="select"
         @change="reSearch"
       >
         <el-option
@@ -35,9 +35,8 @@
       <div class="mt-4">
         <el-input
           v-model="data.search"
-          style="max-width: 300px; margin-bottom: -50px"
           placeholder="请输入查询关键字"
-          class="input-with-select"
+          class="input-with-select input-style"
         >
           <template #append>
             <el-button @click="reSearch" :disabled="data.loadOk"
@@ -48,11 +47,11 @@
       </div>
       <el-button
         type="warning"
-        style="float: right; margin-left: 1rem"
+        class="button1"
         @click="data.dialogVisible2 = true"
         ><el-icon><Memo /></el-icon>&nbsp; 错误申报</el-button
       >
-      <el-button style="float: right" @click="handleExcelExport"
+      <el-button class="button2" @click="handleExcelExport"
         ><el-icon><Download /></el-icon>&nbsp; 导出</el-button
       >
     </div>
@@ -110,11 +109,9 @@
                 </template>
                 <div>
                   <h4>{{ scope.row.username }}签名详细</h4>
-                  <div
-                    style="width: 330px; height: 100px; border: 1px solid black"
-                  >
+                  <div class="sign-box">
                     <el-image
-                      style="width: 100%; height: 100%"
+                      class="sign"
                       :src="scope.row.signature"
                       fit="contain"
                     />
@@ -154,7 +151,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="pagination">
+    <div class="pagination-box">
       <el-pagination
         layout="total,sizes,prev,pager,next"
         :page-size="data.page.pageSize"
@@ -163,7 +160,7 @@
         :total="data.page.total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        style="margin-left: auto"
+        class="pagination"
       />
     </div>
     <!-- 提交按钮 -->
@@ -186,22 +183,19 @@
                     <span v-show="data.signature">已确认</span>
                   </template>
                   <h4>综测小组签字</h4>
-                  <div
-                    style="width: 380px; height: 100px; border: 1px solid black"
-                  >
+                  <div class="sign-box">
                     <el-image
-                      style="width: 100%; height: 100%"
+                      class="sign"
                       :src="data.signature"
                       fit="contain"
                     />
                   </div>
                 </el-popover>
                 <span v-show="!data.signature">待确认</span>
-                <span style="color: rgb(167, 167, 167); margin-left: 15px">
-                  (已确认/待确认)</span
+                <span class="sign-ditail"> (已确认/待确认)</span
                 ><el-button
                   type="primary"
-                  style="margin-left: 1rem"
+                  class="sign-button"
                   @click="signConfirmAssessment"
                   :disabled="data.signature"
                   >前往电子签名</el-button
@@ -215,7 +209,7 @@
   </div>
   <!-- 电子签名对话框 -->
   <el-dialog v-model="data.dialogVisible" title="电子签名" :width="data.width1">
-    <div style="margin-left: 2rem">
+    <div class="tip1">
       当全班成员进行电子签名后，您可以在本页进行签字确认班级综测已编辑核对完成，签字之后无法修改综测内容，请仔细核对后签字。
     </div>
     <br />
@@ -303,6 +297,7 @@
         <el-select
           v-model="data.curType"
           placeholder="请选择需要修改的综测部分"
+          class="input-width"
         >
           <el-option label="德育" value="1" />
           <el-option label="智育" value="2" />
@@ -311,13 +306,13 @@
           <el-option label="劳动" value="5" />
         </el-select>
       </el-form-item>
-      <hr style="border-color: rgba(231, 229, 226, 0.459)" />
+      <hr class="myhr" />
       <div v-show="data.curType == 1">
         <el-form-item label="德育" :label-width="formLabelWidth"></el-form-item>
         <el-form-item label="加分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
-            style="width: 215px"
+            class="input-width"
             v-model="data.form.add1"
             autocomplete="off"
           />
@@ -326,15 +321,14 @@
         <el-form-item label="减分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
-            style="width: 215px"
+            class="input-width"
             v-model="data.form.sub1"
             autocomplete="off"
           />
         </el-form-item>
         <el-form-item label="德育得分" :label-width="formLabelWidth">
           <el-input-number
-            style="width: 100px"
-            class="item__input"
+            class="item__input input-number-width"
             v-model="data.form.point1"
             :min="-100"
             :max="100"
@@ -347,7 +341,7 @@
         <el-form-item label="加分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
-            style="width: 215px"
+            class="input-width"
             v-model="data.form.add2"
             autocomplete="off"
           />
@@ -355,15 +349,14 @@
         <el-form-item label="减分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
-            style="width: 215px"
+            class="input-width"
             v-model="data.form.sub2"
             autocomplete="off"
           />
         </el-form-item>
         <el-form-item label="智育得分" :label-width="formLabelWidth">
           <el-input-number
-            style="width: 100px"
-            class="item__input"
+            class="item__input input-number-width"
             v-model="data.form.point2"
             :min="-100"
             :max="100"
@@ -376,7 +369,7 @@
         <el-form-item label="加分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
-            style="width: 215px"
+            class="input-width"
             v-model="data.form.add3"
             autocomplete="off"
           />
@@ -384,15 +377,14 @@
         <el-form-item label="减分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
-            style="width: 215px"
+            class="input-width"
             v-model="data.form.sub3"
             autocomplete="off"
           />
         </el-form-item>
         <el-form-item label="体育得分" :label-width="formLabelWidth">
           <el-input-number
-            style="width: 100px"
-            class="item__input"
+            class="item__input input-number-width"
             v-model="data.form.point3"
             :min="-100"
             :max="100"
@@ -405,7 +397,7 @@
         <el-form-item label="加分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
-            style="width: 215px"
+            class="input-width"
             v-model="data.form.add4"
             autocomplete="off"
           />
@@ -413,15 +405,14 @@
         <el-form-item label="减分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
-            style="width: 215px"
+            input-number-width
             v-model="data.form.sub4"
             autocomplete="off"
           />
         </el-form-item>
         <el-form-item label="美育得分" :label-width="formLabelWidth">
           <el-input-number
-            style="width: 100px"
-            class="item__input"
+            class="item__input input-number-width"
             v-model="data.form.point4"
             :min="-100"
             :max="100"
@@ -434,7 +425,7 @@
         <el-form-item label="加分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
-            style="width: 215px"
+            class="input-width"
             v-model="data.form.add5"
             autocomplete="off"
           />
@@ -442,15 +433,14 @@
         <el-form-item label="减分明细" :label-width="formLabelWidth">
           <el-input
             type="textarea"
-            style="width: 215px"
+            class="input-width"
             v-model="data.form.sub5"
             autocomplete="off"
           />
         </el-form-item>
         <el-form-item label="劳动得分" :label-width="formLabelWidth">
           <el-input-number
-            style="width: 100px"
-            class="item__input"
+            class="item__input input-number-width"
             v-model="data.form.point5"
             :min="-100"
             :max="100"
@@ -459,7 +449,7 @@
         </el-form-item>
       </div>
       <div class="tip">请注意手动修改单项得分和总加减分,否则可能出现错误</div>
-      <hr style="border-color: rgba(231, 229, 226, 0.459)" />
+      <hr class="myhr" />
       <br />
       <el-form-item label="总体情况" :label-width="formLabelWidth">
         <span v-show="data.form.isTrue">
@@ -471,8 +461,7 @@
       </el-form-item>
       <el-form-item label="总加分" :label-width="formLabelWidth">
         <el-input-number
-          style="width: 100px"
-          class="item__input"
+        class="item__input input-number-width"
           v-model="data.form.add_total"
           :min="0"
           :max="100"
@@ -481,8 +470,7 @@
       </el-form-item>
       <el-form-item label="总减分" :label-width="formLabelWidth">
         <el-input-number
-          style="width: 100px"
-          class="item__input"
+        class="item__input input-number-width"
           v-model="data.form.sub_total"
           :min="-100"
           :max="0"
@@ -513,7 +501,6 @@ import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehe
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import { getMonthName } from "@/assets/js/utils/month";
 import studentFun from "@/api/student";
-
 const data = reactive({
   width1: "80%",
   width2: "80%",
@@ -530,43 +517,7 @@ const data = reactive({
   dialogVisible: false, //电子签名对话框
   dialogVisible2: false, //申诉对话框
   dialogVisible3: false, //编辑综测
-  complaintData: [
-    {
-      create: "2023-05-07",
-      userNumber: "2022100030",
-      username: "杨世博",
-      content: "个人信息性别错误，需要更改为男",
-      state: 1,
-    },
-    {
-      create: "2023-05-11",
-      username: "李珊",
-      userNumber: "2022100030",
-      content: "综测1月加分计算错误，少加了1分英语竞赛二等奖分",
-      state: 0,
-    },
-    {
-      create: "2023-05-24",
-      username: "涂圆元",
-      userNumber: "2022100031",
-      content: "个人信息民族错误，需要更改为土家族",
-      state: 1,
-    },
-    {
-      create: "2023-05-11",
-      username: "陈翔",
-      userNumber: "2022100032",
-      content: "综测1月加分计算错误，少加了3分软件杯全国二等奖分",
-      state: 2,
-    },
-    {
-      create: "2023-05-12",
-      username: "刘橙晨",
-      userNumber: "2022100040",
-      content: "个人信息目标学校错误，需要修改为‘长沙学院’",
-      state: 0,
-    },
-  ], // 申诉列表
+  complaintData: [], // 申诉列表
   curTitle: "", //编辑弹窗标题（锁定学生）
   curType: "1", //修改项
   search: null, //搜索词

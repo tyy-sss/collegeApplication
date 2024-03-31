@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 14:18:25
+ * @LastEditTime: 2024-03-31 16:13:41
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -12,7 +12,7 @@
     <hr />
     <div class="box">
       <!-- 综合排名 -->
-      <div style="margin-bottom: 1rem">
+      <div class="rank1">
         <h3>1️⃣综合排名</h3>
         <br />
         <div>
@@ -32,17 +32,16 @@
         <div>
           <h4>确认批次</h4>
           <br />
-          <div style="color: gray; margin-bottom: 8px">
+          <div class="tip1">
             💬查询排名的依据为流程已结束的预填报批次情况，请根据时间选择参考的填报批次。
           </div>
           <span>确认批次： </span>
           <div class="searchBox">
             <el-select
               v-model="data.preWishId"
-              class="m-2"
+              class="m-2 selectbox"
               placeholder="请选择预填报批次"
               size="large"
-              style="width: 13rem; margin-right: 1rem"
             >
               <el-option
                 v-for="item in data.preWishList"
@@ -63,7 +62,7 @@
             </div>
             <div class="condition_list">
               <div>
-                <b>{{ data.schoolName }}</b>
+                <b>{{ data.schoolName || "暂无信息"}}</b>
               </div>
             </div>
           </div>
@@ -76,7 +75,7 @@
               ></i>
             </div>
             <div class="condition_list">
-              <div v-if="data.academy.length < 1">没有可选择的学院</div>
+              <div v-if="data.academy.length < 1">暂无可选择的学院</div>
               <div
                 v-for="(item, i) in data.academy"
                 :key="i"
@@ -98,7 +97,7 @@
               ></i>
             </div>
             <div class="condition_list">
-              <div v-if="data.majors.length < 1">请先选择报考学院</div>
+              <div v-if="data.majors.length < 1">暂无可选择的专业</div>
               <div
                 v-for="(item, i) in data.majors"
                 :key="i"
@@ -145,96 +144,18 @@ import studentFun from "@/api/student";
 import volunteerFun from "@/api/volunteer";
 //数据
 const data = reactive({
-  loading: false,
-  score: null, //填入分数
   ranking: null, //同分人数
   rankings: null, //排名区间
-  curProvince: "湖南", //选择省份
   curAcademy: "", //选择学院
   curMajor: "", //选择专业
   curMajorId: "", //选择专业id
-  schoolName: "吉首大学", //目标院校
-  provinces: [
-    { name: "北京" },
-    { name: "天津" },
-    { name: "河北" },
-    { name: "山西" },
-    { name: "内蒙古" },
-    { name: "辽宁" },
-    { name: "吉林" },
-    { name: "黑龙江" },
-    { name: "上海" },
-    { name: "江苏" },
-    { name: "浙江" },
-    { name: "安徽" },
-    { name: "福建" },
-    { name: "江西" },
-    { name: "山东" },
-    { name: "河南" },
-    { name: "湖北" },
-    { name: "湖南" },
-    { name: "广东" },
-    { name: "广西" },
-    { name: "海南" },
-    { name: "重庆" },
-    { name: "四川" },
-    { name: "贵州" },
-    { name: "云南" },
-    { name: "陕西" },
-    { name: "甘肃" },
-    { name: "青海" },
-    { name: "宁夏" },
-  ], //省份列表
-  academy: [
-    { name: "软件学院" },
-    { name: "医学院" },
-    { name: "体育学院" },
-    { name: "音乐学院" },
-    { name: "文学院" },
-    { name: "化学院" },
-    { name: "旅游与管理学院" },
-    { name: "美术学院" },
-    { name: "农业学院" },
-    { name: "马克思主义学院" },
-    { name: "法学院" },
-    { name: "传媒学院" },
-    { name: "外国语学院" },
-    { name: "信息工程学院" },
-    { name: "化学与生物工程学院" },
-    { name: "车辆工程学院" },
-    { name: "经济与管理学院" },
-    { name: "智能制造学院" },
-  ], //学院列表
-  majors: [
-    // { name: "金融学" },
-    // { name: "财政学" },
-    // { name: "国际经济与贸易" },
-    // { name: "法学" },
-    // { name: "政治学与行政学" },
-    // { name: "运动训练" },
-    // { name: "汉语言文学" },
-    // { name: "英语" },
-    // { name: "数学与应用数学" },
-    // { name: "历史学" },
-    // { name: "信息与计算科学" },
-    // { name: "化学" },
-    // { name: "工程力学" },
-    // { name: "机械设计制造及其自动化" },
-    // { name: "车辆工程" },
-  ], //专业列表
+  schoolName: "", //目标院校
+  academy: [], //学院列表
+  majors: [], //专业列表
   allData: [], //学院专业选择数据
   loading: false,
   preWishId: null,
-  preWishList: [
-    // {
-    //   value: "100001",
-    //   label: "2016-05-04",
-    // },
-    // {
-    //   value: "100002",
-    //   label: "2016-05-01",
-    // },
-  ], //查询批次列表
+  preWishList: [], //查询批次列表
   numTable: [
     {
       type: "年级排名",
@@ -259,9 +180,16 @@ onMounted(() => {
 });
 //初始化
 function init() {
+  getInformation();
   getVolunteerTable(); //查询志愿列表
   selectStudentMajor(); //查询可选择的学院专业
   getAllNum(); //查询综合排名
+}
+//获取基本信息
+function getInformation() {
+  studentFun.user.getInformation().then((res) => {
+    data.schoolName = res.school;
+  });
 }
 //查询可选专业
 function selectStudentMajor() {
@@ -311,12 +239,6 @@ function search() {
         data.rankings = res.rankings;
         data.loading = false;
       });
-    //模拟查询效果
-    // setTimeout(() => {
-    //   data.ranking = 13;
-    //   data.rankings = 25;
-    //   data.loading = false;
-    // }, 1000);
   } else {
     ElMessage({
       message: "请选择预填报批次或查询专业",

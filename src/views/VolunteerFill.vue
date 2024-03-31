@@ -2,15 +2,16 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 16:29:15
+ * @LastEditTime: 2024-03-31 15:50:27
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
 <template>
   <div class="box column-center-flex">
+    <!-- 提示信息 -->
     <div class="tip">
-      <div style="margin-left: 20px">
-        <span style="color: rgb(163, 6, 6)"
+      <div class="tip-margin">
+        <span class="red-tip"
           >▪
           首要提醒：该表格填写关系到您今后的录取学校选择,请一定要认真对待。</span
         ><br />
@@ -86,6 +87,7 @@
     </div>
     <el-button type="primary" @click="submitVolunteer">提交志愿</el-button>
     <br />
+    <!-- 填报记录 -->
     <el-popover
       :width="300"
       popper-style="box-shadow: rgb(14 18 22 / 35%) 0px 10px 38px -10px, rgb(14 18 22 / 20%) 0px 10px 20px -15px; padding: 20px;"
@@ -115,6 +117,7 @@
         </div>
       </template>
     </el-popover>
+    <!-- 说明 -->
     <div class="tip top-border">
       <div><b>说明</b></div>
       <br />
@@ -130,9 +133,9 @@
     </div>
   </div>
   <!-- 电子签名对话框 -->
-  <el-dialog v-model="dialogVisible" title="提交志愿" width="50%">
+  <el-dialog v-model="data.dialogVisible" title="提交志愿" width="50%">
     <div>
-      <div style="margin-left: 1rem">
+      <div class="dialog-margin">
         <span>您的第一,第二,第三志愿分别为</span><br />
         <b>第一志愿：{{ data.first[0] }}</b
         ><br />
@@ -177,19 +180,22 @@ const data = reactive({
   second: [],
   third: [],
   volunteerId: null,
+  dialogVisible: false,
 });
-// 提交志愿
-let dialogVisible = ref(false);
 onMounted(() => {
   init();
 });
 function init() {
   data.volunteerId = router.currentRoute.value.query.id;
   data.originVolunteers = router.currentRoute.value.query.originVolunteers;
+  getInformation();
+  selectStudentMajor();
+}
+//获取基本信息
+function getInformation() {
   studentFun.user.getInformation().then((res) => {
     data.student = res;
   });
-  selectStudentMajor();
 }
 //获取可选专业选项
 function selectStudentMajor() {
@@ -233,7 +239,7 @@ function submitVolunteer() {
     data.first = splitString(data.volunteers.firstName);
     data.second = splitString(data.volunteers.secondName);
     data.third = splitString(data.volunteers.thirdName);
-    dialogVisible.value = true;
+    data.dialogVisible = true;
   }
 }
 //查重

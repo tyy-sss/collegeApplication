@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 19:48:37
+ * @LastEditTime: 2024-03-31 15:56:24
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -13,8 +13,9 @@
     </div>
     <hr />
     <br />
+    <!-- 提示和选项组 -->
     <div>
-      <div style="color: rgb(167, 167, 167)">
+      <div class="tip">
         <span>请注意检查综测情况，如有错误请及时向测评小组进行申诉。</span
         ><br />
         <span>请在对本月最终的整体综测情况确认无误后再进行电子签名。</span>
@@ -28,6 +29,7 @@
       >
       <br />
       <br />
+      <!-- 选择框,标题 -->
       <div>
         <span>请选择查询月份：</span>
         <el-select
@@ -46,18 +48,19 @@
         </el-select>
       </div>
       <br />
+      <!-- 该月情况详细 -->
       <el-form-item label="该月确认情况 ：">
         <span v-show="data.signature">已确认</span>
         <span v-show="data.signature == null">待确认</span>
-        <span style="color: rgb(167, 167, 167); margin-left: 15px">
-          (已确认/待确认)</span
-        >
+        <span class="tip2">(已确认/待确认)</span>
       </el-form-item>
     </div>
+    <!-- 综测情况详细 -->
     <div>
       <div>
         <h4>该月综测情况确认</h4>
         <br />
+        <!-- 手机端显示 -->
         <div class="phone">
           <el-form>
             <div>
@@ -151,7 +154,7 @@
             </div>
           </el-form>
         </div>
-
+        <!-- pc端显示 -->
         <el-table
           :data="data.assessment"
           v-loading.lock="data.loading"
@@ -207,7 +210,7 @@
   <!-- 电子签名对话框 -->
   <el-dialog v-model="data.dialogVisible" title="电子签名" :width="data.width1">
     <div>
-      <div style="margin-left: 1rem; margin-bottom: 1rem">
+      <div class="tip3">
         该电子签名为确保综测信息经过本人确认后无误
       </div>
       <signatures @finish="finish"></signatures>
@@ -348,48 +351,11 @@ const data = reactive({
     pre_total: 0,
     point_total: 0,
   },
-  assessment: [
-    // {
-    //   userNumber: "2021401449",
-    //   username: "付小小",
-    //   add1: "帮助老师批改作业2分",
-    //   sub1: "旷课1分",
-    //   point1: 1,
-    //   add2: "绩点8分",
-    //   sub2: "挂科1门2分",
-    //   point2: 6,
-    //   add3: "铅球比赛一等奖5分1km二等奖4分",
-    //   sub3: "无",
-    //   point3: 9,
-    //   add4: "捐献书法画1分",
-    //   sub4: "破环草坪1分",
-    //   point4: 0,
-    //   add5: "值日2次4分",
-    //   sub5: "无",
-    //   point5: 4,
-    //   add_total: 24,
-    //   sub_total: 4,
-    //   pre_total: 18,
-    //   point_total: 20,
-    // },
-  ],
-  //目前综测合计
-  // total: [
-  //   {
-  //     class1: 0,
-  //     class2: 0,
-  //     class3: 0,
-  //     class4: 0,
-  //     class5: 0,
-  //     add: 0,
-  //     sup: 0,
-  //     all: 0,
-  //   },
-  // ],
+  assessment: [],
   state: null,
   month: null, //当前确认综测的月份
   score: null, //目前总分
-  signature: null, //签名
+  signature: "xx", //签名
   isEnd: null,
   types: [
     {
@@ -403,30 +369,7 @@ const data = reactive({
   ],
   type: "", //申诉类型
   content: "", //申诉内容
-  // 申诉列表
-  complaintData: [
-    {
-      state: 0,
-      created: "2023-05-07",
-      userNumber: "2022100030",
-      type: "综测问题",
-      content: "个人信息性别错误，需要更改为男",
-    },
-    {
-      state: 1,
-      created: "2023-05-17",
-      userNumber: "2022100030",
-      type: "其他问题",
-      content: "个人信息性别错误，需要更改为男",
-    },
-    {
-      state: 2,
-      created: "2023-05-12",
-      userNumber: "2022100030",
-      type: "其他问题",
-      content: "个人信息性别错误，需要更改为男",
-    },
-  ],
+  complaintData: [], // 申诉列表
   monthes: [],
   loading: false,
   loadOk: true,
@@ -434,7 +377,6 @@ const data = reactive({
   dialogVisible2: false,
   dialogVisible3: false,
 });
-const formLabelWidth = "140px";
 onMounted(() => {
   init();
 });

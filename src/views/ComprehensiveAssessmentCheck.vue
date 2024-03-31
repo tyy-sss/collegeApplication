@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 20:21:26
+ * @LastEditTime: 2024-03-31 16:28:39
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:班主任查看综合测评情况页
 -->
@@ -10,12 +10,13 @@
   <div class="show-container">
     <div class="title"><div class="text">综合测评表情况</div></div>
     <hr />
+    <!-- 月份选择，标题 -->
     <div class="checkMonth">
       <el-select
         v-model="data.curMonth"
         :disabled="data.loadOk"
         placeholder="请选择要查询的综测月份"
-        style="width: 100px; margin-top: -10px"
+        class="select"
         @change="reSearch"
       >
         <el-option
@@ -28,13 +29,13 @@
       <h1>{{ data.myclass }}班级综合测评表</h1>
     </div>
     <br />
+    <!-- 操作行 -->
     <div>
       <div class="mt-4">
         <el-input
           v-model="data.search"
-          style="max-width: 300px; margin-bottom: -50px; margin-right: 1rem"
           placeholder="请输入查询关键字"
-          class="input-with-select"
+          class="input-with-select input-style"
         >
           <template #append>
             <el-button @click="reSearch" :disabled="data.loadOk"
@@ -43,11 +44,12 @@
           </template>
         </el-input>
       </div>
-      <el-button style="float: right" @click="handleExcelExport"
+      <el-button class="right" @click="handleExcelExport"
         ><el-icon><Download /></el-icon>&nbsp; 导出</el-button
       >
     </div>
     <br />
+    <!-- 综合测评表情况 -->
     <el-table
       v-loading.lock="data.loading"
       :data="data.assessments"
@@ -95,9 +97,9 @@
                 <span v-show="scope.row.signature" class="checked">已签</span>
               </template>
               <h4>{{ scope.row.username }}签名详细</h4>
-              <div style="width: 330px; height: 100px; border: 1px solid black">
+              <div class="sign-box">
                 <el-image
-                  style="width: 100%; height: 100%"
+                  class="sign"
                   :src="scope.row.signature"
                   fit="contain"
                 />
@@ -108,7 +110,7 @@
       </el-table-column>
     </el-table>
     <!-- 分页 -->
-    <div class="pagination">
+    <div class="pagination-box">
       <el-pagination
         layout="total,sizes,prev,pager,next"
         :page-size="data.page.pageSize"
@@ -117,10 +119,11 @@
         :total="data.page.total"
         @size-change="handleSizeChange"
         @current-change="handleCurrentChange"
-        style="margin-left: auto"
+        class="pagination"
       />
     </div>
     <hr />
+    <!-- 综测进度详细 -->
     <div class="process">
       <div>
         <span>综测进度 ：</span>
@@ -139,18 +142,16 @@
                     <span v-show="data.assessSignature">已确认</span>
                   </template>
                   <h4>综测小组签字</h4>
-                  <div
-                    style="width: 380px; height: 100px; border: 1px solid black"
-                  >
+                  <div class="sign-box">
                     <el-image
-                      style="width: 100%; height: 100%"
+                      class="sign"
                       :src="data.assessSignature"
                       fit="contain"
                     />
                   </div>
                 </el-popover>
                 <span v-show="!data.assessSignature">待确认</span>
-                <span style="color: rgb(167, 167, 167); margin-left: 15px">
+                <span class="sign-ditail">
                   (综测小组确认后班主任方可签名归档本月综测情况)</span
                 >
               </div>
@@ -161,11 +162,9 @@
                     <span v-show="data.signature">已确认</span>
                   </template>
                   <h4>班主任签字</h4>
-                  <div
-                    style="width: 380px; height: 100px; border: 1px solid black"
-                  >
+                  <div class="sign-box">
                     <el-image
-                      style="width: 100%; height: 100%"
+                      class="sign"
                       :src="data.signature"
                       fit="contain"
                     />
@@ -174,7 +173,7 @@
                 <span v-show="data.signature == null">待确认</span>
                 <el-button
                   type="primary"
-                  style="margin-left: 1rem"
+                  class="sign-button"
                   @click="data.dialogVisible = true"
                   :disabled="
                     data.assessSignature == null || data.signature !== null
@@ -190,7 +189,7 @@
   </div>
   <!-- 电子签名对话框 -->
   <el-dialog v-model="data.dialogVisible" title="电子签名" width="50%">
-    <div style="margin-left: 2rem">
+    <div class="tip">
       当全班成员进行电子签名后，您可以在本页进行签字确认班级综测已编辑核对完成，签字之后无法修改综测内容，请仔细核对后签字。
     </div>
     <br />
@@ -209,196 +208,17 @@ import teacherFun from "@/api/teacher";
 import apiFun from "@/api/user";
 import Signatures from "@/components/utils/Signatures.vue";
 const data = reactive({
-  myclass: "2023级1班",
+  myclass: "- 级- 班",
   search: "",
   dialogVisible: false,
-  assessments: [
-    {
-      userNumber: "20222113001",
-      username: "吾尔肯·塞里克",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 20,
-    },
-    {
-      userNumber: "20222113002",
-      username: "玉苏普·吐荪江",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 21,
-    },
-    {
-      userNumber: "20222113003",
-      username: "沙亚拉·江阿努尔",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 22,
-    },
-    {
-      userNumber: "20222113004",
-      username: "吐尔逊娜衣·托呼提",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 25,
-    },
-    {
-      userNumber: "20222112006",
-      username: "阿合叶尔克·胡瓦提",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 27,
-    },
-    {
-      userNumber: "20222112005",
-      username: "米热古丽·吾斯曼",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 29,
-    },
-    {
-      userNumber: "20222112004",
-      username: "地娜拉·居帕尔",
-      add1: "帮助老师批改作业2分",
-      sub1: "旷课1分",
-      point1: 1,
-      add2: "绩点8分",
-      sub2: "挂科1门2分",
-      point2: 6,
-      add3: "铅球比赛一等奖5分1km二等奖4分",
-      sub3: "无",
-      point3: 9,
-      add4: "捐献书法画1分",
-      sub4: "破环草坪1分",
-      point4: 0,
-      add5: "值日2次4分",
-      sub5: "无",
-      point5: 4,
-      add_total: 24,
-      sub_total: 4,
-      pre_total: 18,
-      point_total: 10,
-    },
-  ],
+  assessments: [],
   page: {
     total: 200, // 总条数
     currentPage: 1, // 当前页
     pageSize: 15, //一页的数据量
   },
   curMonth: 0,
-  monthes: [
-    // {
-    //   value: "1",
-    //   label: "一月",
-    // },
-    // {
-    //   value: "2",
-    //   label: "二月",
-    // },
-    // {
-    //   value: "3",
-    //   label: "三月",
-    // },
-    // {
-    //   value: "4",
-    //   label: "四月",
-    // },
-  ],
+  monthes: [],
   loading: false,
   loadOk: true,
   signature: "xx", //班主任签名
@@ -408,6 +228,7 @@ onMounted(() => {
   init();
 });
 function init() {
+  getClassDetials(); //获取班级信息
   getAssessmentMonth(); //获取可选月份方法
   getAssessmentDetails(); //获取综测信息
 }
@@ -422,6 +243,13 @@ function getAssessmentMonth() {
         label: getMonthName(item),
       });
     });
+  });
+}
+//获取班级信息
+function getClassDetials() {
+  teacherFun.user.getInformation().then((res) => {
+    console.log(res);
+    data.myclass = res.className;
   });
 }
 //获取综测信息

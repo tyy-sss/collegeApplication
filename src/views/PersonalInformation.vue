@@ -74,7 +74,7 @@
               ><span>{{ data.student.className || "-" }}</span>
             </div>
           </div>
-          <div style="margin-top: 1rem">
+          <div class="address">
             <span class="tag">家庭地址 :</span
             ><span>{{ data.student.address || "-" }}</span>
           </div>
@@ -245,13 +245,13 @@
     </template>
     <!-- 内容区 -->
     <template #default>
-      <div style="display: flex; flex-direction: column">
+      <div class="content-box">
         <h4>基本信息</h4>
         <br />
         <el-form-item label="电话号码 ：">
           <el-input
             v-model="updataData.phone"
-            style="width: 30%"
+            class="input-width"
             :placeholder="data.student.phone || '-'"
           />
         </el-form-item>
@@ -261,21 +261,21 @@
           <el-form-item label="收件名称 ：">
             <el-input
               v-model="updataData.consigneeBo.username"
-              style="width: 30%"
+              class="input-width"
               :placeholder="data.consignee.username || '-'"
             />
           </el-form-item>
           <el-form-item label="收件电话 ：">
             <el-input
               v-model="updataData.consigneeBo.phone"
-              style="width: 30%"
+              class="input-width"
               :placeholder="data.consignee.phone || '-'"
             />
           </el-form-item>
           <el-form-item label="详细地址 ：">
             <el-input
               v-model="updataData.consigneeBo.address"
-              style="width: 30%"
+              class="input-width"
               :placeholder="data.consignee.address || '-'"
           /></el-form-item>
         </div>
@@ -283,7 +283,7 @@
     </template>
     <!-- 尾部按钮区 -->
     <template #footer>
-      <div style="flex: auto">
+      <div class="footer-button">
         <el-button @click="data.drawer = false">取消</el-button>
         <el-button type="primary" @click="confirmClick">确定</el-button>
       </div>
@@ -301,7 +301,7 @@
         <el-form-item label="新设密码 ：">
           <el-input
             v-model="updatePasswords.password"
-            style="width: 30%"
+            class="input-width"
             autocomplete="off"
             type="password"
             placeholder="请输入新设密码"
@@ -310,7 +310,7 @@
         <el-form-item label="确认密码 ：">
           <el-input
             v-model="updatePasswords.password2"
-            style="width: 30%"
+            class="input-width"
             autocomplete="off"
             type="password"
             placeholder="请确认密码"
@@ -319,7 +319,7 @@
     </template>
     <!-- 尾部按钮区 -->
     <template #footer>
-      <div style="flex: auto">
+      <div class="footer-button">
         <el-button @click="data.drawer2 = false">取消</el-button>
         <el-button type="primary" @click="updatePassword">确定</el-button>
       </div>
@@ -367,7 +367,7 @@ const updatePasswords = reactive({
 const init = function () {
   data.loading2 = true;
   if (identity.value == 0) {
-    //获取学生/测评小组信息
+    //获取学生信息
     studentFun.user.getInformation().then((res) => {
       data.student = res;
       data.consignee = res.consignee;

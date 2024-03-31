@@ -3,11 +3,25 @@
   text-align: center;
   transform: translateX(-7%);
 }
+
 h1 {
   margin-left: 1rem;
   display: inline-block;
 }
-.pagination {
+
+.pagination-box {
   margin-top: 1rem;
   display: flex;
+}
+.pagination{
+  margin-left: auto;
+}
+.select {
+  width: 100px;
+  margin-top: -10px;
+}
+
+.input-style {
+  max-width: 300px;
+  margin-bottom: -50px;
 }

@@ -26,6 +26,9 @@ $big-margin: 3rem;
   padding: 3rem;
   border-top: 0.1rem solid rgba(87, 86, 86, 0.158);
 }
+.num-tip{
+  color: red;
+}
 .grid-item {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(20rem, 1fr));

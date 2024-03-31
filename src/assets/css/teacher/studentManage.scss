@@ -1,6 +1,7 @@
 .box {
   margin: 10px 0 20px 0;
 }
+
 .card {
   /* grid布局 */
   display: grid;
@@ -9,37 +10,69 @@
   grid-auto-rows: 50px;
   grid-auto-flow: row dense;
 }
+
+.right {
+  float: right;
+}
+
 .item {
   text-align: left;
 }
+
 .mybox {
   padding: 0 0 1rem 0;
 }
+
+.searchbox {
+  min-width: 300px;
+}
+
 .littleTitle {
   margin-bottom: 2rem;
   font-weight: 1000;
 }
+
+.tip {
+  color: gray;
+}
+
 .tag {
   display: inline-block;
   margin-right: 1rem;
   width: 5rem;
   text-align: right;
 }
+
 .infoRow {
   margin-bottom: 1rem;
 }
+
+.address-span {
+  margin-top: 1rem;
+}
+
 .pickup_box {
   width: 50%;
   padding: 0.8rem;
   background-color: rgba(224, 230, 230, 0.438);
 }
+
 .flex_box {
   display: flex;
   flex-direction: column;
 }
+
 .grid-item {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(25rem, 1fr));
   gap: 1rem 1.2rem;
   grid-auto-flow: row dense;
+}
+
+.detail-button {
+  margin-right: 1rem
+}
+
+.footer-button {
+  flex: auto;
 }

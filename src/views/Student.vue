@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 16:34:05
+ * @LastEditTime: 2024-03-31 16:08:30
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -13,6 +13,7 @@
     </div>
     <hr />
     <br />
+    <!-- 操作卡片 -->
     <div class="card">
       <div>
         <el-card shadow="hover" class="item">
@@ -26,7 +27,7 @@
             type="warning"
             size="small"
             plain
-            style="float: right"
+            class="right"
             @click="data.dialogVisible3 = true"
             >管理</el-button
           >
@@ -39,7 +40,7 @@
             type="warning"
             size="small"
             plain
-            style="float: right"
+            class="right"
             @click="data.dialogVisible = true"
             >处理</el-button
           ></el-card
@@ -54,7 +55,7 @@
           <el-input
             v-model="data.search"
             placeholder="输入学生姓名或学号关键字"
-            style="min-width: 300px"
+            class="searchbox"
           >
             <template #suffix>
               <el-icon @click="getStudentDeatils"><Search /></el-icon>
@@ -104,6 +105,9 @@
       <el-button type="primary" @click="handleRepasswds"
         >批量重置密码</el-button
       >
+      <span class="tip"
+        >【重置密码指将所选账号的密码重置为初始密码“123456”】</span
+      >
       <br />
       <!-- 分页 -->
       <el-pagination
@@ -112,7 +116,7 @@
         layout="total,prev, pager, next"
         :total="data.page.total"
         @current-change="handleCurrentChange"
-        style="float: right"
+        class="right"
       />
       <br />
     </div>
@@ -206,8 +210,8 @@
         </el-table-column>
       </el-table>
       <br />
-      <span style="color: gray"
-        >【这里的重置密码指的是重置测评小组账号的密码为学生学号后6位】</span
+      <span class="tip"
+        >【这里的重置密码指的是重置测评小组账号的密码为123456】</span
       >
     </div>
   </el-dialog>
@@ -217,7 +221,7 @@
       <h3>学生信息</h3>
       <el-button
         type="primary"
-        style="margin-right: 1rem"
+        class="detail-button"
         @click="
           data.drawer = false;
           data.drawer2 = true;
@@ -228,7 +232,7 @@
     <template #default>
       <div>
         <!-- 信息区 -->
-        <div class="right">
+        <div>
           <div class="mybox">
             <div class="littleTitle">基本信息</div>
             <div class="grid-item">
@@ -261,7 +265,7 @@
                 ><span>{{ data.student.className || "-" }}</span>
               </div>
             </div>
-            <div style="margin-top: 1rem">
+            <div class="address-span">
               <span class="tag">家庭地址 :</span
               ><span>{{ data.student.address || "-" }}</span>
             </div>
@@ -305,7 +309,7 @@
           <br />
           <div class="mybox">
             <div class="littleTitle">收件信息</div>
-            <div class="flex_box pickup_box">
+            <div class="flex_box">
               <div class="infoRow">
                 <span class="tag">收件人 :</span>
                 <span>{{ data.consignee.username || "-" }}</span>
@@ -391,7 +395,7 @@
     </template>
     <!-- 尾部按钮区 -->
     <template #footer>
-      <div style="flex: auto">
+      <div class="footer-button">
         <el-button @click="data.drawer = false">取消</el-button>
         <el-button type="primary" @click="confirmClick">确定</el-button>
       </div>
@@ -438,25 +442,7 @@ const data = reactive({
   studentTableLoading: false,
   evaluationTableLoading: false,
   curMonth: null, //测试默认值
-  monthes: [
-    // {
-    //   value: "1",
-    //   label: "一月",
-    // },
-    // {
-    //   value: "2",
-    //   label: "二月",
-    // },
-    // {
-    //   value: "3",
-    //   label: "三月",
-    // },
-    // {
-    //   value: "4",
-    //   label: "四月",
-    // },
-  ],
-  isEnd: null,
+  monthes: [], //可选月份
 });
 const multipleTableRef = ref();
 const multipleSelection = ref([]);
