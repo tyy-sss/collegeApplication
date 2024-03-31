@@ -12,32 +12,26 @@ const managerMenuData = reactive([
   {
     menuName: "学校管理",
     path: "/school",
-    icon: "house",
   },
   {
     menuName: "角色管理",
     path: "/role",
-    icon: "location",
   },
   {
     menuName: "用户管理",
     path: "/user",
-    icon: "location",
   },
   {
     menuName: "班级管理",
     path: "/class",
-    icon: "location",
   },
   {
     menuName: "成绩管理",
     path: "/grades",
-    icon: "location",
   },
   {
     menuName: "历史管理",
     path: "/history",
-    icon: "location",
   },
 ]);
 const studentMenuData = reactive([

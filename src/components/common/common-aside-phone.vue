@@ -35,20 +35,7 @@
             v-for="item in menuDataForVue"
             :key="item.path"
           >
-            <el-icon v-if="item.path !== '/information'" class="menu-icon"
-              ><component :is="item.icon"
-            /></el-icon>
-            <template v-if="item.path !== '/information'" #title>{{
-              item.menuName
-            }}</template>
-            <el-badge
-              v-if="item.path === '/information'"
-              :value="1"
-              class="item"
-            >
-              <el-icon class="menu-icon"><component :is="item.icon" /></el-icon>
-              <span>{{ item.menuName }}</span>
-            </el-badge>
+            <template #title>{{ item.menuName }}</template>
           </el-menu-item>
           <!-- 消息管理 -->
         </el-menu>
@@ -163,12 +150,9 @@ onMounted(() => {
   background-color: #fff;
 }
 .el-menu-item {
-  justify-content: flex-start;
+  justify-content: center;
   height: 5rem;
   font-size: 1.2rem;
-}
-.menu-icon {
-  margin-right: 0.2rem;
 }
 /* 设置菜单触发和点击的样式 */
 .el-menu-item:hover,

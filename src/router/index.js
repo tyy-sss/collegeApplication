@@ -24,11 +24,6 @@ const routes = [
     name: "main",
     component: () => import("@/views/Main.vue"),
     children: [
-      {
-        path: "/error",
-        name: "error",
-        component: () => import("@/views/Error.vue"),
-      },
       // 管理员
 
       {
@@ -132,6 +127,12 @@ const routes = [
         component: () => import("@/views/school/SchoolNews.vue"),
       },
     ],
+  },
+  // 错误界面
+  {
+    path: "/error",
+    name: "error",
+    component: () => import("@/views/Error.vue"),
   },
 ];
 
