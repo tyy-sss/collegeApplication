@@ -9,7 +9,7 @@ import {
 } from "@/constants/token";
 
 //1.利用axios对象的方法create，去创建一个axios实例。
-const YSB = "http://192.168.50.36:8081/";
+const YSB = "http://192.168.50.35:8081/";
 const ZWY = "http://192.168.50.159:8081/";
 const CX = "http://192.168.50.236:8081/";
 const requests = axios.create({
