@@ -236,7 +236,6 @@ function init() {
 function getAssessmentMonth() {
   apiFun.user.getAssessmentsMonth().then((res) => {
     res.forEach((item) => {
-      console.log(item);
       data.monthes.push({
         value: item,
         label: getMonthName(item),
@@ -247,7 +246,6 @@ function getAssessmentMonth() {
 //获取班级信息
 function getClassDetials() {
   teacherFun.user.getInformation().then((res) => {
-    console.log(res);
     data.myclass = res.className;
   });
 }

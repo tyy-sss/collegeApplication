@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-31 16:50:14
+ * @LastEditTime: 2024-04-01 15:15:51
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -461,7 +461,7 @@
       </el-form-item>
       <el-form-item label="总加分" :label-width="formLabelWidth">
         <el-input-number
-        class="item__input input-number-width"
+          class="item__input input-number-width"
           v-model="data.form.add_total"
           :min="0"
           :max="100"
@@ -470,7 +470,7 @@
       </el-form-item>
       <el-form-item label="总减分" :label-width="formLabelWidth">
         <el-input-number
-        class="item__input input-number-width"
+          class="item__input input-number-width"
           v-model="data.form.sub_total"
           :min="-100"
           :max="0"
@@ -522,6 +522,7 @@ const data = reactive({
   curType: "1", //修改项
   search: null, //搜索词
   form: {
+    signature: null,
     add1: null,
     sub1: null,
     point1: null,
@@ -586,7 +587,6 @@ function watchWidth() {
     data.width2 = "30%";
     data.width3 = "60%";
   }
-  console.log(data.width2);
 }
 //获取班级信息
 function getClassDetials() {
@@ -671,9 +671,14 @@ const handleEdit = (index, row) => {
 //确认修改综测
 function confirmEdit() {
   if (data.form.isTrue == false) {
-    studentFun.assess.submitAssessments([data.form]).then((res) => {
-      getAssessmentDetails(); //重新获取综测信息
-    });
+    studentFun.assess
+      .submitAssessments({
+        month: data.curMonth,
+        appraisalContentVos: [data.form],
+      })
+      .then((res) => {
+        getAssessmentDetails(); //重新获取综测信息
+      });
     data.dialogVisible3 = false;
   } else {
     ElMessage.error("请确保分数计算正确");

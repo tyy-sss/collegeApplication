@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-12-05 21:22:27
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-21 15:39:53
+ * @LastEditTime: 2024-04-01 15:18:12
  * @FilePath: \collegeApplication\src\api\teacher.js
  * @Description: 介绍文件的作用
  */
@@ -84,18 +84,6 @@ teacherFun.assessment.getAssessments = (params) => {
   );
 };
 
-/**
- * 班主任修改某月综测进度
- */
-teacherFun.assessment.updateAssessmentState = (params) => {
-  return http.put(`/adviser/end?month=${params.month}&end=${params.end}`);
-};
-// /**
-//  * 班主任修改班级成员身份
-//  */
-// teacherFun.assessment.getAssessments = (params) => {
-//   return http.put("/adviser/modify-identity", params);
-// };
 
 /**
  * 班主任修获取班级内的申诉
@@ -133,42 +121,6 @@ teacherFun.class.updateAssessPassword = (params) => {
 };
 
 /**
- * 班主任撤销测评小组学生身份（批量）
- */
-teacherFun.class.deleteAssessPost = (params) => {
-  return http.delete(`/adviser/appraisal/team/revocation`, params);
-};
-/**
- * 班主任设置测评小组学生身份
- */
-teacherFun.class.setAssessPost = (params) => {
-  return http.post(`/adviser/appraisal/team`, params);
-};
-
-/**
- * 班主任平均分配班级成员
- */
-teacherFun.class.averageAllocated = () => {
-  return http.post(`/adviser/appraisal/class/average`);
-};
-
-/**
- * 班主任撤销分配班级成员
- */
-teacherFun.class.revokeAllocated = () => {
-  return http.delete(`/adviser/appraisal/class/revocation`);
-};
-
-/**
- * 获取班级成员志愿情况
- */
-teacherFun.wish.getClassWish = (params) => {
-  return http.get(
-    `/wish/selectClassWish?timeId=${params.timeId}&current=${params.current}&size=${params.size}`
-  );
-};
-
-/**
  * 班主任确认综测上传电子签名按月份
  */
 teacherFun.sign.confirmSign = (month, formData) => {
@@ -178,7 +130,7 @@ teacherFun.sign.confirmSign = (month, formData) => {
 /**
  * 班主任获取综测签名按月份
  */
- teacherFun.sign.getMonthSign = (params) => {
+teacherFun.sign.getMonthSign = (params) => {
   return http.get(`/adviser/appraisal/signature?month=${params.month}`);
 };
 

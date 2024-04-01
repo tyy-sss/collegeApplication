@@ -608,7 +608,6 @@ const handleRecover2 = (index, row) => {
 };
 //筛选器
 const filterTag = (value, row) => {
-  // console.log(row.state, value, row);
   return row.state == value;
 };
 </script>

@@ -62,7 +62,7 @@
             </div>
             <div class="condition_list">
               <div>
-                <b>{{ data.schoolName || "暂无信息"}}</b>
+                <b>{{ data.schoolName || "暂无信息" }}</b>
               </div>
             </div>
           </div>
@@ -195,7 +195,6 @@ function getInformation() {
 function selectStudentMajor() {
   volunteerFun.options.selectStudentMajor().then((res) => {
     data.allData = res;
-    console.log("查询可选专业", data.allData);
     data.academy = res.map((item) => ({ name: item.college }));
   });
 }
@@ -222,9 +221,6 @@ function getMajorsByCollege(college) {
 }
 //查询专业排名
 function search() {
-  console.log(
-    `data.curAcademy=${data.curAcademy}, && data.curMajor=${data.curMajor},&&data.preWishId=${data.preWishId}`
-  );
   if (data.curAcademy && data.curMajor && data.preWishId) {
     data.loading = true;
     //查询排名
@@ -234,7 +230,6 @@ function search() {
         timeId: data.preWishId,
       })
       .then((res) => {
-        console.log("查询排名结果", res);
         data.ranking = res.ranking;
         data.rankings = res.rankings;
         data.loading = false;
@@ -249,7 +244,6 @@ function search() {
 //查询综合排名
 function getAllNum() {
   studentFun.rank.getAllRanking().then((res) => {
-    console.log("查询综合排名", res);
     for (let i = 0; i < 3; i++) {
       data.numTable[i].ranking = res[i].ranking;
       data.numTable[i].rankings = res[i].rankings;
@@ -264,7 +258,6 @@ let selectAcademy = (item) => {
 };
 //选择专业
 let selectMajor = (item) => {
-  console.log(item);
   data.curMajor = item.name;
   data.curMajorId = item.majorId;
 };

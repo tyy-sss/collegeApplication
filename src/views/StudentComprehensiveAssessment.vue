@@ -391,7 +391,6 @@ function init() {
 }
 //监听宽度
 function watchWidth() {
-  // console.log("视口宽度", document.documentElement.clientWidth);
   if (document.documentElement.clientWidth <= 1100) {
     data.width1 = "80%";
     data.width2 = "60%";
@@ -415,7 +414,6 @@ function getAssessmentThisMonth() {
     data.myAssessment = res.content;
     data.loading = false;
     data.loadOk = false;
-    console.log(data.myAssessment);
   });
 }
 //按月份获取综测情况
