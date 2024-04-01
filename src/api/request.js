@@ -25,6 +25,10 @@ requests.interceptors.request.use((config) => {
   if (token) {
     config.headers.Authorization = token;
   }
+  console.info(
+    new Date() + " " + config.method + " " + JSON.stringify(config.params),
+    "请求信息"
+  );
   return config;
 });
 //接收请求拦截器
@@ -32,6 +36,10 @@ requests.interceptors.response.use(
   async (response) => {
     // 获取到配置和后端响应的数据
     let { config, data } = response;
+    console.info(
+      new Date() + " " + config.method + " " + JSON.stringify(data),
+      "响应信息"
+    );
     return new Promise((resolve, reject) => {
       if (data.code === 2039) {
         // 短token失效
