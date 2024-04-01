@@ -173,7 +173,6 @@ const handleExportGrades = () => {
     data.searchData.date != ""
       ? formatDate(data.searchData.date).slice(0, 4)
       : formatDate(new Date()).slice(0, 4);
-  console.log(year);
   managerFun.grades.getAllGradesList(year).then((res) => {
     res.forEach((element) => {
       element.gradeSubjectBos.forEach((item) => {

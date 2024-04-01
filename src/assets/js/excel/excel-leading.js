@@ -52,9 +52,15 @@ export const handleStudentInformation = (data, subjectList) => {
     // 对选考科目进行处理
     let electiveSubjectList = [];
     if (item.subjects.length === 0) {
-      if (item.object.indexOf("文史") != -1) {
+      if (
+        item.object.indexOf("文史") != -1 ||
+        item.object.indexOf("文科") != -1
+      ) {
         electiveSubjectList = ["历史", "政治", "地理"];
-      } else if (item.object.indexOf("理工") != -1) {
+      } else if (
+        item.object.indexOf("理工") != -1 ||
+        item.object.indexOf("理科") != -1
+      ) {
         electiveSubjectList = ["物理", "生物", "化学"];
       }
     } else if (item.subjects.length !== 0) {
