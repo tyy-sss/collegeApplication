@@ -51,7 +51,6 @@ onBeforeMount(() => {
 watch(
   () => store.state.menu.isCollapse,
   (newVal, oldVal) => {
-    console.log(newVal);
     setAsideWidth(newVal);
   }
 );

@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-28 16:31:41
+ * @LastEditTime: 2024-04-01 20:19:32
  * @FilePath: \collegeApplication\src\views\VolunteerCheck.vue
  * @Description: 查看志愿页面
 -->
@@ -65,7 +65,7 @@
     <div class="tip">
       <div><b>⚠提示</b></div>
       <div>▪ 该表格填写关系到您今后的录取学校选择，请一定要认真对待</div>
-      <div>▪ 截止世界前，每人只有三次志愿修改机会。</div>
+      <div>▪ 截止时间前，每人只有三次志愿修改机会。</div>
       <div>▪ 非本人请勿修改志愿信息。</div>
     </div>
     <br />

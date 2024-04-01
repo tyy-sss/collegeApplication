@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-3-20 21:58:13
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-31 16:22:23
+ * @LastEditTime: 2024-04-02 00:02:21
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck2.vue
  * @Description:学生综合测评表公示页面
 -->

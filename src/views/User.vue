@@ -240,7 +240,6 @@ const handleResetUser = (val) => {
 };
 // 修改角色权限
 const handleChangeUserRoleEnd = () => {
-  console.log(data.chooseUser);
   roleFun.user
     .changeUserRole(data.chooseUser.userId, data.chooseUser.roleId)
     .then((res) => {

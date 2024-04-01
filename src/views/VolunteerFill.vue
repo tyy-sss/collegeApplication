@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-31 15:50:27
+ * @LastEditTime: 2024-04-02 00:14:02
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -85,7 +85,9 @@
         />
       </el-form-item>
     </div>
-    <el-button type="primary" @click="submitVolunteer">提交志愿</el-button>
+    <el-button type="primary" @click="submitVolunteer" :disabled="data.isreturn"
+      >提交志愿</el-button
+    >
     <br />
     <!-- 填报记录 -->
     <el-popover
@@ -151,6 +153,7 @@
 </template>
 <script setup>
 import signatures from "@/components/utils/Signatures.vue";
+import { debounce } from "@/assets/js/utils/throttle";
 import { ref, reactive, onMounted } from "vue";
 import { ElMessage } from "element-plus";
 import volunteerFun from "@/api/volunteer";
@@ -181,6 +184,7 @@ const data = reactive({
   third: [],
   volunteerId: null,
   dialogVisible: false,
+  isreturn: false,
 });
 onMounted(() => {
   init();
@@ -220,16 +224,16 @@ function selectStudentMajor() {
     data.options = myOptions;
   });
 }
-//提交志愿进行签名按钮
+//提交志愿进行签名按钮(防抖处理)
 function submitVolunteer() {
   if (
     data.volunteers.firstName[0] == null ||
     data.volunteers.secondName[0] == null ||
     data.volunteers.thirdName[0] == null ||
     checkDuplicate(
-      data.volunteers.firstName[0],
-      data.volunteers.secondName[0],
-      data.volunteers.thirdName[0]
+      data.volunteers.firstName,
+      data.volunteers.secondName,
+      data.volunteers.thirdName
     )
   ) {
     ElMessage.error(
@@ -250,10 +254,12 @@ function checkDuplicate(str1, str2, str3) {
     return false;
   }
 }
-//签名后提交数据和电子签名
-function finish(file) {
+//签名后提交数据和电子签名(防抖处理)
+const finish = debounce((file) => {
   const formData = new FormData();
   formData.append("file", file);
+  data.isreturn = true;
+  data.dialogVisible = false;
   volunteerFun.basis
     .modifyWise(
       {
@@ -274,7 +280,7 @@ function finish(file) {
         message: "提交志愿成功",
       });
     });
-}
+}, 1000);
 //处理数据:"专业名称&专业编号"=>["专业名称",专业编号]
 function splitString(str) {
   return str.split("&");
