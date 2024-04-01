@@ -49,7 +49,7 @@
               </el-col>
             </el-row>
 
-            <el-row :gutter="15">
+            <el-row :gutter="15" v-if="!form.isTeacher">
               <el-col :span="8">
                 <el-form-item label="来源省份:" prop="province">
                   <el-input v-model="form.ruleForm.province" /> </el-form-item
