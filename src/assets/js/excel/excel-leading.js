@@ -43,84 +43,67 @@ export const excelLeadingIn = (data, character) => {
   return list;
 };
 // 对学生信息进行处理
-export const handleStudentInformation = (data) => {
+export const handleStudentInformation = (data, subjectList) => {
   const handleData = [];
-  let subjectList = [];
-  // 获取科目数组
-  managerFun.subject
-    .checkSubject()
-    .then((res) => {
-      res.forEach((element) => {
-        subjectList.push(element.subjectName);
-      });
-      data.forEach((item) => {
-        // 学生的姓名，学号，班级,目标学校不能为空
+  data.forEach((item) => {
+    // 学生的姓名，学号，班级,目标学校不能为空
+    if (!item.username || !item.userNumber || !item.className || !item.school)
+      return;
+    // 对选考科目进行处理
+    let electiveSubjectList = [];
+    if (item.subjects.length === 0) {
+      if (item.object.indexOf("文史") != -1) {
+        electiveSubjectList = ["历史", "政治", "地理"];
+      } else if (item.object.indexOf("理工") != -1) {
+        electiveSubjectList = ["物理", "生物", "化学"];
+      }
+    } else if (item.subjects.length !== 0) {
+      for (let i = 0; i < item.subjects.length; i++) {
         if (
-          !item.username ||
-          !item.userNumber ||
-          !item.className ||
-          !item.school
+          item.subjects[i] === "," ||
+          item.subjects[i] === "+" ||
+          item.subjects[i] === "，" ||
+          item.subjects[i] === "." ||
+          item.subjects[i] === "&" ||
+          item.subjects[i] === "/" ||
+          item.subjects[i] === "*"
         )
-          return;
-        // 对选考科目进行处理
-        let electiveSubjectList = [];
-        if (item.subjects.length === 0) {
-          if (item.object.indexOf("文史") != -1) {
-            electiveSubjectList = ["历史", "政治", "地理"];
-          } else if (item.object.indexOf("理工") != -1) {
-            electiveSubjectList = ["物理", "生物", "化学"];
-          }
-        } else if (item.subjects.length !== 0) {
-          for (let i = 0; i < item.subjects.length; i++) {
-            if (
-              item.subjects[i] === "," ||
-              item.subjects[i] === "+" ||
-              item.subjects[i] === "，" ||
-              item.subjects[i] === "." ||
-              item.subjects[i] === "&" ||
-              item.subjects[i] === "/" ||
-              item.subjects[i] === "*"
-            )
-              continue;
-            let subject = "";
-            while (
-              item.subjects[i] !== "*" &&
-              item.subjects[i] !== "," &&
-              item.subjects[i] !== "+" &&
-              item.subjects[i] !== "，" &&
-              item.subjects[i] !== "." &&
-              item.subjects[i] !== "&" &&
-              item.subjects[i] !== "/" &&
-              item.subjects[i] !== "*"
-            ) {
-              subject = subject.concat(item.subjects[i]);
-              i++;
-              if (i >= item.subjects.length) {
-                break;
-              }
-            }
-            // 判断是不是在科目数组中
-            if (subjectList.includes(subject)) {
-              electiveSubjectList.push(subject);
-            }
+          continue;
+        let subject = "";
+        while (
+          item.subjects[i] !== "*" &&
+          item.subjects[i] !== "," &&
+          item.subjects[i] !== "+" &&
+          item.subjects[i] !== "，" &&
+          item.subjects[i] !== "." &&
+          item.subjects[i] !== "&" &&
+          item.subjects[i] !== "/" &&
+          item.subjects[i] !== "*"
+        ) {
+          subject = subject.concat(item.subjects[i]);
+          i++;
+          if (i >= item.subjects.length) {
+            break;
           }
         }
-        // 去除重复科目
-        electiveSubjectList = new Set(electiveSubjectList);
-        if (electiveSubjectList.size !== 3) {
-          return;
+        // 判断是不是在科目数组中
+        if (subjectList.includes(subject)) {
+          electiveSubjectList.push(subject);
         }
-        item.subjects = Array.from(electiveSubjectList);
-        // 删除Object属性
-        delete item.object;
-        handleData.push(item);
-      });
-    })
-    .catch(() => {})
-    .finally(() => {
-      console.log(handleData, "处理后的学生导入信息");
-      return handleData;
-    });
+      }
+    }
+    // 去除重复科目
+    electiveSubjectList = new Set(electiveSubjectList);
+    if (electiveSubjectList.size !== 3) {
+      return;
+    }
+    item.subjects = Array.from(electiveSubjectList);
+    // 删除Object属性
+    delete item.object;
+    handleData.push(item);
+  });
+  console.log(handleData, "处理后的学生导入信息");
+  return handleData;
 };
 // 对老师信息进行处理
 export const handleTeacherInformation = (data) => {

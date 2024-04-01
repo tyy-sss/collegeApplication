@@ -82,7 +82,6 @@ const evaluatorMenuData = reactive([
 ]);
 
 const giveMenu = (role) => {
-  console.log(role)
   switch (role) {
     case "0":
       return studentMenuData;

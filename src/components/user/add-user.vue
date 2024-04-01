@@ -111,8 +111,20 @@ const handleAddUser = async (ev) => {
     ) {
       // 批量添加学生
       addData = excelLeadingIn(excelData, studentCharacter);
-      addData = handleStudentInformation(addData);
-      adduerList(addData);
+      let subjectList = [];
+      managerFun.subject
+        .checkSubject()
+        .then((res) => {
+          res.forEach((element) => {
+            subjectList.push(element.subjectName);
+          });
+          addData = handleStudentInformation(addData, subjectList);
+          adduerList(addData);
+        })
+        .catch(() => {
+          ElMessage.error("添加失败，请输入正确的高考科目");
+        })
+        .finally(() => {});
     } else if (length === Object.keys(teacherCharacter).length) {
       // 批量添加老师
       addData = excelLeadingIn(excelData, teacherCharacter);
@@ -146,6 +158,7 @@ const handleExportTeach = () => {
 };
 // 添加用户接口
 const adduerList = (val) => {
+  console.log(val);
   // 把学生数据传给后端
   managerFun.user
     .addStudentsByExcel(val)
