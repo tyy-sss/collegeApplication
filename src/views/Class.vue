@@ -36,14 +36,13 @@
             border
             stripe
             style="width: 100%"
-     
             @selection-change="handleSelectionChange"
           >
             <el-table-column type="selection" width="35" />
             <el-table-column label="班级编号" property="classId" />
             <el-table-column label="班级名称" property="className" />
-            <el-table-column label="班主任账号"  property="userNumber" />
-            <el-table-column label="班主任"  property="username" />
+            <el-table-column label="班主任账号" property="userNumber" />
+            <el-table-column label="班主任" property="username" />
             <el-table-column label="班主任联系方式" property="phone" />
             <el-table-column label="班级人数" property="size" />
             <el-table-column label="操作" min-width="180px">
@@ -126,7 +125,7 @@
     </el-dialog>
   </div>
 </template>
-  <script setup>
+<script setup>
 import { ElMessage, ElMessageBox } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
@@ -165,11 +164,6 @@ const data = reactive({
     // 添加查班级姓名
     className: [
       { required: true, message: "请输入班级名", trigger: "blur" },
-      {
-        pattern: CLASS_NAME_TEST,
-        message: "请输入正确的班级名",
-        trigger: "blur",
-      },
       { validator: validateName, trigger: "blur" },
     ],
   },
@@ -234,13 +228,13 @@ const handleChangeClass = (val) => {
     // 获取老师列表
     resolve(getTeacherList());
   }).then(() => {
-    if(val.userNumber!=null){
+    if (val.userNumber != null) {
       data.options.push({ userNumber: val.userNumber, username: val.username });
     }
   });
   data.form = Object.assign({}, val);
   // 如果有班主任
-  if(val.userNumber!=null){
+  if (val.userNumber != null) {
     data.form.userNumber = val.userNumber;
   }
   data.oldClassName = val.className;
@@ -349,11 +343,11 @@ onMounted(() => {
   getClassList();
 });
 </script>
-<style src="@/assets/css/utils/table-center.css" scoped/>
-<style src="@/assets/css/show-container.css" scoped/>
-<style src="@/assets/css/search-top-left-right.css" scoped/>
-<style src="@/assets/css/pager.css" scoped/>
-<style src="@/assets/css/utils/table-empty.css" scoped/>
+<style src="@/assets/css/utils/table-center.css" scoped />
+<style src="@/assets/css/show-container.css" scoped />
+<style src="@/assets/css/search-top-left-right.css" scoped />
+<style src="@/assets/css/pager.css" scoped />
+<style src="@/assets/css/utils/table-empty.css" scoped />
 <style scoped>
 .middle {
   display: flex;
@@ -362,5 +356,3 @@ onMounted(() => {
   align-items: center;
 }
 </style>
-    
-      

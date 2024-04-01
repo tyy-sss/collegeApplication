@@ -34,7 +34,7 @@ const handleGradesInformation = (addData, gradesList) => {
       const gradesSubjectList = [];
       for (let i = 0; i < gradesList.length; i++) {
         let gradeScore = element[gradesList[i].gradeId];
-        let score = parseInt(gradeScore);
+        let score = gradeScore;
         if (!isNaN(score)) {
           gradeScore = score;
         } else {

@@ -107,7 +107,8 @@ const handleAddUser = async (ev) => {
     let addData = [];
     if (
       length === Object.keys(studentCharacter).length ||
-      length + 1 === Object.keys(studentCharacter).length
+      length + 1 === Object.keys(studentCharacter).length ||
+      length + 2 === Object.keys(studentCharacter).length
     ) {
       // 批量添加学生
       addData = excelLeadingIn(excelData, studentCharacter);
