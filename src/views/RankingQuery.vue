@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-31 16:13:41
+ * @LastEditTime: 2024-04-02 20:09:30
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -125,7 +125,7 @@
             <hr />
             <div class="gk-rank">
               <div class="item">
-                <span>我的排名</span>{{ data.ranking || "-" }} 名
+                <span>我的排名</span>第 {{ data.ranking || "-" }} 名
               </div>
               <div class="item">
                 <span>排名范围</span>共 {{ data.rankings || "-" }} 人
@@ -252,12 +252,16 @@ function getAllNum() {
 }
 //选择学院
 let selectAcademy = (item) => {
+  data.ranking = null;
+  data.rankings = null;
   data.curMajor = "";
   data.curAcademy = item.name;
   data.majors = getMajorsByCollege(data.curAcademy);
 };
 //选择专业
 let selectMajor = (item) => {
+  data.ranking = null;
+  data.rankings = null;
   data.curMajor = item.name;
   data.curMajorId = item.majorId;
 };
