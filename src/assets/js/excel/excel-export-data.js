@@ -12,7 +12,7 @@ const studentHeader = {
   province: "来源省份",
   subjects: "选考科目",
   plan: "计划性质",
-  object:"文理科类"
+  object: "文理科类",
 };
 // 学生信息模板第一行信息
 const studentModelData = [
@@ -23,9 +23,10 @@ const studentModelData = [
     className: "2022级预科1班",
     school: "吉首大学",
     province: "湖南省张家界市",
-    subjects: "物理+化学+地理（中间连接符可以使用 “ '*' '+' '，' '.' '&' ，'/'” ）",
+    subjects:
+      "物理+化学+地理（中间连接符可以使用 “ '*' '+' '，' '.' '&' ，'/'” ）",
     plan: "国家计划",
-    object:""
+    object: "",
   },
 ];
 
@@ -56,10 +57,22 @@ const professionInformationLimitHeader = reactive({
   name: "专业名称",
 });
 
+// 未录取的学生名单
+const unAcceptedHeader = {
+  schoolName: "目标学校",
+  className: "班级",
+  userNumber: "学号",
+  username: "姓名",
+  sex: "性别",
+  phone: "联系方式",
+  parentPhone: "父母联系方式",
+  address: "家庭住址",
+};
 export {
   studentHeader,
   studentModelData,
   teacherHeader,
   teacherModelData,
   professionInformationLimitHeader,
+  unAcceptedHeader,
 };

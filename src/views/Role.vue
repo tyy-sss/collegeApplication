@@ -58,10 +58,6 @@ const data = reactive({
     choose: "",
   },
   tableData: [
-    {
-      strName: "tom",
-      description: "1111",
-    },
   ],
 });
 // 获取角色列表

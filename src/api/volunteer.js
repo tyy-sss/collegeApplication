@@ -47,8 +47,11 @@ volunteerFun.student.addWish = (params) => {
 /**
  * 修改个人志愿
  */
-volunteerFun.basis.modifyWise = (params,formData) => {
-  return http.upload2(`/wish/modifyWish?first=${params.first}&firstName=${params.firstName}&second=${params.second}&secondName=${params.secondName}&third=${params.third}&thirdName=${params.thirdName}&timeId=${params.timeId}`, formData);
+volunteerFun.basis.modifyWise = (params, formData) => {
+  return http.upload2(
+    `/wish/modifyWish?first=${params.first}&firstName=${params.firstName}&second=${params.second}&secondName=${params.secondName}&third=${params.third}&thirdName=${params.thirdName}&timeId=${params.timeId}`,
+    formData
+  );
 };
 
 /**
@@ -155,5 +158,13 @@ volunteerFun.manager.checkEndVolunteerDiversion = (data) => {
     current: data.current,
     size: data.size,
   });
+};
+/**
+ * 查看没有填写志愿的人员名单
+ * @param {时间志愿id} timeId
+ * @returns
+ */
+volunteerFun.manager.checkUnAccepted = (timeId) => {
+  return http.get("/wishTime/selectNotAccepted?timeId=" + timeId);
 };
 export default volunteerFun;

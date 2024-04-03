@@ -5,6 +5,13 @@
         <div class="text">预志愿时间：</div>
         <div class="switch">
           <el-switch v-model="data.preVolunteerTime.isOpen" disabled />
+          <div v-if="data.preVolunteerTime.isOpen">
+            <el-button
+              type="primary"
+              @click="handleExportUnAcceptedList(data.preVolunteerTime.id)"
+              >导出未填报学生名单</el-button
+            >
+          </div>
         </div>
       </div>
       <div class="time">
@@ -25,6 +32,13 @@
         <div class="text">正式志愿时间：</div>
         <div class="switch">
           <el-switch v-model="data.volunteerTime.isOpen" disabled />
+          <div v-if="data.volunteerTime.isOpen">
+            <el-button
+              type="primary"
+              @click="handleExportUnAcceptedList(data.volunteerTime.id)"
+              >导出未填报学生名单</el-button
+            >
+          </div>
         </div>
       </div>
       <div class="time">
@@ -44,7 +58,7 @@
 </template>
 <script setup>
 import { onMounted, reactive, ref } from "vue";
-import { NOW_YEAR,getAllTimeNews } from "@/constants/date";
+import { NOW_YEAR, getAllTimeNews } from "@/constants/date";
 // 接口
 import managerFun from "@/api/manager";
 const data = reactive({
@@ -53,9 +67,13 @@ const data = reactive({
   nowYear: Number(NOW_YEAR),
 });
 import { useRoute } from "vue-router";
+import volunteerFun from "@/api/volunteer";
+import { excelExport } from "@/assets/js/excel/excel-export";
+import { unAcceptedHeader } from "@/assets/js/excel/excel-export-data";
 // 获得路由显示的学校id
 const route = new useRoute();
 const schoolId = Number(ref(route.query.schoolId).value);
+const schoolName = ref(route.query.schoolName).value;
 // 设置预填报志愿的时间
 const handleSetPreVolunteerTime = () => {
   const startTime = getAllTimeNews(data.preVolunteerTime.time[0]);
@@ -75,6 +93,27 @@ const handleSetVolunteerTime = () => {
   } else {
     changeWishTime(data.volunteerTime, startTime, endTime);
   }
+};
+// 导出当前未填报志愿的学生名单
+const handleExportUnAcceptedList = (timeId) => {
+  console.log(timeId);
+  volunteerFun.manager
+    .checkUnAccepted(timeId)
+    .then((res) => {
+      let unAcceptedList = [];
+      res.forEach((element) => {
+        element.notAcceptedVoList.forEach((item) => {
+          unAcceptedList.push(item);
+        });
+      });
+      let fileName = getAllTimeNews(new Date()).slice(0, 10);
+      excelExport(
+        unAcceptedList,
+        unAcceptedHeader,
+        fileName + " - " + schoolName + " - 未填报志愿的学生名单"
+      );
+    })
+    .catch(() => {});
 };
 // 有值的修改时间显示
 const changeTimeObject = (element) => {
@@ -162,16 +201,21 @@ onMounted(() => {
 .time {
   display: flex;
   align-items: center;
+  width: 600px;
 }
 .text {
   font-size: 17px;
   margin-bottom: 0.5rem;
   margin: 0;
+  width: 120px;
+  text-align: end;
 }
 .title .text {
   font-weight: bold;
 }
-.time {
-  width: 600px;
+.switch {
+  width: 480px;
+  display: flex;
+  justify-content: space-between;
 }
 </style>
