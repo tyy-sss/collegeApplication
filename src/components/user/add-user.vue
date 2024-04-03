@@ -126,7 +126,7 @@ const handleAddUser = async (ev) => {
           ElMessage.error("添加失败，请输入正确的高考科目");
         })
         .finally(() => {});
-    } else if (length === Object.keys(teacherCharacter).length) {
+    } else if (length <= Object.keys(teacherCharacter).length) {
       // 批量添加老师
       addData = excelLeadingIn(excelData, teacherCharacter);
       addData = handleTeacherInformation(addData);
