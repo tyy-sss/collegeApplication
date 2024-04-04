@@ -262,6 +262,7 @@ const getVounteerDiversion = (value) => {
       switch (res.code) {
         case 3009:
           data.activeName = 1;
+          data.isExport = true;
           getCheckVounteerDiversion();
           break;
       }
