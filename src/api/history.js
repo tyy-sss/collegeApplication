@@ -38,7 +38,7 @@ historyFun.manager.appraisalByClass = (data) => {
 historyFun.manager.student = (data) => {
   return http.get("/student/history", {
     year: data.year,
-    className: data.className,
+    classId: data.className,
     keyword: data.keyword,
     current: data.current,
     size: data.size,
