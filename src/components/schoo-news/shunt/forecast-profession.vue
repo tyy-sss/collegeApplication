@@ -215,7 +215,7 @@ const handleExportVolunteerDiversion = () => {
           });
       });
     volunteerFun.manager
-      .getRemainMajor(data.activeName, data.timeId)
+      .getRemainMajor(data.volunteerRule, data.timeId)
       .then((res) => {
         console.log(res, "未录取的专业结果");
         excelExport(res, professionMajor, headerTitle + "-剩余专业信息");
