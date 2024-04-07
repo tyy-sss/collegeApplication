@@ -49,7 +49,7 @@
     <div class="middle">
       <div class="table">
         <el-table :data="data.assessment" style="width: 100%">
-          <el-table-column prop="userNumber" label="学号" min-width="100" />
+          <el-table-column prop="userNumber" label="学号" min-width="120" />
           <el-table-column prop="username" fixed label="姓名" min-width="100" />
           <el-table-column prop="sex" label="性别" />
           <el-table-column prop="school" label="目标学校" min-width="120" />
