@@ -15,6 +15,11 @@ import { ElMessage } from "element-plus";
 
 const routes = [
   {
+    path: "/test",
+    name: "test",
+    component: () => import("@/components/utils/Signatures.vue"),
+  },
+  {
     path: "/login",
     name: "login",
     component: () => import("@/views/Login.vue"),

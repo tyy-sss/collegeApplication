@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-30 22:12:35
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-15 21:33:58
+ * @LastEditTime: 2024-04-08 16:30:20
  * @FilePath: \collegeApplication\src\components\utils\Signatures.vue
  * @Description:电子签名组件
 -->
@@ -15,8 +15,8 @@
       <vueEsign
         ref="esign"
         class="mySign"
-        :isCrop="isCrop"
-        :lineWidth="lineWidth"
+        isCrop="true"
+        lineWidth="0"
         :lineColor="lineColor"
       />
       <br />
@@ -28,9 +28,9 @@
       <button @click="save">确认提交</button>
     </div>
   </div>
-  <!-- 
+  <!--   
   <h1 style="margin-top: 40px">生成签字图片:</h1>
-  <img v-if="resultImg" :src="resultImg" alt="Signature Image" /> 
+  <img style="border:1px solid red" v-if="resultImg" :src="resultImg" alt="Signature Image" /> 
   -->
 </template>
  
@@ -38,12 +38,10 @@
 import { ElMessage } from "element-plus";
 import vueEsign from "vue-esign";
 import { ref, defineEmits } from "vue";
-import { base64ToPNGFile } from "@/assets/js/utils/base64-png-file"
+import { base64ToPNGFile } from "@/assets/js/utils/base64-png-file";
 const emits = defineEmits(["finish"]);
-const lineWidth = ref(0);
 const lineColor = ref("#000000");
 const resultImg = ref("");
-const isCrop = ref("");
 const esign = ref(null);
 
 // 清空画板
@@ -54,7 +52,7 @@ const reset = () => {
 const save = () => {
   // 可选配置参数 ，在未设置format或quality属性时可在生成图片时配置 例如： {format:'image/jpeg', quality: 0.5}
   esign.value
-    .generate({willReadFrequently:true})
+    .generate({ willReadFrequently: true, quality: 0.1 })
     .then((res) => {
       resultImg.value = res;
       const file = base64ToPNGFile(res);
@@ -87,7 +85,7 @@ const save = () => {
   border: 1px solid #cccccc;
 }
 .text {
-  margin-left: .5rem;
+  margin-left: 0.5rem;
   margin-top: 1rem;
   font-weight: bold;
 }

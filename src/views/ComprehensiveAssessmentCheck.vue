@@ -289,7 +289,7 @@ function finish(file) {
   const formData = new FormData();
   formData.append("file", file);
   teacherFun.sign.confirmSign(data.curMonth, formData).then((res) => {
-    data.signature = "xx"; //不为空即可
+    data.signature = res;
     data.dialogVisible = false;
     ElMessage({
       message: "确认本月综测情况成功",

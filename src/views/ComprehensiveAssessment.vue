@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-04-08 11:54:15
+ * @LastEditTime: 2024-04-08 12:44:06
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -685,7 +685,7 @@ function confirmEdit() {
             data.assessments[data.curIndex][key] = data.form[key];
           }
         }
-        ElMessage.success("修改成功");
+        ElMessage.success(res);
       });
     data.dialogVisible3 = false;
   } else {
@@ -712,7 +712,7 @@ function finish(file) {
   const formData = new FormData();
   formData.append("file", file);
   studentFun.sign.assessConfirmSign(data.curMonth, formData).then((res) => {
-    data.signature = "ABC"; //不为空即可
+    data.signature = res;
     data.dialogVisible = false;
     ElMessage({
       message: "提交本月综测情况成功",

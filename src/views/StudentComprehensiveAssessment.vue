@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-31 15:56:24
+ * @LastEditTime: 2024-04-08 12:53:50
  * @FilePath: \collegeApplication\src\views\StudentComprehensiveAssessment.vue
  * @Description: 学生个人综测查看页面
 -->
@@ -49,11 +49,11 @@
       </div>
       <br />
       <!-- 该月情况详细 -->
-      <el-form-item label="该月确认情况 ：">
+      <!-- <el-form-item label="该月确认情况 ：">
         <span v-show="data.signature">已确认</span>
         <span v-show="data.signature == null">待确认</span>
         <span class="tip2">(已确认/待确认)</span>
-      </el-form-item>
+      </el-form-item> -->
     </div>
     <!-- 综测情况详细 -->
     <div>
@@ -198,6 +198,20 @@
         </el-table>
         <br />
       </div>
+      <!-- 该月情况详细 -->
+      <el-form-item label="该月确认情况 ：">
+        <el-popover trigger="hover" placement="right" :width="400">
+          <template #reference>
+            <span v-show="data.signature">已确认</span>
+          </template>
+          <h4>签字情况</h4>
+          <div class="sign-box">
+            <el-image class="sign" :src="data.signature" fit="contain" />
+          </div>
+        </el-popover>
+        <span v-show="data.signature == null">待确认</span>
+        <span class="tip2">(已确认/待确认)</span>
+      </el-form-item>
       <el-button
         type="primary"
         @click="data.dialogVisible = true"
@@ -210,9 +224,7 @@
   <!-- 电子签名对话框 -->
   <el-dialog v-model="data.dialogVisible" title="电子签名" :width="data.width1">
     <div>
-      <div class="tip3">
-        该电子签名为确保综测信息经过本人确认后无误
-      </div>
+      <div class="tip3">该电子签名为确保综测信息经过本人确认后无误</div>
       <signatures @finish="finish"></signatures>
     </div>
   </el-dialog>
@@ -504,7 +516,8 @@ function finish(file) {
   const formData = new FormData();
   formData.append("file", file);
   studentFun.sign.studentConfirmSign(data.month, formData).then((res) => {
-    data.signature = "ABC"; //不为空即可
+    console.log(res);
+    data.signature = res;
     data.dialogVisible = false;
     ElMessage({
       message: "确认本月综测情况成功",
