@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-04-02 00:14:02
+ * @LastEditTime: 2024-04-08 16:10:47
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -224,7 +224,7 @@ function selectStudentMajor() {
     data.options = myOptions;
   });
 }
-//提交志愿进行签名按钮(防抖处理)
+//提交志愿进行签名按钮
 function submitVolunteer() {
   if (
     data.volunteers.firstName[0] == null ||
@@ -256,10 +256,11 @@ function checkDuplicate(str1, str2, str3) {
 }
 //签名后提交数据和电子签名(防抖处理)
 const finish = debounce((file) => {
+  data.dialogVisible = false;
+  router.replace({ name: "volunteer-table" });
   const formData = new FormData();
   formData.append("file", file);
   data.isreturn = true;
-  data.dialogVisible = false;
   volunteerFun.basis
     .modifyWise(
       {
@@ -274,7 +275,6 @@ const finish = debounce((file) => {
       formData
     )
     .then((res) => {
-      router.replace({ name: "volunteer-table" });
       ElMessage({
         type: "success",
         message: "提交志愿成功",

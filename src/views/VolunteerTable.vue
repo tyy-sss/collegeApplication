@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2024-03-10 17:27:37
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-31 15:46:16
+ * @LastEditTime: 2024-04-08 14:01:41
  * @FilePath: \collegeApplication\src\views\VolunteerTable.vue
  * @Description: 志愿填报批次列表
 -->
@@ -75,6 +75,7 @@
 
 <script setup>
 import { reactive, onMounted } from "vue";
+import { ElMessage } from "element-plus";
 import { useRouter } from "vue-router";
 import volunteerFun from "@/api/volunteer";
 const router = useRouter();
@@ -97,10 +98,14 @@ function getVolunteerTable() {
 }
 //进入填报页面
 const handleClick = (row) => {
-  router.replace({
-    name: "volunteer-check",
-    query: { id: row.id },
-  });
+  if (row.state == 1) {
+    router.replace({
+      name: "volunteer-check",
+      query: { id: row.id },
+    });
+  } else {
+    ElMessage.error("当前填报入口暂未开放");
+  }
 };
 //进入查询填报历史页面
 const handleClick2 = (row) => {

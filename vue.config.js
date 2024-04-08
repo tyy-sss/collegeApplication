@@ -1,3 +1,11 @@
+/*
+ * @Author: STATICHIT 2394412110@qq.com
+ * @Date: 2024-04-04 20:52:05
+ * @LastEditors: STATICHIT 2394412110@qq.com
+ * @LastEditTime: 2024-04-08 16:06:23
+ * @FilePath: \collegeApplication\vue.config.js
+ * @Description: 介绍文件的作用
+ */
 const { defineConfig } = require("@vue/cli-service");
 module.exports = defineConfig({
   transpileDependencies: true,
@@ -12,6 +20,9 @@ module.exports = defineConfig({
         changeOrigin: true, // 是否跨域
       },
     },
+    client: {
+      overlay: false//关闭客户端显式错误
+    }
   },
   publicPath: "/",
 });
