@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-04-01 15:15:51
+ * @LastEditTime: 2024-04-08 11:54:15
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -521,6 +521,7 @@ const data = reactive({
   curTitle: "", //编辑弹窗标题（锁定学生）
   curType: "1", //修改项
   search: null, //搜索词
+  curIndex: 0, //当前修改项的索引
   form: {
     signature: null,
     add1: null,
@@ -659,11 +660,12 @@ const handleEdit = (index, row) => {
     for (let key in row) {
       if (row.hasOwnProperty(key)) {
         // 根据属性名给form对象赋值
-        if (key !== "point_total" && key !== "signature") {
+        if (key !== "point_total") {
           data.form[key] = row[key];
         }
       }
     }
+    data.curIndex = index;
     data.curType = "1"; //启动时默认先展示德育项
     data.dialogVisible3 = true;
   }
@@ -677,7 +679,13 @@ function confirmEdit() {
         appraisalContentVos: [data.form],
       })
       .then((res) => {
-        getAssessmentDetails(); //重新获取综测信息
+        // 遍历form对象的属性和值给row赋值,根据属性名给row对象赋值
+        for (let key in data.form) {
+          if (data.assessments[data.curIndex].hasOwnProperty(key)) {
+            data.assessments[data.curIndex][key] = data.form[key];
+          }
+        }
+        ElMessage.success("修改成功");
       });
     data.dialogVisible3 = false;
   } else {
