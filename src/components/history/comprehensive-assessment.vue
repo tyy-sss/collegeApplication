@@ -118,7 +118,7 @@ const data = reactive({
     year: "",
     month: "",
     class: "",
-    keyword: "",
+    student: "",
     list: [],
   },
   assessment: [],
@@ -142,14 +142,14 @@ const onSearchStudent = (val) => {
   if (data.searchData.date == "") {
     ElMessage.error("请选择时间和班级");
   } else {
-    data.searchData.keyword = val;
+    data.searchData.student = val;
     data.pager.current = 1;
     getComprehensiveNews();
   }
 };
 // 搜索
 const onSearch = () => {
-  data.searchData.keyword = "";
+  data.searchData.student = "";
   data.pager.current = 1;
   getComprehensiveNews();
 };
@@ -185,7 +185,7 @@ const getComprehensiveNews = () => {
       year: data.searchData.year,
       month: data.searchData.month,
       classId: data.searchData.class,
-      keyword: data.searchData.keyword,
+      keyword: data.searchData.student,
       current: data.pager.current,
       size: data.pager.size,
     })
@@ -194,7 +194,13 @@ const getComprehensiveNews = () => {
       res.records.forEach((element) => {
         data.assessment.push(element.content);
       });
-    });
+      data.pager = {
+        current: res.current,
+        size: res.size,
+        total: res.total,
+      };
+    })
+    .catch(() => {});
 };
 // 获得一个班的综测成绩
 const getComprehensiveNewsByClass = () => {
