@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:50:19
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-31 16:28:39
+ * @LastEditTime: 2024-04-11 23:41:17
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessmentCheck.vue
  * @Description:班主任查看综合测评情况页
 -->
@@ -202,6 +202,7 @@
 import { reactive, onMounted } from "vue";
 import { comprehensiveAssessmentHeader } from "@/assets/js/excel/format/comprehensive-assessment-style";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
+import { KEYWORD } from "@/constants/regular-expression";
 import { ElMessage } from "element-plus";
 import { getMonthName } from "@/assets/js/utils/month";
 import teacherFun from "@/api/teacher";
@@ -251,33 +252,37 @@ function getClassDetials() {
 }
 //获取综测信息
 function getAssessmentDetails() {
-  data.loading = true;
-  data.loadOk = true;
-  //这里是老师身份请求本月学生综测信息
-  teacherFun.assessment
-    .getAssessments({
-      keyword: data.search,
-      month: data.curMonth,
-      rank: 0,
-      current: data.page.currentPage,
-      size: data.page.pageSize,
-    })
-    .then((res) => {
-      data.assessments = [];
-      data.page.currentPage = res.current;
-      data.page.pageSize = res.size;
-      data.page.total = res.total;
-      res.records.forEach((item) => {
-        data.assessments.push({ ...item.content, signature: item.signature });
+  if (KEYWORD.test(data.search)) {
+    data.loading = true;
+    data.loadOk = true;
+    teacherFun.assessment
+      .getAssessments({
+        keyword: data.search,
+        month: data.curMonth,
+        rank: 0,
+        current: data.page.currentPage,
+        size: data.page.pageSize,
+      })
+      .then((res) => {
+        data.assessments = [];
+        data.page.currentPage = res.current;
+        data.page.pageSize = res.size;
+        data.page.total = res.total;
+        res.records.forEach((item) => {
+          data.assessments.push({ ...item.content, signature: item.signature });
+        });
+        if (data.curMonth == 0) {
+          data.curMonth = res.records[0].month;
+        }
+        data.signature = res.teacherSignature;
+        data.assessSignature = res.signature;
+        data.loading = false;
+        data.loadOk = false;
       });
-      if (data.curMonth == 0) {
-        data.curMonth = res.records[0].month;
-      }
-      data.signature = res.teacherSignature;
-      data.assessSignature = res.signature;
-      data.loading = false;
-      data.loadOk = false;
-    });
+  } else {
+    data.assessments = [];
+    data.page.total = 0;
+  }
 }
 //重新查询
 function reSearch() {

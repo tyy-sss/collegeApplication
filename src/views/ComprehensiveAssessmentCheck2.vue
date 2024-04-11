@@ -110,6 +110,7 @@
 <script setup>
 import { reactive, onMounted } from "vue";
 import { getMonthName } from "@/assets/js/utils/month";
+import { KEYWORD } from "@/constants/regular-expression";
 import studentFun from "@/api/student";
 const data = reactive({
   search: "",
@@ -144,30 +145,35 @@ function getAssessmentMonth() {
 }
 //获取综测信息
 function getAssessmentDetails() {
-  data.loading = true;
-  data.loadOk = true;
-  studentFun.assess
-    .getAssessmentClass({
-      keyword: data.search,
-      month: data.curMonth,
-      rank: 0,
-      current: data.page.currentPage,
-      size: data.page.pageSize,
-    })
-    .then((res) => {
-      data.assessments = [];
-      data.page.currentPage = res.current;
-      data.page.pageSize = res.size;
-      data.page.total = res.total;
-      res.records.forEach((item) => {
-        data.assessments.push(item.content);
+  if (KEYWORD.test(data.search)) {
+    data.loading = true;
+    data.loadOk = true;
+    studentFun.assess
+      .getAssessmentClass({
+        keyword: data.search,
+        month: data.curMonth,
+        rank: 0,
+        current: data.page.currentPage,
+        size: data.page.pageSize,
+      })
+      .then((res) => {
+        data.assessments = [];
+        data.page.currentPage = res.current;
+        data.page.pageSize = res.size;
+        data.page.total = res.total;
+        res.records.forEach((item) => {
+          data.assessments.push(item.content);
+        });
+        if (data.curMonth == 0) {
+          data.curMonth = res.records[0].month;
+        }
+        data.loading = false;
+        data.loadOk = false;
       });
-      if (data.curMonth == 0) {
-        data.curMonth = res.records[0].month;
-      }
-      data.loading = false;
-      data.loadOk = false;
-    });
+  } else {
+    data.assessments = [];
+    data.page.total = 0;
+  }
 }
 //重新查询
 function reSearch() {

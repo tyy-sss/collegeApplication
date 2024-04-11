@@ -248,46 +248,48 @@
       <div class="content-box">
         <h4>基本信息</h4>
         <br />
-        <div v-if="identity == 3">
-          <el-form-item label="电话号码 ：">
-            <el-input
-              v-model="updataData.phone"
-              class="input-width"
-              :placeholder="data.teacher.phone || '-'"
-            />
-          </el-form-item>
-        </div>
-        <div v-if="identity == 0">
-          <el-form-item label="电话号码 ：">
-            <el-input
-              v-model="updataData.phone"
-              class="input-width"
-              :placeholder="data.student.phone || '-'"
-            />
-          </el-form-item>
-          <h4>收件信息</h4>
-          <br />
-          <el-form-item label="收件名称 ：">
-            <el-input
-              v-model="updataData.consigneeBo.username"
-              class="input-width"
-              :placeholder="data.consignee.username || '-'"
-            />
-          </el-form-item>
-          <el-form-item label="收件电话 ：">
-            <el-input
-              v-model="updataData.consigneeBo.phone"
-              class="input-width"
-              :placeholder="data.consignee.phone || '-'"
-            />
-          </el-form-item>
-          <el-form-item label="详细地址 ：">
-            <el-input
-              v-model="updataData.consigneeBo.address"
-              class="input-width"
-              :placeholder="data.consignee.address || '-'"
-          /></el-form-item>
-        </div>
+        <el-form ref="ruleFormRef" :model="updataData" :rules="data.rules1">
+          <div v-if="identity == 3">
+            <el-form-item label="电话号码 ：" prop="phone">
+              <el-input
+                v-model="updataData.phone"
+                class="input-width"
+                :placeholder="data.teacher.phone || '-'"
+              />
+            </el-form-item>
+          </div>
+          <div v-if="identity == 0">
+            <el-form-item label="电话号码 ：" prop="phone">
+              <el-input
+                v-model="updataData.phone"
+                class="input-width"
+                :placeholder="data.student.phone || '-'"
+              />
+            </el-form-item>
+            <h4>收件信息</h4>
+            <br />
+            <el-form-item label="收件名称 ：" prop="consigneeBo.username">
+              <el-input
+                v-model="updataData.consigneeBo.username"
+                class="input-width"
+                :placeholder="data.consignee.username || '-'"
+              />
+            </el-form-item>
+            <el-form-item label="收件电话 ：" prop="consigneeBo.phone">
+              <el-input
+                v-model="updataData.consigneeBo.phone"
+                class="input-width"
+                :placeholder="data.consignee.phone || '-'"
+              />
+            </el-form-item>
+            <el-form-item label="详细地址 ：" prop="consigneeBo.address">
+              <el-input
+                v-model="updataData.consigneeBo.address"
+                class="input-width"
+                :placeholder="data.consignee.address || '-'"
+            /></el-form-item>
+          </div>
+        </el-form>
       </div>
     </template>
     <!-- 尾部按钮区 -->
@@ -298,6 +300,7 @@
       </div>
     </template>
   </el-drawer>
+
   <!-- 修改密码抽屉 -->
   <el-drawer v-model="data.drawer2" direction="ttb" style="min-height: 50%">
     <!-- 标题 -->
@@ -307,23 +310,29 @@
     <!-- 内容区 -->
     <template #default>
       <div style="display: flex; flex-direction: column">
-        <el-form-item label="新设密码 ：">
-          <el-input
-            v-model="updatePasswords.password"
-            class="input-width"
-            autocomplete="off"
-            type="password"
-            placeholder="请输入新设密码"
-          />
-        </el-form-item>
-        <el-form-item label="确认密码 ：">
-          <el-input
-            v-model="updatePasswords.password2"
-            class="input-width"
-            autocomplete="off"
-            type="password"
-            placeholder="请确认密码"
-        /></el-form-item>
+        <el-form
+          ref="ruleFormRef2"
+          :model="updatePasswords"
+          :rules="data.rules2"
+        >
+          <el-form-item label="新设密码 ：" prop="password">
+            <el-input
+              v-model="updatePasswords.password"
+              class="input-width"
+              autocomplete="off"
+              type="password"
+              placeholder="请输入新设密码"
+            />
+          </el-form-item>
+          <el-form-item label="确认密码 ：" prop="password2">
+            <el-input
+              v-model="updatePasswords.password2"
+              class="input-width"
+              autocomplete="off"
+              type="password"
+              placeholder="请确认密码"
+          /></el-form-item>
+        </el-form>
       </div>
     </template>
     <!-- 尾部按钮区 -->
@@ -338,6 +347,7 @@
 <script setup>
 import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
+import { PHONE_TEST, PASSWORD_TEST2 } from "@/constants/regular-expression";
 import { getRole } from "@/constants/token";
 import studentFun from "@/api/student";
 import teacherFun from "@/api/teacher";
@@ -355,6 +365,40 @@ const data = reactive({
   student: {},
   consignee: {},
   teacher: {},
+  rules1: {
+    phone: [
+      {
+        pattern: PHONE_TEST,
+        message: "请输入正确的手机号",
+        trigger: "blur",
+      },
+    ],
+    "consigneeBo.phone": [
+      {
+        pattern: PHONE_TEST,
+        message: "请输入正确的手机号",
+        trigger: "blur",
+      },
+    ],
+  },
+  rules2: {
+    password: [
+      { required: true, message: "密码不能为空", trigger: "blur" },
+      {
+        pattern: PASSWORD_TEST2,
+        message: "请输入符合要求的密码", //这里后面还会改
+        trigger: "blur",
+      },
+    ],
+    password2: [
+      { required: true, message: "密码不能为空", trigger: "blur" },
+      {
+        pattern: PASSWORD_TEST2,
+        message: "请输入符合要求的密码", //这里后面还会改
+        trigger: "blur",
+      },
+    ],
+  },
 });
 //修改资料数据
 const updataData = reactive({
@@ -370,6 +414,8 @@ const updatePasswords = reactive({
   password: "",
   password2: "",
 });
+const ruleFormRef = ref(null);
+const ruleFormRef2 = ref(null);
 //渲染初始数据
 const init = function () {
   data.loading2 = true;
@@ -419,53 +465,65 @@ function handleFileSelect(e) {
 }
 //修改资料
 function confirmClick() {
-  ElMessageBox.confirm("确定进行资料修改吗")
-    .then(() => {
-      data.drawer = false;
-      //修改资料接口
-      if (identity.value == 0) {
-        studentFun.user.updateInformation(updataData).then((res) => {
-          ElMessage.success(res);
-        });
-      } else if (identity.value == 3) {
-        teacherFun.user.updatePhone(updataData.phone).then((res) => {
-          ElMessage.success(res);
-        });
-      }
-      updataData.phone = "";
-      Object.keys(updataData.consigneeBo).forEach(
-        (key) => (updataData.consigneeBo[key] = "")
-      ); //快速清空内容
-      init();
-    })
-    .catch(() => {});
+  ruleFormRef.value.validate((valid, fields) => {
+    if (valid) {
+      ElMessageBox.confirm("确定进行资料修改吗")
+        .then(() => {
+          data.drawer = false;
+          //修改资料接口
+          if (identity.value == 0) {
+            studentFun.user.updateInformation(updataData).then((res) => {
+              ElMessage.success(res);
+            });
+          } else if (identity.value == 3) {
+            teacherFun.user.updatePhone(updataData.phone).then((res) => {
+              ElMessage.success(res);
+            });
+          }
+          updataData.phone = "";
+          Object.keys(updataData.consigneeBo).forEach(
+            (key) => (updataData.consigneeBo[key] = "")
+          ); //快速清空内容
+          init();
+        })
+        .catch(() => {});
+    }
+  });
 }
 //修改密码
 function updatePassword() {
-  if (updatePasswords.password == "" || updatePasswords.password2 == "") {
-    ElMessage.error("新密码或确认密码不能为空");
-  } else {
-    if (updatePasswords.password !== updatePasswords.password2) {
-      ElMessage.error("两次密码输入不一致");
-    } else {
-      if (identity.value == 0 || identity.value == 2) {
-        //学生修改密码
-        studentFun.user.updatePassword(updatePasswords.password).then((res) => {
-          ElMessage.success(res);
-          data.drawer2 = false;
-        });
-      } else if (identity.value == 3) {
-        //老师修改密码
-        teacherFun.user.updatePassword(updatePasswords.password).then((res) => {
-          ElMessage.success(res);
-          data.drawer2 = false;
-        });
+  ruleFormRef2.value.validate((valid, fields) => {
+    if (valid) {
+      if (updatePasswords.password !== updatePasswords.password2) {
+        ElMessage.error("两次密码输入不一致");
+      } else {
+        ElMessageBox.confirm("确定进行密码修改吗")
+          .then(() => {
+            if (identity.value == 0 || identity.value == 2) {
+              //学生修改密码
+              studentFun.user
+                .updatePassword(updatePasswords.password)
+                .then((res) => {
+                  ElMessage.success(res);
+                  data.drawer2 = false;
+                });
+            } else if (identity.value == 3) {
+              //老师修改密码
+              teacherFun.user
+                .updatePassword(updatePasswords.password)
+                .then((res) => {
+                  ElMessage.success(res);
+                  data.drawer2 = false;
+                });
+            }
+            Object.keys(updatePasswords).forEach(
+              (key) => (updatePasswords[key] = "")
+            ); //快速清空内容
+          })
+          .catch(() => {});
       }
-      Object.keys(updatePasswords).forEach(
-        (key) => (updatePasswords[key] = "")
-      ); //快速清空内容
     }
-  }
+  });
 }
 </script>
 

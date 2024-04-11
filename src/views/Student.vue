@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-03-31 16:08:30
+ * @LastEditTime: 2024-04-12 00:26:55
  * @FilePath: \collegeApplication\src\views\Student.vue
  * @Description: 班级管理页面
 -->
@@ -337,61 +337,63 @@
     <!-- 内容区 -->
     <template #default>
       <div class="littleTitle">基本信息</div>
-      <div class="grid-item">
-        <el-form-item label="学生姓名 ：">
-          <el-input
-            v-model="data.updataData.username"
-            :placeholder="data.student.username || '-'"
-          />
-        </el-form-item>
-        <el-form-item label="身份证号 ：">
-          <el-input
-            v-model="data.updataData.idCard"
-            :placeholder="data.student.idCard || '-'"
-          />
-        </el-form-item>
-        <el-form-item label="联系电话 ：">
-          <el-input
-            v-model="data.updataData.phone"
-            :placeholder="data.student.phone || '-'"
-          />
-        </el-form-item>
-        <el-form-item label="父母电话 ：">
-          <el-input
-            v-model="data.updataData.parentPhone"
-            :placeholder="data.student.parentPhone || '-'"
-          />
-        </el-form-item>
-        <el-form-item label="学生性别 ：">
-          <el-input
-            v-model="data.updataData.sex"
-            :placeholder="data.student.sex || '-'"
-          />
-        </el-form-item>
-        <el-form-item label="家庭地址 ：">
-          <el-input
-            v-model="data.updataData.address"
-            :placeholder="data.student.address || '-'"
-          />
-        </el-form-item>
-      </div>
-      <hr />
-      <br />
-      <div class="littleTitle">其他信息</div>
-      <div class="grid-item">
-        <el-form-item label="政治面貌 ：">
-          <el-input
-            v-model="data.updataData.politicsStatus"
-            :placeholder="data.student.politicsStatus || '-'"
-          />
-        </el-form-item>
-        <el-form-item label="民族 ：">
-          <el-input
-            v-model="data.updataData.nation"
-            :placeholder="data.student.nation || '-'"
-          />
-        </el-form-item>
-      </div>
+      <el-form ref="ruleFormRef" :model="data.updataData" :rules="data.rules">
+        <div class="grid-item">
+          <el-form-item label="学生姓名 ：" prop="username">
+            <el-input
+              v-model="data.updataData.username"
+              :placeholder="data.student.username || '-'"
+            />
+          </el-form-item>
+          <el-form-item label="身份证号 ：" prop="idCard">
+            <el-input
+              v-model="data.updataData.idCard"
+              :placeholder="data.student.idCard || '-'"
+            />
+          </el-form-item>
+          <el-form-item label="联系电话 ：" prop="phone">
+            <el-input
+              v-model="data.updataData.phone"
+              :placeholder="data.student.phone || '-'"
+            />
+          </el-form-item>
+          <el-form-item label="父母电话 ：" prop="parentPhone">
+            <el-input
+              v-model="data.updataData.parentPhone"
+              :placeholder="data.student.parentPhone || '-'"
+            />
+          </el-form-item>
+          <el-form-item label="学生性别 ：" prop="sex">
+            <el-input
+              v-model="data.updataData.sex"
+              :placeholder="data.student.sex || '-'"
+            />
+          </el-form-item>
+          <el-form-item label="家庭地址 ：" prop="address">
+            <el-input
+              v-model="data.updataData.address"
+              :placeholder="data.student.address || '-'"
+            />
+          </el-form-item>
+        </div>
+        <hr />
+        <br />
+        <div class="littleTitle">其他信息</div>
+        <div class="grid-item">
+          <el-form-item label="政治面貌 ：" prop="politicsStatus">
+            <el-input
+              v-model="data.updataData.politicsStatus"
+              :placeholder="data.student.politicsStatus || '-'"
+            />
+          </el-form-item>
+          <el-form-item label="民族 ：" prop="nation">
+            <el-input
+              v-model="data.updataData.nation"
+              :placeholder="data.student.nation || '-'"
+            />
+          </el-form-item>
+        </div>
+      </el-form>
     </template>
     <!-- 尾部按钮区 -->
     <template #footer>
@@ -406,6 +408,11 @@
 import { ref, reactive, onMounted } from "vue";
 import { ElMessageBox, ElMessage } from "element-plus";
 import { getMonthName } from "@/assets/js/utils/month";
+import {
+  KEYWORD,
+  IDENTITY_TEST,
+  PHONE_TEST,
+} from "@/constants/regular-expression";
 import teacherFun from "@/api/teacher";
 import apiFun from "@/api/user";
 onMounted(() => {
@@ -439,11 +446,36 @@ const data = reactive({
     phone: null,
     parentPhone: null,
   }, //修改资料数据
+  rules: {
+    idCard: [
+      {
+        pattern: IDENTITY_TEST,
+        message: "请输入正确的身份证号",
+        trigger: "blur",
+      },
+    ],
+    phone: [
+      {
+        pattern: PHONE_TEST,
+        message: "请输入正确的手机号",
+        trigger: "blur",
+      },
+    ],
+    parentPhone: [
+      {
+        pattern: PHONE_TEST,
+        message: "请输入正确的手机号",
+        trigger: "blur",
+      },
+    ],
+  },
   studentTableLoading: false,
   evaluationTableLoading: false,
   curMonth: null, //测试默认值
   monthes: [], //可选月份
 });
+
+const ruleFormRef = ref(null);
 const multipleTableRef = ref();
 const multipleSelection = ref([]);
 //获取数据
@@ -462,22 +494,27 @@ function getComplaintsDeatils() {
 }
 //获取学生列表数据
 function getStudentDeatils() {
-  data.studentTableLoading = true;
-  teacherFun.class
-    .updateInformation({
-      keyword: data.search,
-      role: null,
-      rank: 0,
-      current: data.page.currentPage,
-      size: 12,
-    })
-    .then((res) => {
-      data.studentsData = res.records;
-      data.page.currentPage = res.current;
-      data.page.pageSize = res.size;
-      data.page.total = res.total;
-      data.studentTableLoading = false;
-    });
+  if (KEYWORD.test(data.search)) {
+    data.studentTableLoading = true;
+    teacherFun.class
+      .updateInformation({
+        keyword: data.search,
+        role: null,
+        rank: 0,
+        current: data.page.currentPage,
+        size: 12,
+      })
+      .then((res) => {
+        data.studentsData = res.records;
+        data.page.currentPage = res.current;
+        data.page.pageSize = res.size;
+        data.page.total = res.total;
+        data.studentTableLoading = false;
+      });
+  } else {
+    data.studentsData = [];
+    data.page.total = 0;
+  }
 }
 //获取测评小组成员列表数据
 function getAssessmentStudent() {
@@ -517,7 +554,6 @@ function getAssessmentMonth() {
   apiFun.user.getAssessmentsMonth().then((res) => {
     res.reverse();
     data.curMonth = res[0];
-    // getAssessmentDetails();
     res.forEach((item) => {
       data.monthes.push({
         value: item,
@@ -564,19 +600,25 @@ const handleEdit = (index, row) => {
 };
 //修改资料
 function confirmClick() {
-  ElMessageBox.confirm("确定进行资料修改吗")
-    .then(() => {
-      data.drawer2 = false;
-      data.updataData.userNumber = data.student.userNumber; //必须传回去被修改用户的学号，否则无法确定修改的是哪个学生的信息
-      //修改资料接口
-      teacherFun.class.updateStudentInformation(data.updataData).then((res) => {
-        ElMessage.success(res);
-        Object.keys(data.updataData).forEach(
-          (key) => (data.updataData[key] = null)
-        ); //快速清空内容
-      });
-    })
-    .catch(() => {});
+  ruleFormRef.value.validate((valid, fields) => {
+    if (valid) {
+      ElMessageBox.confirm("确定进行资料修改吗")
+        .then(() => {
+          data.drawer2 = false;
+          data.updataData.userNumber = data.student.userNumber; //必须传回去被修改用户的学号，否则无法确定修改的是哪个学生的信息
+          //修改资料接口
+          teacherFun.class
+            .updateStudentInformation(data.updataData)
+            .then((res) => {
+              ElMessage.success(res);
+              Object.keys(data.updataData).forEach(
+                (key) => (data.updataData[key] = null)
+              ); //快速清空内容
+            });
+        })
+        .catch(() => {});
+    }
+  });
 }
 //删除申诉项
 const handleDelete = (index, row) => {
