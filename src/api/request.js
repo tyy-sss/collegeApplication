@@ -7,7 +7,6 @@ import {
   removeAccessToken,
   removeRefreshToken,
 } from "@/constants/token";
-import { escapeParams } from "@/assets/js/utils/escapeParams"
 
 //1.利用axios对象的方法create，去创建一个axios实例。
 const requests = axios.create({
@@ -107,7 +106,6 @@ const http = {
     });
   },
   get(url = "", params = {}) {
-    params = escapeParams(params);
     return new Promise((resolve, reject) => {
       requests({
         url,
@@ -125,7 +123,6 @@ const http = {
     });
   },
   post(url = "", params = {}) {
-    params = escapeParams(params);
     return new Promise((resolve, reject) => {
       requests({
         url,
@@ -143,7 +140,6 @@ const http = {
     });
   },
   put(url = "", params = {}) {
-    params = escapeParams(params);
     return new Promise((resolve, reject) => {
       requests({
         url,
@@ -161,7 +157,6 @@ const http = {
     });
   },
   delete(url = "", params = {}) {
-    params = escapeParams(params);
     return new Promise((resolve, reject) => {
       requests({
         url,
