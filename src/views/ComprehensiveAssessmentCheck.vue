@@ -174,7 +174,7 @@
                 <el-button
                   type="primary"
                   class="sign-button"
-                  @click="data.dialogVisible = true"
+                  @click="toSign"
                   :disabled="
                     data.assessSignature == null || data.signature !== null
                   "
@@ -288,6 +288,12 @@ function getAssessmentDetails() {
 function reSearch() {
   data.page.currentPage = 1;
   getAssessmentDetails();
+}
+//打开电子签名窗口
+function toSign() {
+  if (!(data.assessSignature == null || data.signature !== null)) {
+    data.dialogVisible = true;
+  }
 }
 //班主任电子签名
 function finish(file) {

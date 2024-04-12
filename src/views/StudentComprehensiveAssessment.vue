@@ -214,7 +214,7 @@
       </el-form-item>
       <el-button
         type="primary"
-        @click="data.dialogVisible = true"
+        @click="toSign"
         :disabled="!(data.signature == null)"
         >前往电子签名</el-button
       >
@@ -511,6 +511,12 @@ const handleRevoke = (index, row) => {
     ElMessage.success(res);
   });
 };
+//打开电子签名窗口
+function toSign() {
+  if (!data.signature) {
+    data.dialogVisible = true;
+  }
+}
 //签名后提交数据和电子签名
 function finish(file) {
   const formData = new FormData();

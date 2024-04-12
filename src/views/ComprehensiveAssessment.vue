@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-27 20:45:21
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-04-08 12:44:06
+ * @LastEditTime: 2024-04-12 18:06:07
  * @FilePath: \collegeApplication\src\views\ComprehensiveAssessment.vue
  * @Description: 测评小组综合测评表编辑页面
 -->
@@ -700,18 +700,20 @@ function confirmEdit() {
 }
 //点击电子签名
 function signConfirmAssessment() {
-  //查询班级某月份已签名人数
-  studentFun.sign
-    .assessGetSignCnt({
-      month: data.curMonth,
-    })
-    .then((res) => {
-      if (res == data.page.total) {
-        data.dialogVisible = true;
-      } else {
-        ElMessage.error("综测小组请确保全班都已完成签名确认再进行签名");
-      }
-    });
+  if (!data.signature) {
+    //查询班级某月份已签名人数
+    studentFun.sign
+      .assessGetSignCnt({
+        month: data.curMonth,
+      })
+      .then((res) => {
+        if (res == data.page.total) {
+          data.dialogVisible = true;
+        } else {
+          ElMessage.error("综测小组请确保全班都已完成签名确认再进行签名");
+        }
+      });
+  }
 }
 //签名后提交数据和电子签名
 function finish(file) {
