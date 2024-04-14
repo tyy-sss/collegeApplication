@@ -136,6 +136,7 @@ const onSearchYear = (val) => {
   data.searchData.class = "";
   data.searchData.student = "";
   data.searchData.list = [];
+  data.assessment = [];
   managerFun.class.getAllClass(data.searchData.year).then((res) => {
     res.forEach((element) => {
       data.searchData.list.push({

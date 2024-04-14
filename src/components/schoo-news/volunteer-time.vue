@@ -70,6 +70,7 @@ import { useRoute } from "vue-router";
 import volunteerFun from "@/api/volunteer";
 import { excelExport } from "@/assets/js/excel/excel-export";
 import { unAcceptedHeader } from "@/assets/js/excel/excel-export-data";
+import { ElMessage } from "element-plus";
 // 获得路由显示的学校id
 const route = new useRoute();
 const schoolId = Number(ref(route.query.schoolId).value);
@@ -100,18 +101,22 @@ const handleExportUnAcceptedList = (timeId) => {
   volunteerFun.manager
     .checkUnAccepted(timeId)
     .then((res) => {
-      let unAcceptedList = [];
-      res.forEach((element) => {
-        element.notAcceptedVoList.forEach((item) => {
-          unAcceptedList.push(item);
+      if (res.length == 0) {
+        ElMessage.error("无数据")
+      } else {
+        let unAcceptedList = [];
+        res.forEach((element) => {
+          element.notAcceptedVoList.forEach((item) => {
+            unAcceptedList.push(item);
+          });
         });
-      });
-      let fileName = getAllTimeNews(new Date()).slice(0, 10);
-      excelExport(
-        unAcceptedList,
-        unAcceptedHeader,
-        fileName + " - " + schoolName + " - 未填报志愿的学生名单"
-      );
+        let fileName = getAllTimeNews(new Date()).slice(0, 10);
+        excelExport(
+          unAcceptedList,
+          unAcceptedHeader,
+          fileName + " - " + schoolName + " - 未填报志愿的学生名单"
+        );
+      }
     })
     .catch(() => {});
 };

@@ -49,6 +49,8 @@ export const handleStudentInformation = (data, subjectList) => {
     // 学生的姓名，学号，班级,目标学校不能为空
     if (!item.username || !item.userNumber || !item.className || !item.school)
       return;
+    // 把班级变成字符串
+    item.className = item.className.toString();
     // 对选考科目进行处理
     let electiveSubjectList = [];
     if (item.subjects.length === 0) {

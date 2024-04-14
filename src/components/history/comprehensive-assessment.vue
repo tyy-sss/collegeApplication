@@ -135,6 +135,7 @@ const onSearchYear = (val) => {
   data.searchData.month = data.searchData.date.slice(5, 7);
   data.searchData.class = "";
   data.searchData.student = "";
+  data.assessment = [];
   getClassList();
 };
 // 搜索学生

@@ -77,22 +77,9 @@
                   @click="handleChangeAddress(scope.row)"
                   >修改</el-button
                 >
-                <el-button
-                  link
-                  type="danger"
-                  @click="handleDeteleAddress(scope.row)"
-                  >删除</el-button
-                >
               </template></el-table-column
             >
           </el-table>
-        </div>
-        <div class="bottom">
-          <div class="button">
-            <el-button type="success" @click="handleBatchDeleteAddress"
-              >批量删除</el-button
-            >
-          </div>
         </div>
       </div>
     </div>
@@ -135,53 +122,6 @@ const handleChangeAddress = (val) => {
   addVolunteerAddressRef.value.form.isChange = true;
   addVolunteerAddressRef.value.form.oldAddressName = val.name;
   addVolunteerAddressRef.value.form.ruleForm = Object.assign({}, val);
-};
-// 删除地址
-const handleDeteleAddress = (val) => {
-  const areaList = [];
-  areaList.push(val.areaId);
-  // 删除地址组合
-  deleteAreaList(areaList);
-};
-// 批量删除地址
-const handleBatchDeleteAddress = () => {
-  if (multipleSelection.value.length === 0) {
-    ElMessage.error("请至少选择一个班级");
-  } else {
-    const areaList = [];
-    multipleSelection.value.forEach((item) => {
-      areaList.push(item.areaId);
-    });
-    // 删除地址组合
-    deleteAreaList(areaList);
-  }
-};
-// 删除地址组合接口
-const deleteAreaList = (val) => {
-  ElMessageBox.confirm("确定删除所选地址组合", {
-    confirmButtonText: "确定",
-    cancelButtonText: "取消",
-    type: "warning",
-  })
-    .then(() => {
-      val.forEach((item) => {
-        managerFun.area
-          .deleteArea(item)
-          .then((res) => {
-            ElMessage.success("操作成功");
-          })
-          .catch(() => {})
-          .finally(() => {
-            getAddressList();
-          });
-      });
-    })
-    .catch(() => {
-      ElMessage({
-        type: "info",
-        message: "已取消删除",
-      });
-    });
 };
 // 获得地址列表
 const getAddressList = () => {
