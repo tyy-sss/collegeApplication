@@ -157,6 +157,7 @@ const data = reactive({
     size: 10,
     total: 100,
   },
+  type1: 0,
 });
 // 对科目展示进行处理
 const handleSubject = (val) => {
@@ -181,10 +182,6 @@ const handleGetCheckVounteerDiversion = (value) => {
   data.pager.current = 1;
   getCheckVounteerDiversion();
 };
-// 重新导出分流结果
-const handleResetReuslt = () =>{
-  
-}
 // 导出最后的分流结果
 const handleExportVolunteerDiversion = () => {
   if (!data.isExport) {
@@ -233,6 +230,16 @@ const handleExportVolunteerDiversion = () => {
       });
   }
 };
+// 重新导出分流结果
+const handleResetReuslt = () => {
+  data.type1 = 1;
+  new Promise((resolve, reject) => {
+    resolve(getVounteerDiversion(data.volunteerRule));
+  }).then(() => {
+    data.type1 = 0;
+    data.volunteerRule = data.volunteerRule;
+  });
+};
 // 获得最后志愿结果
 const getCheckVounteerDiversion = () => {
   volunteerFun.manager
@@ -262,6 +269,7 @@ const getVounteerDiversion = (value) => {
       schoolId: schoolId,
       type: data.volunteerRule,
       timeId: data.timeId,
+      type1: data.type1,
     })
     .then((res) => {
       ElMessage.success("志愿匹配成功，正在获取志愿结果");

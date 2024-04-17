@@ -69,7 +69,9 @@ const data = reactive({
 import { useRoute } from "vue-router";
 import volunteerFun from "@/api/volunteer";
 import { excelExport } from "@/assets/js/excel/excel-export";
+import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import { unAcceptedHeader } from "@/assets/js/excel/excel-export-data";
+import { professionHeader } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
 import { ElMessage } from "element-plus";
 // 获得路由显示的学校id
 const route = new useRoute();
@@ -120,23 +122,37 @@ const handleExportUnAcceptedList = (timeId) => {
     .catch(() => {});
   // 如果是预志愿填报，导出志愿填报信息
   if (data.preVolunteerTime.id === timeId) {
-    let headerTitle = schoolName + "-" + "预志愿填报表";
-    let endData = [];
+    console.log("预志愿填报");
+    // 预志愿规则匹配志愿
     volunteerFun.manager
-      .exportVolunteerDiversion(schoolId, timeId, 1, 1)
+      .volunteerDiversion({
+        schoolId: schoolId,
+        type: 1,
+        timeId: timeId,
+        type1: 1,
+      })
       .then((res) => {
-        endData = res;
+        let headerTitle = schoolName + "-" + "预志愿填报表";
+        console.log(headerTitle);
+        let endData = [];
         volunteerFun.manager
-          .exportVolunteerDiversion(schoolId, timeId, 1, 0)
+          .exportVolunteerDiversion(schoolId, timeId, 1, 1)
           .then((res) => {
-            res.forEach((element) => {
-              endData.push(element);
-            });
-            // 导出最后分流结果
-            export_json_to_excel(professionHeader, endData, headerTitle);
-          })
-          .catch(() => {});
-      });
+            endData = res;
+            volunteerFun.manager
+              .exportVolunteerDiversion(schoolId, timeId, 1, 0)
+              .then((res) => {
+                res.forEach((element) => {
+                  endData.push(element);
+                });
+                console.log(endData, "预填报信息单");
+                // 导出最后分流结果
+                export_json_to_excel(professionHeader, endData, headerTitle);
+              })
+              .catch(() => {});
+          });
+      })
+      .catch((res) => {});
   }
 };
 // 有值的修改时间显示

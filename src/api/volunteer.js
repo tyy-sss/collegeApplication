@@ -65,6 +65,7 @@ volunteerFun.options.selectStudentMajor = () => {
  * @param {学校id} schoolId
  * @param {志愿匹配方式} type 1第一志愿 2平行志愿
  * @param {匹配时间id} timeId
+ * @param {是否重新生成} type1
  * @returns
  */
 volunteerFun.manager.volunteerDiversion = (data) => {
@@ -72,6 +73,7 @@ volunteerFun.manager.volunteerDiversion = (data) => {
     schoolId: data.schoolId,
     type: data.type,
     timeId: data.timeId,
+    type1: data.type1,
   });
 };
 /**
