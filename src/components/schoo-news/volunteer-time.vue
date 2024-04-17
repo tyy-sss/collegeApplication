@@ -145,7 +145,6 @@ const handleExportUnAcceptedList = (timeId) => {
                 res.forEach((element) => {
                   endData.push(element);
                 });
-                console.log(endData, "预填报信息单");
                 // 导出最后分流结果
                 export_json_to_excel(professionHeader, endData, headerTitle);
               })
