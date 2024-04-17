@@ -122,7 +122,6 @@ const handleExportUnAcceptedList = (timeId) => {
     .catch(() => {});
   // 如果是预志愿填报，导出志愿填报信息
   if (data.preVolunteerTime.id === timeId) {
-    console.log("预志愿填报");
     // 预志愿规则匹配志愿
     volunteerFun.manager
       .volunteerDiversion({
