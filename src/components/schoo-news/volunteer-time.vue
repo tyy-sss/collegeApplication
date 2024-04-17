@@ -119,23 +119,25 @@ const handleExportUnAcceptedList = (timeId) => {
     })
     .catch(() => {});
   // 如果是预志愿填报，导出志愿填报信息
-  let headerTitle = schoolName + "-" + "预志愿填报表";
-  let endData = [];
-  volunteerFun.manager
-    .exportVolunteerDiversion(schoolId, timeId, 1, 1)
-    .then((res) => {
-      endData = res;
-      volunteerFun.manager
-        .exportVolunteerDiversion(schoolId, timeId, 1, 0)
-        .then((res) => {
-          res.forEach((element) => {
-            endData.push(element);
-          });
-          // 导出最后分流结果
-          export_json_to_excel(professionHeader, endData, headerTitle);
-        })
-        .catch(() => {});
-    });
+  if (data.preVolunteerTime.id === timeId) {
+    let headerTitle = schoolName + "-" + "预志愿填报表";
+    let endData = [];
+    volunteerFun.manager
+      .exportVolunteerDiversion(schoolId, timeId, 1, 1)
+      .then((res) => {
+        endData = res;
+        volunteerFun.manager
+          .exportVolunteerDiversion(schoolId, timeId, 1, 0)
+          .then((res) => {
+            res.forEach((element) => {
+              endData.push(element);
+            });
+            // 导出最后分流结果
+            export_json_to_excel(professionHeader, endData, headerTitle);
+          })
+          .catch(() => {});
+      });
+  }
 };
 // 有值的修改时间显示
 const changeTimeObject = (element) => {
