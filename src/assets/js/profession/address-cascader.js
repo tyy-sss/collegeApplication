@@ -146,7 +146,6 @@ const getLabel = (n) => {
 };
 // 得到总的联级选择框
 export const optionsChoose = (subjectScope, areaIdVal, subjectNumber) => {
-  console.log(subjectScope);
   subjectList = subjectScope;
   areaId = areaIdVal;
   let firstChildren = [];

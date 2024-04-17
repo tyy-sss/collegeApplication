@@ -97,12 +97,11 @@ const handleSetVolunteerTime = () => {
 };
 // 导出当前未填报志愿的学生名单
 const handleExportUnAcceptedList = (timeId) => {
-  console.log(timeId);
   volunteerFun.manager
     .checkUnAccepted(timeId)
     .then((res) => {
       if (res.length == 0) {
-        ElMessage.error("无数据")
+        ElMessage.error("所有学生已完成志愿填报");
       } else {
         let unAcceptedList = [];
         res.forEach((element) => {
@@ -119,6 +118,24 @@ const handleExportUnAcceptedList = (timeId) => {
       }
     })
     .catch(() => {});
+  // 如果是预志愿填报，导出志愿填报信息
+  let headerTitle = schoolName + "-" + "预志愿填报表";
+  let endData = [];
+  volunteerFun.manager
+    .exportVolunteerDiversion(schoolId, timeId, 1, 1)
+    .then((res) => {
+      endData = res;
+      volunteerFun.manager
+        .exportVolunteerDiversion(schoolId, timeId, 1, 0)
+        .then((res) => {
+          res.forEach((element) => {
+            endData.push(element);
+          });
+          // 导出最后分流结果
+          export_json_to_excel(professionHeader, endData, headerTitle);
+        })
+        .catch(() => {});
+    });
 };
 // 有值的修改时间显示
 const changeTimeObject = (element) => {

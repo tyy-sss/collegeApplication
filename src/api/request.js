@@ -12,7 +12,7 @@ import {
 const requests = axios.create({
   //配置对象
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径                                                                                                                                                                                              当中会出现api
-  baseURL: "http://192.168.50.35:8081",
+  baseURL: "https://ykxsgl8081.jsu.edu.cn",
   //代表请求超时的时间
   timeout: 50 * 1000,
 });
