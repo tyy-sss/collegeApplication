@@ -1,28 +1,35 @@
 <template>
   <div class="forecast-profession">
     <div class="top">
-      <div class="text">志愿规则选择：</div>
-      <div class="choose">
-        <el-radio-group
-          v-model="data.volunteerRule"
-          class="ml-4"
-          @change="getVounteerDiversion"
-        >
-          <el-tooltip
-            v-for="(item, index) in data.mateTtypeData"
-            :key="index"
-            class="box-item"
-            effect="light"
-            placement="bottom"
+      <div class="left">
+        <div class="text">志愿规则选择：</div>
+        <div class="choose">
+          <el-radio-group
+            v-model="data.volunteerRule"
+            class="ml-4"
+            @change="getVounteerDiversion"
           >
-            <template #content>
-              <rule-explain :volunteer-rule="item.volunteerRule" />
-            </template>
-            <el-radio :label="item.type" size="large">{{
-              item.label
-            }}</el-radio>
-          </el-tooltip>
-        </el-radio-group>
+            <el-tooltip
+              v-for="(item, index) in data.mateTtypeData"
+              :key="index"
+              class="box-item"
+              effect="light"
+              placement="bottom"
+            >
+              <template #content>
+                <rule-explain :volunteer-rule="item.volunteerRule" />
+              </template>
+              <el-radio :label="item.type" size="large">{{
+                item.label
+              }}</el-radio>
+            </el-tooltip>
+          </el-radio-group>
+        </div>
+      </div>
+      <div class="right">
+        <el-button type="primary" @click="handleResetReuslt">
+          重新生成结果
+        </el-button>
       </div>
     </div>
     <div class="middle">
@@ -174,6 +181,10 @@ const handleGetCheckVounteerDiversion = (value) => {
   data.pager.current = 1;
   getCheckVounteerDiversion();
 };
+// 重新导出分流结果
+const handleResetReuslt = () =>{
+  
+}
 // 导出最后的分流结果
 const handleExportVolunteerDiversion = () => {
   if (!data.isExport) {
@@ -296,7 +307,11 @@ onMounted(() => {
 .top {
   display: flex;
   align-items: center;
-  height: 30px;
+  justify-content: space-between;
+}
+.left {
+  display: flex;
+  align-items: center;
 }
 .rule-explain {
   max-width: 600px;
