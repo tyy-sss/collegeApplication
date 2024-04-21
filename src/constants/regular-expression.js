@@ -9,7 +9,7 @@ export const PASSWORD_TEST = /^[@#$%^&+=a-zA-Z0-9]{6,16}$/;
 //修改密码
 export const PASSWORD_TEST2 = /^[@#$%^&+=a-zA-Z0-9]{6,16}$/;
 // 账号
-export const ACCOUNT_TEST = /^[0-9]{6,16}$/;
+export const ACCOUNT_TEST = /^[@#$%^&+=a-zA-Z0-9]{6,16}$/;
 // 姓名
 export const NAME_TEST = /^[\u4E00-\u9FA5]{2,10}(·[\u4E00-\u9FA5]{2,10}){0,2}$/;
 // 班级姓名
