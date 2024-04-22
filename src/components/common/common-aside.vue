@@ -12,9 +12,6 @@
           <div class="user-name" v-if="!store.state.menu.isCollapse">
             吉首大学
           </div>
-          <div class="collapse" @click="handleCollapse">
-            <img src="@/assets/image/collapse.png" />
-          </div>
         </div>
         <div class="description" v-if="!store.state.menu.isCollapse">
           Jishou University
@@ -71,11 +68,6 @@ const setImgWidth = () => {
   } else {
     imgWidth.value = "70px";
   }
-};
-// 手动收缩
-const handleCollapse = () => {
-  store.commit("setIsCollapse");
-  setImgWidth();
 };
 // 跳转界面
 const handleSelect = (key, keyPath) => {

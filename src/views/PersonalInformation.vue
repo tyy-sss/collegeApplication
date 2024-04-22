@@ -235,6 +235,32 @@
         >
       </div>
     </div>
+    <!-- 管理员信息 -->
+    <div v-if="identity == 4" class="manager">
+      <!-- 信息区 -->
+      <div>
+        <div class="box">
+          <div class="littleTitle">基本信息</div>
+          <div class="grid-item">
+            <div>
+              <span class="tag">管理员账号 :</span
+              ><span>{{ data.manager.userNumber || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">登录时间 :</span
+              ><span>{{ data.manager.lastDdlTime || "-" }}</span>
+            </div>
+          </div>
+        </div>
+        <br />
+      </div>
+      <!-- 按钮区 -->
+      <div class="btnBox">
+        <el-button class="changeInfo" @click="data.drawer2 = true"
+          >修改密码</el-button
+        >
+      </div>
+    </div>
   </div>
 
   <!-- 修改资料抽屉 -->
@@ -351,6 +377,7 @@ import { PHONE_TEST, PASSWORD_TEST2 } from "@/constants/regular-expression";
 import { getRole } from "@/constants/token";
 import studentFun from "@/api/student";
 import teacherFun from "@/api/teacher";
+import managerFun from "@/api/manager";
 onMounted(() => {
   identity.value = getRole();
   init();
@@ -365,6 +392,7 @@ const data = reactive({
   student: {},
   consignee: {},
   teacher: {},
+  manager: {},
   rules1: {
     phone: [
       {
@@ -440,6 +468,12 @@ const init = function () {
       data.student.className = res.className;
       data.loading2 = false;
     });
+  } else if (identity.value == 4) {
+    managerFun.user.getNews().then((res) => {
+      data.manager = res;
+      data.manager.lastDdlTime = data.manager.lastDdlTime.replace("T", " ");
+      data.loading2 = false;
+    });
   }
 };
 //上传证件照假按钮
@@ -497,6 +531,7 @@ function updatePassword() {
       if (updatePasswords.password !== updatePasswords.password2) {
         ElMessage.error("两次密码输入不一致");
       } else {
+        console.log(identity.value);
         ElMessageBox.confirm("确定进行密码修改吗")
           .then(() => {
             if (identity.value == 0 || identity.value == 2) {
@@ -515,6 +550,14 @@ function updatePassword() {
                   ElMessage.success(res);
                   data.drawer2 = false;
                 });
+            } else if (identity.value == 4) {
+              // 管理员修改密码
+              managerFun.user
+                .uploadPassword(updatePasswords.password)
+                .then((res) => {
+                  ElMessage.success(res);
+                  data.drawer2 = false;
+                });
             }
             Object.keys(updatePasswords).forEach(
               (key) => (updatePasswords[key] = "")
@@ -528,4 +571,4 @@ function updatePassword() {
 </script>
 
 <style src="@/assets/css/show-container.css" scoped></style>
-<style src="@/assets/css/user/personalInformation.scss"  lang="scss" scoped/>
+<style src="@/assets/css/user/personalInformation.scss" lang="scss" scoped />

@@ -11,7 +11,7 @@
               class="demo-ruleForm"
             >
               <el-form-item>
-                <h1>志愿填报系统</h1>
+                <h1>预科学院综测与专业分流系统</h1>
               </el-form-item>
               <el-form-item prop="userNumber">
                 <input
@@ -59,7 +59,11 @@ const data = reactive({
   rules: {
     userNumber: [
       { required: true, message: "请输入账号", trigger: "blur" },
-      { pattern: ACCOUNT_TEST, message: "请输入正确的账号", trigger: "blur" },
+      {
+        pattern: ACCOUNT_TEST,
+        message: "请输入正确的账号，数字或者字母（6~16位）",
+        trigger: "blur",
+      },
     ],
     password: [
       { required: true, message: "请输入密码", trigger: "blur" },

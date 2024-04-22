@@ -9,10 +9,12 @@ import {
 } from "@/constants/token";
 
 //1.利用axios对象的方法create，去创建一个axios实例。
+const fwq = "https://ykxsgl8081.jsu.edu.cn";
+const ysb = "http://192.168.50.37:8081";
 const requests = axios.create({
   //配置对象
   //接口当中：路径都带有/api     基础路径，发送请求的时候，路径                                                                                                                                                                                              当中会出现api
-  baseURL: "https://ykxsgl8081.jsu.edu.cn",
+  baseURL: ysb,
   //代表请求超时的时间
   timeout: 50 * 1000,
 });

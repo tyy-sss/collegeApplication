@@ -33,6 +33,10 @@ const managerMenuData = reactive([
     menuName: "历史管理",
     path: "/history",
   },
+  {
+    menuName: "个人信息",
+    path: "/personal-information",
+  },
 ]);
 const studentMenuData = reactive([
   {

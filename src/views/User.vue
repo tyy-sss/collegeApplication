@@ -105,6 +105,13 @@
                   @click="handleResetUser(scope.row)"
                   >重置密码</el-button
                 >
+                <el-button
+                  link
+                  type="warning"
+                  v-if="scope.row.role === '学生'"
+                  @click="handleCheckUser(scope.row)"
+                  >查看用户</el-button
+                >
               </template></el-table-column
             >
           </el-table>
@@ -169,6 +176,8 @@
 <script setup>
 // 接口 搜索用户 删除用户 重置密码 修改用户角色
 import managerFun from "@/api/manager";
+import { useRouter } from "vue-router";
+const router = useRouter();
 import roleFun from "@/api/role";
 import addUser from "@/components/user/add-user.vue";
 import addUserSingle from "@/components/user/add-user-single.vue";
@@ -231,6 +240,18 @@ const handleDeleteUser = (val) => {
   let userNumberList = [];
   userNumberList.push(val.userNumber);
   deleteUserList(userNumberList);
+};
+// 查看学生的个人信息
+const handleCheckUser = (val) => {
+  console.log(val);
+  // 跳转界面
+  const href = router.resolve({
+    path: "/school-manager/student-news",
+    query: {
+      userId: val.userId
+    },
+  });
+  window.open(href.href, "_blank");
 };
 // 重置密码
 const handleResetUser = (val) => {

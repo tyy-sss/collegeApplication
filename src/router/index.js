@@ -121,7 +121,7 @@ const routes = [
     ],
   },
   {
-    // 管理员查看学校的信息
+    // 管理员查看学校,，学生的信息
     path: "/school-manager",
     name: "school-manager",
     component: () => import("@/views/school/Main.vue"),
@@ -130,6 +130,11 @@ const routes = [
         path: "school-news",
         name: "school-news",
         component: () => import("@/views/school/SchoolNews.vue"),
+      },
+      {
+        path: "student-news",
+        name: "student-news",
+        component: () => import("@/views/school/StuendtNews.vue"),
       },
     ],
   },

@@ -12,7 +12,21 @@ let managerFun = {
   wishTime: {},
   grades: {},
 };
-
+/**
+ * 管理员获取自己的信息
+ * @returns
+ */
+managerFun.user.getNews = () => {
+  return http.get("/user/admin");
+};
+/**
+ * 管理员修改自己的密码
+ * @param {*} password
+ * @returns
+ */
+managerFun.user.uploadPassword = (password) => {
+  return http.put("/user/password", password);
+};
 /**
  * 查询用户数据
  * @param {*} username 姓名
@@ -62,6 +76,22 @@ managerFun.user.deleteUser = (data) => {
 managerFun.user.getTeacherList = () => {
   return http.get("/user/teachers");
 };
+/**
+ *  获得学生的信息
+ * @param {*} userId
+ * @returns
+ */
+managerFun.user.getStudentNews = (userId) => {
+  return http.get("/user/student?userId=" + userId);
+};
+/**
+ * 管理员修改学生信息
+ * @param {*} data
+ * @returns
+ */
+managerFun.user.changeStudentNews = (data) => {
+  return http.put("/user/student", data);
+};
 /** 班级 */
 /**
  * 分页获取班级
@@ -75,8 +105,8 @@ managerFun.class.searchClass = (year, current, size) => {
 };
 /**
  * 获得所有班级的信息
- * @param {*} year 
- * @returns 
+ * @param {*} year
+ * @returns
  */
 managerFun.class.getAllClass = (year) => {
   return http.get("/class/list?year=" + year);

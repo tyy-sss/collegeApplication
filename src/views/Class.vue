@@ -102,7 +102,7 @@
         class="demo-ruleForm"
       >
         <el-form-item label="班级名称" prop="className">
-          <el-input v-model="data.form.className" />
+          <el-input v-model="data.form.className" :disabled="data.isChange" />
           <div class="prompt">请输入长度在5到20位之间的中文数字</div>
         </el-form-item>
         <el-form-item label="选择班主任" prop="number">
