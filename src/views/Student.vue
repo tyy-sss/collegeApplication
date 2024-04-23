@@ -105,9 +105,7 @@
       <el-button type="primary" @click="handleRepasswds"
         >批量重置密码</el-button
       >
-      <span class="tip"
-        >【重置密码指将所选账号的密码重置为初始密码“123456”】</span
-      >
+      <span class="tip">【重置密码指将所选账号的密码重置为学生学号 】</span>
       <br />
       <!-- 分页 -->
       <el-pagination
@@ -654,5 +652,5 @@ const filterTag = (value, row) => {
 };
 </script>
 <style src="@/assets/css/show-container.css" scoped></style>
-<style src="@/assets/css/search-top-left-right.css" scoped/>
-<style src="@/assets/css/teacher/studentManage.scss" lang="scss" scoped/>
+<style src="@/assets/css/search-top-left-right.css" scoped />
+<style src="@/assets/css/teacher/studentManage.scss" lang="scss" scoped />
