@@ -97,7 +97,6 @@
         ref="ruleFormRef"
         label-position="top"
         :model="data.form"
-        :rules="data.rules"
         label-width="120px"
         class="demo-ruleForm"
       >
@@ -132,23 +131,6 @@ import { Plus } from "@element-plus/icons-vue";
 import { formatDate } from "@/assets/js/utils/format-date";
 // 接口添加 获得班主任列表，按年搜索班级，班级姓名查重，添加班级，删除班级，搜索学校
 import managerFun from "@/api/manager";
-import { CLASS_NAME_TEST } from "@/constants/regular-expression";
-const validateName = async (rule, value, callback) => {
-  if (
-    (data.isChange === false && value) ||
-    (data.isChange === true && value != data.oldClassName)
-  ) {
-    await managerFun.class
-      .existsClass(value)
-      .then((res) => {
-        callback();
-      })
-      .catch((err) => {
-        callback(new Error(err.msg));
-      });
-  }
-  callback();
-};
 //   数据
 const data = reactive({
   dialogVisible: false,
@@ -159,13 +141,6 @@ const data = reactive({
     classId: "",
     className: "",
     userNumber: "",
-  },
-  rules: {
-    // 添加查班级姓名
-    className: [
-      { required: true, message: "请输入班级名", trigger: "blur" },
-      { validator: validateName, trigger: "blur" },
-    ],
   },
   // 班主任信息数据
   options: [],
@@ -195,7 +170,12 @@ const handleAddClass = () => {
   ruleFormRef.value.validate((valid, fields) => {
     if (valid) {
       if (data.isChange) {
-        changeClassData();
+        if (data.form.userNumber == "-1") {
+          // 删除班主任
+          classAdviser();
+        } else {
+          changeClassData();
+        }
       } else {
         addClassData();
       }
@@ -317,11 +297,29 @@ const deleteClassList = (val) => {
       });
     });
 };
+// 删除班主任
+const classAdviser = () => {
+  managerFun.class
+    .adviser(data.form.classId)
+    .then((res) => {
+      ElMessage.success("操作成功");
+    })
+    .catch(() => {})
+    .finally(() => {
+      getClassList();
+      handleClose();
+    });
+};
 // 获得老师信息接口
 const getTeacherList = () => {
   // 获得老师列表
   managerFun.user.getTeacherList().then((res) => {
+    console.log(res);
     data.options = res;
+    data.options.push({
+      username: "不设置班主任",
+      userNumber: "-1",
+    });
   });
 };
 // 获得班级信息接口

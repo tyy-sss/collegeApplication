@@ -136,6 +136,14 @@ managerFun.class.changeClass = (classId, userNumber, className) => {
   return http.put("/class", { classId, userNumber, className });
 };
 /**
+ * 删除班主任
+ * @param {*} classId
+ * @returns
+ */
+managerFun.class.adviser = (classId) => {
+  return http.post("/class/class/adviser", classId);
+};
+/**
  * 删除班级
  * @param {*} data 班级编号数组
  */
