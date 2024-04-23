@@ -307,7 +307,7 @@ function confirmClick() {
             },
           };
           managerFun.user.changeStudentNews(studentData).then((res) => {
-            ElMessage.success("修改学校信息成功");
+            ElMessage.success("修改学生信息成功");
             init();
           });
         })
