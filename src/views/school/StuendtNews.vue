@@ -89,8 +89,8 @@
                   />
                 </el-select>
               </el-form-item>
-              <el-form-item label="目标学校 :" prop="school">
-                <el-select v-model="data.student.school" class="m-2">
+              <el-form-item label="目标学校 :" prop="schoolId">
+                <el-select v-model="data.student.schoolId" class="m-2">
                   <el-option
                     v-for="item in data.schoolList"
                     :key="item.schoolId"
@@ -209,7 +209,7 @@ const data = reactive({
     ],
     sex: [{ required: true, message: "请输入性别", trigger: "blur" }],
     className: [{ required: true, message: "请输入", trigger: "blur" }],
-    school: [{ required: true, message: "请输入", trigger: "blur" }],
+    schoolId: [{ required: true, message: "请输入", trigger: "blur" }],
     province: [{ required: true, message: "请输入", trigger: "blur" }],
     subjects: [
       { required: true, message: "请输入", trigger: "blur" },
@@ -252,10 +252,6 @@ const init = function () {
   // 管理员通过id获取学生的个人信息
   managerFun.user.getStudentNews(userId).then((res) => {
     data.student = res;
-    // 处理学生的学校条件
-    data.student.school = data.schoolList.filter((element) => {
-      return element.name == data.student.school;
-    })[0].schoolId;
     data.loading2 = false;
   });
 };
@@ -276,7 +272,6 @@ const createFilter = (queryString) => {
 //修改资料
 function confirmClick() {
   ruleFormRef.value.validate((valid, fields) => {
-    console.log(valid);
     if (valid) {
       ElMessageBox.confirm("确定进行资料修改吗")
         .then(() => {
@@ -291,7 +286,7 @@ function confirmClick() {
               politicsStatus: data.student.politicsStatus,
               nation: data.student.nation,
               className: data.student.className,
-              schoolId: data.student.school,
+              schoolId: data.student.schoolId,
               province: data.student.province,
               subjects: data.student.subjects,
               plan: data.student.plan,
@@ -340,6 +335,7 @@ const getList = () => {
   init();
 };
 onMounted(() => {
+  console.log(1);
   getList();
 });
 </script>
