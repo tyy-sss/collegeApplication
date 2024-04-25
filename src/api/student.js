@@ -33,8 +33,8 @@ studentFun.user.updateInformation = (params) => {
 /**
  * 学生修改密码
  */
-studentFun.user.updatePassword = (password) => {
-  return http.put("/student/password", password);
+studentFun.user.updatePassword = (params) => {
+  return http.put("/student/password", params);
 };
 
 /**

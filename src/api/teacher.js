@@ -34,8 +34,8 @@ teacherFun.user.updatePhone = (phone) => {
 /**
  * 老师修改密码
  */
-teacherFun.user.updatePassword = (password) => {
-  return http.put("/teacher/password", password);
+teacherFun.user.updatePassword = (params) => {
+  return http.put("/teacher/password", params);
 };
 
 /**

@@ -537,7 +537,9 @@ function updatePassword() {
             if (identity.value == 0 || identity.value == 2) {
               //学生修改密码
               studentFun.user
-                .updatePassword(updatePasswords.password)
+                .updatePassword({
+                  password: updatePasswords.password,
+                })
                 .then((res) => {
                   ElMessage.success(res);
                   data.drawer2 = false;
@@ -545,7 +547,9 @@ function updatePassword() {
             } else if (identity.value == 3) {
               //老师修改密码
               teacherFun.user
-                .updatePassword(updatePasswords.password)
+                .updatePassword({
+                  password: updatePasswords.password,
+                })
                 .then((res) => {
                   ElMessage.success(res);
                   data.drawer2 = false;
@@ -553,7 +557,9 @@ function updatePassword() {
             } else if (identity.value == 4) {
               // 管理员修改密码
               managerFun.user
-                .uploadPassword(updatePasswords.password)
+                .uploadPassword({
+                  password: updatePasswords.password,
+                })
                 .then((res) => {
                   ElMessage.success(res);
                   data.drawer2 = false;
