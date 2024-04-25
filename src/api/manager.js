@@ -24,8 +24,8 @@ managerFun.user.getNews = () => {
  * @param {*} password
  * @returns
  */
-managerFun.user.uploadPassword = (password) => {
-  return http.put("/user/password", password);
+managerFun.user.uploadPassword = (params) => {
+  return http.put("/user/password", params);
 };
 /**
  * 查询用户数据
