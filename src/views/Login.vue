@@ -53,8 +53,8 @@ const router = useRouter();
 const data = reactive({
   userData: {
     type: 1,
-    userNumber: "",
-    password: "",
+    userNumber: null,
+    password: null,
   },
   rules: {
     userNumber: [

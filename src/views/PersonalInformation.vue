@@ -439,8 +439,8 @@ const updataData = reactive({
 });
 //修改密码数据
 const updatePasswords = reactive({
-  password: "",
-  password2: "",
+  password: null,
+  password2: null,
 });
 const ruleFormRef = ref(null);
 const ruleFormRef2 = ref(null);
@@ -531,7 +531,6 @@ function updatePassword() {
       if (updatePasswords.password !== updatePasswords.password2) {
         ElMessage.error("两次密码输入不一致");
       } else {
-        console.log(identity.value);
         ElMessageBox.confirm("确定进行密码修改吗")
           .then(() => {
             if (identity.value == 0 || identity.value == 2) {
