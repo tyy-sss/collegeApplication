@@ -1,6 +1,6 @@
 // 文件导入
 import XLSX from "xlsx";
-import managerFun from "@/api/manager";
+import { IDENTITY_TEST } from "@/constants/regular-expression";
 
 // 按照二进制读取文件
 export const readFile = (file) => {
@@ -49,6 +49,10 @@ export const handleStudentInformation = (data, subjectList) => {
     // 学生的姓名，学号，班级,目标学校不能为空
     if (!item.username || !item.userNumber || !item.className || !item.school)
       return;
+    // 判断最身份证是否输入正确
+    if (!IDENTITY_TEST.test(item.idCard)) {
+      return;
+    }
     // 把班级变成字符串
     item.className = item.className.toString();
     // 对选考科目进行处理
@@ -122,6 +126,5 @@ export const handleTeacherInformation = (data) => {
     }
     handleData.push(item);
   });
-  console.log(handleData, "处理后的老师导入信息");
   return handleData;
 };

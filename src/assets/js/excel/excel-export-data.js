@@ -9,6 +9,7 @@ const studentHeader = {
   sex: "性别",
   className: "班级",
   school: "目标学校",
+  idCard: "身份证号码",
   province: "来源省份",
   subjects: "选考科目",
   plan: "计划性质",
@@ -22,11 +23,12 @@ const studentModelData = [
     sex: "男",
     className: "2022级预科1班",
     school: "吉首大学",
+    idCard: "请输入正确的身份证号",
     province: "湖南省张家界市",
     subjects:
       "物理+化学+地理（中间连接符可以使用 “ '*' '+' '，' '.' '&' ，'/'” ）",
     plan: "国家计划",
-    object: "",
+    object: "文理科类",
   },
 ];
 

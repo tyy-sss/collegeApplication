@@ -22,12 +22,16 @@ export let studentCharacter = {
     text: "目标学校",
     type: "string",
   },
+  idCard: {
+    text: "身份证号码",
+    type: "string",
+  },
   province: {
     text: "来源省份",
     type: "string",
   },
   subjects: {
-    text: "选考科目",
+    text: "选考科目", 
     type: "string",
   },
   plan: {

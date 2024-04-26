@@ -49,6 +49,13 @@
               </el-col>
             </el-row>
 
+            <el-row v-if="!form.isTeacher">
+              <el-col :span="24">
+                <el-form-item label="身份证号:" prop="idCard">
+                  <el-input v-model="form.ruleForm.idCard" /> </el-form-item
+              ></el-col>
+            </el-row>
+
             <el-row :gutter="15" v-if="!form.isTeacher">
               <el-col :span="8">
                 <el-form-item label="来源省份:" prop="province">
@@ -141,7 +148,11 @@ import {
   nationList,
   politicsStatusList,
 } from "@/assets/js/data/information-dropdown-data";
-import { NAME_TEST, ACCOUNT_TEST } from "@/constants/regular-expression";
+import {
+  NAME_TEST,
+  ACCOUNT_TEST,
+  IDENTITY_TEST,
+} from "@/constants/regular-expression";
 import { ElMessage } from "element-plus";
 
 // 验证信息
@@ -176,6 +187,10 @@ const form = reactive({
       { pattern: NAME_TEST, message: "请输入正确的姓名", trigger: "blur" },
     ],
     sex: [{ required: true, message: "请输入性别", trigger: "blur" }],
+    idCard: [
+      { required: true, message: "请输入姓名", trigger: "blur" },
+      { pattern: IDENTITY_TEST, message: "请输入正确的姓名", trigger: "blur" },
+    ],
     province: [{ required: true, message: "请输入", trigger: "blur" }],
     school: [{ required: true, message: "请输入", trigger: "blur" }],
     className: [{ required: true, message: "请输入", trigger: "blur" }],

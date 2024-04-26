@@ -123,7 +123,7 @@ const handleAddUser = async (ev) => {
           adduerList(addData);
         })
         .catch(() => {
-          ElMessage.error("添加失败，请输入正确的高考科目");
+          ElMessage.error("添加失败，请检查输入格式");
         })
         .finally(() => {});
     } else if (length <= Object.keys(teacherCharacter).length) {
@@ -159,7 +159,6 @@ const handleExportTeach = () => {
 };
 // 添加用户接口
 const adduerList = (val) => {
-  console.log(val);
   // 把学生数据传给后端
   managerFun.user
     .addStudentsByExcel(val)
