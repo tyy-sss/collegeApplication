@@ -26,6 +26,7 @@
                   placeholder="密码"
                   v-model="data.userData.password"
                   autocomplete="off"
+                  @keyup.enter="login"
                 />
               </el-form-item>
               <el-form-item>
