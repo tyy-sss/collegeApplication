@@ -1,6 +1,5 @@
 .search {
   display: flex;
-  justify-content: space-between;
 }
 .search .left,
 .search .right {

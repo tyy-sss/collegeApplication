@@ -116,6 +116,8 @@ import managerFun from "@/api/manager";
 import historyFun from "@/api/history";
 import { throttle } from "@/assets/js/utils/throttle";
 import { ElMessage } from "element-plus";
+import { DELAY_TIME } from '@/constants/date';
+import { debounce } from "@/assets/js/utils/throttle";
 const data = reactive({
   searchData: {
     year: "",
@@ -131,7 +133,7 @@ const data = reactive({
   },
 });
 // 搜索年份获得当年的班级信息
-const onSearchYear = (val) => {
+const onSearchYear = debounce((val) => {
   data.searchData.year = getYearNews(val);
   data.searchData.class = "";
   data.searchData.student = "";
@@ -145,22 +147,22 @@ const onSearchYear = (val) => {
       });
     });
   });
-};
+},DELAY_TIME);
 // 搜索学生信息
-const onSearchStudent = () => {
+const onSearchStudent = debounce(() => {
   if (data.searchData.class == "") {
     ElMessage.error("请选择时间和班级");
   } else {
     data.pager.current = 1;
     getStudentNews();
   }
-};
+},DELAY_TIME);
 // 搜索
-const onSearch = () => {
+const onSearch = debounce(() => {
   data.pager.current = 1;
   data.searchData.student = "";
   getStudentNews();
-};
+},DELAY_TIME);
 // 手动修改页码数
 const handleChangePage = (val) => {
   data.pager.current = val;
@@ -222,5 +224,9 @@ const getStudentNews = throttle(() => {
 .pager {
   display: flex;
   justify-content: flex-end;
+}
+.search {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

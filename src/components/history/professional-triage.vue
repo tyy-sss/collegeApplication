@@ -94,6 +94,8 @@ import { getYearNews } from "@/constants/date";
 import managerFun from "@/api/manager";
 import { ElMessage } from "element-plus";
 import volunteerFun from "@/api/volunteer";
+import { DELAY_TIME } from '@/constants/date';
+import { debounce } from "@/assets/js/utils/throttle";
 const data = reactive({
   searchData: {
     year: "",
@@ -109,7 +111,7 @@ const data = reactive({
   },
 });
 // 搜索
-const onSearch = () => {
+const onSearch = debounce(() => {
   data.pager.current = 1;
   if (data.searchData.school != "" && data.searchData.year != "") {
     getVolunteerNews();
@@ -118,7 +120,7 @@ const onSearch = () => {
   } else if (data.searchData.year == "") {
     ElMessage.error("请选择年份");
   }
-};
+},DELAY_TIME);
 // 手动修改页码数
 const handleChangePage = (val) => {
   data.pager.current = val;
@@ -213,5 +215,9 @@ onMounted(() => {
 .pager {
   display: flex;
   justify-content: flex-end;
+}
+.search {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

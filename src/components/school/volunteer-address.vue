@@ -14,16 +14,12 @@
                   <el-input
                     v-model="data.searchData.searchName"
                     placeholder="请输入"
+                    @change="getAddressList"
                   />
                 </div>
               </div>
             </div>
             <div class="right">
-              <div class="search-button">
-                <el-button type="primary" @click="getAddressList"
-                  >查询</el-button
-                >
-              </div>
               <div class="search-icon">
                 <el-icon :size="23" color="#409EFC" @click="onReSearch"
                   ><Refresh
@@ -53,18 +49,18 @@
             <el-table-column type="selection" width="35" />
             <el-table-column prop="areaId" label="组合编号" />
             <el-table-column prop="name" label="组合名称" />
-            <el-table-column prop="subjectNumber" label="高考科目数量"/>
-            <el-table-column prop="subjectScope" label="所含科目" min-width="160"/>
+            <el-table-column prop="subjectNumber" label="高考科目数量" />
+            <el-table-column
+              prop="subjectScope"
+              label="所含科目"
+              min-width="160"
+            />
             <el-table-column
               prop="includingProvinces"
               label="涵盖省份"
               min-width="180"
             />
-            <el-table-column
-              prop="updateTime"
-              label="修改时间"
-              min-width="110"
-            >
+            <el-table-column prop="updateTime" label="修改时间" min-width="110">
               <template #default="scope">{{
                 getAllTimeNews(scope.row.updateTime)
               }}</template></el-table-column
@@ -92,7 +88,8 @@ import addVolunteerAddress from "@/components/volunteer/address/add-volunteer-ad
 // 接口
 import managerFun from "@/api/manager";
 import { ElMessage, ElMessageBox } from "element-plus";
-import { getAllTimeNews } from "@/constants/date";
+import { DELAY_TIME, getAllTimeNews } from "@/constants/date";
+import { debounce } from "@/assets/js/utils/throttle";
 const data = reactive({
   // 搜索数据
   searchData: {
@@ -101,10 +98,10 @@ const data = reactive({
   tableData: [],
 });
 // 重置搜索
-const onReSearch = () => {
+const onReSearch = debounce(() => {
   data.searchData.searchName = "";
   getAddressList();
-};
+},DELAY_TIME);
 // 新增地址
 const addVolunteerAddressRef = ref(null);
 const handleAddAddress = () => {
@@ -124,25 +121,25 @@ const handleChangeAddress = (val) => {
   addVolunteerAddressRef.value.form.ruleForm = Object.assign({}, val);
 };
 // 获得地址列表
-const getAddressList = () => {
+const getAddressList = debounce(() => {
   managerFun.area.selectArea(data.searchData.searchName).then((res) => {
     data.tableData = [];
     if (res) {
       data.tableData = res;
       data.tableData.forEach((item) => {
         item.includingProvinces = JSON.parse(item.includingProvinces);
-        item.subjectScope = JSON.parse(item.subjectScope)
+        item.subjectScope = JSON.parse(item.subjectScope);
       });
     }
   });
-};
+}, DELAY_TIME);
 onMounted(() => {
   getAddressList();
 });
 </script>
-<style src="@/assets/css/show-container.css" scoped/>
-<style src="@/assets/css/search-top-left-right.css" scoped/>
-<style src="@/assets/css/pager.css" scoped/>
+<style src="@/assets/css/show-container.css" scoped />
+<style src="@/assets/css/search-top-left-right.css" scoped />
+<style src="@/assets/css/pager.css" scoped />
 <style scoped>
 .volunteer-address > div:not(:last-child) {
   padding-bottom: 1rem;

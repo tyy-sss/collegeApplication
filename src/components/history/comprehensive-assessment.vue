@@ -112,6 +112,8 @@ import { getAllTimeNews } from "@/constants/date";
 import managerFun from "@/api/manager";
 import historyFun from "@/api/history";
 import { ElMessage } from "element-plus";
+import { DELAY_TIME } from '@/constants/date';
+import { debounce } from "@/assets/js/utils/throttle";
 const data = reactive({
   searchData: {
     date: "",
@@ -129,7 +131,7 @@ const data = reactive({
   },
 });
 // 搜索年份获得当年的班级信息
-const onSearchYear = (val) => {
+const onSearchYear = debounce((val) => {
   data.searchData.date = getAllTimeNews(val);
   data.searchData.year = data.searchData.date.slice(0, 4);
   data.searchData.month = data.searchData.date.slice(5, 7);
@@ -137,9 +139,9 @@ const onSearchYear = (val) => {
   data.searchData.student = "";
   data.assessment = [];
   getClassList();
-};
+},DELAY_TIME);
 // 搜索学生
-const onSearchStudent = (val) => {
+const onSearchStudent = debounce((val) => {
   if (data.searchData.date == "") {
     ElMessage.error("请选择时间和班级");
   } else {
@@ -147,13 +149,13 @@ const onSearchStudent = (val) => {
     data.pager.current = 1;
     getComprehensiveNews();
   }
-};
+},DELAY_TIME);
 // 搜索
-const onSearch = () => {
+const onSearch = debounce(() => {
   data.searchData.student = "";
   data.pager.current = 1;
   getComprehensiveNews();
-};
+},DELAY_TIME);
 // 手动修改页码数
 const handleChangePage = (val) => {
   data.pager.current = val;
@@ -240,5 +242,9 @@ const getComprehensiveNewsByClass = () => {
 .pager {
   display: flex;
   justify-content: flex-end;
+}
+.search {
+  display: flex;
+  justify-content: space-between;
 }
 </style>

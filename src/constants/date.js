@@ -1,5 +1,6 @@
 import { formatDate } from "@/assets/js/utils/format-date";
 
+export const DELAY_TIME = 1000;
 // 当前年的信息
 export const NOW_YEAR = formatDate(new Date()).slice(0, 4);
 // 指定年的信息
@@ -9,4 +10,4 @@ export const getYearNews = (date) => {
 // 获得所有的时间消息
 export const getAllTimeNews = (date) => {
   return formatDate(date);
-}
+};

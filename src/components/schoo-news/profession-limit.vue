@@ -45,16 +45,12 @@
                 <el-input
                   v-model="data.searchData.searchName"
                   placeholder="请输入具体信息"
+                  @change="handleSearchProfession"
                 />
               </div>
             </div>
           </div>
           <div class="right">
-            <div class="search-button">
-              <el-button type="primary" @click="handleSearchProfession"
-                >查询</el-button
-              >
-            </div>
             <div class="search-button">
               <el-button type="primary" @click="resetProfessionList"
                 >重置</el-button
@@ -106,7 +102,11 @@
               />
             </template>
           </el-table-column>
-          <el-table-column prop="enrollmentNumber" label="限制人数">
+          <el-table-column
+            prop="enrollmentNumber"
+            label="限制人数"
+            min-width="100px"
+          >
             <template #default="scope">
               <el-input-number
                 v-model="scope.row.enrollmentNumber"
@@ -172,6 +172,7 @@ import {
   handleTableData,
   handleTableDataForSingle,
 } from "@/assets/js/profession/profeesion-receive-data";
+import { DELAY_TIME } from "@/constants/date";
 import { debounce } from "@/assets/js/utils/throttle";
 import { ElMessage, ElMessageBox } from "element-plus";
 const data = reactive({
@@ -201,13 +202,13 @@ const handleAddProfessionInformation = () => {
   professionInformationRef.value.data.dialogTableVisible = true;
 };
 // 搜索
-const handleSearchProfession = () => {
+const handleSearchProfession = debounce(() => {
   if (!data.searchData.isSearch || data.searchData.searchName == "") {
     ElMessage.error("请输入正确数据");
   } else {
     getShcoolMajor();
   }
-};
+}, DELAY_TIME);
 // 导出信息
 const handleExportProfession = () => {
   handleProfessionExportData(data.tableHeader, data.tableData);
@@ -308,13 +309,13 @@ const getShcoolMajor = () => {
     .catch(() => {});
 };
 // 上传成功之后获得专业信息
-const resetProfessionList = () => {
+const resetProfessionList = debounce(() => {
   data.page.currentPage = 1;
   data.page.nowPageSize = 10;
   data.searchData.searchType = "";
   data.searchData.searchName = "";
   getShcoolMajor();
-};
+}, DELAY_TIME);
 watch(
   () => data.searchData.searchType,
   (newVal, oldVal) => {

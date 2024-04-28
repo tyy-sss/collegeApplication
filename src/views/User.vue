@@ -14,6 +14,7 @@
                   <el-input
                     v-model="data.searchData.searchName"
                     placeholder="请输入用户账号或者姓名"
+                    @change="searchUser"
                   />
                 </div>
               </div>
@@ -23,6 +24,7 @@
                   <el-select
                     placeholder="选择一个角色"
                     v-model="data.searchData.searchRole"
+                    @change="searchUser"
                   >
                     <el-option
                       v-for="(item, index) in data.roleList"
@@ -35,9 +37,6 @@
               </div>
             </div>
             <div class="right">
-              <div class="search-button">
-                <el-button type="primary" @click="searchUser">查询</el-button>
-              </div>
               <div class="search-icon">
                 <el-icon :size="23" color="#409EFC" @click="onReSearch"
                   ><Refresh
@@ -184,6 +183,8 @@ import addUserSingle from "@/components/user/add-user-single.vue";
 import { onMounted, reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { DELAY_TIME } from '@/constants/date';
+import { debounce } from "@/assets/js/utils/throttle";
 const addUserRef = ref(null);
 const addUserSingleRef = ref(null);
 const data = reactive({
@@ -212,16 +213,16 @@ const data = reactive({
   roleList: [],
 });
 // 重置搜索
-const onReSearch = () => {
+const onReSearch = debounce(() => {
   data.searchData.searchName = "";
   data.searchData.searchRole = "";
   searchUser();
-};
+},DELAY_TIME);
 // 搜索用户
-const searchUser = () => {
+const searchUser = debounce(() => {
   data.page.currentPage = 1;
   getUserList();
-};
+},DELAY_TIME);
 // 添加用户
 const handleAddUser = () => {
   addUserRef.value.data.dialogTableVisible = true;
@@ -243,7 +244,6 @@ const handleDeleteUser = (val) => {
 };
 // 查看学生的个人信息
 const handleCheckUser = (val) => {
-  console.log(val);
   // 跳转界面
   const href = router.resolve({
     path: "/school-manager/student-news",

@@ -22,11 +22,8 @@
                   v-model="form.searchData"
                   placeholder="请输入"
                   min-width="100"
-                >
-                  <template #suffix>
-                    <el-icon @click="onSearch"><Search /></el-icon>
-                  </template>
-                </el-input>
+                  @change="onSearch"
+                />
               </div>
             </div>
             <div class="right">
@@ -90,11 +87,13 @@
     </el-dialog>
   </div>
 </template>
-  <script setup>
+<script setup>
 import { ElMessage, ElMessageBox } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
+import { DELAY_TIME } from '@/constants/date';
+import { debounce } from "@/assets/js/utils/throttle";
 const router = useRouter();
 
 // 接口添加 学校姓名查重，添加学校，修改学校，删除学校，搜索学校
@@ -221,14 +220,14 @@ const checkSchoolNews = (val) => {
   window.open(href.href, "_blank");
 };
 // 搜索学校
-const onSearch = () => {
+const onSearch = debounce(() => {
   getSchoolList();
-};
+},DELAY_TIME);
 // 重置搜索
-const onReSearch = () => {
+const onReSearch = debounce(() => {
   form.searchData = "";
   getSchoolList();
-};
+},DELAY_TIME);
 // 获得学校信息
 const getSchoolList = () => {
   managerFun.school.searchSchool(form.searchData).then((res) => {
@@ -239,9 +238,9 @@ onMounted(() => {
   getSchoolList();
 });
 </script>
-  <style src="@/assets/css/show-container.css" scoped/>
-  <style src="@/assets/css/search-top-left-right.css" scoped/>
-  <style scoped>
+<style src="@/assets/css/show-container.css" scoped />
+<style src="@/assets/css/search-top-left-right.css" scoped />
+<style scoped>
 .school > div:not(:last-child) {
   margin-bottom: 2rem;
 }
@@ -307,5 +306,3 @@ onMounted(() => {
   box-shadow: 10px 5px 5px RGBA(74, 84, 85, 0.2);
 }
 </style>
-    
-      

@@ -141,6 +141,8 @@ import managerFun from "@/api/manager";
 import addGrades from "@/components/grades/add-grades.vue";
 import addGradesSingle from "@/components/grades/change-grades-single.vue";
 import { ElMessage, ElMessageBox } from "element-plus";
+import { DELAY_TIME } from '@/constants/date';
+import { debounce } from "@/assets/js/utils/throttle";
 
 const addGradesRef = ref(null);
 const addGradesSingleRef = ref(null);
@@ -168,7 +170,7 @@ const handleAddGrades = () => {
   addGradesRef.value.data.dialogTableVisible = true;
 };
 // 导出学生成绩单
-const handleExportGrades = () => {
+const handleExportGrades = debounce(() => {
   let year =
     data.searchData.date != ""
       ? formatDate(data.searchData.date).slice(0, 4)
@@ -182,7 +184,7 @@ const handleExportGrades = () => {
     const gradesHeader = getGradesHeader(data.tableHeader);
     excelExport(res, gradesHeader, year + "年成绩单");
   });
-};
+},DELAY_TIME);
 // 按年份搜索成绩单
 const onSearch = debounceRight(() => {
   data.page.currentPage = 1;
@@ -192,14 +194,14 @@ const onSearch = debounceRight(() => {
   getGradesList();
 }, 50);
 // 重置搜索
-const onReSearch = () => {
+const onReSearch = debounce(() => {
   data.page.currentPage = 1;
   data.searchData = {
     date: "",
     descript: "",
   };
   getGradesList();
-};
+},DELAY_TIME);
 // 修改成绩信息
 const handleChangeGrades = (val) => {
   addGradesSingleRef.value.data.ruleForm = val;

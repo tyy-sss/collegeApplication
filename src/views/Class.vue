@@ -129,6 +129,8 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { formatDate } from "@/assets/js/utils/format-date";
+import { DELAY_TIME } from "@/constants/date";
+import { debounce } from "@/assets/js/utils/throttle";
 // 接口添加 获得班主任列表，按年搜索班级，班级姓名查重，添加班级，删除班级，搜索学校
 import managerFun from "@/api/manager";
 //   数据
@@ -193,15 +195,15 @@ const handleClose = () => {
   });
 };
 // 搜索班级
-const onSearch = () => {
+const onSearch = debounce(() => {
   data.searchData = formatDate(data.searchData).slice(0, 4);
   getClassList();
-};
+}, DELAY_TIME);
 // 重置搜索
-const onReSearch = () => {
+const onReSearch = debounce(() => {
   data.searchData = "";
   getClassList();
-};
+}, DELAY_TIME);
 // 修改班级信息
 const handleChangeClass = (val) => {
   new Promise((resolve, reject) => {
