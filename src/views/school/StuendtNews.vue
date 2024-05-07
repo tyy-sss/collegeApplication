@@ -24,7 +24,7 @@
         </div>
       </div>
       <!-- 信息区 -->
-      <div class="right">
+      <div class="right" v-if="userId">
         <el-form
           ref="ruleFormRef"
           label-position="right"
@@ -147,9 +147,99 @@
           </div>
         </el-form>
       </div>
-
+      <div class="right" v-if="userNumber">
+        <div class="box">
+          <div class="littleTitle">基本信息</div>
+          <div class="grid-item">
+            <div>
+              <span class="tag">学生姓名 :</span
+              ><span>{{ data.student.username || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">学生学号 :</span
+              ><span>{{ data.student.userNumber || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">身份证号 :</span
+              ><span>{{ data.student.idCard || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">联系电话 :</span
+              ><span>{{ data.student.phone || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">父母电话 :</span
+              ><span>{{ data.student.parentPhone || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">学生性别 :</span
+              ><span>{{ data.student.sex || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">学生班级 :</span
+              ><span>{{ data.student.className || "-" }}</span>
+            </div>
+          </div>
+          <div class="address">
+            <span class="tag">家庭地址 :</span
+            ><span>{{ data.student.address || "-" }}</span>
+          </div>
+        </div>
+        <hr />
+        <br />
+        <div class="box">
+          <div class="littleTitle">其他信息</div>
+          <div class="grid-item">
+            <div>
+              <span class="tag">政治面貌 :</span
+              ><span>{{ data.student.politicsStatus || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">目标学校 :</span
+              ><span>{{ data.student.school || "-" }}</span>
+            </div> 
+            <div>
+              <span class="tag">民族 :</span
+              ><span>{{ data.student.nation || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">来源省份 :</span
+              ><span>{{ data.student.province || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">性质计划 :</span
+              ><span>{{ data.student.plan || "-" }}</span>
+            </div>
+            <div>
+              <span class="tag">选考科目 :</span>
+              <span v-for="(item, index) in data.student.subjects" :key="index"
+                >{{ item }}&nbsp;</span
+              >
+            </div>
+          </div>
+        </div>
+        <hr />
+        <br />
+        <div class="box">
+          <div class="littleTitle">收件信息</div>
+          <div class="flex_box pickup_box">
+            <div class="infoRow">
+              <span class="tag">收件人 :</span>
+              <span>{{ data.student.consignee.username || "-" }}</span>
+            </div>
+            <div class="infoRow">
+              <span class="tag">收件电话 :</span>
+              <span>{{ data.student.consignee.phone || "-" }}</span>
+            </div>
+            <div class="infoRow">
+              <span class="tag">详细地址 :</span>
+              <span>{{ data.student.consignee.address || "-" }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
       <!-- 按钮区 -->
-      <div class="btnBox">
+      <div class="btnBox" v-if="userId">
         <el-button type="primary" class="changeInfo" @click="confirmClick"
           >修改资料</el-button
         >
@@ -173,9 +263,11 @@ import {
 import { NOW_YEAR } from "@/constants/date";
 import managerFun from "@/api/manager";
 import { useRoute } from "vue-router";
+import teacherFun from "@/api/teacher";
 // 获得路由显示的学校id
 const route = new useRoute();
 const userId = Number(ref(route.query.userId).value);
+const userNumber = Number(ref(route.query.userNumber).value);
 
 // 验证信息
 const validateElectiveSubject = (rule, value, callback) => {
@@ -249,11 +341,24 @@ const ruleFormRef = ref(null);
 //渲染初始数据
 const init = function () {
   data.loading2 = true;
-  // 管理员通过id获取学生的个人信息
-  managerFun.user.getStudentNews(userId).then((res) => {
-    data.student = res;
-    data.loading2 = false;
-  });
+  if (userId) {
+    // 管理员通过id获取学生的个人信息
+    managerFun.user.getStudentNews(userId).then((res) => {
+      data.student = res;
+      data.loading2 = false;
+    });
+  }
+  if (userNumber) {
+    console.log(userNumber);
+    teacherFun.class
+      .getStudentInformation({
+        number: userNumber,
+      })
+      .then((res) => {
+        data.student = res;
+        data.loading2 = false;
+      });
+  }
 };
 // 自动补全输入框
 const queryEthniGroupString = (nation, cb) => {
@@ -335,7 +440,6 @@ const getList = () => {
   init();
 };
 onMounted(() => {
-  console.log(1);
   getList();
 });
 </script>

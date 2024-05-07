@@ -48,7 +48,11 @@
     </div>
     <div class="middle">
       <div class="table">
-        <el-table :data="data.assessment" style="width: 100%">
+        <el-table
+          :data="data.assessment"
+          style="width: 100%"
+          @row-click="handleCheckStudent"
+        >
           <el-table-column prop="userNumber" label="学号" min-width="120" />
           <el-table-column prop="username" fixed label="姓名" min-width="100" />
           <el-table-column prop="sex" label="性别" />
@@ -116,8 +120,10 @@ import managerFun from "@/api/manager";
 import historyFun from "@/api/history";
 import { throttle } from "@/assets/js/utils/throttle";
 import { ElMessage } from "element-plus";
-import { DELAY_TIME } from '@/constants/date';
+import { DELAY_TIME } from "@/constants/date";
 import { debounce } from "@/assets/js/utils/throttle";
+import { useRouter } from "vue-router";
+const router = useRouter();
 const data = reactive({
   searchData: {
     year: "",
@@ -147,7 +153,7 @@ const onSearchYear = debounce((val) => {
       });
     });
   });
-},DELAY_TIME);
+}, DELAY_TIME);
 // 搜索学生信息
 const onSearchStudent = debounce(() => {
   if (data.searchData.class == "") {
@@ -156,13 +162,13 @@ const onSearchStudent = debounce(() => {
     data.pager.current = 1;
     getStudentNews();
   }
-},DELAY_TIME);
+}, DELAY_TIME);
 // 搜索
 const onSearch = debounce(() => {
   data.pager.current = 1;
   data.searchData.student = "";
   getStudentNews();
-},DELAY_TIME);
+}, DELAY_TIME);
 // 手动修改页码数
 const handleChangePage = (val) => {
   data.pager.current = val;
@@ -193,6 +199,18 @@ const handleExcelExport = () => {
       );
     });
   }
+};
+// 点击查看学生个人信息
+const handleCheckStudent = (row) => {
+  row = JSON.parse(JSON.stringify(row));
+  // 跳转界面
+  const href = router.resolve({
+    path: "/school-manager/student-news",
+    query: {
+      userNumber: row.userNumber,
+    },
+  });
+  window.open(href.href, "_blank");
 };
 // 获取学生信息
 const getStudentNews = throttle(() => {
