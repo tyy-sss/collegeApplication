@@ -12,6 +12,11 @@
               >导出未填报学生名单</el-button
             >
           </div>
+          <div v-if="data.preVolunteerTime.afterOpen">
+            <el-button type="primary" @click="handleExportStudentList"
+              >导出学生填报信息名单</el-button
+            >
+          </div>
         </div>
       </div>
       <div class="time">
@@ -120,38 +125,39 @@ const handleExportUnAcceptedList = (timeId) => {
       }
     })
     .catch(() => {});
-  // 如果是预志愿填报，导出志愿填报信息
-  if (data.preVolunteerTime.id === timeId) {
-    // 预志愿规则匹配志愿
-    volunteerFun.manager
-      .volunteerDiversion({
-        schoolId: schoolId,
-        type: 1,
-        timeId: timeId,
-        type1: 1,
-      })
-      .then((res) => {
-        let headerTitle = schoolName + "-" + "预志愿填报表";
-        console.log(headerTitle);
-        let endData = [];
-        volunteerFun.manager
-          .exportVolunteerDiversion(schoolId, timeId, 1, 1)
-          .then((res) => {
-            endData = res;
-            volunteerFun.manager
-              .exportVolunteerDiversion(schoolId, timeId, 1, 0)
-              .then((res) => {
-                res.forEach((element) => {
-                  endData.push(element);
-                });
-                // 导出最后分流结果
-                export_json_to_excel(professionHeader, endData, headerTitle);
-              })
-              .catch(() => {});
-          });
-      })
-      .catch((res) => {});
-  }
+};
+// 导出预志愿填报信息名单
+const handleExportStudentList = () => {
+  const timeId = data.preVolunteerTime.id;
+  // 预志愿规则匹配志愿
+  volunteerFun.manager
+    .volunteerDiversion({
+      schoolId: schoolId,
+      type: 1,
+      timeId: timeId,
+      type1: 1,
+    })
+    .then((res) => {
+      let headerTitle = schoolName + "-" + "预志愿填报表";
+      let endData = [];
+      volunteerFun.manager
+        .exportVolunteerDiversion(schoolId, timeId, 1, 1)
+        .then((res) => {
+          console.log(res);
+          endData = res;
+          volunteerFun.manager
+            .exportVolunteerDiversion(schoolId, timeId, 1, 0)
+            .then((res) => {
+              res.forEach((element) => {
+                endData.push(element);
+              });
+              // 导出最后分流结果
+              export_json_to_excel(professionHeader, endData, headerTitle);
+            })
+            .catch(() => {});
+        });
+    })
+    .catch((res) => {});
 };
 // 有值的修改时间显示
 const changeTimeObject = (element) => {
@@ -162,6 +168,9 @@ const changeTimeObject = (element) => {
     new Date(element.endTime) >= new Date()
   ) {
     changeObj.isOpen = true;
+  } else if (new Date(element.endTime) < new Date()) {
+    changeObj.afterOpen = true;
+    changeObj.isOpen = false;
   } else {
     changeObj.isOpen = false;
   }
