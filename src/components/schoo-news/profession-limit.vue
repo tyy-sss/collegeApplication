@@ -78,9 +78,36 @@
         </div>
       </div>
       <div class="middle">
-        <el-table :data="data.tableData" border stripe style="width: 100%">
-          <el-table-column prop="college" label="教学学院" />
-          <el-table-column prop="name" label="专业名称" />
+        <el-table :data="data.tableData" border stripe @selection-change="handleSelectionChange" style="width: 100%">
+          <el-table-column type="selection" width="35" />
+          <el-table-column prop="college" label="教学学院" min-width="150px">
+            <template #default="scope">
+              <span
+                v-if="!scope.row.isCollege"
+                @click="handleCheckInput(true, scope.row)"
+                >{{ scope.row.college }}</span
+              >
+              <el-input
+                v-else
+                v-model="scope.row.college"
+                @change="handleChangeProfessionName(scope.row)"
+              ></el-input>
+            </template>
+          </el-table-column>
+          <el-table-column prop="name" label="专业名称" min-width="150px">
+            <template #default="scope">
+              <span
+                v-if="!scope.row.isName"
+                @click="handleCheckInput(false, scope.row)"
+                >{{ scope.row.name }}</span
+              >
+              <el-input
+                v-else
+                v-model="scope.row.name"
+                @change="handleChangeProfessionName(scope.row)"
+              ></el-input>
+            </template>
+          </el-table-column>
           <el-table-column
             v-for="(item, index) in data.tableHeader"
             :key="index"
@@ -117,7 +144,7 @@
               />
             </template>
           </el-table-column>
-          <el-table-column label="操作">
+          <el-table-column label="操作" min-width="100px">
             <template #default="scope">
               <el-button
                 type="danger"
@@ -129,6 +156,12 @@
         </el-table>
       </div>
       <div class="bottom">
+        <div class="button">
+            <el-button type="success" @click="handleBatchDeleteProfession"
+              >批量删除专业信息</el-button
+            >
+          </div>
+          <el-divider />
         <div class="pager">
           <div class="page-news">共{{ data.page.total }}条信息</div>
           <el-pagination
@@ -230,15 +263,7 @@ const handleDeleteProfession = (val) => {
     type: "warning",
   })
     .then(() => {
-      managerFun.major
-        .deleteMajor(val.majorId)
-        .then((res) => {
-          ElMessage.success("操作成功");
-        })
-        .catch(() => {})
-        .finally(() => {
-          getShcoolMajor();
-        });
+     deleteMajor([val.majorId]);
     })
     .catch(() => {
       ElMessage({
@@ -246,6 +271,23 @@ const handleDeleteProfession = (val) => {
         message: "已取消删除",
       });
     });
+};
+// 编辑输入框
+const handleCheckInput = (isCollege, row) => {
+  switch (isCollege) {
+    case true:
+      row.isCollege = true;
+      break;
+    case false:
+      row.isName = true;
+      break;
+  }
+};
+// 修改专业的名称
+const handleChangeProfessionName = (val) => {
+  changeMajor(handleCascaderDataForEnrollmentNumber(val));
+  val.isCollege = false;
+  val.isName = false;
 };
 // 修改专业的录取人数
 const handleChangeEnrollmentNumber = debounce((val) => {
@@ -269,6 +311,23 @@ const changeMajor = (val, rowVal) => {
     })
     .finally(() => {});
 };
+// 批量处理
+const multipleSelection = ref([]);
+const handleSelectionChange = (val) => {
+  multipleSelection.value = val;
+};
+// 批量删除
+const handleBatchDeleteProfession = () =>{
+  if (multipleSelection.value.length === 0) {
+    ElMessage.error("请至少选择一个专业");
+  } else {
+    let professionNumberList = [];
+    multipleSelection.value.forEach((item) => {
+      professionNumberList.push(item.majorId);
+    });
+    deleteMajor(professionNumberList)
+  }
+}
 // 获取要展示的地区组合信息
 const getAreaList = () => {
   managerFun.area.selectArea("").then((res) => {
@@ -288,6 +347,18 @@ const getAreaList = () => {
     }
   });
 };
+// 删除专业信息
+const deleteMajor = (list) =>{
+  managerFun.major
+        .deleteMajor(list)
+        .then((res) => {
+          ElMessage.success("操作成功");
+        })
+        .catch(() => {})
+        .finally(() => {
+          getShcoolMajor();
+        });
+}
 // 通过学校id获取专业信息
 const getShcoolMajor = () => {
   managerFun.major
