@@ -366,6 +366,14 @@ managerFun.wishTime.addWishTime = (timeData) => {
 managerFun.wishTime.modifyWiseTime = (timeData) => {
   return http.put("/wishTime/modifyWiseTime", timeData);
 };
+/**
+ * 删除志愿时间
+ * @param {志愿时间} timeId
+ * @returns
+ */
+managerFun.wishTime.deleteWiseTime = (timeId) => {
+  return http.delete("/wishTime/deleteMajor?id=" + timeId);
+};
 
 /** 成绩 */
 /**

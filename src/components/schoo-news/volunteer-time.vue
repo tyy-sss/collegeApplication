@@ -22,6 +22,7 @@
       <div class="time">
         <div class="text">设置时间：</div>
         <el-date-picker
+          class="date-picker"
           v-model="data.preVolunteerTime.time"
           type="datetimerange"
           start-placeholder="开始时间"
@@ -30,6 +31,14 @@
           value-format="YYYY-MM-DD HH:mm:ss"
           @change="handleSetPreVolunteerTime"
         />
+        <div class="right">
+          <el-button
+            v-show="data.preVolunteerTime.id"
+            type="success"
+            @click="handleDeleteWishTime(data.preVolunteerTime.id, true)"
+            >清除志愿数据</el-button
+          >
+        </div>
       </div>
     </div>
     <div class="time-item">
@@ -49,6 +58,7 @@
       <div class="time">
         <div class="text">设置时间：</div>
         <el-date-picker
+          class="date-picker"
           v-model="data.volunteerTime.time"
           type="datetimerange"
           start-placeholder="开始日期"
@@ -57,6 +67,14 @@
           value-format="YYYY-MM-DD HH:mm:ss"
           @change="handleSetVolunteerTime"
         />
+        <div class="right">
+          <el-button
+            v-show="data.volunteerTime.id"
+            type="success"
+            @click="handleDeleteWishTime(data.volunteerTime.id, false)"
+            >清除志愿数据</el-button
+          >
+        </div>
       </div>
     </div>
   </div>
@@ -125,6 +143,10 @@ const handleExportUnAcceptedList = (timeId) => {
       }
     })
     .catch(() => {});
+};
+// 清除志愿填报信息
+const handleDeleteWishTime = (timeId, isPreVolunteerTime) => {
+  deleteWiseTime(timeId, isPreVolunteerTime);
 };
 // 导出预志愿填报信息名单
 const handleExportStudentList = () => {
@@ -236,6 +258,23 @@ const changeWishTime = (val, startTime, endTime) => {
       getWishTime();
     });
 };
+// 删除志愿填报信息
+const deleteWiseTime = (timeId, isPreVolunteerTime) => {
+  managerFun.wishTime
+    .deleteWiseTime(timeId)
+    .then(() => {
+      ElMessage.success("操作成功");
+      if (isPreVolunteerTime) {
+        data.preVolunteerTime = {};
+      } else {
+        data.volunteerTime = {};
+      }
+    })
+    .catch(() => {})
+    .finally(() => {
+      getWishTime();
+    });
+};
 onMounted(() => {
   getWishTime();
 });
@@ -248,8 +287,12 @@ onMounted(() => {
 .time {
   display: flex;
   align-items: center;
-  width: 600px;
+  max-width: 650px;
+  .right {
+    margin-left: 20px;
+  }
 }
+
 .text {
   font-size: 17px;
   margin-bottom: 0.5rem;
