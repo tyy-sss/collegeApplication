@@ -36,6 +36,7 @@
               label="拟录专业"
               min-width="100"
             />
+            <el-table-column prop="result" label="录取说明" min-width="100" />
           </el-table-column>
           <el-table-column label="联系方式" fixed="right">
             <el-table-column prop="phone" label="电话号码" min-width="120" />
@@ -44,6 +45,7 @@
               label="父母电话"
               min-width="120"
             />
+            <el-table-column prop="address" label="收件地址" min-width="130" />
           </el-table-column>
         </el-table>
       </div>
@@ -118,6 +120,7 @@ const getWishTime = () => {
           getFinalProfessionList();
         }
       });
+    }).catch((res)=>{
     });
 };
 // 获取分页的最后分流结果

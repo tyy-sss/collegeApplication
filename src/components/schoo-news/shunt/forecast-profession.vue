@@ -82,6 +82,7 @@
               label="拟录专业"
               min-width="100"
             />
+            <el-table-column prop="result" label="录取说明" min-width="100" />
           </el-table-column>
           <el-table-column label="联系方式" fixed="right">
             <el-table-column prop="phone" label="电话号码" min-width="120" />
@@ -90,6 +91,7 @@
               label="父母电话"
               min-width="120"
             />
+            <el-table-column prop="address" label="收件地址" min-width="130" />
           </el-table-column>
         </el-table>
       </div>
@@ -222,12 +224,43 @@ const handleExportVolunteerDiversion = () => {
             ElMessage.error("没有分流结果");
           });
       });
-    volunteerFun.manager
-      .getRemainMajor(data.volunteerRule, data.timeId)
-      .then((res) => {
-        console.log(res, "未录取的专业结果");
-        excelExport(res, professionMajor, headerTitle + "-剩余专业信息");
+    // 未录取的专业结果,先得到地区组合消息
+    managerFun.area.selectArea("").then((res) => {
+      const addressData = [];
+      res.forEach((element) => {
+        addressData.push({
+          areaId: element.areaId,
+          name: element.name,
+        });
       });
+      // 未录取的专业结果,与地区消息做匹配
+      volunteerFun.manager
+        .getRemainMajor(data.volunteerRule, data.timeId)
+        .then((res) => {
+          const finalData = [];
+          res.forEach((element) => {
+            element.classification = JSON.parse(element.classification);
+            var request = "";
+            for (var i = 0; i < element.classification.length; i++) {
+              const addressItem = addressData.filter((item) => {
+                return (item.areaId = element.classification[i].areaId);
+              })[0].name;
+              request +=
+                addressItem +
+                "：" +
+                JSON.parse(element.classification[i].strings[3]).strings +
+                " ";
+            }
+            finalData.push({
+              college: element.college,
+              name: element.name,
+              request: request,
+              enrollmentNumber: element.enrollmentNumber,
+            });
+          });
+          excelExport(finalData, professionMajor, headerTitle + "-剩余专业信息");
+        });
+    });
   }
 };
 // 重新导出分流结果

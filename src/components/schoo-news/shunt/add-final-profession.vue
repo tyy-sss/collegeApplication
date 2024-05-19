@@ -78,7 +78,6 @@ const handleAddUser = async (ev) => {
     let data = await readFile(file);
     let excelData = getExcelData(data);
     excelData = excelLeadingInForFinalProfession(excelData);
-    console.log(excelData);
     addFinalProfession(excelData);
   }
 };

@@ -16,7 +16,9 @@ const professionHeader = reactive({
       "",
       "",
       "",
+      "",
       "联系方式",
+      "",
       "",
     ],
   ], // 第一行的表头数据
@@ -33,8 +35,10 @@ const professionHeader = reactive({
     "二志愿",
     "三志愿",
     "拟录专业",
+    "录取说明",
     "电话号码",
     "父母电话",
+    "收件地址",
   ], //第二行的表头数据
   filterVal: [
     "name",
@@ -49,8 +53,10 @@ const professionHeader = reactive({
     "secondName",
     "thirdName",
     "majorName",
+    "result",
     "phone",
     "parentName",
+    "address",
   ], // 从左到右每一个属性名
   merges: [
     "A1:A2",
@@ -61,8 +67,8 @@ const professionHeader = reactive({
     "F1:F2",
     "G1:G2",
     "H1:H2",
-    "I1:L1",
-    "M1:N1",
+    "I1:M1",
+    "N1:P1",
   ], //合并单元格规则
 });
 
@@ -70,6 +76,7 @@ const professionHeader = reactive({
 const professionMajor = reactive({
   college: "学院",
   name: "专业",
+  request:"报考要求",
   enrollmentNumber: "剩余可填报人数",
 });
 export { professionHeader, professionMajor };
