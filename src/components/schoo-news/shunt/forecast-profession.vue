@@ -243,7 +243,7 @@ const handleExportVolunteerDiversion = () => {
             var request = "";
             for (var i = 0; i < element.classification.length; i++) {
               const addressItem = addressData.filter((item) => {
-                return (item.areaId = element.classification[i].areaId);
+                return (item.areaId == element.classification[i].areaId);
               })[0].name;
               request +=
                 addressItem +
@@ -256,9 +256,17 @@ const handleExportVolunteerDiversion = () => {
               name: element.name,
               request: request,
               enrollmentNumber: element.enrollmentNumber,
+              first: element.first,
+              second: element.second,
+              third: element.third,
+              surplusNumber: element.surplusNumber,
             });
           });
-          excelExport(finalData, professionMajor, headerTitle + "-剩余专业信息");
+          excelExport(
+            finalData,
+            professionMajor,
+            headerTitle + "-剩余专业信息"
+          );
         });
     });
   }

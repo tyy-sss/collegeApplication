@@ -76,7 +76,11 @@ const professionHeader = reactive({
 const professionMajor = reactive({
   college: "学院",
   name: "专业",
-  request:"报考要求",
-  enrollmentNumber: "剩余可填报人数",
+  request: "报考要求",
+  enrollmentNumber: "总计划数",
+  first: "一志愿录取数",
+  second: "二志愿录取数",
+  third: "三志愿录取数",
+  surplusNumber: "剩余可填报人数",
 });
 export { professionHeader, professionMajor };
