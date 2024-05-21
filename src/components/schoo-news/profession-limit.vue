@@ -78,7 +78,13 @@
         </div>
       </div>
       <div class="middle">
-        <el-table :data="data.tableData" border stripe @selection-change="handleSelectionChange" style="width: 100%">
+        <el-table
+          :data="data.tableData"
+          border
+          stripe
+          @selection-change="handleSelectionChange"
+          style="width: 100%"
+        >
           <el-table-column type="selection" width="35" />
           <el-table-column prop="college" label="教学学院" min-width="150px">
             <template #default="scope">
@@ -157,11 +163,11 @@
       </div>
       <div class="bottom">
         <div class="button">
-            <el-button type="success" @click="handleBatchDeleteProfession"
-              >批量删除专业信息</el-button
-            >
-          </div>
-          <el-divider />
+          <el-button type="success" @click="handleBatchDeleteProfession"
+            >批量删除专业信息</el-button
+          >
+        </div>
+        <el-divider />
         <div class="pager">
           <div class="page-news">共{{ data.page.total }}条信息</div>
           <el-pagination
@@ -263,7 +269,7 @@ const handleDeleteProfession = (val) => {
     type: "warning",
   })
     .then(() => {
-     deleteMajor([val.majorId]);
+      deleteMajor([val.majorId]);
     })
     .catch(() => {
       ElMessage({
@@ -296,7 +302,24 @@ const handleChangeEnrollmentNumber = debounce((val) => {
 const cascaderRef = ref(null);
 // 修改限制专业地区的值
 const handleChangeChooseValue = (chooseVal, rowVal) => {
-  changeMajor(handleCascaderData(chooseVal, rowVal), rowVal);
+  let sign = 0;
+  // 取消对专业限制
+  for (let i = 0; i < rowVal.subjectRule.length; i++) {
+    if (rowVal.subjectRule[i].strings[0] == "deleteLimit") {
+      sign = 1;
+      rowVal.subjectRule[i].strings.length = 0;
+      break;
+    }
+  }
+  const endData = handleCascaderData(chooseVal, rowVal, sign);
+  if (endData.subjectRule.length == 0) {
+    endData.subjectRule.push({
+      areaId: 0,
+      requiredSubjects: [""],
+      optionalSubjects: { subjectNumber: 0, optionalSubjectScope: [""] },
+    });
+  }
+  changeMajor(endData, rowVal);
 };
 // 修改单个专业限制信息
 const changeMajor = (val, rowVal) => {
@@ -317,7 +340,7 @@ const handleSelectionChange = (val) => {
   multipleSelection.value = val;
 };
 // 批量删除
-const handleBatchDeleteProfession = () =>{
+const handleBatchDeleteProfession = () => {
   if (multipleSelection.value.length === 0) {
     ElMessage.error("请至少选择一个专业");
   } else {
@@ -325,9 +348,9 @@ const handleBatchDeleteProfession = () =>{
     multipleSelection.value.forEach((item) => {
       professionNumberList.push(item.majorId);
     });
-    deleteMajor(professionNumberList)
+    deleteMajor(professionNumberList);
   }
-}
+};
 // 获取要展示的地区组合信息
 const getAreaList = () => {
   managerFun.area.selectArea("").then((res) => {
@@ -348,17 +371,17 @@ const getAreaList = () => {
   });
 };
 // 删除专业信息
-const deleteMajor = (list) =>{
+const deleteMajor = (list) => {
   managerFun.major
-        .deleteMajor(list)
-        .then((res) => {
-          ElMessage.success("操作成功");
-        })
-        .catch(() => {})
-        .finally(() => {
-          getShcoolMajor();
-        });
-}
+    .deleteMajor(list)
+    .then((res) => {
+      ElMessage.success("操作成功");
+    })
+    .catch(() => {})
+    .finally(() => {
+      getShcoolMajor();
+    });
+};
 // 通过学校id获取专业信息
 const getShcoolMajor = () => {
   managerFun.major

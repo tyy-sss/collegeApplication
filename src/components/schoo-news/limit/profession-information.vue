@@ -124,7 +124,7 @@ const uploadFile = (val) => {
           strings: [""],
         },
       ],
-      enrollmentNumber: 0,
+      enrollmentNumber: Number(val[i].enrolImentNumber),
     };
   }
   managerFun.major

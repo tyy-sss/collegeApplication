@@ -3,6 +3,7 @@ const getCascaderData = (changeData) => {
   let [...data] = changeData;
   let labelString = [];
   let n = data.length - 1;
+  // 对strings数组进行处理
   for (let i = 0; i <= n; i++) {
     if (i == n) {
       labelString.push(JSON.stringify(data[i]));
@@ -20,9 +21,13 @@ const getCascaderData = (changeData) => {
 };
 
 // 把修改的数据上传给后端
-export const handleCascaderData = (changeData, allData) => {
-  // 获得最后上传的联级选择器的值 改成深拷贝
-  let cascaderData = getCascaderData(changeData);
+export const handleCascaderData = (changeData, allData, sign) => {
+  let cascaderData = {};
+  if (sign == 0) {
+    // 修改专业限制
+    // 获得最后上传的联级选择器的值 改成深拷贝
+    cascaderData = getCascaderData(changeData);
+  }
   let subjectRules = [];
   allData.subjectRule.forEach((element) => {
     if (element.strings.length != 0 && element.areaId != 0) {

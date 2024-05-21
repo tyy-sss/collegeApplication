@@ -82,4 +82,8 @@ export let professionInformationLimitCharacter = reactive({
     text: "专业名称",
     type: "string",
   },
+  enrolImentNumber:{
+    text: "限制人数",
+    type: "string",
+  }
 });

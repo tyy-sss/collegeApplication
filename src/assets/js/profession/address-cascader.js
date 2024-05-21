@@ -168,6 +168,10 @@ export const optionsChoose = (subjectScope, areaIdVal, subjectNumber) => {
       label: "限制科目",
       children: firstChildren,
     },
+    {
+      value: "deleteLimit",
+      label: "取消限制",
+    },
   ];
   for (let i = 1; i <= subjectNumber; i++) {
     getLabel(i);

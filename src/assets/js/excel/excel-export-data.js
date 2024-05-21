@@ -57,6 +57,7 @@ const teacherModelData = reactive([
 const professionInformationLimitHeader = reactive({
   college: "教学学院",
   name: "专业名称",
+  enrolImentNumber: "限制人数",
 });
 
 // 未录取的学生名单
