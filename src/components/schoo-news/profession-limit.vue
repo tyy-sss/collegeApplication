@@ -316,7 +316,12 @@ const handleChangeChooseValue = (chooseVal, rowVal) => {
     endData.subjectRule.push({
       areaId: 0,
       requiredSubjects: [""],
-      optionalSubjects: { subjectNumber: 0, optionalSubjectScope: [""] },
+      optionalSubjects: {
+        subjectNumber: 0,
+        optionalSubjectScope: [""],
+      },
+      subjectGroups: [0],
+      strings: [""],
     });
   }
   changeMajor(endData, rowVal);
@@ -332,7 +337,9 @@ const changeMajor = (val, rowVal) => {
     .catch(() => {
       getShcoolMajor();
     })
-    .finally(() => {});
+    .finally(() => {
+      
+    });
 };
 // 批量处理
 const multipleSelection = ref([]);
