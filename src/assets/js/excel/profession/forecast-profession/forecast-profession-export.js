@@ -17,6 +17,79 @@ const professionHeader = reactive({
       "",
       "",
       "",
+      "",
+      "联系方式",
+      "",
+      "",
+    ],
+  ], // 第一行的表头数据
+  header: [
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "",
+    "一志愿",
+    "二志愿",
+    "三志愿",
+    "拟录专业",
+    "所属学院",
+    "录取说明",
+    "电话号码",
+    "父母电话",
+    "收件地址",
+  ], //第二行的表头数据
+  filterVal: [
+    "name",
+    "userName",
+    "userNumber",
+    "sex",
+    "province",
+    "className",
+    "subjects",
+    "score",
+    "firstName",
+    "secondName",
+    "thirdName",
+    "majorName",
+    "college",
+    "result",
+    "phone",
+    "parentName",
+    "address",
+  ], // 从左到右每一个属性名
+  merges: [
+    "A1:A2",
+    "B1:B2",
+    "C1:C2",
+    "D1:D2",
+    "E1:E2",
+    "F1:F2",
+    "G1:G2",
+    "H1:H2",
+    "I1:N1",
+    "P1:Q1",
+  ], //合并单元格规则
+});
+const professionHeaderNoCollege = reactive({
+  multiHeader: [
+    [
+      "目标学校",
+      "姓名",
+      "学号",
+      "性别",
+      "省份",
+      "班级",
+      "选考科目",
+      "分流成绩",
+      "志愿填报",
+      "",
+      "",
+      "",
+      "",
       "联系方式",
       "",
       "",
@@ -71,7 +144,6 @@ const professionHeader = reactive({
     "N1:P1",
   ], //合并单元格规则
 });
-
 // 导出剩余专业的信息
 const professionMajor = reactive({
   college: "学院",
@@ -83,4 +155,4 @@ const professionMajor = reactive({
   third: "三志愿录取数",
   surplusNumber: "剩余可填报人数",
 });
-export { professionHeader, professionMajor };
+export { professionHeader,professionHeaderNoCollege, professionMajor };

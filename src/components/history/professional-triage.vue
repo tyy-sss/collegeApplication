@@ -90,7 +90,7 @@
 <script setup>
 import { reactive, onMounted } from "vue";
 // 导出数据
-import { professionHeader } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
+import { professionHeaderNoCollege } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import { getYearNews } from "@/constants/date";
 import managerFun from "@/api/manager";
@@ -140,7 +140,7 @@ const handleExcelExport = () => {
       let schoolName = getSchoolName();
       let headerTitle =
         getYearNews(data.searchData.year) + "年-" + schoolName + "-" + "分流表";
-      export_json_to_excel(professionHeader, allData, headerTitle);
+      export_json_to_excel(professionHeaderNoCollege, allData, headerTitle);
     });
 };
 // 获取学校的姓名

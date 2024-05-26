@@ -77,6 +77,7 @@
             <el-table-column prop="firstName" label="一志愿" />
             <el-table-column prop="secondName" label="二志愿" />
             <el-table-column prop="thirdName" label="三志愿" />
+            <el-table-column prop="college" label="所属学院"  min-width="100" />
             <el-table-column
               prop="majorName"
               label="拟录专业"

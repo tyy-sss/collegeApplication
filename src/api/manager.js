@@ -191,7 +191,14 @@ managerFun.school.changeSchool = (data) => {
 managerFun.school.deleteSchool = (schoolId) => {
   return http.delete("/school", schoolId);
 };
-
+/**
+ * 管理员重置学生综测信息
+ * @param {*} year 
+ * @returns 
+ */
+ managerFun.school.resetAppraisalAppraisal = (year) => {
+  return http.get("/school/appraisal?year=" + year);
+};
 /** 地区 */
 /**
  * 搜索组合

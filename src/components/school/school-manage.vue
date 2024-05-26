@@ -85,6 +85,29 @@
         </span>
       </template>
     </el-dialog>
+    <div class="show-container">
+      <div class="title">
+        <div class="text">学期综测信息重置</div>
+      </div>
+      <div class="context">
+        <div class="top">
+          <div class="search">
+            <div class="left">
+              <el-date-picker
+                v-model="form.resetDate"
+                type="year"
+                placeholder="请选择重置综测的年份"
+              />
+            </div>
+            <div class="right">
+              <el-button type="primary" @click="resetAppraisal"
+                >重置所选年份的学生的综测信息</el-button
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script setup>
@@ -92,8 +115,9 @@ import { ElMessage, ElMessageBox } from "element-plus";
 import { onMounted, reactive, ref } from "vue";
 import { Plus } from "@element-plus/icons-vue";
 import { useRouter } from "vue-router";
-import { DELAY_TIME } from '@/constants/date';
+import { DELAY_TIME } from "@/constants/date";
 import { debounce } from "@/assets/js/utils/throttle";
+import { formatDate } from "@/assets/js/utils/format-date";
 const router = useRouter();
 
 // 接口添加 学校姓名查重，添加学校，修改学校，删除学校，搜索学校
@@ -127,6 +151,7 @@ const form = reactive({
     name: "",
     number: "",
   },
+  resetDate: "",
   rules: {
     // 添加查重学校姓名
     name: [
@@ -222,12 +247,26 @@ const checkSchoolNews = (val) => {
 // 搜索学校
 const onSearch = debounce(() => {
   getSchoolList();
-},DELAY_TIME);
+}, DELAY_TIME);
 // 重置搜索
 const onReSearch = debounce(() => {
   form.searchData = "";
   getSchoolList();
-},DELAY_TIME);
+}, DELAY_TIME);
+
+// 重置学生综测信息
+const resetAppraisal = () => {
+  if (!form.resetDate) {
+    ElMessage.error("请选择重置年份");
+  } else {
+    managerFun.school
+      .resetAppraisalAppraisal(formatDate(form.resetDate).slice(0, 4))
+      .then((res) => {
+        ElMessage.success(res);
+      })
+      .catch(() => {});
+  }
+};
 // 获得学校信息
 const getSchoolList = () => {
   managerFun.school.searchSchool(form.searchData).then((res) => {

@@ -67,7 +67,7 @@ import { NOW_YEAR } from "@/constants/date";
 import { Download, Plus } from "@element-plus/icons-vue";
 import addFinalProfession from "@/components/schoo-news/shunt/add-final-profession.vue";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
-import { professionHeader } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
+import { professionHeaderNoCollege } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
 import managerFun from "@/api/manager";
 import volunteerFun from "@/api/volunteer";
 import { useRoute } from "vue-router";
@@ -152,7 +152,7 @@ const getAllFinalProfessionList = () => {
       data.allData = res;
       let schoolName = ref(route.query.schoolName).value;
       let headerTitle = schoolName + "-" + "最终分流表";
-      export_json_to_excel(professionHeader, data.allData, headerTitle);
+      export_json_to_excel(professionHeaderNoCollege, data.allData, headerTitle);
     });
 };
 onMounted(() => {

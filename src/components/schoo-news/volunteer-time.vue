@@ -94,7 +94,7 @@ import volunteerFun from "@/api/volunteer";
 import { excelExport } from "@/assets/js/excel/excel-export";
 import { export_json_to_excel } from "@/assets/js/excel/excel-export-multi";
 import { unAcceptedHeader } from "@/assets/js/excel/excel-export-data";
-import { professionHeader } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
+import { professionHeaderNoCollege } from "@/assets/js/excel/profession/forecast-profession/forecast-profession-export";
 import { ElMessage } from "element-plus";
 // 获得路由显示的学校id
 const route = new useRoute();
@@ -174,7 +174,7 @@ const handleExportStudentList = () => {
                 endData.push(element);
               });
               // 导出最后分流结果
-              export_json_to_excel(professionHeader, endData, headerTitle);
+              export_json_to_excel(professionHeaderNoCollege, endData, headerTitle);
             })
             .catch(() => {});
         });
