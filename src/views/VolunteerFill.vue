@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-04-08 16:10:47
+ * @LastEditTime: 2024-06-20 22:34:18
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -59,7 +59,7 @@
     <div class="volunteers-box">
       <el-form-item label="第一志愿 ：">
         <el-cascader
-          :options="data.options"
+          :options="data.options1"
           placeholder="请输入专业名称"
           :show-all-levels="false"
           :props="props"
@@ -68,7 +68,7 @@
       </el-form-item>
       <el-form-item label="第二志愿 ：">
         <el-cascader
-          :options="data.options"
+          :options="data.options2"
           placeholder="请输入专业名称"
           :show-all-levels="false"
           :props="props"
@@ -77,7 +77,7 @@
       </el-form-item>
       <el-form-item label="第三志愿 ：">
         <el-cascader
-          :options="data.options"
+          :options="data.options3"
           placeholder="请输入专业名称"
           :show-all-levels="false"
           :props="props"
@@ -178,7 +178,9 @@ const data = reactive({
     thirdName: "",
   },
   originVolunteers: {},
-  options: [],
+  options1: [], //第一志愿选项
+  options2: [],
+  options3: [],
   first: [],
   second: [],
   third: [],
@@ -204,7 +206,7 @@ function getInformation() {
 //获取可选专业选项
 function selectStudentMajor() {
   volunteerFun.options.selectStudentMajor().then((res) => {
-    let myOptions = [];
+    let myOptions1 = [];
     for (let i = 0; i < res.length; i++) {
       let college = res[i].college;
       let majors = res[i].majors;
@@ -215,13 +217,17 @@ function selectStudentMajor() {
           label: majors[j].name,
         });
       }
-      myOptions.push({
+      myOptions1.push({
         value: college,
         label: college,
         children: children,
       });
     }
-    data.options = myOptions;
+    let myOptions2 = [{ value: "不填报&-2", label: "不填报" }, ...myOptions1];
+    let myOptions3 = [{ value: "不填报&-3", label: "不填报" }, ...myOptions1];
+    data.options1 = myOptions1;
+    data.options2 = myOptions2;
+    data.options3 = myOptions3;
   });
 }
 //提交志愿进行签名按钮
@@ -236,9 +242,7 @@ function submitVolunteer() {
       data.volunteers.thirdName
     )
   ) {
-    ElMessage.error(
-      "任何一项志愿不能为空，且不能选择相同志愿，请认真完成志愿填报"
-    );
+    ElMessage.error("任何一项不能为空，且不能选择重复志愿，请认真完成志愿填报");
   } else {
     data.first = splitString(data.volunteers.firstName);
     data.second = splitString(data.volunteers.secondName);
@@ -266,10 +270,10 @@ const finish = debounce((file) => {
       {
         first: parseInt(data.first[1]), //第一志愿
         firstName: data.first[0], //第一志愿
-        second: parseInt(data.second[1]), //第二志愿
-        secondName: data.second[0], //第二志愿
-        third: parseInt(data.third[1]), //第三志愿
-        thirdName: data.third[0], //第三志愿
+        second: parseInt(data.second[1]) < 0 ? "" : parseInt(data.second[1]), //第二志愿
+        secondName: data.second[0] == "不填报" ? "" : data.second[0], //第二志愿
+        third: parseInt(data.third[1]) < 0 ? "" : parseInt(data.third[1]), //第三志愿
+        thirdName: data.third[0] == "不填报" ? "" : data.third[0], //第三志愿
         timeId: data.originVolunteers.timeId, //时间段id
       },
       formData

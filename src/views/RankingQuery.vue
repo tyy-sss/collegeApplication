@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:48:59
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-04-02 20:09:30
+ * @LastEditTime: 2024-06-20 21:57:33
  * @FilePath: \collegeApplication\src\views\RankingQuery.vue
  * @Description: 学生查询排名页面
 -->
@@ -25,15 +25,15 @@
           </el-table>
         </div>
       </div>
-      <!-- 查询延保同—个专业的排名 -->
+      <!-- 查询专业第一志愿排名 -->
       <div>
-        <h3>2️⃣查询延保同—个专业的排名</h3>
+        <h3>2️⃣查询第一志愿专业排名</h3>
         <br />
         <div>
           <h4>确认批次</h4>
           <br />
           <div class="tip1">
-            💬查询排名的依据为流程已结束的预填报批次情况，请根据时间选择参考的填报批次。
+            💬查询排名结果的依据为第一志愿的实时填报情况，请先选择要查询的填报批次。
           </div>
           <span>确认批次： </span>
           <div class="searchBox">
@@ -202,10 +202,13 @@ function selectStudentMajor() {
 function getVolunteerTable() {
   volunteerFun.student.getWishTable().then((res) => {
     res.forEach((volunteer) => {
-      if (volunteer.state === 2 && volunteer.type === false) {
+      if (volunteer.state !== 0) {
+        let type = volunteer.type ? "正式填报" : "预填报";
+        let state = volunteer.state == 1 ? "填报中" : "填报结束";
         data.preWishList.push({
           value: volunteer.id,
-          label: volunteer.startTime + "批次",
+          label:
+            "【" + type + "】" + volunteer.startTime + "批次（" + state + ")",
         });
       }
     });
