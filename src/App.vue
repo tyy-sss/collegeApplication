@@ -4,6 +4,7 @@
   </div>
 </template>
 <script setup>
+import { onMounted } from "vue";
 // 处理ResizeObserver loop limit exceeded问题
 const debounce = (fn, delay) => {
   let timer = null;
@@ -16,6 +17,13 @@ const debounce = (fn, delay) => {
     }, delay);
   };
 };
+onMounted(() => {
+  console.log("-----------------------------------------------------------------");
+  console.log(
+    "吉首大学 版权所有 开发工作室：吉首大学HOPE实验室 CX|CJ|TYY|ZWY|YSB"
+  );
+  console.log("-----------------------------------------------------------------");
+});
 
 const _ResizeObserver = window.ResizeObserver;
 window.ResizeObserver = class ResizeObserver extends _ResizeObserver {
