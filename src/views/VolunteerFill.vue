@@ -2,7 +2,7 @@
  * @Author: STATICHIT 2394412110@qq.com
  * @Date: 2023-11-06 22:04:48
  * @LastEditors: STATICHIT 2394412110@qq.com
- * @LastEditTime: 2024-06-20 22:34:18
+ * @LastEditTime: 2024-06-22 13:59:00
  * @FilePath: \collegeApplication\src\views\VolunteerFill.vue
  * @Description: 志愿填报页面
 -->
@@ -103,17 +103,17 @@
           <br />
           <span
             >第一志愿 :<b>{{
-              data.originVolunteers.firstName || "暂无数据"
+              data.originVolunteers.firstName || "未填报"
             }}</b></span
           ><br />
           <span
             >第二志愿 :<b>{{
-              data.originVolunteers.secondName || "暂无数据"
+              data.originVolunteers.secondName || "未填报"
             }}</b></span
           ><br />
           <span
             >第三志愿 :<b>{{
-              data.originVolunteers.thirdName || "暂无数据"
+              data.originVolunteers.thirdName || "未填报"
             }}</b></span
           >
         </div>
@@ -265,14 +265,16 @@ const finish = debounce((file) => {
   const formData = new FormData();
   formData.append("file", file);
   data.isreturn = true;
+  let secondId = parseInt(data.second[1]);
+  let thirdId = parseInt(data.third[1]);
   volunteerFun.basis
     .modifyWise(
       {
         first: parseInt(data.first[1]), //第一志愿
         firstName: data.first[0], //第一志愿
-        second: parseInt(data.second[1]) < 0 ? "" : parseInt(data.second[1]), //第二志愿
+        second: secondId < 0 ? 0 : secondId, //第二志愿
         secondName: data.second[0] == "不填报" ? "" : data.second[0], //第二志愿
-        third: parseInt(data.third[1]) < 0 ? "" : parseInt(data.third[1]), //第三志愿
+        third: thirdId < 0 ? 0 : thirdId, //第三志愿
         thirdName: data.third[0] == "不填报" ? "" : data.third[0], //第三志愿
         timeId: data.originVolunteers.timeId, //时间段id
       },
