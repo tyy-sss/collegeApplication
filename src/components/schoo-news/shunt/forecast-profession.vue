@@ -54,7 +54,14 @@
           :icon="Download"
           @click="handleExportVolunteerDiversion"
         >
-          导出分流表
+          导出分流结果
+        </el-button>
+        <el-button
+          type="primary"
+          :icon="Download"
+          @click="handleExportVolunteerRemainder"
+        >
+          导出剩余计划
         </el-button>
       </div>
     </div>
@@ -77,7 +84,7 @@
             <el-table-column prop="firstName" label="一志愿" />
             <el-table-column prop="secondName" label="二志愿" />
             <el-table-column prop="thirdName" label="三志愿" />
-            <el-table-column prop="college" label="所属学院"  min-width="100" />
+            <el-table-column prop="college" label="所属学院" min-width="100" />
             <el-table-column
               prop="majorName"
               label="拟录专业"
@@ -225,6 +232,13 @@ const handleExportVolunteerDiversion = () => {
             ElMessage.error("没有分流结果");
           });
       });
+  }
+};
+// 导出剩余计划数
+const handleExportVolunteerRemainder = () => {
+  if (!data.isExport) {
+    ElMessage.error("无法导出分流信息");
+  } else {
     // 未录取的专业结果,先得到地区组合消息
     managerFun.area.selectArea("").then((res) => {
       const addressData = [];
@@ -234,6 +248,18 @@ const handleExportVolunteerDiversion = () => {
           name: element.name,
         });
       });
+    let schoolName = ref(route.query.schoolName).value;
+    let volunteerRuleName = data.mateTtypeData.filter((element) => {
+      return element.type == data.volunteerRule;
+    })[0].label;
+    let headerTitle =
+      Number(NOW_YEAR) +
+      "-" +
+      schoolName +
+      "-" +
+      volunteerRuleName +
+      "-" +
+      "预测分流表";
       // 未录取的专业结果,与地区消息做匹配
       volunteerFun.manager
         .getRemainMajor(data.volunteerRule, data.timeId)
@@ -241,11 +267,12 @@ const handleExportVolunteerDiversion = () => {
           const finalData = [];
           res.forEach((element) => {
             element.classification = JSON.parse(element.classification);
-            var request = "";
+            let request = "";
             for (var i = 0; i < element.classification.length; i++) {
               const addressItem = addressData.filter((item) => {
-                return (item.areaId == element.classification[i].areaId);
+                return item.areaId == element.classification[i].areaId;
               })[0].name;
+              console.log(element.classification[i].strings,element.classification[i].strings[3])
               request +=
                 addressItem +
                 "：" +
